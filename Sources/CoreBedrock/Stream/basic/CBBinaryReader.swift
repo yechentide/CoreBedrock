@@ -38,7 +38,7 @@ final class CBBinaryReader {
     /// - Parameter bytesToSkip: The number of bytes to skip. This value must be 0 or non-negative.
     /// - Throws: An `argumentOutOfRange` error if `bytesToSkip` is negative; a `endOfStream` error if the end of the stream is reached.
     func skip(_ bytesToSkip: Int) throws {
-        guard bytesToSkip >= 0 else { throw CBError.argumentOutOfRange("bytesToSkip", "Non-negative number required.") }
+        guard bytesToSkip >= 0 else { throw CBStreamError.argumentOutOfRange("bytesToSkip", "Non-negative number required.") }
         guard bytesToSkip > 0 else { return }
         
         if _seekBuffer == nil {
@@ -49,7 +49,7 @@ final class CBBinaryReader {
             let bytesToRead = min(_seekBufferSize, bytesToSkip - bytesSkipped)
             let bytesRead = try _buffer.read(&_seekBuffer, 0, bytesToRead)
             if bytesRead == 0 {
-                throw CBError.endOfStream
+                throw CBStreamError.endOfStream
             }
             bytesSkipped += bytesRead
         }
@@ -59,7 +59,7 @@ final class CBBinaryReader {
     /// - Throws: An `invalidFormat` error if the length of the string could not be determined.
     func skipString() throws {
         let length = try readInt16()
-        guard length >= 0 else { throw CBError.invalidFormat("Negative string length given!") }
+        guard length >= 0 else { throw CBStreamError.invalidFormat("Negative string length given!") }
         try skip(Int(length))
     }
 }
@@ -70,8 +70,8 @@ extension CBBinaryReader {
     /// - Returns: An `TagType` value.
     func readTagType() throws -> TagType {
         let type = _buffer.readByte()
-        guard type >= 0 else { throw CBError.endOfStream }
-        guard type <= Int(TagType.longArray.rawValue) else { throw CBError.invalidFormat("NBT tag type out of range: \(type)") }
+        guard type >= 0 else { throw CBStreamError.endOfStream }
+        guard type <= Int(TagType.longArray.rawValue) else { throw CBStreamError.invalidFormat("NBT tag type out of range: \(type)") }
         return TagType(rawValue: UInt8(type))!
     }
     
@@ -80,7 +80,7 @@ extension CBBinaryReader {
     /// - Returns: A byte from the current stream.
     func readByte() throws -> UInt8 {
         let byte = _buffer.readByte()
-        guard byte >= 0 else { throw CBError.endOfStream }
+        guard byte >= 0 else { throw CBStreamError.endOfStream }
         return UInt8(byte)
     }
     
@@ -90,7 +90,7 @@ extension CBBinaryReader {
     /// - Returns: A byte array containing data read from the underlying stream. This might be less than the number of bytes requested if the end of the stream is reached.
     func readBytes(_ count: Int) throws -> [UInt8] {
         var count = count
-        guard count >= 0 else { throw CBError.argumentOutOfRange("count", "Non-negative number required.") }
+        guard count >= 0 else { throw CBStreamError.argumentOutOfRange("count", "Non-negative number required.") }
         guard count > 0 else { return [] }
         
         var result = [UInt8](repeating: 0, count: count)
@@ -175,7 +175,7 @@ extension CBBinaryReader {
     /// - Returns: The string being read.
     func readString() throws -> String {
         let length = try readInt16()
-        guard length >= 0 else { throw CBError.invalidFormat("Negative string length given!") }
+        guard length >= 0 else { throw CBStreamError.invalidFormat("Negative string length given!") }
         
         var utf8 = UTF8()
         var string = ""
@@ -192,7 +192,7 @@ extension CBBinaryReader {
                 if let nonUTF8Str = String(data: Data(bytes), encoding: .isoLatin1) {
                     return nonUTF8Str
                 } else {
-                    throw CBError.stringConversionError
+                    throw CBStreamError.stringConversionError
                 }
             }
         }

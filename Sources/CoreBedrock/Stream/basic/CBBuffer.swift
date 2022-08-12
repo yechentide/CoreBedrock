@@ -36,7 +36,7 @@ public class CBBuffer {
     /// - Parameter capacity: The initial size of the internal array in bytes.
     /// - Throws: an `argumentOutOfRange` error if `capacity` is negative.
     public init(_ capacity: Int) throws {
-        guard capacity >= 0 else { throw CBError.argumentOutOfRange("capacity", "Non-negative number required.") }
+        guard capacity >= 0 else { throw CBStreamError.argumentOutOfRange("capacity", "Non-negative number required.") }
         
         if capacity == 0 {
             _buffer = []
@@ -65,10 +65,10 @@ public class CBBuffer {
     /// - Throws: An `argumentOutOfRange` error if index or count is less than zero;
     /// or a `formatError` if the buffer length minus the `index` is less than `count`.
     public init(_ buffer: [UInt8], _ index: Int, _ count: Int) throws {
-        guard index >= 0 else { throw CBError.argumentOutOfRange("index", "Non-negative number required.") }
-        guard count >= 0 else { throw CBError.argumentOutOfRange("count", "Non-negative number required.") }
+        guard index >= 0 else { throw CBStreamError.argumentOutOfRange("index", "Non-negative number required.") }
+        guard count >= 0 else { throw CBStreamError.argumentOutOfRange("count", "Non-negative number required.") }
         guard index + count <= buffer.count else {
-            throw CBError.argumentError("Offset and length were out of bounds for the array or count is greater than the number of elements from index to the end of the source collection.")
+            throw CBStreamError.argumentError("Offset and length were out of bounds for the array or count is greater than the number of elements from index to the end of the source collection.")
         }
         
         _buffer = buffer
@@ -118,8 +118,8 @@ public class CBBuffer {
         // the value is different than the current capacity. Special
         // behavior if the buffer isn't expandable: we don't throw if
         // value is the same as the current capacity
-        guard value >= length else { throw CBError.argumentOutOfRange("capacity", "Capacity cannot be less than the current size.") }
-        guard _expandable || value == capacity else { throw CBError.bufferNotExpandable }
+        guard value >= length else { throw CBStreamError.argumentOutOfRange("capacity", "Capacity cannot be less than the current size.") }
+        guard _expandable || value == capacity else { throw CBStreamError.bufferNotExpandable }
         
         // CBBuffer has this invariant: _origin > 0 => !expandable (see init)
         guard _expandable && value != _capacity else { return }
@@ -143,7 +143,7 @@ public class CBBuffer {
     // Returns a bool saying whether a new array was allocated
     private func ensureCapacity(_ value: Int) throws -> Bool {
         // Check for overflow
-        guard value >= 0 else { throw CBError.argumentOutOfRange("value", "Non-negative number required.") }
+        guard value >= 0 else { throw CBStreamError.argumentOutOfRange("value", "Non-negative number required.") }
         guard value > _capacity else { return false }
         
         var newCapacity = max(value, 256)
@@ -185,10 +185,10 @@ public class CBBuffer {
         // situations where a buffer may be created on top of an array then
         // the buffer is made longer than the maximum possible length of the
         // array (int.MaxValue).
-        guard 0 <= value && value <= Int.max else { throw CBError.argumentOutOfRange("length", "Stream length must be non-negative and less than 2^31 - 1 - origin.") }
+        guard 0 <= value && value <= Int.max else { throw CBStreamError.argumentOutOfRange("length", "Stream length must be non-negative and less than 2^31 - 1 - origin.") }
         // Origin wasn't publicly exposed above
         guard value <= Int.max - _origin else {
-            throw CBError.argumentOutOfRange("length", "Stream length must be non-negative and less than 2^31 - 1 - origin.")
+            throw CBStreamError.argumentOutOfRange("length", "Stream length must be non-negative and less than 2^31 - 1 - origin.")
         }
 
         let newLength = _origin + value
@@ -217,16 +217,16 @@ public class CBBuffer {
     // Use a method to set length until Swift allows throwing in properties
     /// Sets  the current position within the `CBBuffer`.
     public func setPosition(_ value: Int) throws {
-        guard 0 <= value else { throw CBError.argumentOutOfRange("position", "Non-negative number required.") }
-        guard value <= maxBufferLength else { throw CBError.argumentOutOfRange("position", "Value must be less than 2^31 - 1 - origin.") }
+        guard 0 <= value else { throw CBStreamError.argumentOutOfRange("position", "Non-negative number required.") }
+        guard value <= maxBufferLength else { throw CBStreamError.argumentOutOfRange("position", "Value must be less than 2^31 - 1 - origin.") }
 
         _position = _origin + value
     }
     
     private func validateBufferArguments(_ buffer: [UInt8], _ offset: Int, _ count: Int) throws {
-        guard offset >= 0 else { throw CBError.argumentOutOfRange("offset", "Non-negative number required.") }
-        guard count >= 0 else { throw CBError.argumentOutOfRange("count", "Non-negative number required.") }
-        guard count <= buffer.count - offset else { throw CBError.argumentOutOfRange("count", "Offset and length were out of bounds for the array or count is greater than the number of elements from index to the end of the source collection.") }
+        guard offset >= 0 else { throw CBStreamError.argumentOutOfRange("offset", "Non-negative number required.") }
+        guard count >= 0 else { throw CBStreamError.argumentOutOfRange("count", "Non-negative number required.") }
+        guard count <= buffer.count - offset else { throw CBStreamError.argumentOutOfRange("count", "Offset and length were out of bounds for the array or count is greater than the number of elements from index to the end of the source collection.") }
     }
     
     /// Returns the array of unsigned bytes from which this `CBBuffer` was created.
@@ -287,7 +287,7 @@ public class CBBuffer {
     /// - Returns: The new position within the `CBBuffer`, calculated by combining
     /// the initial reference point and the offset.
     public func seek(to offset: Int, from loc: SeekOrigin) throws -> Int {
-        guard offset <= maxBufferLength else { throw CBError.argumentOutOfRange("offset", "Value must be less than 2^31 - 1 - origin.") }
+        guard offset <= maxBufferLength else { throw CBStreamError.argumentOutOfRange("offset", "Value must be less than 2^31 - 1 - origin.") }
         
         let tempPosition: Int
         
@@ -304,7 +304,7 @@ public class CBBuffer {
         }
         
         if tempPosition < _origin || _origin > tempPosition {
-            throw CBError.seekBeforeBegin
+            throw CBStreamError.seekBeforeBegin
         }
         _position = tempPosition
         
@@ -341,7 +341,7 @@ public class CBBuffer {
         
         let dstPos = _position + count
         // Check for overflow
-        guard dstPos >= 0 else { throw CBError.invalidOperation("Stream too long.") }
+        guard dstPos >= 0 else { throw CBStreamError.invalidOperation("Stream too long.") }
         
         if dstPos > _length {
             var mustZero = _position > _length

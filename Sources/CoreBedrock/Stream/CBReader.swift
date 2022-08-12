@@ -120,7 +120,7 @@ public class CBReader {
                 // Read the first tag, make sure it's a compound
                 if try _reader.readTagType() != .compound {
                     _state = .error
-                    throw CBError.invalidFormat("Given NBT stream does not start with TAG_Compound.")
+                    throw CBStreamError.invalidFormat("Given NBT stream does not start with TAG_Compound.")
                 }
                 depth = 1
                 tagType = .compound
@@ -186,7 +186,7 @@ public class CBReader {
                     } else {
                         // This should not happen unless CBReader is bugged
                         _state = .error
-                        throw CBError.invalidFormat(invalidParentTagError)
+                        throw CBStreamError.invalidFormat(invalidParentTagError)
                     }
                 } else {
                     tagStartOffset = _reader.baseStream.position - _streamStartOffset
@@ -209,7 +209,7 @@ public class CBReader {
                 } else {
                     // This should not happen unless CBReader is bugged
                     _state = .error
-                    throw CBError.invalidFormat(invalidParentTagError)
+                    throw CBStreamError.invalidFormat(invalidParentTagError)
                 }
                 
             case .atStreamEnd:
@@ -218,7 +218,7 @@ public class CBReader {
                 
             default:
                 // Parsing error, or unexpected state
-                throw CBError.invalidReaderState(erroneousStateError)
+                throw CBStreamError.invalidReaderState(erroneousStateError)
             }
         }
     }
@@ -242,7 +242,7 @@ public class CBReader {
     /// - Returns: `true` if a matching descendant tag is found; otherwise `false`.
     public func readToDescendant(_ tagName: String) throws -> Bool {
         if _state == .error {
-            throw CBError.invalidReaderState(erroneousStateError)
+            throw CBStreamError.invalidReaderState(erroneousStateError)
         } else if _state == .atStreamEnd {
             return false
         }
@@ -262,7 +262,7 @@ public class CBReader {
     /// - Returns: `true` if a sibling element is found; otherwise `false`.
     public func readToNextSibling() throws -> Bool {
         if _state == .error {
-            throw CBError.invalidReaderState(erroneousStateError)
+            throw CBStreamError.invalidReaderState(erroneousStateError)
         } else if _state == .atStreamEnd {
             return false
         }
@@ -296,7 +296,7 @@ public class CBReader {
     /// - Returns: Total number of tags that were skipped. Returns 0 if end of the stream is reached.
     public func skip() throws -> Int {
         if _state == .error {
-            throw CBError.invalidReaderState(erroneousStateError)
+            throw CBStreamError.invalidReaderState(erroneousStateError)
         } else if _state == .atStreamEnd {
             return 0
         }
@@ -317,10 +317,10 @@ public class CBReader {
     /// - Returns: Constructed NbtTag object
     public func readAsTag() throws -> NBT {
         if _state == .error {
-            throw CBError.invalidReaderState(erroneousStateError)
+            throw CBStreamError.invalidReaderState(erroneousStateError)
         }
         else if _state == .atStreamEnd {
-            throw CBError.endOfStream
+            throw CBStreamError.endOfStream
         }
         else if _state == .atStreamBeginning || _state == .atCompoundEnd {
             _ = try readToFollowing()
@@ -342,7 +342,7 @@ public class CBReader {
         }
         else {
             // End tags cannot be read as tags (there is no corresponding NbtTag object)
-            throw CBError.invalidOperation(noValueToReadError)
+            throw CBStreamError.invalidOperation(noValueToReadError)
         }
         
         let startingDepth = depth
@@ -391,17 +391,17 @@ public class CBReader {
     /// - Returns: The value boxed in the correct type.
     public func readValue() throws -> Any? {
         if _state == .atStreamEnd {
-            throw CBError.endOfStream
+            throw CBStreamError.endOfStream
         }
         if !_atValue {
             if cacheTagValues {
                 if _valueCache == nil {
-                    throw CBError.invalidOperation("No value to read.")
+                    throw CBStreamError.invalidOperation("No value to read.")
                 } else {
                     return _valueCache
                 }
             } else {
-                throw CBError.invalidOperation(noValueToReadError)
+                throw CBStreamError.invalidOperation(noValueToReadError)
             }
         }
         
@@ -430,7 +430,7 @@ public class CBReader {
         case .byteArray:
             let byteArr = try _reader.readBytes(tagLength)
             if byteArr.count < tagLength {
-                throw CBError.endOfStream
+                throw CBStreamError.endOfStream
             }
             value = byteArr
             break
@@ -452,7 +452,7 @@ public class CBReader {
             value = try _reader.readString()
             break
         default:
-            throw CBError.invalidOperation(nonValueTagError)
+            throw CBStreamError.invalidOperation(nonValueTagError)
         }
         
         _valueCache = cacheTagValues ? value : nil
@@ -473,9 +473,9 @@ public class CBReader {
     public func readListAsArray<T>() throws -> [T] {
         switch _state {
         case .atStreamEnd:
-            throw CBError.endOfStream
+            throw CBStreamError.endOfStream
         case .error:
-            throw CBError.invalidReaderState(erroneousStateError)
+            throw CBStreamError.invalidReaderState(erroneousStateError)
         case .atListBeginning:
             goDown()
             listIndex = 0
@@ -485,7 +485,7 @@ public class CBReader {
         case .inList:
             break
         default:
-            throw CBError.invalidOperation("ReadListAsArray may only be used on List tags.")
+            throw CBStreamError.invalidOperation("ReadListAsArray may only be used on List tags.")
         }
         
         let elementsToRead = parentTagLength - listIndex
@@ -496,7 +496,7 @@ public class CBReader {
             listIndex = parentTagLength - 1
             let val = try _reader.readBytes(elementsToRead) as! [T]
             if val.count < elementsToRead {
-                throw CBError.endOfStream
+                throw CBStreamError.endOfStream
             }
             return val
         }
@@ -540,7 +540,7 @@ public class CBReader {
             }
             break
         default:
-            throw CBError.invalidOperation("ReadListAsArray may only be used on lists of value types.")
+            throw CBStreamError.invalidOperation("ReadListAsArray may only be used on lists of value types.")
         }
         
         tagsRead += elementsToRead
@@ -590,7 +590,7 @@ public class CBReader {
         }
         else {
             // Cannot happen unless NbtRead is bugged
-            throw CBError.invalidFormat(invalidParentTagError)
+            throw CBStreamError.invalidFormat(invalidParentTagError)
         }
     }
     
@@ -607,7 +607,7 @@ public class CBReader {
             else if value is Double { return UInt8(value as! Double) as! T }
             else if value is String { return UInt8(value as! String) as! T }
             else {
-                throw CBError.invalidFormat("Cannot convert from type: \(type(of: value))")
+                throw CBStreamError.invalidFormat("Cannot convert from type: \(type(of: value))")
             }
         }
         else if T.Type.self == Int16.Type.self {
@@ -619,7 +619,7 @@ public class CBReader {
             else if value is Double { return Int16(value as! Double) as! T }
             else if value is String { return Int16(value as! String) as! T }
             else {
-                throw CBError.invalidFormat("Cannot convert from type: \(type(of: value))")
+                throw CBStreamError.invalidFormat("Cannot convert from type: \(type(of: value))")
             }
         }
         else if T.Type.self == Int32.Type.self {
@@ -631,7 +631,7 @@ public class CBReader {
             else if value is Double { return Int32(value as! Double) as! T }
             else if value is String { return Int32(value as! String) as! T }
             else {
-                throw CBError.invalidFormat("Cannot convert from type: \(type(of: value))")
+                throw CBStreamError.invalidFormat("Cannot convert from type: \(type(of: value))")
             }
         }
         else if T.Type.self == Int64.Type.self {
@@ -643,7 +643,7 @@ public class CBReader {
             else if value is Double { return Int64(value as! Double) as! T }
             else if value is String { return Int64(value as! String) as! T }
             else {
-                throw CBError.invalidFormat("Cannot convert from type: \(type(of: value))")
+                throw CBStreamError.invalidFormat("Cannot convert from type: \(type(of: value))")
             }
         }
         else if T.Type.self == Float.Type.self {
@@ -655,7 +655,7 @@ public class CBReader {
             else if value is Double { return Float(value as! Double) as! T }
             else if value is String { return Float(value as! String) as! T }
             else {
-                throw CBError.invalidFormat("Cannot convert from type: \(type(of: value))")
+                throw CBStreamError.invalidFormat("Cannot convert from type: \(type(of: value))")
             }
         }
         else if T.Type.self == Double.Type.self {
@@ -667,7 +667,7 @@ public class CBReader {
             else if value is Double { return Double(value as! Double) as! T }
             else if value is String { return Double(value as! String) as! T }
             else {
-                throw CBError.invalidFormat("Cannot convert from type: \(type(of: value))")
+                throw CBStreamError.invalidFormat("Cannot convert from type: \(type(of: value))")
             }
         }
         else if T.Type.self == String.Type.self {
@@ -679,11 +679,11 @@ public class CBReader {
             else if value is Double { return String(value as! Double) as! T }
             else if value is String { return String(value as! String) as! T }
             else {
-                throw CBError.invalidFormat("Cannot convert from type: \(type(of: value))")
+                throw CBStreamError.invalidFormat("Cannot convert from type: \(type(of: value))")
             }
         }
         else {
-            throw CBError.invalidFormat("Cannot convert to type: \(type(of: value))")
+            throw CBStreamError.invalidFormat("Cannot convert to type: \(type(of: value))")
         }
     }
     
@@ -724,7 +724,7 @@ public class CBReader {
     private func readValueAsTag() throws -> NBT {
         if !_atValue {
             // Should never happen
-            throw CBError.invalidOperation(noValueToReadError)
+            throw CBStreamError.invalidOperation(noValueToReadError)
         }
         
         _atValue = false
@@ -746,7 +746,7 @@ public class CBReader {
         case .byteArray:
             let bytes = try _reader.readBytes(tagLength)
             if bytes.count < tagLength {
-                throw CBError.endOfStream
+                throw CBStreamError.endOfStream
             }
             return ByteArrayTag(name: tagName, bytes)
         case .intArray:
@@ -762,7 +762,7 @@ public class CBReader {
             }
             return LongArrayTag(name: tagName, longs)
         default:
-            throw CBError.invalidOperation(nonValueTagError)
+            throw CBStreamError.invalidOperation(nonValueTagError)
         }
     }
     
@@ -794,7 +794,7 @@ public class CBReader {
             listType = try _reader.readTagType()
             tagLength = Int(try _reader.readInt32())
             if tagLength < 0 {
-                throw CBError.invalidFormat("Negative tag length given: \(tagLength)")
+                throw CBStreamError.invalidFormat("Negative tag length given: \(tagLength)")
             }
             _state = .atListBeginning
             break
@@ -803,7 +803,7 @@ public class CBReader {
             break
         default:
             _state = .error
-            throw CBError.invalidFormat("Trying to read tag of unknown type.")
+            throw CBStreamError.invalidFormat("Trying to read tag of unknown type.")
         }
     }
     
@@ -837,7 +837,7 @@ public class CBReader {
             try _reader.skipString()
             break
         default:
-            throw CBError.invalidOperation(nonValueTagError)
+            throw CBStreamError.invalidOperation(nonValueTagError)
         }
         
         _atValue = false

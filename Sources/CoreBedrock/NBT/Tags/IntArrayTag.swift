@@ -53,7 +53,7 @@ public final class IntArrayTag: NBT {
     
     override func readTag(_ readStream: CBBinaryReader, _ skip: (NBT) -> Bool) throws -> Bool {
         let length = Int(try readStream.readInt32())
-        guard length >= 0 else { throw CBError.invalidFormat("Negative length given in TAG_Int_Array") }
+        guard length >= 0 else { throw CBStreamError.invalidFormat("Negative length given in TAG_Int_Array") }
         
         // Check if the tag needs to be skipped
         if skip(self) {
@@ -70,13 +70,13 @@ public final class IntArrayTag: NBT {
     
     override func skipTag(_ readStream: CBBinaryReader) throws {
         let length = Int(try readStream.readInt32())
-        guard length >= 0 else { throw CBError.invalidFormat("Negative length given in TAG_Int_Array") }
+        guard length >= 0 else { throw CBStreamError.invalidFormat("Negative length given in TAG_Int_Array") }
         try readStream.skip(length * MemoryLayout<Int32>.size)
     }
     
     override func writeTag(_ writeStream: CBBinaryWriter) throws {
         try writeStream.write(TagType.intArray)
-        guard let name = name else { throw CBError.invalidFormat("Name is null") }
+        guard let name = name else { throw CBStreamError.invalidFormat("Name is null") }
         try writeStream.write(name)
         try writeData(writeStream)
     }

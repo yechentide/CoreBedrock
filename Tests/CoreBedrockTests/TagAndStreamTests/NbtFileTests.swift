@@ -145,7 +145,7 @@ class NBTFileTests: XCTestCase {
         let oldRoot = CompoundTag(name: "defaultRoot")
         let newFile = try NBTFile(rootTag: oldRoot)
         XCTAssertThrowsError(try newFile.setRootTag(CompoundTag())) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentError("Root tag must be named."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentError("Root tag must be named."))
         }
         
         // Ensure that the root has not changed
@@ -155,7 +155,7 @@ class NBTFileTests: XCTestCase {
         oldRoot.name = nil
         var buffer = Data()
         XCTAssertThrowsError(try newFile.save(to: &buffer, compression: .none)) { error in
-            XCTAssertEqual(error as? CBError, CBError.invalidFormat("Cannot save NBTFile: root tag is not named. Its name may be an empty string, but not nil."))
+            XCTAssertEqual(error as? CBStreamError, CBStreamError.invalidFormat("Cannot save NBTFile: root tag is not named. Its name may be an empty string, but not nil."))
         }
     }
 }

@@ -62,7 +62,7 @@ public final class IntTag: NBT {
     
     override func writeTag(_ writeStream: CBBinaryWriter) throws {
         try writeStream.write(TagType.int)
-        guard let name = name else { throw CBError.invalidFormat("Name is null") }
+        guard let name = name else { throw CBStreamError.invalidFormat("Name is null") }
         try writeStream.write(name)
         try writeData(writeStream)
     }

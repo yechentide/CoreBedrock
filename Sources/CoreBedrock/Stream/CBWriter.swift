@@ -68,7 +68,7 @@ public final class CBWriter {
     /// - Throws: An `NbtError.invalidFormat` error if not currently in a compound.
     public func endCompound() throws {
         if isDone || _parentType != .compound {
-            throw CBError.invalidFormat("Not currently in a compound.")
+            throw CBStreamError.invalidFormat("Not currently in a compound.")
         }
         goUp()
         try _writer.write(TagType.end)
@@ -84,11 +84,11 @@ public final class CBWriter {
     /// error if `size` is negative or `elementType` is not a valid type.
     public func beginList(elementType: TagType, size: Int) throws {
         if size < 0 {
-            throw CBError.argumentOutOfRange("size", "List size may not be negative.")
+            throw CBStreamError.argumentOutOfRange("size", "List size may not be negative.")
         }
         if elementType.rawValue < TagType.byte.rawValue ||
             elementType.rawValue > TagType.longArray.rawValue {
-            throw CBError.argumentOutOfRange("elementType", "Unrecognized tag type.")
+            throw CBStreamError.argumentOutOfRange("elementType", "Unrecognized tag type.")
         }
         try enforceConstraints(name: nil, desiredType: .list)
         goDown(thisType: .list)
@@ -110,11 +110,11 @@ public final class CBWriter {
     /// `elementType` is not a valid type.
     public func beginList(tagName: String, elementType: TagType, size: Int) throws {
         if size < 0 {
-            throw CBError.argumentOutOfRange("size", "List size may not be negative.")
+            throw CBStreamError.argumentOutOfRange("size", "List size may not be negative.")
         }
         if elementType.rawValue < TagType.byte.rawValue ||
             elementType.rawValue > TagType.longArray.rawValue {
-            throw CBError.argumentOutOfRange("elementType", "Unrecognized tag type.")
+            throw CBStreamError.argumentOutOfRange("elementType", "Unrecognized tag type.")
         }
         try enforceConstraints(name: tagName, desiredType: .list)
         goDown(thisType: .list)
@@ -132,10 +132,10 @@ public final class CBWriter {
     /// not all list elements have been written yet.
     public func endList() throws {
         if _parentType != .list || isDone {
-            throw CBError.invalidFormat("Not currently in a list.")
+            throw CBStreamError.invalidFormat("Not currently in a list.")
         }
         else if _listIndex < _listSize {
-            throw CBError.invalidFormat("Cannot end list: not all elements have been written yet. Expected: \(_listSize), written: \(_listIndex)")
+            throw CBStreamError.invalidFormat("Cannot end list: not all elements have been written yet. Expected: \(_listSize), written: \(_listIndex)")
         }
         goUp()
     }
@@ -372,7 +372,7 @@ public final class CBWriter {
     /// given stream does not support reading.
     public func writeByteArray(dataSource: CBBuffer, count: Int) throws {
         if count < 0 {
-            throw CBError.argumentOutOfRange("count", "Value may not be negative.")
+            throw CBStreamError.argumentOutOfRange("count", "Value may not be negative.")
         }
         let bufferSize = min(count, maxStreamCopyBufferSize)
         var streamCopyBuffer = [UInt8](repeating: 0, count: bufferSize)
@@ -391,10 +391,10 @@ public final class CBWriter {
     /// given stream does not support reading or `buffer` size is 0.
     public func writeByteArray(dataSource: CBBuffer, count: Int, buffer: inout [UInt8]) throws {
         if count < 0 {
-            throw CBError.argumentOutOfRange("count", "Value may not be negative.")
+            throw CBStreamError.argumentOutOfRange("count", "Value may not be negative.")
         }
         else if buffer.count == 0 && count > 0 {
-            throw CBError.argumentError("Buffer size must be greater than 0 when count is greater than 0.", "buffer")
+            throw CBStreamError.argumentError("Buffer size must be greater than 0 when count is greater than 0.", "buffer")
         }
         
         try enforceConstraints(name: nil, desiredType: .byteArray)
@@ -413,7 +413,7 @@ public final class CBWriter {
     /// given stream does not support reading.
     public func writeByteArray(tagName: String, dataSource: CBBuffer, count: Int) throws {
         if count < 0 {
-            throw CBError.argumentOutOfRange("count", "Value may not be negative.")
+            throw CBStreamError.argumentOutOfRange("count", "Value may not be negative.")
         }
         let bufferSize = min(count, maxStreamCopyBufferSize)
         var streamCopyBuffer = [UInt8](repeating: 0, count: bufferSize)
@@ -434,10 +434,10 @@ public final class CBWriter {
     public func writeByteArray(tagName: String, dataSource: CBBuffer,
                                count: Int, buffer: inout [UInt8]) throws {
         if count < 0 {
-            throw CBError.argumentOutOfRange("count", "Value may not be negative.")
+            throw CBStreamError.argumentOutOfRange("count", "Value may not be negative.")
         }
         else if buffer.count == 0 && count > 0 {
-            throw CBError.argumentError("Buffer size must be greater than 0 when count is greater than 0.", "buffer")
+            throw CBStreamError.argumentError("Buffer size must be greater than 0 when count is greater than 0.", "buffer")
         }
         
         try enforceConstraints(name: tagName, desiredType: .byteArray)
@@ -592,7 +592,7 @@ public final class CBWriter {
     /// - Throws: An `NbtError.invalidFormat` error if not all tags have been closed yet.
     public func finish() throws {
         if !isDone {
-            throw CBError.invalidFormat("Cannot finish: not all tags have been closed yet.")
+            throw CBStreamError.invalidFormat("Cannot finish: not all tags have been closed yet.")
         }
     }
     
@@ -626,34 +626,34 @@ public final class CBWriter {
     
     private func enforceConstraints(name: String?, desiredType: TagType) throws {
         if isDone {
-            throw CBError.invalidFormat("Cannot write any more tags: root tag has been closed.")
+            throw CBStreamError.invalidFormat("Cannot write any more tags: root tag has been closed.")
         }
         if _parentType == .list {
             if name != nil {
-                throw CBError.invalidFormat("Expecting an unnamed tag.")
+                throw CBStreamError.invalidFormat("Expecting an unnamed tag.")
             }
             else if _listType != desiredType {
-                throw CBError.invalidFormat("Unexpected tag type (expected: \(_listType), given: \(desiredType))")
+                throw CBStreamError.invalidFormat("Unexpected tag type (expected: \(_listType), given: \(desiredType))")
             }
             else if _listIndex >= _listSize {
-                throw CBError.invalidFormat("Given list size exceeded.")
+                throw CBStreamError.invalidFormat("Given list size exceeded.")
             }
             _listIndex += 1
         }
         else if name == nil {
-            throw CBError.invalidFormat("Expecting a named tag.")
+            throw CBStreamError.invalidFormat("Expecting a named tag.")
         }
     }
     
     private static func checkArray(data: Array<Any>, offset: Int, count: Int) throws {
         if offset < 0 {
-            throw CBError.argumentOutOfRange("offset", "Offset may not be negative.")
+            throw CBStreamError.argumentOutOfRange("offset", "Offset may not be negative.")
         }
         else if count < 0 {
-            throw CBError.argumentOutOfRange("count", "Count may not be negative.")
+            throw CBStreamError.argumentOutOfRange("count", "Count may not be negative.")
         }
         else if data.count - offset < count {
-            throw CBError.argumentError("Count may not be greater than offset subtracted from the array length.")
+            throw CBStreamError.argumentError("Count may not be greater than offset subtracted from the array length.")
         }
     }
     

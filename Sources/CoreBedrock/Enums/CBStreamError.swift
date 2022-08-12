@@ -1,4 +1,4 @@
-public enum CBError: Error, Equatable {
+public enum CBStreamError: Error, Equatable {
     case invalidReaderState(_ message: String)
     case invalidFormat(_ message: String)
     case invalidOperation(_ message: String)

@@ -35,10 +35,10 @@ class CompoundTests: XCTestCase {
         // Test if allNamed == allNamedTest
         
         XCTAssertThrowsError(try CompoundTag(name: "someUnnamedTest", someUnnamed)) { error in
-            XCTAssertEqual(error as? CBError, CBError.argumentError("Only named tags are allowed in Compound tags."))
+            XCTAssertEqual(error as? CBStreamError, CBStreamError.argumentError("Only named tags are allowed in Compound tags."))
         }
         XCTAssertThrowsError(try CompoundTag(name: "dupeNamesTest", dupeNames)) { error in
-            XCTAssertEqual(error as? CBError, CBError.argumentError("A tag with the same name has already been added."))
+            XCTAssertEqual(error as? CBStreamError, CBStreamError.argumentError("A tag with the same name has already been added."))
         }
     }
 

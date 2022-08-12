@@ -193,11 +193,11 @@ class CBWriterTests: XCTestCase {
         
         // Use Negative list size
         XCTAssertThrowsError(try writer.beginList(tagName: "list", elementType: .int, size: -1)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("size", "List size may not be negative."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("size", "List size may not be negative."))
         }
         XCTAssertNoThrow(try writer.beginList(tagName: "listOfLists", elementType: .list, size: 1))
         XCTAssertThrowsError(try writer.beginList(elementType: .int, size: -1)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("size", "List size may not be negative."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("size", "List size may not be negative."))
         }
         XCTAssertNoThrow(try writer.beginList(elementType: .int, size: 0))
         XCTAssertNoThrow(try writer.endList())
@@ -207,120 +207,120 @@ class CBWriterTests: XCTestCase {
         
         // Invalid list type
         XCTAssertThrowsError(try writer.beginList(elementType: .end, size: 0)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("elementType", "Unrecognized tag type."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("elementType", "Unrecognized tag type."))
         }
         XCTAssertThrowsError(try writer.beginList(tagName: "list", elementType: .end, size: 0)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("elementType", "Unrecognized tag type."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("elementType", "Unrecognized tag type."))
         }
         
         // Call EndCompound when not in a compound
         XCTAssertThrowsError(try writer.endCompound()) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Not currently in a compound."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Not currently in a compound."))
         }
         
         // End list before all elements have been written
         XCTAssertThrowsError(try writer.endList()) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Cannot end list: not all elements have been written yet. Expected: 1, written: 0"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Cannot end list: not all elements have been written yet. Expected: 1, written: 0"))
         }
         
         // Write the wrong kind of tag inside a list
         XCTAssertThrowsError(try writer.writeShort(value: 0)) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Unexpected tag type (expected: int, given: short)"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Unexpected tag type (expected: int, given: short)"))
         }
         
         // Write a named tag where an unnamed tag is expected
         XCTAssertThrowsError(try writer.writeInt(tagName: "NamedInt", value: 0)) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting an unnamed tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting an unnamed tag."))
         }
         
         // Write too many list elements
         XCTAssertNoThrow(try writer.writeTag(tag: IntTag()))
         XCTAssertThrowsError(try writer.writeInt(value: 0)) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Given list size exceeded."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Given list size exceeded."))
         }
         XCTAssertNoThrow(try writer.endList())
         
         // Write an unnamed tag where a named tag is expected
         XCTAssertThrowsError(try writer.writeTag(tag: IntTag())) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting a named tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting a named tag."))
         }
         XCTAssertThrowsError(try writer.writeInt(value: 0)) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting a named tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting a named tag."))
         }
         
         // End a list when not in a list
         XCTAssertThrowsError(try writer.endList()) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Not currently in a list."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Not currently in a list."))
         }
         
         // Try to write arary with out-of-range offset/count
         XCTAssertThrowsError(try writer.writeByteArray(data: dummyByteArray, offset: -1, count: 5)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("offset", "Offset may not be negative."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("offset", "Offset may not be negative."))
         }
         XCTAssertThrowsError(try writer.writeByteArray(data: dummyByteArray, offset: 0, count: -1)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("count", "Count may not be negative."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("count", "Count may not be negative."))
         }
         XCTAssertThrowsError(try writer.writeByteArray(data: dummyByteArray, offset: 0, count: 6)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentError("Count may not be greater than offset subtracted from the array length."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentError("Count may not be greater than offset subtracted from the array length."))
         }
         XCTAssertThrowsError(try writer.writeByteArray(data: dummyByteArray, offset: 1, count: 5)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentError("Count may not be greater than offset subtracted from the array length."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentError("Count may not be greater than offset subtracted from the array length."))
         }
         XCTAssertThrowsError(try writer.writeByteArray(tagName: "OutOfRangeByteArray", data: dummyByteArray, offset: -1, count: 5)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("offset", "Offset may not be negative."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("offset", "Offset may not be negative."))
         }
         XCTAssertThrowsError(try writer.writeByteArray(tagName: "OutOfRangeByteArray", data: dummyByteArray, offset: 0, count: -1)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("count", "Count may not be negative."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("count", "Count may not be negative."))
         }
         XCTAssertThrowsError(try writer.writeByteArray(tagName: "OutOfRangeByteArray", data: dummyByteArray, offset: 0, count: 6)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentError("Count may not be greater than offset subtracted from the array length."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentError("Count may not be greater than offset subtracted from the array length."))
         }
         XCTAssertThrowsError(try writer.writeByteArray(tagName: "OutOfRangeByteArray", data: dummyByteArray, offset: 1, count: 5)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentError("Count may not be greater than offset subtracted from the array length."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentError("Count may not be greater than offset subtracted from the array length."))
         }
         
         XCTAssertThrowsError(try writer.writeIntArray(data: dummyIntArray, offset: -1, count: 5)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("offset", "Offset may not be negative."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("offset", "Offset may not be negative."))
         }
         XCTAssertThrowsError(try writer.writeIntArray(data: dummyIntArray, offset: 0, count: -1)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("count", "Count may not be negative."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("count", "Count may not be negative."))
         }
         XCTAssertThrowsError(try writer.writeIntArray(data: dummyIntArray, offset: 0, count: 6)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentError("Count may not be greater than offset subtracted from the array length."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentError("Count may not be greater than offset subtracted from the array length."))
         }
         XCTAssertThrowsError(try writer.writeIntArray(data: dummyIntArray, offset: 1, count: 5)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentError("Count may not be greater than offset subtracted from the array length."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentError("Count may not be greater than offset subtracted from the array length."))
         }
         XCTAssertThrowsError(try writer.writeIntArray(tagName: "OutOfRangeIntArray", data: dummyIntArray, offset: -1, count: 5)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("offset", "Offset may not be negative."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("offset", "Offset may not be negative."))
         }
         XCTAssertThrowsError(try writer.writeIntArray(tagName: "OutOfRangeIntArray", data: dummyIntArray, offset: 0, count: -1)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("count", "Count may not be negative."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("count", "Count may not be negative."))
         }
         XCTAssertThrowsError(try writer.writeIntArray(tagName: "OutOfRangeIntArray", data: dummyIntArray, offset: 0, count: 6)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentError("Count may not be greater than offset subtracted from the array length."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentError("Count may not be greater than offset subtracted from the array length."))
         }
         XCTAssertThrowsError(try writer.writeIntArray(tagName: "OutOfRangeIntArray", data: dummyIntArray, offset: 1, count: 5)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentError("Count may not be greater than offset subtracted from the array length."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentError("Count may not be greater than offset subtracted from the array length."))
         }
 
         // Out-of-range values for stream-reading overloads of WriteByteArray
         XCTAssertThrowsError(try writer.writeByteArray(dataSource: dummyBuffer, count: -1)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("count", "Value may not be negative."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("count", "Value may not be negative."))
         }
         XCTAssertThrowsError(try writer.writeByteArray(tagName: "BadLength", dataSource: dummyBuffer, count: -1)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("count", "Value may not be negative."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("count", "Value may not be negative."))
         }
         XCTAssertThrowsError(try writer.writeByteArray(dataSource: dummyBuffer, count: -1, buffer: &dummyByteArray)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("count", "Value may not be negative."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("count", "Value may not be negative."))
         }
         XCTAssertThrowsError(try writer.writeByteArray(tagName: "BadLength", dataSource: dummyBuffer, count: -1, buffer: &dummyByteArray)) { error in
-            XCTAssertEqual(error as! CBError, CBError.argumentOutOfRange("count", "Value may not be negative."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.argumentOutOfRange("count", "Value may not be negative."))
         }
         
         // Finish too early
         XCTAssertThrowsError(try writer.finish()) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Cannot finish: not all tags have been closed yet."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Cannot finish: not all tags have been closed yet."))
         }
         
         try writer.endCompound()
@@ -328,7 +328,7 @@ class CBWriterTests: XCTestCase {
         
         // write tag after finishing
         XCTAssertThrowsError(try writer.writeTag(tag: IntTag())) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Cannot write any more tags: root tag has been closed."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Cannot write any more tags: root tag has been closed."))
         }
     }
     
@@ -337,40 +337,40 @@ class CBWriterTests: XCTestCase {
         let writer = try CBWriter(stream: ms, rootTagName: "test", useLittleEndian: false)
         // All tags (aside from list elements) must be named
         XCTAssertThrowsError(try writer.writeTag(tag: ByteTag(123))) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting a named tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting a named tag."))
         }
         XCTAssertThrowsError(try writer.writeTag(tag: ShortTag(123))) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting a named tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting a named tag."))
         }
         XCTAssertThrowsError(try writer.writeTag(tag: IntTag(123))) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting a named tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting a named tag."))
         }
         XCTAssertThrowsError(try writer.writeTag(tag: LongTag(123))) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting a named tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting a named tag."))
         }
         XCTAssertThrowsError(try writer.writeTag(tag: FloatTag(123))) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting a named tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting a named tag."))
         }
         XCTAssertThrowsError(try writer.writeTag(tag: DoubleTag(123))) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting a named tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting a named tag."))
         }
         XCTAssertThrowsError(try writer.writeTag(tag: StringTag("value"))) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting a named tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting a named tag."))
         }
         XCTAssertThrowsError(try writer.writeTag(tag: ByteArrayTag([UInt8]()))) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting a named tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting a named tag."))
         }
         XCTAssertThrowsError(try writer.writeTag(tag: IntArrayTag([Int32]()))) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting a named tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting a named tag."))
         }
         XCTAssertThrowsError(try writer.writeTag(tag: LongArrayTag([Int64]()))) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting a named tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting a named tag."))
         }
         XCTAssertThrowsError(try writer.writeTag(tag: ListTag(listType: .byte))) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting a named tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting a named tag."))
         }
         XCTAssertThrowsError(try writer.writeTag(tag: CompoundTag())) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Expecting a named tag."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Expecting a named tag."))
         }
     }
 }

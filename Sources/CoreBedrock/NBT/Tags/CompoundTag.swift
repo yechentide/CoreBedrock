@@ -115,16 +115,16 @@ public final class CompoundTag: NBT {
     /// if a tag with the given name already exists in this `CompoundTag`.
     public func append(_ newTag: NBT) throws {
         if newTag as? CompoundTag === self {
-            throw CBError.argumentError("Cannot add tag to itself")
+            throw CBStreamError.argumentError("Cannot add tag to itself")
         }
         if newTag.parent != nil {
-            throw CBError.argumentError("A tag may only be added to one compound/list at a time.")
+            throw CBStreamError.argumentError("A tag may only be added to one compound/list at a time.")
         }
         if newTag.name == nil {
-            throw CBError.argumentError("Only named tags are allowed in Compound tags.")
+            throw CBStreamError.argumentError("Only named tags are allowed in Compound tags.")
         }
         if contains(newTag.name!) {
-            throw CBError.argumentError("A tag with the same name has already been added.")
+            throw CBStreamError.argumentError("A tag with the same name has already been added.")
         }
         
         // Add to the _tags array
@@ -154,7 +154,7 @@ public final class CompoundTag: NBT {
     /// - Throws: An `CBError.argumentError` if the given tag is unnamed.
     public func contains(_ tag: NBT) throws -> Bool {
         if tag.name == nil {
-            throw CBError.argumentError("Only named tags are allowed in Compound tags.")
+            throw CBStreamError.argumentError("Only named tags are allowed in Compound tags.")
         }
         if let index = _keys[tag.name!] {
             return tag === _tags[index]
@@ -206,7 +206,7 @@ public final class CompoundTag: NBT {
     /// otherwise, `false`. This method also returns `false` if tag is not found.
     public func remove(_ tag: NBT) throws -> Bool {
         // Validate
-        guard tag.name != nil else { throw CBError.argumentError("Trying to remove an unnamed tag.") }
+        guard tag.name != nil else { throw CBStreamError.argumentError("Trying to remove an unnamed tag.") }
         
         // Look for name in _keys
         guard let index = _keys[tag.name!] else { return false }
@@ -250,8 +250,8 @@ public final class CompoundTag: NBT {
     
     func renameTag(oldName: String, newName: String) throws {
         guard oldName != newName else { return }
-        guard !_keys.keys.contains(newName) else { throw CBError.argumentError("Cannot rename: a tag with the same name already exists in this compound.") }
-        guard let index = _keys[oldName] else { throw CBError.argumentError("Cannot rename: no tag found to rename.") }
+        guard !_keys.keys.contains(newName) else { throw CBStreamError.argumentError("Cannot rename: a tag with the same name already exists in this compound.") }
+        guard let index = _keys[oldName] else { throw CBStreamError.argumentError("Cannot rename: no tag found to rename.") }
         
         let tag = _tags[index]
         // Rename tag
@@ -311,7 +311,7 @@ public final class CompoundTag: NBT {
                 newTag = LongArrayTag()
                 break
             default:
-                throw CBError.invalidFormat("Unsupported tag type found in NBT_Compound: \(type)")
+                throw CBStreamError.invalidFormat("Unsupported tag type found in NBT_Compound: \(type)")
             }
             newTag.parent = self
             newTag._name = try readStream.readString()
@@ -372,7 +372,7 @@ public final class CompoundTag: NBT {
                 newTag = LongArrayTag()
                 break
             default:
-                throw CBError.invalidFormat("Unsupported tag type found in NBT_Compound: \(type)")
+                throw CBStreamError.invalidFormat("Unsupported tag type found in NBT_Compound: \(type)")
             }
             
             try readStream.skipString()
@@ -382,7 +382,7 @@ public final class CompoundTag: NBT {
     
     override func writeTag(_ writeStream: CBBinaryWriter) throws {
         try writeStream.write(TagType.compound)
-        guard let name = name else { throw CBError.invalidFormat("Name is nil") }
+        guard let name = name else { throw CBStreamError.invalidFormat("Name is nil") }
         try writeStream.write(name)
         try writeData(writeStream)
     }

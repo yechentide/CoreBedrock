@@ -410,7 +410,7 @@ class CBReaderTests: XCTestCase {
         // skip to the end of the stream
         while try reader.readToFollowing() { }
         XCTAssertThrowsError(try reader.readListAsArray() as [Int32]) { error in
-            XCTAssertEqual(error as? CBError, CBError.endOfStream)
+            XCTAssertEqual(error as? CBStreamError, CBStreamError.endOfStream)
         }
     }
     
@@ -458,7 +458,7 @@ class CBReaderTests: XCTestCase {
         // Skip to very end and make sure we can't read any more values
         _ = try reader.readToFollowing()
         XCTAssertThrowsError(try reader.readValue()) { error in
-            XCTAssertEqual(error as! CBError, CBError.endOfStream)
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.endOfStream)
         }
     }
     
@@ -473,48 +473,48 @@ class CBReaderTests: XCTestCase {
         
         // Attempt to use ReadValue when not at value
         XCTAssertThrowsError(try reader.readValue()) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidOperation("Value already read, or no value to read."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidOperation("Value already read, or no value to read."))
         }
         reader.cacheTagValues = true
         XCTAssertThrowsError(try reader.readValue()) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidOperation("No value to read."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidOperation("No value to read."))
         }
         
         // Attempt to read from a corrupt stream
         XCTAssertThrowsError(try reader.readToFollowing()) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("NBT tag type out of range: 123"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("NBT tag type out of range: 123"))
         }
         
         // Make sure we've properly entered the error state
         XCTAssertTrue(reader.isInErrorState)
         XCTAssertFalse(reader.hasName)
         XCTAssertThrowsError(try reader.readToFollowing()) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidReaderState("CBReader is in an erroneous state!"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidReaderState("CBReader is in an erroneous state!"))
         }
         XCTAssertThrowsError(try reader.readListAsArray() as [Int32]) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidReaderState("CBReader is in an erroneous state!"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidReaderState("CBReader is in an erroneous state!"))
         }
         XCTAssertThrowsError(try reader.readToNextSibling()) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidReaderState("CBReader is in an erroneous state!"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidReaderState("CBReader is in an erroneous state!"))
         }
         XCTAssertThrowsError(try reader.readToDescendant("derp")) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidReaderState("CBReader is in an erroneous state!"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidReaderState("CBReader is in an erroneous state!"))
         }
         XCTAssertThrowsError(try reader.readAsTag()) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidReaderState("CBReader is in an erroneous state!"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidReaderState("CBReader is in an erroneous state!"))
         }
         XCTAssertThrowsError(try reader.skip()) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidReaderState("CBReader is in an erroneous state!"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidReaderState("CBReader is in an erroneous state!"))
         }
     }
     
     func testCorruptFileRead() throws {
         let emptyFile = Data()
         XCTAssertThrowsError(try tryReadBadFile(emptyFile, useLittleEndian: false)) { error in
-            XCTAssertEqual(error as! CBError, CBError.endOfStream)
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.endOfStream)
         }
         XCTAssertThrowsError(try NBTFile().load(contentsOf: emptyFile, compression: .none)) { error in
-            XCTAssertEqual(error as! CBError, CBError.endOfStream)
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.endOfStream)
         }
         
         let badHeader = Data([
@@ -523,10 +523,10 @@ class CBReaderTests: XCTestCase {
             0x00 // end tag
         ])
         XCTAssertThrowsError(try tryReadBadFile(badHeader, useLittleEndian: false)) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Given NBT stream does not start with TAG_Compound."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Given NBT stream does not start with TAG_Compound."))
         }
         XCTAssertThrowsError(try NBTFile().load(contentsOf: badHeader, compression: .none)) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Given NBT stream does not start with TAG_Compound."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Given NBT stream does not start with TAG_Compound."))
         }
         
         let badStringLength = Data([
@@ -535,10 +535,10 @@ class CBReaderTests: XCTestCase {
             0x00 // end tag
         ])
         XCTAssertThrowsError(try tryReadBadFile(badStringLength, useLittleEndian: false)) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Negative string length given!"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Negative string length given!"))
         }
         XCTAssertThrowsError(try NBTFile().load(contentsOf: badStringLength, compression: .none)) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Negative string length given!"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Negative string length given!"))
         }
         
         let abruptStringEnd = Data([
@@ -547,10 +547,10 @@ class CBReaderTests: XCTestCase {
             0x00 // premature end tag
         ])
         XCTAssertThrowsError(try tryReadBadFile(abruptStringEnd, useLittleEndian: false)) { error in
-            XCTAssertEqual(error as! CBError, CBError.endOfStream)
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.endOfStream)
         }
         XCTAssertThrowsError(try NBTFile(useLittleEndian: false).load(contentsOf: abruptStringEnd, compression: .none)) { error in
-            XCTAssertEqual(error as! CBError, CBError.endOfStream)
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.endOfStream)
         }
         
         let badSecondTag = Data([
@@ -560,10 +560,10 @@ class CBReaderTests: XCTestCase {
             0x00 // end tag
         ])
         XCTAssertThrowsError(try tryReadBadFile(badSecondTag, useLittleEndian: false)) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("NBT tag type out of range: 255"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("NBT tag type out of range: 255"))
         }
         XCTAssertThrowsError(try NBTFile(useLittleEndian: false).load(contentsOf: badSecondTag, compression: .none)) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("NBT tag type out of range: 255"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("NBT tag type out of range: 255"))
         }
         
         NBTFile.littleEndianByDefault = false
@@ -575,10 +575,10 @@ class CBReaderTests: XCTestCase {
             0xFF // invalid list tag type (-1)
         ])
         XCTAssertThrowsError(try tryReadBadFile(badListType, useLittleEndian: false)) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("NBT tag type out of range: 255"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("NBT tag type out of range: 255"))
         }
         XCTAssertThrowsError(try NBTFile().load(contentsOf: badListType, compression: .none)) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("NBT tag type out of range: 255"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("NBT tag type out of range: 255"))
         }
         
         let badListSize = Data([
@@ -590,10 +590,10 @@ class CBReaderTests: XCTestCase {
             0xFF, 0xFF, 0xFF, 0xFF, // List size: -1
         ])
         XCTAssertThrowsError(try tryReadBadFile(badListSize, useLittleEndian: false)) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Negative tag length given: -1"))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Negative tag length given: -1"))
         }
         XCTAssertThrowsError(try NBTFile().load(contentsOf: badListSize, compression: .none)) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidFormat("Negative list size given."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidFormat("Negative list size given."))
         }
     }
     
@@ -621,7 +621,7 @@ class CBReaderTests: XCTestCase {
         XCTAssertFalse(reader.hasName)
         XCTAssertFalse(reader.hasLength)
         XCTAssertThrowsError(try reader.readAsTag()) { error in
-            XCTAssertEqual(error as! CBError, CBError.invalidOperation("Value already read, or no value to read."))
+            XCTAssertEqual(error as! CBStreamError, CBStreamError.invalidOperation("Value already read, or no value to read."))
         }
         
         XCTAssertFalse(try reader.readToFollowing())

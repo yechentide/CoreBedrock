@@ -20,7 +20,7 @@ public final class NBTFile {
     /// - Parameter tag: The compound tag to become the root of this file.
     /// - Throws: An `NbtError.argumentError` if the tag is unnamed.
     public func setRootTag(_ tag: CompoundTag) throws {
-        guard tag.name != nil else { throw CBError.argumentError("Root tag must be named.") }
+        guard tag.name != nil else { throw CBStreamError.argumentError("Root tag must be named.") }
         _rootTag = tag
     }
 
@@ -161,7 +161,7 @@ public final class NBTFile {
                 fileCompression = .zLib
                 break
             default:
-                throw CBError.invalidData("Could not auto-detect compression format.")
+                throw CBStreamError.invalidData("Could not auto-detect compression format.")
 
             }
         } else {
@@ -176,7 +176,7 @@ public final class NBTFile {
             decompressedData = buffer.unzip()
         }
         // Validate
-        guard decompressedData != nil else { throw CBError.invalidFormat("NBT file was not compressed in the specified format.") }
+        guard decompressedData != nil else { throw CBStreamError.invalidFormat("NBT file was not compressed in the specified format.") }
 
         // Put the data into an CBBuffer
         let ms = CBBuffer(decompressedData!)
@@ -194,8 +194,8 @@ public final class NBTFile {
     /// - Returns: The number of bytes read from the stream.
     func loadInternal(_ buffer: CBBuffer, _ skip: (NBT) -> Bool) throws -> Int {
         let firstByte = buffer.readByte()
-        guard firstByte >= 0 else { throw CBError.endOfStream }
-        guard firstByte == TagType.compound.rawValue else { throw CBError.invalidFormat("Given NBT stream does not start with TAG_Compound.") }
+        guard firstByte >= 0 else { throw CBStreamError.endOfStream }
+        guard firstByte == TagType.compound.rawValue else { throw CBStreamError.invalidFormat("Given NBT stream does not start with TAG_Compound.") }
         
         // Initialize reader
         let reader = CBBinaryReader(buffer, littleEndian)
@@ -220,7 +220,7 @@ public final class NBTFile {
         var buffer = Data()
         _ = try save(to: &buffer, compression: compression)
         // Velidate
-        guard buffer.count > 0 else { throw CBError.invalidOperation("Unable to save to URL, no data to write.") }
+        guard buffer.count > 0 else { throw CBStreamError.invalidOperation("Unable to save to URL, no data to write.") }
         // Write data to url
         try buffer.write(to: url, options: .atomic)
 
@@ -236,8 +236,8 @@ public final class NBTFile {
     /// tags contained unnamed tags or if an `NbtList` tag had unknown list type and no elements.
     /// - Returns: The number of uncompressed bytes written to the buffer.
     public func save(to buffer: inout Data, compression: CBCompression) throws -> Int {
-        guard rootTag.name != nil else { throw CBError.invalidFormat("Cannot save NBTFile: root tag is not named. Its name may be an empty string, but not nil.") }
-        guard compression != .autoDetect else { throw CBError.argumentError(".autoDetect is not a valid CBCompression value for saving.") }
+        guard rootTag.name != nil else { throw CBStreamError.invalidFormat("Cannot save NBTFile: root tag is not named. Its name may be an empty string, but not nil.") }
+        guard compression != .autoDetect else { throw CBStreamError.argumentError(".autoDetect is not a valid CBCompression value for saving.") }
 
         // Get NBT data into buffer
         let stream = CBBuffer()
@@ -247,10 +247,10 @@ public final class NBTFile {
         // Compress the data
         switch compression {
         case .gZip:
-            guard let compressedData = data.gzip() else { throw CBError.compressionError }
+            guard let compressedData = data.gzip() else { throw CBStreamError.compressionError }
             buffer = compressedData
         case .zLib:
-            guard let compressedData = data.zip() else { throw CBError.compressionError }
+            guard let compressedData = data.zip() else { throw CBStreamError.compressionError }
             buffer = compressedData
         default:
             buffer = data

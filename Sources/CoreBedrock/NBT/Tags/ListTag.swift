@@ -96,17 +96,17 @@ public final class ListTag: NBT {
         if newType == .end {
             // Empty lists may have type "End"
             if _tags.count > 0 {
-                throw CBError.argumentError("Only empty list tags may have TagType of End.")
+                throw CBStreamError.argumentError("Only empty list tags may have TagType of End.")
             }
         } else if newType < TagType.byte || (newType > TagType.longArray && newType != TagType.unknown) {
-            throw CBError.argumentOutOfRange("newType", "value is out of the range of acceptable tag types.")
+            throw CBStreamError.argumentOutOfRange("newType", "value is out of the range of acceptable tag types.")
         }
         
         if _tags.count > 0 {
             let actualType = _tags[0].tagType
             // We can safely assume that ALL tags have the same TagType as the first tag.
             if actualType != newType {
-                throw CBError.argumentError("Given NBTType (\(newType)) does not match actual element type (\(actualType)).")
+                throw CBStreamError.argumentError("Given NBTType (\(newType)) does not match actual element type (\(actualType)).")
             }
         }
         _listType = newType
@@ -159,7 +159,7 @@ public final class ListTag: NBT {
     /// - Returns: The tag at the given index.
     public func get(at index: Int) throws -> NBT {
         if index < 0 || index >= _tags.count {
-            throw CBError.argumentOutOfRange("index", "The given value is not a valid index in the list.")
+            throw CBStreamError.argumentOutOfRange("index", "The given value is not a valid index in the list.")
         }
         return _tags[index]
     }
@@ -188,19 +188,19 @@ public final class ListTag: NBT {
     /// - Throws: An `CBError.argumentError` if `newTag` is already in another list, is the same as this tag or does not match the tag type of this list; an `CBError.argumentOutOfRange` error if the given `index` is not a valid index in this `ListTag`.
     public func insert(_ newTag: NBT, at index: Int) throws {
         if newTag.parent != nil {
-            throw CBError.argumentError("A tag may only be added to one compound/list at a time.")
+            throw CBStreamError.argumentError("A tag may only be added to one compound/list at a time.")
         }
         if newTag === self || newTag === self.parent {
-            throw CBError.argumentError("A list may not be added to itself or to its child tag.")
+            throw CBStreamError.argumentError("A list may not be added to itself or to its child tag.")
         }
         if newTag.name != nil {
-            throw CBError.argumentError("Named tag given. A list may only contain unnamed tags.")
+            throw CBStreamError.argumentError("Named tag given. A list may only contain unnamed tags.")
         }
         if listType != .unknown && newTag.tagType != listType {
-            throw CBError.argumentError("Items in this list must be of type \(listType). Given type: \(newTag.tagType).", "newTag")
+            throw CBStreamError.argumentError("Items in this list must be of type \(listType). Given type: \(newTag.tagType).", "newTag")
         }
         if index < 0 || index > _tags.count {
-            throw CBError.argumentOutOfRange("index", "The given value is not a valid index in the list.")
+            throw CBStreamError.argumentOutOfRange("index", "The given value is not a valid index in the list.")
         }
         _tags.insert(newTag, at: index)
         if listType == .unknown {
@@ -227,7 +227,7 @@ public final class ListTag: NBT {
     /// - Throws: An `CBError.argumentOutOfRange` error if `index` is not a valid index in the `ListTag`.
     public func remove(at index: Int) throws -> NBT {
         if index < 0 || index >= _tags.count {
-            throw CBError.argumentOutOfRange("index", "The given value is not a valid index in the list.")
+            throw CBStreamError.argumentOutOfRange("index", "The given value is not a valid index in the list.")
         }
         let tag = _tags.remove(at: index)
         tag.parent = nil
@@ -252,7 +252,7 @@ public final class ListTag: NBT {
         try setListType(readStream.readTagType())
         
         let length = try readStream.readInt32()
-        guard length >= 0 else { throw CBError.invalidFormat("Negative list size given.") }
+        guard length >= 0 else { throw CBStreamError.invalidFormat("Negative list size given.") }
         
         for _ in 0..<length {
             var newTag: NBT
@@ -295,7 +295,7 @@ public final class ListTag: NBT {
                 break
             default:
                 // Should never happen since ListType is checked beforehand
-                throw CBError.invalidFormat("Unsupported tag type found in NBT_List: \(listType)")
+                throw CBStreamError.invalidFormat("Unsupported tag type found in NBT_List: \(listType)")
             }
             newTag.parent = self
             if try newTag.readTag(readStream, skip) {
@@ -311,7 +311,7 @@ public final class ListTag: NBT {
         
         let length = Int(try readStream.readInt32())
         if length < 0 {
-            throw CBError.invalidFormat("Negative list size given.")
+            throw CBStreamError.invalidFormat("Negative list size given.")
         }
         
         switch listType {
@@ -364,13 +364,13 @@ public final class ListTag: NBT {
     
     override func writeTag(_ writeStream: CBBinaryWriter) throws {
         try writeStream.write(TagType.list)
-        guard let name = name else { throw CBError.invalidFormat("Name is nil") }
+        guard let name = name else { throw CBStreamError.invalidFormat("Name is nil") }
         try writeStream.write(name)
         try writeData(writeStream)
     }
     
     override func writeData(_ writeStream: CBBinaryWriter) throws {
-        guard listType != .unknown else { throw CBError.invalidFormat("ListTag had no elements and an Unknown ListType.") }
+        guard listType != .unknown else { throw CBStreamError.invalidFormat("ListTag had no elements and an Unknown ListType.") }
         try writeStream.write(listType)
         // write as Int32
         try writeStream.write(Int32(_tags.count))
