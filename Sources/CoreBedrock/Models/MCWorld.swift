@@ -13,7 +13,7 @@ public class MCWorld {
     public var levelData: LevelData
 
     public var wellKnownKeys   = Set<MCWellKnownKey>()
-    public var serverPlayers   = [Data]()
+    public var serverPlayers   = Set<MCPlayer>()
     public var maps            = [Data]()
     public var villages        = [Data]()
     public var structures      = [Data]()
@@ -40,7 +40,7 @@ public class MCWorld {
         self.levelData = levelData
         
         getWellKnownKeys()
-        getServerPlayers()
+        storeKeys()
     }
     
     private func getWellKnownKeys() {
@@ -53,15 +53,29 @@ public class MCWorld {
         }
     }
     
-    private func getServerPlayers() {
+    private func storeKeys() {
         db.seekToFirst()
         while db.valid() {
-            // prefix: player_
-            if let keyData = db.value(), String(data: keyData[0...5], encoding: .utf8) == "player" {
-                serverPlayers.append(keyData)
+            defer {
+                keysCount += 1
+                db.next()
             }
-            keysCount += 1
-            db.next()
+            guard let key = db.value() else { continue }
+            
+            let prefix = String(data: key[0...2], encoding: .utf8)
+            if prefix == "pla", let value = db.value(), value.count == 166 {
+                let msaID = String(data: value[13...48], encoding: .utf8)!
+                let signedID = String(data: value[66...101], encoding: .utf8)!
+                let serverID = String(data: value[115...164], encoding: .utf8)!
+                let player = MCPlayer(msaID: msaID, signedID: signedID, serverID: serverID)
+                serverPlayers.insert(player)
+            } else if prefix == "map" {
+                maps.append(key)
+            } else if prefix == "VIL" {
+                villages.append(key)
+            } else if prefix == "str" {
+                structures.append(key)
+            }
         }
     }
     
