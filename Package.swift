@@ -17,7 +17,10 @@ let package = Package(
     ],
     targets: [
         .target(name: "CoreBedrock",
-                dependencies: ["LvDBWrapper"]),
+                dependencies: ["LvDBWrapper"],
+                resources: [
+                    .process("./Extensions/endian.md")
+                ]),
         .testTarget(name: "CoreBedrockTests",
                     dependencies: ["CoreBedrock"],
                     resources: [
