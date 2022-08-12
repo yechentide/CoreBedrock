@@ -1,0 +1,151 @@
+Version: 9
+Content:
+TAG_Compound: 97 entries {{
+    TAG_String("BiomeOverride"): ""
+    TAG_Byte("CenterMapsToOrigin"): 0
+    TAG_Byte("ConfirmedPlatformLockedContent"): 0
+    TAG_Int("Difficulty"): 2
+    TAG_String("FlatWorldLayers"): "{
+        "biome_id":1,
+        "block_layers":[
+            {
+                "block_name":"minecraft:bedrock",
+                "count":1
+            },
+            {
+                "block_name":"minecraft:dirt",
+                "count":2
+            },
+            {
+                "block_name":"minecraft:grass",
+                "count":1
+            }
+        ],
+        "encoding_version":6,
+        "structure_options":null,
+        "world_version":"version.post_1_18"
+    }"
+    TAG_Byte("ForceGameType"): 0
+    TAG_Int("GameType"): 1
+    TAG_Int("Generator"): 1
+    TAG_String("InventoryVersion"): "1.19.11"
+    TAG_Byte("LANBroadcast"): 1
+    TAG_Byte("LANBroadcastIntent"): 1
+    TAG_Double("LastPlayed"): 1659422674
+    TAG_String("LevelName"): "abcdefg"
+    TAG_Int("LimitedWorldOriginX"): 0
+    TAG_Int("LimitedWorldOriginY"): 32767
+    TAG_Int("LimitedWorldOriginZ"): 0
+    TAG_List("MinimumCompatibleClientVersion"): 5 entries {{
+        TAG_Int: 1
+        TAG_Int: 19
+        TAG_Int: 10
+        TAG_Int: 0
+        TAG_Int: 0
+    }
+    TAG_Byte("MultiplayerGame"): 1
+    TAG_Byte("MultiplayerGameIntent"): 1
+    TAG_Int("NetherScale"): 8
+    TAG_Int("NetworkVersion"): 534
+    TAG_Int("Platform"): 2
+    TAG_Int("PlatformBroadcastIntent"): 3
+    TAG_Double("RandomSeed"): 666666
+    TAG_Byte("SpawnV1Villagers"): 0
+    TAG_Int("SpawnX"): 0
+    TAG_Int("SpawnY"): 32767
+    TAG_Int("SpawnZ"): 0
+    TAG_Int("StorageVersion"): 9
+    TAG_Double("Time"): 5000
+    TAG_Int("WorldVersion"): 1
+    TAG_Int("XBLBroadcastIntent"): 3
+    TAG_Compound("abilities"): 15 entries {{
+        TAG_Byte("attackmobs"): 1
+        TAG_Byte("attackplayers"): 1
+        TAG_Byte("build"): 1
+        TAG_Byte("doorsandswitches"): 1
+        TAG_Float("flySpeed"): 0.05
+        TAG_Byte("flying"): 0
+        TAG_Byte("instabuild"): 0
+        TAG_Byte("invulnerable"): 0
+        TAG_Byte("lightning"): 0
+        TAG_Byte("mayfly"): 0
+        TAG_Byte("mine"): 1
+        TAG_Byte("op"): 0
+        TAG_Byte("opencontainers"): 1
+        TAG_Byte("teleport"): 0
+        TAG_Float("walkSpeed"): 0.1
+    }
+    TAG_String("baseGameVersion"): "*"
+    TAG_Byte("bonusChestEnabled"): 0
+    TAG_Byte("bonusChestSpawned"): 0
+    TAG_Byte("commandblockoutput"): 1
+    TAG_Byte("commandblocksenabled"): 1
+    TAG_Byte("commandsEnabled"): 1
+    TAG_Double("currentTick"): 13017
+    TAG_Byte("dodaylightcycle"): 0
+    TAG_Byte("doentitydrops"): 1
+    TAG_Byte("dofiretick"): 1
+    TAG_Byte("doimmediaterespawn"): 1
+    TAG_Byte("doinsomnia"): 1
+    TAG_Byte("domobloot"): 1
+    TAG_Byte("domobspawning"): 1
+    TAG_Byte("dotiledrops"): 1
+    TAG_Byte("doweathercycle"): 1
+    TAG_Byte("drowningdamage"): 1
+    TAG_Int("eduOffer"): 0
+    TAG_Byte("educationFeaturesEnabled"): 0
+    TAG_Compound("experiments"): 2 entries {{
+        TAG_Byte("experiments_ever_used"): 0
+        TAG_Byte("saved_with_toggled_experiments"): 0
+    }
+    TAG_Byte("falldamage"): 1
+    TAG_Byte("firedamage"): 1
+    TAG_Byte("freezedamage"): 1
+    TAG_Int("functioncommandlimit"): 10000
+    TAG_Byte("hasBeenLoadedInCreative"): 1
+    TAG_Byte("hasLockedBehaviorPack"): 0
+    TAG_Byte("hasLockedResourcePack"): 0
+    TAG_Byte("immutableWorld"): 0
+    TAG_Byte("isFromLockedTemplate"): 0
+    TAG_Byte("isFromWorldTemplate"): 0
+    TAG_Byte("isSingleUseWorld"): 0
+    TAG_Byte("isWorldTemplateOptionLocked"): 0
+    TAG_Byte("keepinventory"): 0
+    TAG_List("lastOpenedWithVersion"): 5 entries {{
+        TAG_Int: 1
+        TAG_Int: 19
+        TAG_Int: 11
+        TAG_Int: 1
+        TAG_Int: 0
+    }
+    TAG_Float("lightningLevel"): 0.0
+    TAG_Int("lightningTime"): 149246
+    TAG_Int("limitedWorldDepth"): 16
+    TAG_Int("limitedWorldWidth"): 16
+    TAG_Int("maxcommandchainlength"): 65535
+    TAG_Byte("mobgriefing"): 1
+    TAG_Byte("naturalregeneration"): 1
+    TAG_Int("permissionsLevel"): 0
+    TAG_Int("playerPermissionsLevel"): 1
+    TAG_String("prid"): ""
+    TAG_Byte("pvp"): 0
+    TAG_Float("rainLevel"): 0.0
+    TAG_Int("rainTime"): 95720
+    TAG_Int("randomtickspeed"): 1
+    TAG_Byte("requiresCopiedPackRemovalCheck"): 0
+    TAG_Byte("respawnblocksexplode"): 1
+    TAG_Byte("sendcommandfeedback"): 1
+    TAG_Int("serverChunkTickRange"): 4
+    TAG_Byte("showbordereffect"): 1
+    TAG_Byte("showcoordinates"): 1
+    TAG_Byte("showdeathmessages"): 1
+    TAG_Byte("showtags"): 1
+    TAG_Byte("spawnMobs"): 1
+    TAG_Int("spawnradius"): 5
+    TAG_Byte("startWithMapEnabled"): 0
+    TAG_Byte("texturePacksRequired"): 0
+    TAG_Byte("tntexplodes"): 1
+    TAG_Byte("useMsaGamertagsOnly"): 0
+    TAG_Double("worldStartCount"): 4294967294
+    TAG_Compound("world_policies"): 0 entries {{}
+}

@@ -24,7 +24,8 @@ let package = Package(
         .testTarget(name: "CoreBedrockTests",
                     dependencies: ["CoreBedrock"],
                     resources: [
-                        .process("TestData")
+                        .process("TestData"),
+                        .copy("TestWorld")
                     ]),
     ]
 )
