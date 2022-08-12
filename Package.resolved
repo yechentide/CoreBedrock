@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "lvdbwrapper",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yechentide/LvDBWrapper",
+      "state" : {
+        "revision" : "a25cd30c6a50c7abed605b12550567764e6e46a8",
+        "version" : "1.0.0"
+      }
+    }
+  ],
+  "version" : 2
+}
