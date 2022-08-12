@@ -60,7 +60,7 @@ public class MCWorld {
                 keysCount += 1
                 db.next()
             }
-            guard let key = db.value() else { continue }
+            guard let key = db.key() else { continue }
             
             let prefix = String(data: key[0...2], encoding: .utf8)
             if prefix == "pla", let value = db.value(), value.count == 166 {
