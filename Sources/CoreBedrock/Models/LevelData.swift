@@ -5,23 +5,20 @@ public struct LevelData: CustomStringConvertible {
     private var version: Int32
     public var rootTag: CompoundTag
     
-    public init?(srcURL: URL) {
-        do {
-            guard let nbtData = try? Data(contentsOf: srcURL), nbtData.count > 8 else { return nil }
-            
-            version = nbtData[0...3].int32!
-            // data length: nbtData[4...7].int32
-            
-            let stream = CBBuffer(nbtData[8...])
-            let reader = CBReader(stream)
-            rootTag = try reader.readAsTag() as! CompoundTag
-            if rootTag.tagType != .compound { return nil }
-            
-            self.srcURL = srcURL
-        } catch {
-            print("Error: cannot init level data")
-            return nil
+    public init(srcURL: URL) throws {
+        guard let nbtData = try? Data(contentsOf: srcURL), nbtData.count > 8 else {
+            throw CBLvDBError.failedParseLevelData(srcURL)
         }
+        
+        version = nbtData[0...3].int32!
+        // data length: nbtData[4...7].int32
+        
+        let stream = CBBuffer(nbtData[8...])
+        let reader = CBReader(stream)
+        rootTag = try reader.readAsTag() as! CompoundTag
+        if rootTag.tagType != .compound { throw CBLvDBError.failedParseLevelData(srcURL) }
+        
+        self.srcURL = srcURL
     }
     
     public var description: String {
