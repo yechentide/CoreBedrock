@@ -1,6 +1,5 @@
 import Foundation
 import CoreGraphics
-import LvDBWrapper
 
 public struct MCDir: Identifiable {
     public var id = UUID()
@@ -133,10 +132,10 @@ public struct MCDir: Identifiable {
         try FileManager.default.removeItem(at: dirURL)
     }
     
-    public func parser() throws -> MCWorld {
+    public func parser(onlyConnectDB: Bool) throws -> MCWorld {
         guard !useSecurityScope else {
             throw CBLvDBError.parsingWorldOutsideTheSandbox(dirURL)
         }
-        return try MCWorld(from: dirURL)
+        return try MCWorld(from: dirURL, storeKeys: !onlyConnectDB)
     }
 }
