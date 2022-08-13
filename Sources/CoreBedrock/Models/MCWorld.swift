@@ -130,20 +130,20 @@ extension MCWorld {
                 }
                 
                 print("Delete digp & actorprefix in chunk (\(x), \(z))")
-                let digp = "digp".data(using: .utf8)! + prefix
-                if let digpData = db.get(digp), digpData.count > 0, digpData.count % 8 == 0 {
+                let digpKey = "digp".data(using: .utf8)! + prefix
+                if let digpData = db.get(digpKey), digpData.count > 0, digpData.count % 8 == 0 {
                     for i in 0..<digpData.count/8 {
-                        let actorprefix = "actorprefix".data(using: .utf8)! + digpData[i*8...i*8+7]
-                        if db.remove(actorprefix) {
-                            print("    Delete actorprefix: \(actorprefix.hexString)")
+                        let actorprefixKey = "actorprefix".data(using: .utf8)! + digpData[i*8...i*8+7]
+                        if db.remove(actorprefixKey) {
+                            print("    Delete actorprefix: \(actorprefixKey.hexString)")
                         } else {
-                            print("    Error ==> Delete actorprefix: \(actorprefix.hexString)")
+                            print("    Error ==> Delete actorprefix: \(actorprefixKey.hexString)")
                         }
                     }
-                    if db.remove(digp) {
-                        print("    Delete digp: \(digp.hexString)")
+                    if db.remove(digpKey) {
+                        print("    Delete digp: \(digpKey.hexString)")
                     } else {
-                        print("    Delete digp: \(digp.hexString)")
+                        print("    Delete digp: \(digpKey.hexString)")
                     }
                 }
                 
