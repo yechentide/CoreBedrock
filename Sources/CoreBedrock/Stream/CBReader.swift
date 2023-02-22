@@ -310,9 +310,9 @@ public class CBReader {
     
     /// Reads the entirety of the current tag, including any descendants,
     /// and constructs an NbtTag object of the appropriate type.
-    /// - Throws: An `NbtError.invalidFormat` error if an error occurred while parsing data in NBT format;
-    /// an `NbtError.invalidReaderState` error if the CBReader cannot recover from a previous parsing error;
-    /// an `NbtError.endOfStream` error if the end of the stream has been reached; an `NbtError.invalidOperation`
+    /// - Throws: An `CBStreamError.invalidFormat` error if an error occurred while parsing data in NBT format;
+    /// an `CBStreamError.invalidReaderState` error if the CBReader cannot recover from a previous parsing error;
+    /// an `CBStreamError.endOfStream` error if the end of the stream has been reached; an `CBStreamError.invalidOperation`
     /// error if the tag value has already been read and `cacheTagValues` is false.
     /// - Returns: Constructed NbtTag object
     public func readAsTag() throws -> NBT {
@@ -383,10 +383,10 @@ public class CBReader {
     /// Reads the value as an object of the correct type, boxed.
     /// Cannot be called for tags that do not have a single-object
     /// value (compound, list, and end tags).
-    /// - Throws: An `NbtError.endOfStream` error if the end of the stream was reached;
-    /// an `NbtError.invalidFormat` error if an error occurred while parsing data in NBT format;
-    /// an `NbtError.invalidOperation` error if the value has already been read or there is no
-    /// value to read; an `NbtError.invalidReaderState` error if the `CBReader` cannot
+    /// - Throws: An `CBStreamError.endOfStream` error if the end of the stream was reached;
+    /// an `CBStreamError.invalidFormat` error if an error occurred while parsing data in NBT format;
+    /// an `CBStreamError.invalidOperation` error if the value has already been read or there is no
+    /// value to read; an `CBStreamError.invalidReaderState` error if the `CBReader` cannot
     /// recover from a previous parsing error.
     /// - Returns: The value boxed in the correct type.
     public func readValue() throws -> Any? {
@@ -464,10 +464,10 @@ public class CBReader {
     /// the remaining unread tags/values. ListType must be a value type
     /// (byte, short, int, long, float, double, or string). Stops reading after
     /// the last list element.
-    /// - Throws: An `NbtError.endOfStream` error if the end of the stream was reached;
-    /// an `NbtError.invalidOperation` error if the current tag is not of type List; an
-    /// `NbtError.invalidReaderState` error if `CBReader` cannot recover from
-    /// a previous parsing error; an `NbtError.invalidFormat` error if an error occurred while
+    /// - Throws: An `CBStreamError.endOfStream` error if the end of the stream was reached;
+    /// an `CBStreamError.invalidOperation` error if the current tag is not of type List; an
+    /// `CBStreamError.invalidReaderState` error if `CBReader` cannot recover from
+    /// a previous parsing error; an `CBStreamError.invalidFormat` error if an error occurred while
     /// parsing data in NBT foramt.
     /// - Returns: List contents converted to an array of the requested type.
     public func readListAsArray<T>() throws -> [T] {

@@ -43,7 +43,7 @@ public final class CBWriter {
     public var baseStream: CBBuffer { return _writer.baseStream }
     
     /// Begins an unnamed compound tag.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can be
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can be
     /// written, a named compound tag was expected, a tag of a different type was
     /// expected, or the size of a parent list has been exceeded.
     public func beginCompound() throws {
@@ -53,7 +53,7 @@ public final class CBWriter {
     
     /// Begins a named compound tag.
     /// - Parameter tagName: The name to give to this compound tag.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can be
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can be
     /// written, an unnamed compound tag was expected, a tag of a different type was
     /// expected.
     public func beginCompound(_ tagName: String) throws {
@@ -65,7 +65,7 @@ public final class CBWriter {
     }
     
     /// Ends a compound tag.
-    /// - Throws: An `NbtError.invalidFormat` error if not currently in a compound.
+    /// - Throws: An `CBStreamError.invalidFormat` error if not currently in a compound.
     public func endCompound() throws {
         if isDone || _parentType != .compound {
             throw CBStreamError.invalidFormat("Not currently in a compound.")
@@ -78,9 +78,9 @@ public final class CBWriter {
     /// - Parameters:
     ///   - elementType: The type of elements in the list.
     ///   - size: The number of elements in the list. Must not be negative.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can be
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can be
     /// written, a named list tag was expected, a tag of a different type was expected,
-    /// or the size of a parent list has been exceeded; an `NbtError.argumentOutOfRange`
+    /// or the size of a parent list has been exceeded; an `CBStreamError.argumentOutOfRange`
     /// error if `size` is negative or `elementType` is not a valid type.
     public func beginList(elementType: TagType, size: Int) throws {
         if size < 0 {
@@ -104,9 +104,9 @@ public final class CBWriter {
     ///   - tagName: The name given to this list tag.
     ///   - elementType: The type of elements in the list.
     ///   - size: The number of elements in the list. Must not be negative.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can be
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can be
     /// written, a unnamed list tag was expected, or a tag of a different type was expected;
-    /// an `NbtError.argumentOutOfRange` error if `size` is negative or
+    /// an `CBStreamError.argumentOutOfRange` error if `size` is negative or
     /// `elementType` is not a valid type.
     public func beginList(tagName: String, elementType: TagType, size: Int) throws {
         if size < 0 {
@@ -128,7 +128,7 @@ public final class CBWriter {
     }
     
     /// Ends a list tag.
-    /// - Throws: An `NbtError.invalidFormat` error if not currently in a list or
+    /// - Throws: An `CBStreamError.invalidFormat` error if not currently in a list or
     /// not all list elements have been written yet.
     public func endList() throws {
         if _parentType != .list || isDone {
@@ -143,7 +143,7 @@ public final class CBWriter {
     
     /// Writes an unnamed byte tag.
     /// - Parameter value: The unsigned byte to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
     /// be written, a named byte tag was expcted, a tag of a different type was exptected,
     /// or the size of a parent list has been exceeded.
     public func writeByte(value: UInt8) throws {
@@ -155,7 +155,7 @@ public final class CBWriter {
     /// - Parameters:
     ///   - tagName: The name to be given to this tag.
     ///   - value: The unsigned byte to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
     /// be written, an unnamed byte tag was expcted, or a tag of a different type was exptected.
     public func writeByte(tagName: String, value: UInt8) throws {
         try enforceConstraints(name: tagName, desiredType: .byte)
@@ -166,7 +166,7 @@ public final class CBWriter {
     
     /// Writes an unnamed double tag.
     /// - Parameter value: The double-precision, floating-point value to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
     /// be written, a named double tag was expcted, a tag of a different type was exptected,
     /// or the size of a parent list has been exceeded.
     public func writeDouble(value: Double) throws {
@@ -178,7 +178,7 @@ public final class CBWriter {
     /// - Parameters:
     ///   - tagName: The name to be given to this tag.
     ///   - value: The double-precision, floating-point value to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
     /// be written, an unnamed double tag was expcted, or a tag of a different type was exptected.
     public func writeDouble(tagName: String, value: Double) throws {
         try enforceConstraints(name: tagName, desiredType: .double)
@@ -189,7 +189,7 @@ public final class CBWriter {
     
     /// Writes an unnamed float tag.
     /// - Parameter value: The single-precision, floating-point value to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
     /// be written, a named float tag was expcted, a tag of a different type was exptected,
     /// or the size of a parent list has been exceeded.
     public func writeFloat(value: Float) throws {
@@ -201,7 +201,7 @@ public final class CBWriter {
     /// - Parameters:
     ///   - tagName: The name to be given to this tag.
     ///   - value: The single-precision, floating-point value to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
     /// be written, an unnamed float tag was expcted, or a tag of a different type was exptected.
     public func writeFloat(tagName: String, value: Float) throws {
         try enforceConstraints(name: tagName, desiredType: .float)
@@ -212,7 +212,7 @@ public final class CBWriter {
     
     /// Writes an unnamed int tag.
     /// - Parameter value: The 32-bit, signed integer to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
     /// be written, a named int tag was expcted, a tag of a different type was exptected,
     /// or the size of a parent list has been exceeded.
     public func writeInt(value: Int32) throws {
@@ -224,7 +224,7 @@ public final class CBWriter {
     /// - Parameters:
     ///   - tagName: The name to be given to this tag.
     ///   - value: The 32-bit, signed integer to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
     /// be written, an unnamed int tag was expcted, or a tag of a different type was exptected.
     public func writeInt(tagName: String, value: Int32) throws {
         try enforceConstraints(name: tagName, desiredType: .int)
@@ -235,7 +235,7 @@ public final class CBWriter {
     
     /// Writes an unnamed long tag.
     /// - Parameter value: The 64-bit, signed integer to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
     /// be written, a named long tag was expcted, a tag of a different type was exptected,
     /// or the size of a parent list has been exceeded.
     public func writeLong(value: Int64) throws {
@@ -247,7 +247,7 @@ public final class CBWriter {
     /// - Parameters:
     ///   - tagName: The name to be given to this tag.
     ///   - value: The 64-bit, signed integer to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
     /// be written, an unnamed long tag was expcted, or a tag of a different type was exptected.
     public func writeLong(tagName: String, value: Int64) throws {
         try enforceConstraints(name: tagName, desiredType: .long)
@@ -258,7 +258,7 @@ public final class CBWriter {
     
     /// Writes an unnamed short tag.
     /// - Parameter value: The 16-bit, signed integer to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
     /// be written, a named short tag was expcted, a tag of a different type was exptected,
     /// or the size of a parent list has been exceeded.
     public func writeShort(value: Int16) throws {
@@ -270,7 +270,7 @@ public final class CBWriter {
     /// - Parameters:
     ///   - tagName: The name to be given to this tag.
     ///   - value: The 16-bit, signed integer towrite.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
     /// be written, an unnamed short tag was expcted, or a tag of a different type was exptected.
     public func writeShort(tagName: String, value: Int16) throws {
         try enforceConstraints(name: tagName, desiredType: .short)
@@ -281,7 +281,7 @@ public final class CBWriter {
     
     /// Writes an unnamed string tag.
     /// - Parameter value: The string to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
     /// be written, a named string tag was expcted, a tag of a different type was exptected,
     /// or the size of a parent list has been exceeded.
     public func writeString(value: String) throws {
@@ -293,7 +293,7 @@ public final class CBWriter {
     /// - Parameters:
     ///   - tagName: The name to be given to this tag.
     ///   - value: The string to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
     /// be written, an unnamed string tag was expcted, or a tag of a different type was exptected.
     public func writeString(tagName: String, value: String) throws {
         try enforceConstraints(name: tagName, desiredType: .string)
@@ -306,7 +306,7 @@ public final class CBWriter {
     /// Writes an unnamed byte array tag, copying data from an array.
     /// - Parameters:
     ///   - data: A byte array containing the data to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, a named byte array tag was expected, or a tag of a
     /// different type was expected.
     public func writeByteArray(data: [UInt8]) throws {
@@ -318,10 +318,10 @@ public final class CBWriter {
     ///   - data: A byte array containing the data to write.
     ///   - offset: The starting point in <paramref name="data"/> at which to begin writing. Must not be negative.
     ///   - count: The number of bytes to write. Must not be negative.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, a named byte array tag was expected, or a tag of a
-    /// different type was expected; an `NbtError.argumentOutOfRange`
-    /// error if `count` is negative; an `NbtError.argumentError` if
+    /// different type was expected; an `CBStreamError.argumentOutOfRange`
+    /// error if `count` is negative; an `CBStreamError.argumentError` if
     /// `count` is greater than `offset` subtracted from the array length.
     public func writeByteArray(data: [UInt8], offset: Int, count: Int) throws {
         try CBWriter.checkArray(data: data, offset: offset, count: count)
@@ -334,7 +334,7 @@ public final class CBWriter {
     /// - Parameters:
     ///   - tagName: Name to give to this byte array tag.
     ///   - data: A byte array containing the data to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, an unnamed byte array tag was expected, or a tag of a
     /// different type was expected.
     public func writeByteArray(tagName: String, data: [UInt8]) throws {
@@ -347,10 +347,10 @@ public final class CBWriter {
     ///   - data: A byte array containing the data to write.
     ///   - offset: The starting point in <paramref name="data"/> at which to begin writing. Must not be negative.
     ///   - count: The number of bytes to write. Must not be negative.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, an unnamed byte array tag was expected, or a tag of a
-    /// different type was expected; an `NbtError.argumentOutOfRange`
-    /// error if `count` is negative; an `NbtError.argumentError` if
+    /// different type was expected; an `CBStreamError.argumentOutOfRange`
+    /// error if `count` is negative; an `CBStreamError.argumentError` if
     /// `count` is greater than `offset` subtracted from the array length.
     public func writeByteArray(tagName: String, data: [UInt8], offset: Int, count: Int) throws {
         try CBWriter.checkArray(data: data, offset: offset, count: count)
@@ -365,10 +365,10 @@ public final class CBWriter {
     /// - Parameters:
     ///   - dataSource: A Stream from which data will be copied.
     ///   - count: The number of bytes to write. Must not be negative.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, a named byte array tag was expected, or a tag of a
-    /// different type was expected; an `NbtError.argumentOutOfRange`
-    /// error if `count` is negative; an `NbtError.argumentError` if the
+    /// different type was expected; an `CBStreamError.argumentOutOfRange`
+    /// error if `count` is negative; an `CBStreamError.argumentError` if the
     /// given stream does not support reading.
     public func writeByteArray(dataSource: CBBuffer, count: Int) throws {
         if count < 0 {
@@ -384,10 +384,10 @@ public final class CBWriter {
     ///   - dataSource: A Stream from which data will be copied.
     ///   - count: The number of bytes to write. Must not be negative.
     ///   - buffer: Buffer to use for copying. Size must be greater than 0.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, a named byte array tag was expected, or a tag of a
-    /// different type was expected; an `NbtError.argumentOutOfRange`
-    /// error if `count` is negative; an `NbtError.argumentError` if the
+    /// different type was expected; an `CBStreamError.argumentOutOfRange`
+    /// error if `count` is negative; an `CBStreamError.argumentError` if the
     /// given stream does not support reading or `buffer` size is 0.
     public func writeByteArray(dataSource: CBBuffer, count: Int, buffer: inout [UInt8]) throws {
         if count < 0 {
@@ -406,10 +406,10 @@ public final class CBWriter {
     ///   - tagName: Name to give to this byte array tag.
     ///   - dataSource: A Stream from which data will be copied.
     ///   - count: The number of bytes to write. Must not be negative.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, an unnamed byte array tag was expected, or a tag of a
-    /// different type was expected; an `NbtError.argumentOutOfRange`
-    /// error if `count` is negative; an `NbtError.argumentError` if the
+    /// different type was expected; an `CBStreamError.argumentOutOfRange`
+    /// error if `count` is negative; an `CBStreamError.argumentError` if the
     /// given stream does not support reading.
     public func writeByteArray(tagName: String, dataSource: CBBuffer, count: Int) throws {
         if count < 0 {
@@ -426,10 +426,10 @@ public final class CBWriter {
     ///   - dataSource: A Stream from which data will be copied.
     ///   - count: The number of bytes to write. Must not be negative.
     ///   - buffer: Buffer to use for copying. Size must be greater than 0.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, an unnamed byte array tag was expected, or a tag of a
-    /// different type was expected; an `NbtError.argumentOutOfRange`
-    /// error if `count` is negative; an `NbtError.argumentError` if the
+    /// different type was expected; an `CBStreamError.argumentOutOfRange`
+    /// error if `count` is negative; an `CBStreamError.argumentError` if the
     /// given stream does not support reading or `buffer` size is 0.
     public func writeByteArray(tagName: String, dataSource: CBBuffer,
                                count: Int, buffer: inout [UInt8]) throws {
@@ -449,7 +449,7 @@ public final class CBWriter {
     /// Writes an unnamed int array tag, copying data from an array.
     /// - Parameters:
     ///   - data: An int array containing the data to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, an unnamed int array tag was expected, or a tag of a
     /// different type was expected.
     public func writeIntArray(data: [Int32]) throws {
@@ -461,10 +461,10 @@ public final class CBWriter {
     ///   - data: An int array containing the data to write.
     ///   - offset: The starting point in `data` at which to begin writing. Must not be negative.
     ///   - count: The number of elements to write. Must not be negative.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, a named int array tag was expected, or a tag of a
-    /// different type was expected; an `NbtError.argumentOutOfRange`
-    /// error if `count` is negative; an `NbtError.argumentError` if
+    /// different type was expected; an `CBStreamError.argumentOutOfRange`
+    /// error if `count` is negative; an `CBStreamError.argumentError` if
     /// `count` is greater than `offset` subtracted from array length.
     public func writeIntArray(data: [Int32], offset: Int, count: Int) throws {
         try CBWriter.checkArray(data: data, offset: offset, count: count)
@@ -479,7 +479,7 @@ public final class CBWriter {
     /// - Parameters:
     ///   - tagName: Name to give to this int array tag.
     ///   - data: An int array containing the data to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, an unnamed int array tag was expected, or a tag of a
     /// different type was expected.
     public func writeIntArray(tagName: String, data: [Int32]) throws {
@@ -492,10 +492,10 @@ public final class CBWriter {
     ///   - data: An int array containing the data to write.
     ///   - offset: The starting point in `data` at which to begin writing. Must not be negative.
     ///   - count: The number of elements to write. Must not be negative.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, an unnamed int array tag was expected, or a tag of a
-    /// different type was expected; an `NbtError.argumentOutOfRange`
-    /// error if `count` is negative; an `NbtError.argumentError` if
+    /// different type was expected; an `CBStreamError.argumentOutOfRange`
+    /// error if `count` is negative; an `CBStreamError.argumentError` if
     /// `count` is greater than `offset` subtracted from array length.
     public func writeIntArray(tagName: String, data: [Int32], offset: Int, count: Int) throws {
         try CBWriter.checkArray(data: data, offset: offset, count: count)
@@ -511,7 +511,7 @@ public final class CBWriter {
     /// Writes an unnamed long array tag, copying data from an array.
     /// - Parameters:
     ///   - data: A long array containing the data to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, an unnamed long array tag was expected, or a tag of a
     /// different type was expected.
     public func writeLongArray(data: [Int64]) throws {
@@ -523,10 +523,10 @@ public final class CBWriter {
     ///   - data: A long array containing the data to write.
     ///   - offset: The starting point in `data` at which to begin writing. Must not be negative.
     ///   - count: The number of elements to write. Must not be negative.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, a named long array tag was expected, or a tag of a
-    /// different type was expected; an `NbtError.argumentOutOfRange`
-    /// error if `count` is negative; an `NbtError.argumentError` if
+    /// different type was expected; an `CBStreamError.argumentOutOfRange`
+    /// error if `count` is negative; an `CBStreamError.argumentError` if
     /// `count` is greater than `offset` subtracted from array length.
     public func writeLongArray(data: [Int64], offset: Int, count: Int) throws {
         try CBWriter.checkArray(data: data, offset: offset, count: count)
@@ -541,7 +541,7 @@ public final class CBWriter {
     /// - Parameters:
     ///   - tagName: Name to give to this int array tag.
     ///   - data: A  long array containing the data to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, an unnamed long array tag was expected, or a tag of a
     /// different type was expected.
     public func writeLongArray(tagName: String, data: [Int64]) throws {
@@ -554,10 +554,10 @@ public final class CBWriter {
     ///   - data: A long array containing the data to write.
     ///   - offset: The starting point in `data` at which to begin writing. Must not be negative.
     ///   - count: The number of elements to write. Must not be negative.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags
     /// can be wrtten, an unnamed long array tag was expected, or a tag of a
-    /// different type was expected; an `NbtError.argumentOutOfRange`
-    /// error if `count` is negative; an `NbtError.argumentError` if
+    /// different type was expected; an `CBStreamError.argumentOutOfRange`
+    /// error if `count` is negative; an `CBStreamError.argumentError` if
     /// `count` is greater than `offset` subtracted from array length.
     public func writeLongArray(tagName: String, data: [Int64], offset: Int, count: Int) throws {
         try CBWriter.checkArray(data: data, offset: offset, count: count)
@@ -575,7 +575,7 @@ public final class CBWriter {
     /// already have lots of `NbtTag` objects, you might as well use `NbtFile` to write them all
     /// at once.
     /// - Parameter tag: The tag to write.
-    /// - Throws: An `NbtError.invalidFormat` error if no more tags can be written or the given
+    /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can be written or the given
     /// tag is unacceptable at this time.
     public func writeTag(tag: NBT) throws {
         try enforceConstraints(name: tag.name, desiredType: tag.tagType)
@@ -589,7 +589,7 @@ public final class CBWriter {
     /// Ensures that file has been written in its entirety, with no tags left open.
     /// This method is for verification only, and does not actually write any data.
     /// Calling this method is optional (but probably a good idea, to catch any usage errors).
-    /// - Throws: An `NbtError.invalidFormat` error if not all tags have been closed yet.
+    /// - Throws: An `CBStreamError.invalidFormat` error if not all tags have been closed yet.
     public func finish() throws {
         if !isDone {
             throw CBStreamError.invalidFormat("Cannot finish: not all tags have been closed yet.")

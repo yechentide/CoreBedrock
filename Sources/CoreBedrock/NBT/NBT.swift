@@ -113,7 +113,7 @@ public class NBT {
     }
     
     /// Returns the value of this tag cast as a short (signed 16-bit integer).
-    /// - Remark: Only supported by `ByteTag` and `Shorttag` tags.
+    /// - Remark: Only supported by `ByteTag` and `ShortTag` tags.
     public var shortValue: Int16 {
         switch tagType {
         case .byte:

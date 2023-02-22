@@ -1,4 +1,5 @@
 import Foundation
+import DataCompression
 
 @available(OSX 10.11, *)
 public final class NBTFile {
@@ -8,7 +9,7 @@ public final class NBTFile {
 
     /// Gets the compression method used for most recent loading/saving of this file.
     /// Defaults to `.autoDetect`.
-    public private(set) var fileCompression: CBCompression = .autoDetect
+    public private(set) var fileCompression: CBCompressionType = .autoDetect
 
     private var _rootTag: CompoundTag
     
@@ -18,16 +19,16 @@ public final class NBTFile {
     // Until Swift allows properties to throw, use a function
     /// Sets the root tag of this file. Must be a named `CompoundTag`.
     /// - Parameter tag: The compound tag to become the root of this file.
-    /// - Throws: An `NbtError.argumentError` if the tag is unnamed.
+    /// - Throws: An `CBStreamError.argumentError` if the tag is unnamed.
     public func setRootTag(_ tag: CompoundTag) throws {
         guard tag.name != nil else { throw CBStreamError.argumentError("Root tag must be named.") }
         _rootTag = tag
     }
 
-    /// Whether new `NBTFiles` should default to big-endian encoding. The default is `true`.
+    /// Whether new `NBTFiles` should default to little-endian encoding. The default is `true`.
     public static var littleEndianByDefault: Bool = true
 
-    /// Whether this file should read/write tags in big-endian encoding format.
+    /// Whether this file should read/write tags in little-endian encoding format.
     public var littleEndian: Bool
 
     /// Creates an empty `NBTFile`. `rootTag` will be set to an empty
@@ -44,7 +45,7 @@ public final class NBTFile {
 
     /// Creates a new `NBTFile` with the given root tag.
     /// - Parameter rootTag: A named `CompoundTag` tag to set as the root tag.
-    /// - Throws: An `NbtError.argumentError` if the tag is unnamed.
+    /// - Throws: An `CBStreamError.argumentError` if the tag is unnamed.
     convenience public init(rootTag: CompoundTag) throws {
         self.init()
         try setRootTag(rootTag)
@@ -53,8 +54,8 @@ public final class NBTFile {
     /// Creates a new `NBTFile` from the specified `URL` using the most common settings.
     /// Automatically detects compression and assumes the file to be big-endian.
     /// - Parameter url: The `URL` of the file containing NBT data.
-    /// - Throws: An `NbtError.invalidData` error if the compression could not be determined;
-    /// an `NbtError.invalidFormat` error if the data could not be properly decompressed.
+    /// - Throws: An `CBStreamError.invalidData` error if the compression could not be determined;
+    /// an `CBStreamError.invalidFormat` error if the data could not be properly decompressed.
     convenience public init(contentsOf url: URL) throws {
         self.init()
         _ = try load(contentsOf: url, compression: .autoDetect)
@@ -63,8 +64,8 @@ public final class NBTFile {
     /// Creates a new `NBTFile` from the specified `Data` buffer using the most common settings.
     /// Automatically detects compression and assumes the file to be big-endian.
     /// - Parameter buffer: The `Data` buffer containing the NBT data.
-    /// - Throws: An `NbtError.invalidData` error if the compression could not be determined;
-    /// an `NbtError.invalidFormat` error if the data could not be properly decompressed.
+    /// - Throws: An `CBStreamError.invalidData` error if the compression could not be determined;
+    /// an `CBStreamError.invalidFormat` error if the data could not be properly decompressed.
     convenience public init(contentsOf buffer: Data) throws {
         self.init()
         _ = try load(contentsOf: buffer, compression: .autoDetect)
@@ -74,10 +75,10 @@ public final class NBTFile {
     /// - Parameters:
     ///   - url: The `URL` of the file containing NBT data.
     ///   - compression: The algorithm used to compress the data.
-    /// - Throws: An `NbtError.invalidData` error if the compression could not be determined;
-    /// an `NbtError.invalidFormat` error if the data could not be properly decompressed.
+    /// - Throws: An `CBStreamError.invalidData` error if the compression could not be determined;
+    /// an `CBStreamError.invalidFormat` error if the data could not be properly decompressed.
     /// - Returns: The number of bytes read from the file.
-    public func load(contentsOf url: URL, compression: CBCompression) throws -> Int {
+    public func load(contentsOf url: URL, compression: CBCompressionType) throws -> Int {
         return try load(contentsOf: url, compression: compression) { tag in
             return false
         }
@@ -89,10 +90,10 @@ public final class NBTFile {
     ///   - compression: The algorithm used to compress the data.
     ///   - selector: Optional callback to select which tags to load into memory.
     ///   Root may not be skipped.
-    /// - Throws: An `NbtError.invalidData` error if the compression could not be determined;
-    /// an `NbtError.invalidFormat` error if the data could not be properly decompressed.
+    /// - Throws: An `CBStreamError.invalidData` error if the compression could not be determined;
+    /// an `CBStreamError.invalidFormat` error if the data could not be properly decompressed.
     /// - Returns: The number of bytes read from the file.
-    public func load(contentsOf url: URL, compression: CBCompression, _ skip: (NBT) -> Bool) throws -> Int {
+    public func load(contentsOf url: URL, compression: CBCompressionType, _ skip: (NBT) -> Bool) throws -> Int {
         let data = try Data(contentsOf: url)
         fileName = url.path
         return try load(contentsOf: data, compression: compression, skip)
@@ -102,10 +103,10 @@ public final class NBTFile {
     /// - Parameters:
     ///   - bytes: The array of  unsigned bytes containing the NBT data.
     ///   - compression: The algorithm used to compress the data.
-    /// - Throws: An `NbtError.invalidData` error if the compression could not be determined;
-    /// an `NbtError.invalidFormat` error if the data could not be properly decompressed.
+    /// - Throws: An `CBStreamError.invalidData` error if the compression could not be determined;
+    /// an `CBStreamError.invalidFormat` error if the data could not be properly decompressed.
     /// - Returns: The number of bytes read from the file.
-    public func load(contentsOf bytes: [UInt8], compression: CBCompression) throws -> Int {
+    public func load(contentsOf bytes: [UInt8], compression: CBCompressionType) throws -> Int {
         return try load(contentsOf: bytes, compression: compression) { tag in
             return false
         }
@@ -117,10 +118,10 @@ public final class NBTFile {
     ///   - compression: The algorithm used to compress the data.
     ///   - selector: Optional callback to select which tags to load into memory.
     ///   Root may not be skipped.
-    /// - Throws: An `NbtError.invalidData` error if the compression could not be determined;
-    /// an `NbtError.invalidFormat` error if the data could not be properly decompressed.
+    /// - Throws: An `CBStreamError.invalidData` error if the compression could not be determined;
+    /// an `CBStreamError.invalidFormat` error if the data could not be properly decompressed.
     /// - Returns: The number of bytes read from the file.
-    public func load(contentsOf bytes: [UInt8], compression: CBCompression, _ skip: (NBT) -> Bool) throws -> Int {
+    public func load(contentsOf bytes: [UInt8], compression: CBCompressionType, _ skip: (NBT) -> Bool) throws -> Int {
         let data = Data(bytes)
         return try load(contentsOf: data, compression: compression, skip)
     }
@@ -129,10 +130,10 @@ public final class NBTFile {
     /// - Parameters:
     ///   - buffer: The buffer containing the NBT data.
     ///   - compression: The algorithm used to compress the data in `buffer`.
-    /// - Throws: An `NbtError.invalidData` error if the compression could not be determined;
-    /// an `NbtError.invalidFormat` error if the data could not be properly decompressed.
+    /// - Throws: An `CBStreamError.invalidData` error if the compression could not be determined;
+    /// an `CBStreamError.invalidFormat` error if the data could not be properly decompressed.
     /// - Returns: The number of bytes read from the file.
-    public func load(contentsOf buffer: Data, compression: CBCompression) throws -> Int {
+    public func load(contentsOf buffer: Data, compression: CBCompressionType) throws -> Int {
         return try load(contentsOf: buffer, compression: compression) { tag in
             return false
         }
@@ -144,10 +145,10 @@ public final class NBTFile {
     ///   - compression: The algorithm used to compress the data in `buffer`.
     ///   - selector: Optional callback to select which tags to load into memory.
     ///   Root may not be skipped.
-    /// - Throws: An `NbtError.invalidData` error if the compression could not be determined;
-    /// an `NbtError.invalidFormat` error if the data could not be properly decompressed.
+    /// - Throws: An `CBStreamError.invalidData` error if the compression could not be determined;
+    /// an `CBStreamError.invalidFormat` error if the data could not be properly decompressed.
     /// - Returns: The number of bytes read from the file.
-    public func load(contentsOf buffer: Data, compression: CBCompression, _ skip: (NBT) -> Bool) throws -> Int {
+    public func load(contentsOf buffer: Data, compression: CBCompressionType, _ skip: (NBT) -> Bool) throws -> Int {
         // Detect compression using the first byte in the buffer
         if compression == .autoDetect {
             switch buffer[0] {
@@ -189,8 +190,8 @@ public final class NBTFile {
     ///   - stream: The stream from which the data will be loaded.
     ///   - tagSelector: Optional callback to select which tags to load into memory.
     ///   Root may not be skipped.
-    /// - Throws: An `NbtError.endOfStream` error if the stream ended earlier than expected;
-    /// an `NbtError.invalidFormat` error if the root is not a TAG_Compound.
+    /// - Throws: An `CBStreamError.endOfStream` error if the stream ended earlier than expected;
+    /// an `CBStreamError.invalidFormat` error if the root is not a TAG_Compound.
     /// - Returns: The number of bytes read from the stream.
     func loadInternal(_ buffer: CBBuffer, _ skip: (NBT) -> Bool) throws -> Int {
         let firstByte = buffer.readByte()
@@ -211,11 +212,11 @@ public final class NBTFile {
     /// - Parameters:
     ///   - url: The location to save the data to. Must be a fully qualified path including file name.
     ///   - compression: Compression mode to use for saving. May not be `.autoDetect`.
-    /// - Throws: An `NbtError.argumentError` if `.autoDetect` was given as a
-    /// compression mode; an `NbtError.invalidFormat` error if one of the `NbtCompound`
+    /// - Throws: An `CBStreamError.argumentError` if `.autoDetect` was given as a
+    /// compression mode; an `CBStreamError.invalidFormat` error if one of the `NbtCompound`
     /// tags contained unnamed tags or if an `NbtList` tag had unknown list type and no elements.
     /// - Returns: The number of uncompressed bytes written to the file.
-    public func save(to url: URL, compression: CBCompression) throws -> Int {
+    public func save(to url: URL, compression: CBCompressionType) throws -> Int {
         // Get data buffer
         var buffer = Data()
         _ = try save(to: &buffer, compression: compression)
@@ -231,11 +232,11 @@ public final class NBTFile {
     /// - Parameters:
     ///   - buffer: The buffer to write the data to.
     ///   - compression: Compression mode to use for saving. May not be `.autoDetect`.
-    /// - Throws: An `NbtError.argumentError` if `.autoDetect` was given as a
-    /// compression mode; an `NbtError.invalidFormat` error if one of the `NbtCompound`
+    /// - Throws: An `CBStreamError.argumentError` if `.autoDetect` was given as a
+    /// compression mode; an `CBStreamError.invalidFormat` error if one of the `NbtCompound`
     /// tags contained unnamed tags or if an `NbtList` tag had unknown list type and no elements.
     /// - Returns: The number of uncompressed bytes written to the buffer.
-    public func save(to buffer: inout Data, compression: CBCompression) throws -> Int {
+    public func save(to buffer: inout Data, compression: CBCompressionType) throws -> Int {
         guard rootTag.name != nil else { throw CBStreamError.invalidFormat("Cannot save NBTFile: root tag is not named. Its name may be an empty string, but not nil.") }
         guard compression != .autoDetect else { throw CBStreamError.argumentError(".autoDetect is not a valid CBCompression value for saving.") }
 
@@ -258,7 +259,7 @@ public final class NBTFile {
         return data.count
     }
 
-    func saveToBuffer(compression: CBCompression) throws -> Data {
+    func saveToBuffer(compression: CBCompressionType) throws -> Data {
         var result = Data()
         _ = try save(to: &result, compression: compression)
         return result

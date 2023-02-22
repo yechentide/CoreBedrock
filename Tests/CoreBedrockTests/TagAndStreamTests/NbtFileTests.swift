@@ -32,16 +32,16 @@ class NBTFileTests: XCTestCase {
         let file = try NBTFile(contentsOf: url)
         XCTAssertNotNil(file.fileName)
         XCTAssertEqual(url.path, file.fileName!)
-        XCTAssertEqual(CBCompression.none, file.fileCompression)
+        XCTAssertEqual(CBCompressionType.none, file.fileCompression)
         try TestData.assertNbtSmallFile(file)
     }
-    
+
     func testLoadingSmallFileGZip() throws {
         let url = try TestData.getFileUrl(file: .small, compression: .gZip)
         let file = try NBTFile(contentsOf: url)
         XCTAssertNotNil(file.fileName)
         XCTAssertEqual(url.path, file.fileName!)
-        XCTAssertEqual(CBCompression.gZip, file.fileCompression)
+        XCTAssertEqual(CBCompressionType.gZip, file.fileCompression)
         try TestData.assertNbtSmallFile(file)
     }
     
@@ -50,7 +50,7 @@ class NBTFileTests: XCTestCase {
         let file = try NBTFile(contentsOf: url)
         XCTAssertNotNil(file.fileName)
         XCTAssertEqual(url.path, file.fileName!)
-        XCTAssertEqual(CBCompression.zLib, file.fileCompression)
+        XCTAssertEqual(CBCompressionType.zLib, file.fileCompression)
         try TestData.assertNbtSmallFile(file)
     }
     
@@ -60,7 +60,7 @@ class NBTFileTests: XCTestCase {
         try TestData.assertNbtBigFile(file)
         XCTAssertEqual(length, 1783)
     }
-    
+
     func testLoadingBigFileGZip() throws {
         let file = NBTFile(useLittleEndian: false)
         let length = try file.load(contentsOf: TestData.getFileUrl(file: .big, compression: .gZip), compression: .autoDetect)
@@ -93,7 +93,7 @@ class NBTFileTests: XCTestCase {
         
         XCTAssertEqual(length, fileSize)
     }
-    
+
     func testReloadFile() throws {
         try reloadFileInteral(.big, .none, .none, false)
         try reloadFileInteral(.big, .gZip, .none, false)
@@ -103,7 +103,7 @@ class NBTFileTests: XCTestCase {
         try reloadFileInteral(.big, .zLib, .none, false)
     }
     
-    func reloadFileInteral(_ file: TestFile, _ loadCompression: CBCompression, _ saveCompression: CBCompression, _ useLittleEndian: Bool) throws {
+    func reloadFileInteral(_ file: TestFile, _ loadCompression: CBCompressionType, _ saveCompression: CBCompressionType, _ useLittleEndian: Bool) throws {
         NBTFile.littleEndianByDefault = useLittleEndian
         let loadedFile = try NBTFile(contentsOf: TestData.getFileUrl(file: file, compression: loadCompression))
         let fileName = TestData.getFileName(file: file, compression: saveCompression)

@@ -398,7 +398,7 @@ class TestData {
         XCTAssertEqual("123", (node as! StringTag).value)
     }
     
-    static func getFileName(file: TestFile, compression: CBCompression) -> String {
+    static func getFileName(file: TestFile, compression: CBCompressionType) -> String {
         var fileName = ""
         
         switch file {
@@ -424,14 +424,14 @@ class TestData {
         return fileName
     }
     
-    static func getFileUrl(file: TestFile, compression: CBCompression) throws -> URL {
+    static func getFileUrl(file: TestFile, compression: CBCompressionType) throws -> URL {
         let fileName = getFileName(file: file, compression: compression)
         let url = Bundle.module.url(forResource: fileName, withExtension: nil)
         precondition(url != nil, "Can't find file.")
         return url!
     }
     
-    static func getFileData(file: TestFile, compression: CBCompression) throws -> Data {
+    static func getFileData(file: TestFile, compression: CBCompressionType) throws -> Data {
         let url = try getFileUrl(file: file, compression: compression)
         let data = try Data(contentsOf: url)
         return data

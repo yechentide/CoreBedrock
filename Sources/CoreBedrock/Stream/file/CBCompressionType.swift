@@ -1,4 +1,4 @@
-public enum CBCompression: UInt8 {
+public enum CBCompressionType: UInt8 {
     /// Automatically detect file compression. Not a valid format for saving.
     case autoDetect
     
