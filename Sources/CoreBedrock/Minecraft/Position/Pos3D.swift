@@ -1,0 +1,14 @@
+public struct Pos3D<T: SignedInteger>: Equatable, Hashable {
+    public let x: T
+    public let y: T
+    public let z: T
+
+    static func distansSquare(p1: Pos3D<T>, p2: Pos3D<T>) -> T {
+        let dx = p1.x - p2.x
+        let dy = p1.y - p2.y
+        let dz = p1.z - p2.z
+        return dx * dx + dy * dy + dz * dz
+    }
+}
+
+typealias Pos3Di32 = Pos3D<Int32>

@@ -307,6 +307,11 @@ public class CBReader {
         }
         return skipped
     }
+
+    /// Reset the state to read contiguous tags
+    public func resetState() {
+        _state = .atStreamBeginning
+    }
     
     /// Reads the entirety of the current tag, including any descendants,
     /// and constructs an NbtTag object of the appropriate type.

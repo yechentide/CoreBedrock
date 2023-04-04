@@ -1,6 +1,6 @@
 import Foundation
 
-public enum MCWellKnownKey: String, CaseIterable {
+public enum MCStringKey: String, CaseIterable {
     case autonomousEntities             = "AutonomousEntities"
     case biomeData                      = "BiomeData"
     case dimension0                     = "dimension0"
@@ -21,9 +21,3 @@ public enum MCWellKnownKey: String, CaseIterable {
         return key
     }
 }
-// map_
-// player_
-// VILLAGE_
-// structuretemplate_
-// actorprefix ...
-// digp ...

@@ -13,7 +13,7 @@ extension FixedWidthInteger {
             let padding = String(repeating: "0", count: 8 - byteString.count)
             result.append(padding + byteString)
         }
-        return "0b" + result.joined(separator: "_")
+        return result.joined(separator: "_")
     }
     
     public mutating func bitOn(offset: UInt8) {

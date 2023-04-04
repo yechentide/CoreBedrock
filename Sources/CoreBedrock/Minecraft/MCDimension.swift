@@ -1,11 +1,9 @@
-import Foundation
-
-public enum MCDimension: Int32 {
+public enum MCDimension: Int32, CustomStringConvertible {
     case overworld = 0
     case theNether = 1
     case theEnd    = 2
     
-    public var string: String {
+    public var description: String {
         switch self {
         case .overworld:
             return "overworld"

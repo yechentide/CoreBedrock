@@ -7,7 +7,7 @@ extension Data {
             let hexString = String(format: "%02X", byte)
             result.append(hexString)
         }
-        return "0x" + result.joined(separator: "_")
+        return result.joined(separator: "_")
     }
     
     public var uint8: UInt8 {
@@ -21,12 +21,28 @@ extension Data {
             $0.load(as: Int8.self)
         })
     }
+
+    public var uint32: UInt32? {
+        guard self.count >= 4 else { return nil }
+
+        return UInt32(littleEndian: self[ self.startIndex+0..<self.startIndex+4 ].withUnsafeBytes{
+            $0.load(as: UInt32.self)
+        })
+    }
     
     public var int32: Int32? {
         guard self.count >= 4 else { return nil }
 
-        return Int32(littleEndian: self[ self.startIndex+0...self.startIndex+3 ].withUnsafeBytes{
+        return Int32(littleEndian: self[ self.startIndex+0..<self.startIndex+4 ].withUnsafeBytes{
             $0.load(as: Int32.self)
         })
     }
+
+//    public var uint64: UInt64? {
+//        guard self.count >= 8 else { return nil }
+//
+//        return UInt64(littleEndian: self[ self.startIndex+0..<self.startIndex+8 ].withUnsafeBytes{
+//            $0.load(as: UInt64.self)
+//        })
+//    }
 }

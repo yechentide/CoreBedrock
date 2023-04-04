@@ -1,5 +1,3 @@
-import Foundation
-
 ///  Key types in leveldb.
 ///
 ///  [Chunk key format](https://minecraft.fandom.com/wiki/Bedrock_Edition_level_format)
