@@ -18,7 +18,7 @@ final class MCPositionConvertTests: XCTestCase {
             (32, 2),
         ]
         for data in list {
-            let actual = convert(from: data.pos, .blockToChunk)
+            let actual = convertPos(from: data.pos, .blockToChunk)
             XCTAssertEqual(data.expected, actual)
         }
     }
@@ -33,7 +33,7 @@ final class MCPositionConvertTests: XCTestCase {
             (512, 1),
         ]
         for data in list {
-            let actual = convert(from: data.pos, .blockToRegion)
+            let actual = convertPos(from: data.pos, .blockToRegion)
             XCTAssertEqual(data.expected, actual)
         }
     }
@@ -48,7 +48,7 @@ final class MCPositionConvertTests: XCTestCase {
             (32, 1),
         ]
         for data in list {
-            let actual = convert(from: data.pos, .chunkToRegion)
+            let actual = convertPos(from: data.pos, .chunkToRegion)
             XCTAssertEqual(data.expected, actual)
         }
     }

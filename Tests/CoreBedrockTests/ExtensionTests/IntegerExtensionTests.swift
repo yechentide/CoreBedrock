@@ -39,37 +39,37 @@ final class IntegerExtensionTests: XCTestCase {
     
     func testBinaryString() {
         // All data is little endian
-        XCTAssertEqual(Int8.min.binaryString,           "0b10000000")
-        XCTAssertEqual(Int8(10).binaryString,           "0b00001010")
-        XCTAssertEqual(Int8.max.binaryString,           "0b01111111")
+        XCTAssertEqual(Int8.min.binaryString,           "10000000")
+        XCTAssertEqual(Int8(10).binaryString,           "00001010")
+        XCTAssertEqual(Int8.max.binaryString,           "01111111")
         
-        XCTAssertEqual(UInt8.min.binaryString,          "0b00000000")
-        XCTAssertEqual(UInt8(10).binaryString,          "0b00001010")
-        XCTAssertEqual(UInt8.max.binaryString,          "0b11111111")
+        XCTAssertEqual(UInt8.min.binaryString,          "00000000")
+        XCTAssertEqual(UInt8(10).binaryString,          "00001010")
+        XCTAssertEqual(UInt8.max.binaryString,          "11111111")
 
-        XCTAssertEqual(Int16.min.binaryString,          "0b00000000_10000000")
-        XCTAssertEqual(Int16(16706).binaryString,       "0b01000010_01000001")
-        XCTAssertEqual(Int16.max.binaryString,          "0b11111111_01111111")
+        XCTAssertEqual(Int16.min.binaryString,          "00000000_10000000")
+        XCTAssertEqual(Int16(16706).binaryString,       "01000010_01000001")
+        XCTAssertEqual(Int16.max.binaryString,          "11111111_01111111")
 
-        XCTAssertEqual(UInt16.min.binaryString,         "0b00000000_00000000")
-        XCTAssertEqual(UInt16(16706).binaryString,      "0b01000010_01000001")
-        XCTAssertEqual(UInt16.max.binaryString,         "0b11111111_11111111")
+        XCTAssertEqual(UInt16.min.binaryString,         "00000000_00000000")
+        XCTAssertEqual(UInt16(16706).binaryString,      "01000010_01000001")
+        XCTAssertEqual(UInt16.max.binaryString,         "11111111_11111111")
 
-        XCTAssertEqual(Int32.min.binaryString,          "0b00000000_00000000_00000000_10000000")
-        XCTAssertEqual(Int32(2376002).binaryString,     "0b01000010_01000001_00100100_00000000")
-        XCTAssertEqual(Int32.max.binaryString,          "0b11111111_11111111_11111111_01111111")
+        XCTAssertEqual(Int32.min.binaryString,          "00000000_00000000_00000000_10000000")
+        XCTAssertEqual(Int32(2376002).binaryString,     "01000010_01000001_00100100_00000000")
+        XCTAssertEqual(Int32.max.binaryString,          "11111111_11111111_11111111_01111111")
 
-        XCTAssertEqual(UInt32.min.binaryString,         "0b00000000_00000000_00000000_00000000")
-        XCTAssertEqual(UInt32(2376002).binaryString,    "0b01000010_01000001_00100100_00000000")
-        XCTAssertEqual(UInt32.max.binaryString,         "0b11111111_11111111_11111111_11111111")
+        XCTAssertEqual(UInt32.min.binaryString,         "00000000_00000000_00000000_00000000")
+        XCTAssertEqual(UInt32(2376002).binaryString,    "01000010_01000001_00100100_00000000")
+        XCTAssertEqual(UInt32.max.binaryString,         "11111111_11111111_11111111_11111111")
 
-        XCTAssertEqual(Int64.min.binaryString,          "0b00000000_00000000_00000000_00000000_00000000_00000000_00000000_10000000")
-        XCTAssertEqual(Int64(1965310274).binaryString,  "0b01000010_01000001_00100100_01110101_00000000_00000000_00000000_00000000")
-        XCTAssertEqual(Int64.max.binaryString,          "0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_01111111")
+        XCTAssertEqual(Int64.min.binaryString,          "00000000_00000000_00000000_00000000_00000000_00000000_00000000_10000000")
+        XCTAssertEqual(Int64(1965310274).binaryString,  "01000010_01000001_00100100_01110101_00000000_00000000_00000000_00000000")
+        XCTAssertEqual(Int64.max.binaryString,          "11111111_11111111_11111111_11111111_11111111_11111111_11111111_01111111")
 
-        XCTAssertEqual(UInt64.min.binaryString,         "0b00000000_00000000_00000000_00000000_00000000_00000000_00000000_00000000")
-        XCTAssertEqual(UInt64(1965310274).binaryString, "0b01000010_01000001_00100100_01110101_00000000_00000000_00000000_00000000")
-        XCTAssertEqual(UInt64.max.binaryString,         "0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111")
+        XCTAssertEqual(UInt64.min.binaryString,         "00000000_00000000_00000000_00000000_00000000_00000000_00000000_00000000")
+        XCTAssertEqual(UInt64(1965310274).binaryString, "01000010_01000001_00100100_01110101_00000000_00000000_00000000_00000000")
+        XCTAssertEqual(UInt64.max.binaryString,         "11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111")
     }
     
     func testBitOnOff() {

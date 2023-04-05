@@ -4,10 +4,10 @@ import XCTest
 final class DataExtensionTests: XCTestCase {
     func testHexString() {
         let testCases: [Data:String] = [
-            Data([0x00])                : "0x00",
-            Data([0x00, 0x1C])          : "0x00_1C",
-            Data([0xFF])                : "0xFF",
-            Data([0x00, 0xFF, 0xCC])    : "0x00_FF_CC",
+            Data([0x00])                : "00",
+            Data([0x00, 0x1C])          : "00_1C",
+            Data([0xFF])                : "FF",
+            Data([0x00, 0xFF, 0xCC])    : "00_FF_CC",
         ]
         for (key, value) in testCases {
             XCTAssertEqual(key.hexString, value)
@@ -36,6 +36,17 @@ final class DataExtensionTests: XCTestCase {
             XCTAssertEqual(key.int8, value)
         }
     }
+
+    func testUInt32() {
+        let testCases: [Data:UInt32?] = [
+            Data([0x00, 0x00, 0x00, 0x00])  : UInt32.min,
+            Data([0xFF, 0xFF, 0xFF, 0xFF])  : UInt32.max,
+            Data([0xFF, 0xFF, 0xFF])        : nil,
+        ]
+        for (key, value) in testCases {
+            XCTAssertEqual(key.uint32 ?? nil, value ?? nil)
+        }
+    }
     
     func testInt32() {
         let testCases: [Data:Int32?] = [
@@ -47,6 +58,5 @@ final class DataExtensionTests: XCTestCase {
         for (key, value) in testCases {
             XCTAssertEqual(key.int32 ?? nil, value ?? nil)
         }
-        
     }
 }
