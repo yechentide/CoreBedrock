@@ -9,4 +9,4 @@ public struct Pos2D<T: SignedInteger>: Equatable, Hashable {
     }
 }
 
-typealias Pos2Di32 = Pos2D<Int32>
+public typealias Pos2Di32 = Pos2D<Int32>

@@ -11,4 +11,4 @@ public struct Pos3D<T: SignedInteger>: Equatable, Hashable {
     }
 }
 
-typealias Pos3Di32 = Pos3D<Int32>
+public typealias Pos3Di32 = Pos3D<Int32>

@@ -2,7 +2,7 @@ import CoreGraphics
 import LvDBWrapper
 
 public struct MCChunk {
-    static var viewSize: Int {
+    public static var viewSize: Int {
         MCSubChunk.length * MCSubChunk.length
     }
 
@@ -45,7 +45,7 @@ public struct MCChunk {
         return topBlocks
     }
 
-    func getTopDownView() -> CGImage {
+    public func getTopDownView() -> CGImage {
         let view = getTopVisibleBlocks()
         var rgbaPixels = view.map { $0.color }
         let image = rgbaPixels.withUnsafeMutableBytes { (ptr) -> CGImage in

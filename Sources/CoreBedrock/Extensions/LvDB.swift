@@ -1,7 +1,7 @@
 import LvDBWrapper
 
 extension LvDB {
-    func getChunkKeys(x: Int32, z: Int32, dimension: MCDimension) -> [Data] {
+    public func getChunkKeys(x: Int32, z: Int32, dimension: MCDimension) -> [Data] {
         let keyPrefix = LvDBKey.makeSubChunkKeyPrefix(x: x, z: z, dimension: dimension)
         let start = keyPrefix + MCChunkKeyType.keyTypeStartWith.data
 
