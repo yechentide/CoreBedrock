@@ -37,12 +37,4 @@ extension Data {
             $0.load(as: Int32.self)
         })
     }
-
-//    public var uint64: UInt64? {
-//        guard self.count >= 8 else { return nil }
-//
-//        return UInt64(littleEndian: self[ self.startIndex+0..<self.startIndex+8 ].withUnsafeBytes{
-//            $0.load(as: UInt64.self)
-//        })
-//    }
 }
