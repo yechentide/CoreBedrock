@@ -157,8 +157,12 @@ public struct MCSubChunk {
     public let x: Int32
     public let yIndex: Int8
     public let z: Int32
-    private let version: UInt8
+    public let version: UInt8
     private let storageLayers: [StorageLayer]
+
+    public var storageLayersCount: Int {
+        storageLayers.count
+    }
 
     public static func parseSubChunkData(x: Int32, yIndex:Int8, z: Int32, from subChunkData: Data) -> MCSubChunk? {
         guard subChunkData.count > 4 else { return nil }

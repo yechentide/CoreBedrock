@@ -36,30 +36,12 @@ public class MCWorld {
             try? newValue.write(to: nameFileURL, atomically: true, encoding: .utf8)
         }
     }
-
-//    public func loadChunSection(x: Int32, z: Int32, dimension: MCDimension = .overworld) {
-//        let keyPrefix: Data
-//        if dimension == .overworld {
-//            keyPrefix = x.data + z.data
-//        } else {
-//            keyPrefix = x.data + z.data + dimension.rawValue.data
-//        }
-//        var keyList = [Data]()
-//        db.seek(keyPrefix)
-//        while true {
-//            defer {
-//                db.next()
-//            }
-//            guard let keyData = db.key(), keyData[0..<keyPrefix.count] == keyPrefix else {
-//                break
-//            }
-//            guard keyData.count == keyPrefix.count + 2 else { continue }
-//            keyList.append(keyData)
-//        }
-//    }
 }
 
-//extension MCWorld {
+extension MCWorld {
+    public func removeChunks(xRange: ClosedRange<Int32>, zRange: ClosedRange<Int32>, dimension: MCDimension) {
+        db.removeChunks(xRange: xRange, zRange: zRange, dimension: dimension)
+    }
 //    public func decode(nbtData: Data) throws -> CompoundTag {
 //        let reader = CBReader(CBBuffer(nbtData))
 //        return try reader.readAsTag() as! CompoundTag
@@ -117,6 +99,5 @@ public class MCWorld {
 //                print("")
 //            }
 //        }
-//
 //    }
-//}
+}
