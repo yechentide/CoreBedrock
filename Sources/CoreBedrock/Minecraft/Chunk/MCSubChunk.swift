@@ -68,6 +68,7 @@ fileprivate struct StorageLayer {
     }
 
     func getTopVisibleBlocks() -> [MCBlock] {
+        let blockData = Data(blockData)
         var topVisibleBlocks = [MCBlock]()
         var buffer = [UInt32]()
 
@@ -75,20 +76,16 @@ fileprivate struct StorageLayer {
             let range = i * Self.wordByteSize ..< (i+1) * Self.wordByteSize
             let wordData = Data(blockData[range])
             buffer.append(contentsOf: getBlocksFrom(wordData))
-            if buffer.count < 16 { continue }
 
-            for j in stride(from: 15, through: 0, by: -1) {
-                let paletteIndex = Int(buffer[j])
-                let block = palettes[paletteIndex].block
-                if block.isOpaque {
-                    topVisibleBlocks.append(block)
-                    if buffer.count > 16 {
-                        buffer = [UInt32](buffer[16...])
-                    } else {
-                        buffer.removeAll()
-                    }
-                    break
-                }
+            while buffer.count >= 16 {
+                let paletteIndex = buffer[0..<16].last(where: {
+                    let paletteIndex = Int($0)
+                    let block = palettes[paletteIndex].block
+                    return block.isOpaque
+                }) ?? buffer[15]
+                let block = palettes[Int(paletteIndex)].block
+                topVisibleBlocks.append(block)
+                buffer = [UInt32](buffer[16...])
             }
         }
 
@@ -110,7 +107,9 @@ fileprivate func parsePalette(_ byte: UInt8) -> (type: StorageLayer.PaletteMetaT
 
 fileprivate func convertToBlockFrom(tag: CompoundTag) -> MCBlock {
     if let nameTag = tag["name"] as? StringTag {
-        return MCBlock(stringLiteral: nameTag.value)
+        let blockName = nameTag.value.dropFirst(10)
+        let block = MCBlock(stringLiteral: String(blockName))
+        return block
     }
     return .unknown
 }
