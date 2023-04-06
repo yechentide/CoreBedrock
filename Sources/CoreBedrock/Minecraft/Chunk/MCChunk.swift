@@ -22,7 +22,7 @@ public struct MCChunk {
         // parse subChunk keys
         keyList.forEach { key in
             guard key.count == keyPrefixLength + 2 else { return }
-            let yIndex = Int8(key[key.count-1])
+            let yIndex = Int8(truncatingIfNeeded: key[key.count-1])
             if let subChunkData = lvDB.get(key),
                let subChunk = MCSubChunk.parseSubChunkData(x: x, yIndex: yIndex, z: z, from: subChunkData)
             {
@@ -57,7 +57,7 @@ public struct MCChunk {
                 bytesPerRow: 4 * MCSubChunk.length,
                 space: CGColorSpace(name: CGColorSpace.sRGB)!,
                 bitmapInfo: CGBitmapInfo.byteOrder32Little.rawValue +
-                CGImageAlphaInfo.premultipliedFirst.rawValue
+                            CGImageAlphaInfo.premultipliedFirst.rawValue
             )!
             return ctx.makeImage()!
         }

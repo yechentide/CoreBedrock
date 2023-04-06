@@ -1480,6 +1480,14 @@ public enum MCBlock: UInt32, ExpressibleByStringLiteral, CustomStringConvertible
 
     public init(stringLiteral value: String) {
         switch value {
+            case "stained_glass":                     self = .stainedGlass
+            case "sea_lantern":                       self = .seaLantern
+            case "structure_void":                    self = .structureVoid
+            case "azalea_leaves_flowered":            self = .azaleaLeavesFlowered
+            case "pearlescent_froglight":             self = .pearlescentFroglight
+            case "command_block":                     self = .commandBlock
+            case "stone_button":                      self = .stoneButton
+            case "standing_banner":                   self = .standingBanner
             case "air":                               self = .air
             case "stone":                             self = .stone
             case "grass":                             self = .grass
@@ -2220,7 +2228,7 @@ public enum MCBlock: UInt32, ExpressibleByStringLiteral, CustomStringConvertible
 
     public var isOpaque: Bool {
         switch self {
-            case .air:
+            case .bedrock, .dirt, .grass, .seaLantern:
                 return true
             default:
                 return false
@@ -2229,8 +2237,10 @@ public enum MCBlock: UInt32, ExpressibleByStringLiteral, CustomStringConvertible
 
     public var color: UInt32 {
         switch self {
-            case .air:
-                return 0xFF204080
+            case .seaLantern:
+                return 0xFF0000FF
+            case .grass:
+                return 0xFF00FF00
             default:
                 return 0x00000000
         }
