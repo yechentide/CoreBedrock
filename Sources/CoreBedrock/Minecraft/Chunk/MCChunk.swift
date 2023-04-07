@@ -45,9 +45,21 @@ public struct MCChunk {
         return topBlocks
     }
 
+    private func flip(_ array: [UInt32]) -> [UInt32] {
+        assert(array.count == Self.viewSize)
+        var flipped = [UInt32](repeating: 0, count: Self.viewSize)
+        for i in 0..<Self.viewSize {
+            let x = i / MCSubChunk.length
+            let y = i % MCSubChunk.length
+            let index = y * MCSubChunk.length + x
+            flipped[index] = array[i]
+        }
+        return flipped
+    }
+
     public func getTopDownView() -> CGImage {
-        let view = getTopVisibleBlocks()
-        var rgbaPixels = view.map { $0.color }
+        let view = getTopVisibleBlocks().map { $0.color }
+        var rgbaPixels = flip(view)
         let image = rgbaPixels.withUnsafeMutableBytes { (ptr) -> CGImage in
             let ctx = CGContext(
                 data: ptr.baseAddress,
