@@ -5,12 +5,12 @@ public enum MCDimension: Int32, CustomStringConvertible {
     
     public var description: String {
         switch self {
-        case .overworld:
-            return "overworld"
-        case .theNether:
-            return "theNether"
-        case .theEnd:
-            return "theEnd"
+            case .overworld:
+                return "overworld"
+            case .theNether:
+                return "theNether"
+            case .theEnd:
+                return "theEnd"
         }
     }
 }
