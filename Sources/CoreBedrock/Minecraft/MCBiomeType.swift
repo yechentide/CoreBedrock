@@ -1,9 +1,4 @@
-/**
- Minecraft biomes
-
- [Data source](https://github.com/PrismarineJS/minecraft-data/blob/master/data/bedrock/1.19.1/biomes.json)
- */
-public enum MCBiome: UInt32, ExpressibleByStringLiteral, CustomStringConvertible {
+public enum MCBiomeType: UInt16 {
     case unknown                      = 65535
     case ocean                        = 0
     case plains                       = 1
@@ -90,7 +85,9 @@ public enum MCBiome: UInt32, ExpressibleByStringLiteral, CustomStringConvertible
     case stonyPeaks                   = 189
     case deepDark                     = 190
     case mangroveSwamp                = 191
+}
 
+extension MCBiomeType: CustomStringConvertible {
     public var description: String {
         switch self {
             case .unknown:                      return "unknown"
@@ -181,7 +178,9 @@ public enum MCBiome: UInt32, ExpressibleByStringLiteral, CustomStringConvertible
             case .mangroveSwamp:                return "mangrove_swamp"
         }
     }
+}
 
+extension MCBiomeType: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         switch value {
             case "ocean":                        self = .ocean

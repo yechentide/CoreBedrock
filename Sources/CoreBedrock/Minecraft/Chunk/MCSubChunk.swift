@@ -27,7 +27,7 @@ fileprivate struct StorageLayer {
         return mask
     }
     let blockData: Data
-    let palettes: [(tag: CompoundTag, block: MCBlock)]
+    let palettes: [(tag: CompoundTag, block: MCBlockType)]
 
     private func getBlocksFrom(_ wordData: Data) -> [UInt32] {
         assert(wordData.count == Self.wordByteSize)
@@ -55,7 +55,7 @@ fileprivate struct StorageLayer {
         return word & blockMask
     }
 
-    func getBlock(blockOffset: Int) -> MCBlock {
+    func getBlock(blockOffset: Int) -> MCBlockType {
         let wordIndex = ceil(Double(blockOffset) / Double(blocksPerWord)) - 1
         let start = Int(wordIndex) * Self.wordByteSize
         let end = start + Self.wordByteSize
@@ -67,9 +67,9 @@ fileprivate struct StorageLayer {
         return palettes[Int(paletteIndex)].block
     }
 
-    func getTopVisibleBlocks() -> [MCBlock] {
+    func getTopVisibleBlocks() -> [MCBlockType] {
         let blockData = Data(blockData)
-        var topVisibleBlocks = [MCBlock]()
+        var topVisibleBlocks = [MCBlockType]()
         var buffer = [UInt32]()
 
         for i in 0..<totalWords {
@@ -97,18 +97,18 @@ fileprivate func parsePalette(_ byte: UInt8) -> (type: StorageLayer.PaletteMetaT
     let paletteType = StorageLayer.PaletteMetaType(rawValue: byte & 0x1)!
     let bitsPerBlock = Int(byte >> 1)
     switch bitsPerBlock {
-    case 1...6, 8, 16:
-        return (paletteType, StorageLayer.wordBitSize / bitsPerBlock)
-    default:
-        print("Unsupported palette type: \(bitsPerBlock)")
-        return nil
+        case 1...6, 8, 16:
+            return (paletteType, StorageLayer.wordBitSize / bitsPerBlock)
+        default:
+            print("Unsupported palette type: \(bitsPerBlock)")
+            return nil
     }
 }
 
-fileprivate func convertToBlockFrom(tag: CompoundTag) -> MCBlock {
+fileprivate func convertToBlockFrom(tag: CompoundTag) -> MCBlockType {
     if let nameTag = tag["name"] as? StringTag {
         let blockName = nameTag.value.dropFirst(10)
-        let block = MCBlock(stringLiteral: String(blockName))
+        let block = MCBlockType(stringLiteral: String(blockName))
         return block
     }
     return .unknown
@@ -124,7 +124,7 @@ fileprivate func parseStorageLayer(layerData: Data, byteOffset: inout Int) -> St
     let paletteCount = Data(layerData[offset..<offset+4]).int32!
     offset += 4
 
-    var palettes = [(CompoundTag, MCBlock)]()
+    var palettes = [(CompoundTag, MCBlockType)]()
     let reader = CBReader(CBBuffer(layerData[offset...]))
     for _ in 0..<paletteCount {
         guard let paletteTag = try? reader.readAsTag() as? CompoundTag else {
@@ -184,7 +184,7 @@ public struct MCSubChunk {
         return MCSubChunk(x: x, yIndex: yIndex, z: z, version: storageVersion, storageLayers: storageLayers)
     }
 
-    public func getBlock(_ localX: Int, _ localY: Int, _ localZ: Int) -> MCBlock {
+    public func getBlock(_ localX: Int, _ localY: Int, _ localZ: Int) -> MCBlockType {
         guard storageLayers.count > 0 else {
             fatalError("\(#function): no storage layers")
         }
@@ -193,7 +193,7 @@ public struct MCSubChunk {
         return block
     }
 
-    public func getTopVisibleBlocks() -> [MCBlock] {
+    public func getTopVisibleBlocks() -> [MCBlockType] {
         return storageLayers[0].getTopVisibleBlocks()
     }
 }

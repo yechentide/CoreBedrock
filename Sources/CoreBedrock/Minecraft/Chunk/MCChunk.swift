@@ -32,8 +32,8 @@ public struct MCChunk {
         subChunks.sort { $0.yIndex < $1.yIndex }
     }
 
-    private func getTopVisibleBlocks() -> [MCBlock] {
-        var topBlocks = [MCBlock](repeating: .air, count: Self.viewSize)
+    private func getTopVisibleBlocks() -> [MCBlockType] {
+        var topBlocks = [MCBlockType](repeating: .air, count: Self.viewSize)
         for subChunk in subChunks {
             let blocks = subChunk.getTopVisibleBlocks()
             for i in 0..<Self.viewSize {
