@@ -16,6 +16,7 @@ type Biome struct {
 type Block struct {
 	ID            int32  `json:"id"`
 	Name          string `json:"name"`
+	Transparent   bool   `json:"transparent"`
 	CamelCaseName string `json:"-"`
 }
 
@@ -28,17 +29,17 @@ func toCamelCase(str string) string {
 }
 
 func main() {
-	exportBlockEnum()
-	exportBiomeEnum()
+	// exportBlockTypeEnum()
+	// exportBiomeTypeEnum()
 }
 
-func exportBlockEnum() {
+func exportBlockTypeEnum() {
 	blockJsonData, err := os.ReadFile("/Users/tide/Downloads/minecraft-data/data/bedrock/1.19.1/blocks.json")
 	if err != nil {
 		panic(err)
 	}
 
-	var blockList []Biome
+	var blockList []Block
 	json.Unmarshal(blockJsonData, &blockList)
 
 	camelCaseNameMaxLength := 0
@@ -56,39 +57,77 @@ func exportBlockEnum() {
 
 	format01 := fmt.Sprintf("    case %%-%ds = %%d\n", camelCaseNameMaxLength)
 	format02 := fmt.Sprintf("            case %%-%ds return \"%%s\"\n", camelCaseNameMaxLength+2)
-	format03 := fmt.Sprintf("            case %%-%ds self = .%%s\n", camelCaseNameMaxLength+3)
-
+	format03 := fmt.Sprintf("            case %%-%ds self = .%%s\n", camelCaseNameMaxLength+18)
+	formatForColor := fmt.Sprintf("            case %%-%ds return %%s\n", camelCaseNameMaxLength+2)
 	builder := strings.Builder{}
-	builder.WriteString("enum MCBlock: UInt32, ExpressibleByStringLiteral, CustomStringConvertible {\n")
-	for _, biome := range blockList {
-		builder.WriteString(fmt.Sprintf(format01, biome.CamelCaseName, biome.ID))
-	}
 
+	// definition
+	builder.WriteString("public enum MCBlockType: UInt32 {\n")
+	for _, block := range blockList {
+		builder.WriteString(fmt.Sprintf(format01, block.CamelCaseName, block.ID))
+	}
+	builder.WriteString("}\n")
+
+	// to string
 	builder.WriteString("\n")
-	builder.WriteString("    var description: String {\n")
+	builder.WriteString("extension MCBlockType: CustomStringConvertible {\n")
+	builder.WriteString("    public var description: String {\n")
 	builder.WriteString("        switch self {\n")
-	builder.WriteString("            case .unknown: return \"unknown\"\n")
-	for _, biome := range blockList {
-		builder.WriteString(fmt.Sprintf(format02, "."+biome.CamelCaseName+":", biome.Name))
+	for _, block := range blockList {
+		builder.WriteString(fmt.Sprintf(format02, "."+block.CamelCaseName+":", "minecraft:"+block.Name))
 	}
 	builder.WriteString("        }\n")
 	builder.WriteString("    }\n")
+	builder.WriteString("}\n")
 
+	// from string
 	builder.WriteString("\n")
-	builder.WriteString("    init(stringLiteral value: String) {\n")
+	builder.WriteString("extension MCBlockType: ExpressibleByStringLiteral {\n")
+	builder.WriteString("    public init(stringLiteral value: String) {\n")
 	builder.WriteString("        switch value {\n")
-	for _, biome := range blockList {
-		builder.WriteString(fmt.Sprintf(format03, "\""+biome.CamelCaseName+"\":", biome.CamelCaseName))
+	for _, block := range blockList {
+		builder.WriteString(fmt.Sprintf(format03, "\"minecraft:"+block.Name+"\":", block.CamelCaseName))
 	}
 	builder.WriteString("            default: self = .unknown\n")
 	builder.WriteString("        }\n")
 	builder.WriteString("    }\n")
+	builder.WriteString("}\n")
 
-	builder.WriteString("}\n\n\n")
+	// is opaque
+	builder.WriteString("\n")
+	builder.WriteString("extension MCBlockType {\n")
+	builder.WriteString("    public var isOpaque: Bool {\n")
+	builder.WriteString("        switch self {\n")
+	for _, block := range blockList {
+		if block.Transparent {
+			continue
+		}
+		builder.WriteString(fmt.Sprintf(formatForColor, "."+block.CamelCaseName+":", "true"))
+	}
+	builder.WriteString(fmt.Sprintf(fmt.Sprintf("            %%-%ds return false\n", camelCaseNameMaxLength+7), "default:"))
+	builder.WriteString("        }\n")
+	builder.WriteString("    }\n")
+	builder.WriteString("}\n")
+
+	// to color
+	builder.WriteString("\n")
+	builder.WriteString("extension MCBlockType {\n")
+	builder.WriteString("    public var color: UInt32 {\n")
+	builder.WriteString("        switch self {\n")
+	for _, block := range blockList {
+		builder.WriteString(fmt.Sprintf(formatForColor, "."+block.CamelCaseName+":", "0xF0000F"))
+	}
+	// builder.WriteString(fmt.Sprintf(formatForColor, "default", "0"))
+	builder.WriteString(fmt.Sprintf(fmt.Sprintf("            %%-%ds return 0\n", camelCaseNameMaxLength+7), "default:"))
+	builder.WriteString("        }\n")
+	builder.WriteString("    }\n")
+	builder.WriteString("}")
+
+	// output
 	fmt.Println(builder.String())
 }
 
-func exportBiomeEnum() {
+func exportBiomeTypeEnum() {
 	biomeJsonData, err := os.ReadFile("/Users/tide/Downloads/minecraft-data/data/bedrock/1.19.1/biomes.json")
 	if err != nil {
 		panic(err)
@@ -113,34 +152,42 @@ func exportBiomeEnum() {
 	format01 := fmt.Sprintf("    case %%-%ds = %%d\n", camelCaseNameMaxLength)
 	format02 := fmt.Sprintf("            case %%-%ds return \"%%s\"\n", camelCaseNameMaxLength+2)
 	format03 := fmt.Sprintf("            case %%-%ds self = .%%s\n", camelCaseNameMaxLength+3)
-
 	builder := strings.Builder{}
-	builder.WriteString("enum MCBiome: UInt16, ExpressibleByStringLiteral, CustomStringConvertible {\n")
-	builder.WriteString("    case unknown = 65535\n")
+
+	// definition
+	builder.WriteString("public enum MCBiomeType: UInt16 {\n")
+	builder.WriteString(fmt.Sprintf(format01, "unknown", 65535))
 	for _, biome := range biomeList {
 		builder.WriteString(fmt.Sprintf(format01, biome.CamelCaseName, biome.ID))
 	}
+	builder.WriteString("}\n")
 
+	// to string
 	builder.WriteString("\n")
-	builder.WriteString("    var description: String {\n")
+	builder.WriteString("extension MCBiomeType: CustomStringConvertible {\n")
+	builder.WriteString("    public var description: String {\n")
 	builder.WriteString("        switch self {\n")
-	builder.WriteString("            case .unknown: return \"unknown\"\n")
+	builder.WriteString(fmt.Sprintf(format02, ".unknown:", "unknown"))
 	for _, biome := range biomeList {
 		builder.WriteString(fmt.Sprintf(format02, "."+biome.CamelCaseName+":", biome.Name))
 	}
 	builder.WriteString("        }\n")
 	builder.WriteString("    }\n")
+	builder.WriteString("}\n")
 
+	// from string
 	builder.WriteString("\n")
-	builder.WriteString("    init(stringLiteral value: String) {\n")
+	builder.WriteString("extension MCBiomeType: ExpressibleByStringLiteral {\n")
+	builder.WriteString("    public init(stringLiteral value: String) {\n")
 	builder.WriteString("        switch value {\n")
 	for _, biome := range biomeList {
 		builder.WriteString(fmt.Sprintf(format03, "\""+biome.CamelCaseName+"\":", biome.CamelCaseName))
 	}
-	builder.WriteString("            default: self = .unknown\n")
+	builder.WriteString(fmt.Sprintf(fmt.Sprintf("            %%-%ds self = .unknown\n", camelCaseNameMaxLength+8), "default:"))
 	builder.WriteString("        }\n")
 	builder.WriteString("    }\n")
+	builder.WriteString("}")
 
-	builder.WriteString("}\n\n\n")
+	// output
 	fmt.Println(builder.String())
 }
