@@ -1,9 +1,9 @@
 import Foundation
 
 extension CBReader: CustomStringConvertible {
-   public var description: String {
-       return toString(includeValue: false, indentString: NBT.defaultIndentString)
-   }
+    public var description: String {
+        return toString(includeValue: false, indentString: NBT.defaultIndentString)
+    }
 }
 
 /// Represents a reader that provides fast, non-cached, forward-only access to NBT data.
@@ -74,13 +74,13 @@ public class CBReader {
     var isListElement: Bool { return parentTagType == .list }
     var hasValue: Bool {
         switch tagType {
-        case .compound,
-                .end,
-                .list,
-                .unknown:
-            return false
-        default:
-            return true
+            case .compound,
+                    .end,
+                    .list,
+                    .unknown:
+                return false
+            default:
+                return true
         }
     }
     var hasName: Bool { return tagName != nil }
@@ -91,13 +91,13 @@ public class CBReader {
         // Technically Compound tags also have a length, but
         // it is not known until all child tags are read.
         switch tagType {
-        case .list,
-                .byteArray,
-                .intArray,
-                .longArray:
-            return true
-        default:
-            return false
+            case .list,
+                    .byteArray,
+                    .intArray,
+                    .longArray:
+                return true
+            default:
+                return false
         }
     }
     private(set) var tagStartOffset: Int = 0
@@ -112,8 +112,8 @@ public class CBReader {
     /// - Returns: `true` if the tag was read successfully; false if there are no more tags to read.
     /// - Throws: An `invalidFormat` error if an error occurred while parsing data; an `invalidReaderState` error if the reader cannot recover from a previous parsing error.
     public func readToFollowing() throws -> Bool {
-        readLoop: while true {
-            switch _state {
+    readLoop: while true {
+        switch _state {
             case .atStreamBeginning:
                 // Set the state to error in case reader.ReadTagType throws
                 _state = .error
@@ -219,8 +219,8 @@ public class CBReader {
             default:
                 // Parsing error, or unexpected state
                 throw CBStreamError.invalidReaderState(erroneousStateError)
-            }
         }
+    }
     }
     
     /// Reads until a tag with the specified name is found. Returns false if are no more tags to read (end of stream is reached).
@@ -414,50 +414,50 @@ public class CBReader {
         _atValue = false
         var value: Any?
         switch tagType {
-        case .byte:
-            value = try _reader.readByte()
-            break
-        case .short:
-            value = try _reader.readInt16()
-            break
-        case .int:
-            value = try _reader.readInt32()
-            break
-        case .long:
-            value = try _reader.readInt64()
-            break
-        case .float:
-            value = try _reader.readFloat()
-            break
-        case .double:
-            value = try _reader.readDouble()
-            break
-        case .byteArray:
-            let byteArr = try _reader.readBytes(tagLength)
-            if byteArr.count < tagLength {
-                throw CBStreamError.endOfStream
-            }
-            value = byteArr
-            break
-        case .intArray:
-            var intArr: [Int32] = []
-            for _ in 0..<tagLength {
-                try intArr.append(_reader.readInt32())
-            }
-            value = intArr
-            break
-        case .longArray:
-            var longArr: [Int64] = []
-            for _ in 0..<tagLength {
-                try longArr.append(_reader.readInt64())
-            }
-            value = longArr
-            break
-        case .string:
-            value = try _reader.readString()
-            break
-        default:
-            throw CBStreamError.invalidOperation(nonValueTagError)
+            case .byte:
+                value = try _reader.readByte()
+                break
+            case .short:
+                value = try _reader.readInt16()
+                break
+            case .int:
+                value = try _reader.readInt32()
+                break
+            case .long:
+                value = try _reader.readInt64()
+                break
+            case .float:
+                value = try _reader.readFloat()
+                break
+            case .double:
+                value = try _reader.readDouble()
+                break
+            case .byteArray:
+                let byteArr = try _reader.readBytes(tagLength)
+                if byteArr.count < tagLength {
+                    throw CBStreamError.endOfStream
+                }
+                value = byteArr
+                break
+            case .intArray:
+                var intArr: [Int32] = []
+                for _ in 0..<tagLength {
+                    try intArr.append(_reader.readInt32())
+                }
+                value = intArr
+                break
+            case .longArray:
+                var longArr: [Int64] = []
+                for _ in 0..<tagLength {
+                    try longArr.append(_reader.readInt64())
+                }
+                value = longArr
+                break
+            case .string:
+                value = try _reader.readString()
+                break
+            default:
+                throw CBStreamError.invalidOperation(nonValueTagError)
         }
         
         _valueCache = cacheTagValues ? value : nil
@@ -477,20 +477,20 @@ public class CBReader {
     /// - Returns: List contents converted to an array of the requested type.
     public func readListAsArray<T>() throws -> [T] {
         switch _state {
-        case .atStreamEnd:
-            throw CBStreamError.endOfStream
-        case .error:
-            throw CBStreamError.invalidReaderState(erroneousStateError)
-        case .atListBeginning:
-            goDown()
-            listIndex = 0
-            tagType = listType
-            _state = .inList
-            break
-        case .inList:
-            break
-        default:
-            throw CBStreamError.invalidOperation("ReadListAsArray may only be used on List tags.")
+            case .atStreamEnd:
+                throw CBStreamError.endOfStream
+            case .error:
+                throw CBStreamError.invalidReaderState(erroneousStateError)
+            case .atListBeginning:
+                goDown()
+                listIndex = 0
+                tagType = listType
+                _state = .inList
+                break
+            case .inList:
+                break
+            default:
+                throw CBStreamError.invalidOperation("ReadListAsArray may only be used on List tags.")
         }
         
         let elementsToRead = parentTagLength - listIndex
@@ -509,43 +509,43 @@ public class CBReader {
         // For everything else, gotta read elements one-by-one
         var result: [T] = []
         switch listType {
-        case .byte:
-            for _ in 0..<elementsToRead {
-                try result.append(convertValue(_reader.readByte()))
-            }
-            break
-        case .short:
-            for _ in 0..<elementsToRead {
-                try result.append(convertValue(_reader.readInt16()))
-            }
-            break
-        case .int:
-            for _ in 0..<elementsToRead {
-                try result.append(convertValue(_reader.readInt32()))
-            }
-            break
-        case .long:
-            for _ in 0..<elementsToRead {
-                try result.append(convertValue(_reader.readInt64()))
-            }
-            break
-        case .float:
-            for _ in 0..<elementsToRead {
-                try result.append(convertValue(_reader.readFloat()))
-            }
-            break
-        case .double:
-            for _ in 0..<elementsToRead {
-                try result.append(convertValue(_reader.readDouble()))
-            }
-            break
-        case .string:
-            for _ in 0..<elementsToRead {
-                try result.append(convertValue(_reader.readString()))
-            }
-            break
-        default:
-            throw CBStreamError.invalidOperation("ReadListAsArray may only be used on lists of value types.")
+            case .byte:
+                for _ in 0..<elementsToRead {
+                    try result.append(convertValue(_reader.readByte()))
+                }
+                break
+            case .short:
+                for _ in 0..<elementsToRead {
+                    try result.append(convertValue(_reader.readInt16()))
+                }
+                break
+            case .int:
+                for _ in 0..<elementsToRead {
+                    try result.append(convertValue(_reader.readInt32()))
+                }
+                break
+            case .long:
+                for _ in 0..<elementsToRead {
+                    try result.append(convertValue(_reader.readInt64()))
+                }
+                break
+            case .float:
+                for _ in 0..<elementsToRead {
+                    try result.append(convertValue(_reader.readFloat()))
+                }
+                break
+            case .double:
+                for _ in 0..<elementsToRead {
+                    try result.append(convertValue(_reader.readDouble()))
+                }
+                break
+            case .string:
+                for _ in 0..<elementsToRead {
+                    try result.append(convertValue(_reader.readString()))
+                }
+                break
+            default:
+                throw CBStreamError.invalidOperation("ReadListAsArray may only be used on lists of value types.")
         }
         
         tagsRead += elementsToRead
@@ -734,40 +734,40 @@ public class CBReader {
         
         _atValue = false
         switch tagType {
-        case .byte:
-            return try ByteTag(name: tagName, _reader.readByte())
-        case .short:
-            return try ShortTag(name: tagName, _reader.readInt16())
-        case .int:
-            return try IntTag(name: tagName, _reader.readInt32())
-        case .long:
-            return try LongTag(name: tagName, _reader.readInt64())
-        case .float:
-            return try FloatTag(name: tagName, _reader.readFloat())
-        case .double:
-            return try DoubleTag(name: tagName, _reader.readDouble())
-        case .string:
-            return try StringTag(name: tagName, _reader.readString())
-        case .byteArray:
-            let bytes = try _reader.readBytes(tagLength)
-            if bytes.count < tagLength {
-                throw CBStreamError.endOfStream
-            }
-            return ByteArrayTag(name: tagName, bytes)
-        case .intArray:
-            var ints: [Int32] = []
-            for _ in 0..<tagLength {
-                try ints.append(_reader.readInt32())
-            }
-            return IntArrayTag(name: tagName, ints)
-        case .longArray:
-            var longs: [Int64] = []
-            for _ in 0..<tagLength {
-                try longs.append(_reader.readInt64())
-            }
-            return LongArrayTag(name: tagName, longs)
-        default:
-            throw CBStreamError.invalidOperation(nonValueTagError)
+            case .byte:
+                return try ByteTag(name: tagName, _reader.readByte())
+            case .short:
+                return try ShortTag(name: tagName, _reader.readInt16())
+            case .int:
+                return try IntTag(name: tagName, _reader.readInt32())
+            case .long:
+                return try LongTag(name: tagName, _reader.readInt64())
+            case .float:
+                return try FloatTag(name: tagName, _reader.readFloat())
+            case .double:
+                return try DoubleTag(name: tagName, _reader.readDouble())
+            case .string:
+                return try StringTag(name: tagName, _reader.readString())
+            case .byteArray:
+                let bytes = try _reader.readBytes(tagLength)
+                if bytes.count < tagLength {
+                    throw CBStreamError.endOfStream
+                }
+                return ByteArrayTag(name: tagName, bytes)
+            case .intArray:
+                var ints: [Int32] = []
+                for _ in 0..<tagLength {
+                    try ints.append(_reader.readInt32())
+                }
+                return IntArrayTag(name: tagName, ints)
+            case .longArray:
+                var longs: [Int64] = []
+                for _ in 0..<tagLength {
+                    try longs.append(_reader.readInt64())
+                }
+                return LongArrayTag(name: tagName, longs)
+            default:
+                throw CBStreamError.invalidOperation(nonValueTagError)
         }
     }
     
@@ -778,71 +778,71 @@ public class CBReader {
         listType = .unknown
         
         switch tagType {
-        case .byte,
-                .short,
-                .int,
-                .long,
-                .float,
-                .double,
-                .string:
-            _atValue = true
-            break
-        case .intArray,
-                .byteArray,
-                .longArray:
-            tagLength = Int(try _reader.readInt32())
-            _atValue = true
-            break
-        case .list:
-            // Setting state to error in case reader throws
-            _state = .error
-            listType = try _reader.readTagType()
-            tagLength = Int(try _reader.readInt32())
-            if tagLength < 0 {
-                throw CBStreamError.invalidFormat("Negative tag length given: \(tagLength)")
-            }
-            _state = .atListBeginning
-            break
-        case .compound:
-            _state = .atCompoundBeginning
-            break
-        default:
-            _state = .error
-            throw CBStreamError.invalidFormat("Trying to read tag of unknown type.")
+            case .byte,
+                    .short,
+                    .int,
+                    .long,
+                    .float,
+                    .double,
+                    .string:
+                _atValue = true
+                break
+            case .intArray,
+                    .byteArray,
+                    .longArray:
+                tagLength = Int(try _reader.readInt32())
+                _atValue = true
+                break
+            case .list:
+                // Setting state to error in case reader throws
+                _state = .error
+                listType = try _reader.readTagType()
+                tagLength = Int(try _reader.readInt32())
+                if tagLength < 0 {
+                    throw CBStreamError.invalidFormat("Negative tag length given: \(tagLength)")
+                }
+                _state = .atListBeginning
+                break
+            case .compound:
+                _state = .atCompoundBeginning
+                break
+            default:
+                _state = .error
+                throw CBStreamError.invalidFormat("Trying to read tag of unknown type.")
         }
     }
     
     private func skipValue() throws {
         // Make sure to check for "atValue" before calling this method
         switch tagType {
-        case .byte:
-            try _reader.skip(MemoryLayout<UInt8>.size)
-            break
-        case .short:
-            try _reader.skip(MemoryLayout<Int16>.size)
-            break
-        case .float,
-                .int:
-            try _reader.skip(MemoryLayout<Int32>.size)
-            break
-        case .double,
-                .long:
-            try _reader.skip(MemoryLayout<Int64>.size)
-            break
-        case .byteArray:
-            try _reader.skip(tagLength)
-            break
-        case .intArray:
-            try _reader.skip(MemoryLayout<Int32>.size * tagLength)
-            break
-        case .longArray:
-            try _reader.skip(MemoryLayout<Int64>.size * tagLength)
-            break
-        case .string:
-            try _reader.skipString()
-            break
-        default:
-            throw CBStreamError.invalidOperation(nonValueTagError)
+            case .byte:
+                try _reader.skip(MemoryLayout<UInt8>.size)
+                break
+            case .short:
+                try _reader.skip(MemoryLayout<Int16>.size)
+                break
+            case .float,
+                    .int:
+                try _reader.skip(MemoryLayout<Int32>.size)
+                break
+            case .double,
+                    .long:
+                try _reader.skip(MemoryLayout<Int64>.size)
+                break
+            case .byteArray:
+                try _reader.skip(tagLength)
+                break
+            case .intArray:
+                try _reader.skip(MemoryLayout<Int32>.size * tagLength)
+                break
+            case .longArray:
+                try _reader.skip(MemoryLayout<Int64>.size * tagLength)
+                break
+            case .string:
+                try _reader.skipString()
+                break
+            default:
+                throw CBStreamError.invalidOperation(nonValueTagError)
         }
         
         _atValue = false

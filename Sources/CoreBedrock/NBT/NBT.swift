@@ -16,13 +16,13 @@ public class NBT {
     /// Gets whether this tag has a value attached. All tags except Compound, List, and End have values.
     public var hasValue: Bool {
         switch tagType {
-        case .compound,
-                .end,
-                .list,
-                .unknown:
-            return false
-        default:
-            return true
+            case .compound,
+                    .end,
+                    .list,
+                    .unknown:
+                return false
+            default:
+                return true
         }
     }
     
@@ -116,12 +116,12 @@ public class NBT {
     /// - Remark: Only supported by `ByteTag` and `ShortTag` tags.
     public var shortValue: Int16 {
         switch tagType {
-        case .byte:
-            return Int16((self as! ByteTag).value)
-        case .short:
-            return (self as! ShortTag).value
-        default:
-            preconditionFailure("Cannot get shortValue from \(NBT.getCanonicalTagName(tagType))")
+            case .byte:
+                return Int16((self as! ByteTag).value)
+            case .short:
+                return (self as! ShortTag).value
+            default:
+                preconditionFailure("Cannot get shortValue from \(NBT.getCanonicalTagName(tagType))")
         }
     }
     
@@ -129,14 +129,14 @@ public class NBT {
     /// - Remark: Only supported by `ByteTag`, `ShortTag`, and `IntTag` tags.
     public var intValue: Int32 {
         switch tagType {
-        case .byte:
-            return Int32((self as! ByteTag).value)
-        case .short:
-            return Int32((self as! ShortTag).value)
-        case .int:
-            return (self as! IntTag).value
-        default:
-            preconditionFailure("Cannot get intValue from \(NBT.getCanonicalTagName(tagType))")
+            case .byte:
+                return Int32((self as! ByteTag).value)
+            case .short:
+                return Int32((self as! ShortTag).value)
+            case .int:
+                return (self as! IntTag).value
+            default:
+                preconditionFailure("Cannot get intValue from \(NBT.getCanonicalTagName(tagType))")
         }
     }
     
@@ -144,16 +144,16 @@ public class NBT {
     /// - Remark: Only supported by `ByteTag`, `ShortTag`, `IntTag`, and `LongTag` tags.
     public var longValue: Int64 {
         switch tagType {
-        case .byte:
-            return Int64((self as! ByteTag).value)
-        case .short:
-            return Int64((self as! ShortTag).value)
-        case .int:
-            return Int64((self as! IntTag).value)
-        case .long:
-            return (self as! LongTag).value
-        default:
-            preconditionFailure("Cannot get longValue from \(NBT.getCanonicalTagName(tagType))")
+            case .byte:
+                return Int64((self as! ByteTag).value)
+            case .short:
+                return Int64((self as! ShortTag).value)
+            case .int:
+                return Int64((self as! IntTag).value)
+            case .long:
+                return (self as! LongTag).value
+            default:
+                preconditionFailure("Cannot get longValue from \(NBT.getCanonicalTagName(tagType))")
         }
     }
     
@@ -162,20 +162,20 @@ public class NBT {
     /// and `FloatTag` tags.
     public var floatValue: Float {
         switch tagType {
-        case .byte:
-            return Float((self as! ByteTag).value)
-        case .short:
-            return Float((self as! ShortTag).value)
-        case .int:
-            return Float((self as! IntTag).value)
-        case .long:
-            return Float((self as! LongTag).value)
-        case .float:
-            return (self as! FloatTag).value
-        case .double:
-            return Float((self as! DoubleTag).value)
-        default:
-            preconditionFailure("Cannot get floatValue from \(NBT.getCanonicalTagName(tagType))")
+            case .byte:
+                return Float((self as! ByteTag).value)
+            case .short:
+                return Float((self as! ShortTag).value)
+            case .int:
+                return Float((self as! IntTag).value)
+            case .long:
+                return Float((self as! LongTag).value)
+            case .float:
+                return (self as! FloatTag).value
+            case .double:
+                return Float((self as! DoubleTag).value)
+            default:
+                preconditionFailure("Cannot get floatValue from \(NBT.getCanonicalTagName(tagType))")
         }
     }
     
@@ -184,20 +184,20 @@ public class NBT {
     /// `FloatTag`, and `DoubleTag` tags.
     public var doubleValue: Double {
         switch tagType {
-        case .byte:
-            return Double((self as! ByteTag).value)
-        case .short:
-            return Double((self as! ShortTag).value)
-        case .int:
-            return Double((self as! IntTag).value)
-        case .long:
-            return Double((self as! LongTag).value)
-        case .float:
-            return Double(String((self as! FloatTag).value))!
-        case .double:
-            return (self as! DoubleTag).value
-        default:
-            preconditionFailure("Cannot get doubleValue from \(NBT.getCanonicalTagName(tagType))")
+            case .byte:
+                return Double((self as! ByteTag).value)
+            case .short:
+                return Double((self as! ShortTag).value)
+            case .int:
+                return Double((self as! IntTag).value)
+            case .long:
+                return Double((self as! LongTag).value)
+            case .float:
+                return Double(String((self as! FloatTag).value))!
+            case .double:
+                return (self as! DoubleTag).value
+            default:
+                preconditionFailure("Cannot get doubleValue from \(NBT.getCanonicalTagName(tagType))")
         }
     }
     
@@ -227,55 +227,55 @@ public class NBT {
     /// `IntArrayTag`, or `LongArrayTag` tags.
     public var stringValue: String {
         switch tagType {
-        case .string:
-            return (self as! StringTag).value
-        case .byte:
-            return String((self as! ByteTag).value)
-        case .short:
-            return String((self as! ShortTag).value)
-        case .int:
-            return String((self as! IntTag).value)
-        case .long:
-            return String((self as! LongTag).value)
-        case .float:
-            return String((self as! FloatTag).value)
-        case .double:
-            return String((self as! DoubleTag).value)
-        default:
-            preconditionFailure("Cannot get stringValue from \(NBT.getCanonicalTagName(tagType))")
+            case .string:
+                return (self as! StringTag).value
+            case .byte:
+                return String((self as! ByteTag).value)
+            case .short:
+                return String((self as! ShortTag).value)
+            case .int:
+                return String((self as! IntTag).value)
+            case .long:
+                return String((self as! LongTag).value)
+            case .float:
+                return String((self as! FloatTag).value)
+            case .double:
+                return String((self as! DoubleTag).value)
+            default:
+                preconditionFailure("Cannot get stringValue from \(NBT.getCanonicalTagName(tagType))")
         }
     }
     
     static func getCanonicalTagName(_ type: TagType) -> String {
         switch type {
-        case .byte:
-            return "TAG_Byte"
-        case .byteArray:
-            return "TAG_Byte_Array"
-        case .compound:
-            return "TAG_Compound"
-        case .double:
-            return "TAG_Double"
-        case .end:
-            return "TAG_End"
-        case .float:
-            return "TAG_Float"
-        case .int:
-            return "TAG_Int"
-        case .intArray:
-            return "TAG_Int_Array"
-        case .list:
-            return "TAG_List"
-        case .long:
-            return "TAG_Long"
-        case .longArray:
-            return "TAG_Long_Array"
-        case .short:
-            return "TAG_Short"
-        case .string:
-            return "TAG_String"
-        default:
-            return "UNKNOWN";
+            case .byte:
+                return "TAG_Byte"
+            case .byteArray:
+                return "TAG_Byte_Array"
+            case .compound:
+                return "TAG_Compound"
+            case .double:
+                return "TAG_Double"
+            case .end:
+                return "TAG_End"
+            case .float:
+                return "TAG_Float"
+            case .int:
+                return "TAG_Int"
+            case .intArray:
+                return "TAG_Int_Array"
+            case .list:
+                return "TAG_List"
+            case .long:
+                return "TAG_Long"
+            case .longArray:
+                return "TAG_Long_Array"
+            case .short:
+                return "TAG_Short"
+            case .string:
+                return "TAG_String"
+            default:
+                return "UNKNOWN";
         }
     }
 }

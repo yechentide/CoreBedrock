@@ -292,15 +292,15 @@ public class CBBuffer {
         let tempPosition: Int
         
         switch loc {
-        case .begin:
-            tempPosition = _origin + offset
-            break
-        case .current:
-            tempPosition = _position + offset
-            break
-        case .end:
-            tempPosition = _length + offset
-            break
+            case .begin:
+                tempPosition = _origin + offset
+                break
+            case .current:
+                tempPosition = _position + offset
+                break
+            case .end:
+                tempPosition = _length + offset
+                break
         }
         
         if tempPosition < _origin || _origin > tempPosition {

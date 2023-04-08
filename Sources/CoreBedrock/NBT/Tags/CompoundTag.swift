@@ -272,46 +272,46 @@ public final class CompoundTag: NBT {
             let type = try readStream.readTagType()
             var newTag: NBT
             switch type {
-            case .end:
-                return true
-            case .byte:
-                newTag = ByteTag()
-                break
-            case .short:
-                newTag = ShortTag()
-                break
-            case .int:
-                newTag = IntTag()
-                break
-            case .long:
-                newTag = LongTag()
-                break
-            case .float:
-                newTag = FloatTag()
-                break
-            case .double:
-                newTag = DoubleTag()
-                break
-            case .byteArray:
-                newTag = ByteArrayTag()
-                break
-            case .string:
-                newTag = StringTag()
-                break
-            case .list:
-                newTag = ListTag()
-                break
-            case .compound:
-                newTag = CompoundTag()
-                break
-            case .intArray:
-                newTag = IntArrayTag()
-                break
-            case .longArray:
-                newTag = LongArrayTag()
-                break
-            default:
-                throw CBStreamError.invalidFormat("Unsupported tag type found in NBT_Compound: \(type)")
+                case .end:
+                    return true
+                case .byte:
+                    newTag = ByteTag()
+                    break
+                case .short:
+                    newTag = ShortTag()
+                    break
+                case .int:
+                    newTag = IntTag()
+                    break
+                case .long:
+                    newTag = LongTag()
+                    break
+                case .float:
+                    newTag = FloatTag()
+                    break
+                case .double:
+                    newTag = DoubleTag()
+                    break
+                case .byteArray:
+                    newTag = ByteArrayTag()
+                    break
+                case .string:
+                    newTag = StringTag()
+                    break
+                case .list:
+                    newTag = ListTag()
+                    break
+                case .compound:
+                    newTag = CompoundTag()
+                    break
+                case .intArray:
+                    newTag = IntArrayTag()
+                    break
+                case .longArray:
+                    newTag = LongArrayTag()
+                    break
+                default:
+                    throw CBStreamError.invalidFormat("Unsupported tag type found in NBT_Compound: \(type)")
             }
             newTag.parent = self
             newTag._name = try readStream.readString()
@@ -333,46 +333,46 @@ public final class CompoundTag: NBT {
             let type = try readStream.readTagType()
             var newTag: NBT
             switch type {
-            case .end:
-                return
-            case .byte:
-                newTag = ByteTag()
-                break
-            case .short:
-                newTag = ShortTag()
-                break
-            case .int:
-                newTag = IntTag()
-                break
-            case .long:
-                newTag = LongTag()
-                break
-            case .float:
-                newTag = FloatTag()
-                break
-            case .double:
-                newTag = DoubleTag()
-                break
-            case .byteArray:
-                newTag = ByteArrayTag()
-                break
-            case .string:
-                newTag = StringTag()
-                break
-            case .list:
-                newTag = ListTag()
-                break
-            case .compound:
-                newTag = CompoundTag()
-                break
-            case .intArray:
-                newTag = IntArrayTag()
-                break
-            case .longArray:
-                newTag = LongArrayTag()
-                break
-            default:
-                throw CBStreamError.invalidFormat("Unsupported tag type found in NBT_Compound: \(type)")
+                case .end:
+                    return
+                case .byte:
+                    newTag = ByteTag()
+                    break
+                case .short:
+                    newTag = ShortTag()
+                    break
+                case .int:
+                    newTag = IntTag()
+                    break
+                case .long:
+                    newTag = LongTag()
+                    break
+                case .float:
+                    newTag = FloatTag()
+                    break
+                case .double:
+                    newTag = DoubleTag()
+                    break
+                case .byteArray:
+                    newTag = ByteArrayTag()
+                    break
+                case .string:
+                    newTag = StringTag()
+                    break
+                case .list:
+                    newTag = ListTag()
+                    break
+                case .compound:
+                    newTag = CompoundTag()
+                    break
+                case .intArray:
+                    newTag = IntArrayTag()
+                    break
+                case .longArray:
+                    newTag = LongArrayTag()
+                    break
+                default:
+                    throw CBStreamError.invalidFormat("Unsupported tag type found in NBT_Compound: \(type)")
             }
             
             try readStream.skipString()

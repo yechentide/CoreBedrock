@@ -152,17 +152,17 @@ public final class NBTFile {
         // Detect compression using the first byte in the buffer
         if compression == .autoDetect {
             switch buffer[0] {
-            case 0x0a:
-                fileCompression = .none
-                break
-            case 0x1F:
-                fileCompression = .gZip
-                break
-            case 0x78:
-                fileCompression = .zLib
-                break
-            default:
-                throw CBStreamError.invalidData("Could not auto-detect compression format.")
+                case 0x0a:
+                    fileCompression = .none
+                    break
+                case 0x1F:
+                    fileCompression = .gZip
+                    break
+                case 0x78:
+                    fileCompression = .zLib
+                    break
+                default:
+                    throw CBStreamError.invalidData("Could not auto-detect compression format.")
 
             }
         } else {
@@ -247,14 +247,14 @@ public final class NBTFile {
         let data = Data(stream.toArray())
         // Compress the data
         switch compression {
-        case .gZip:
-            guard let compressedData = data.gzip() else { throw CBStreamError.compressionError }
-            buffer = compressedData
-        case .zLib:
-            guard let compressedData = data.zip() else { throw CBStreamError.compressionError }
-            buffer = compressedData
-        default:
-            buffer = data
+            case .gZip:
+                guard let compressedData = data.gzip() else { throw CBStreamError.compressionError }
+                buffer = compressedData
+            case .zLib:
+                guard let compressedData = data.zip() else { throw CBStreamError.compressionError }
+                buffer = compressedData
+            default:
+                buffer = data
         }
         return data.count
     }

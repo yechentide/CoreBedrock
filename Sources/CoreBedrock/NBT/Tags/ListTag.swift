@@ -257,45 +257,45 @@ public final class ListTag: NBT {
         for _ in 0..<length {
             var newTag: NBT
             switch listType {
-            case .byte:
-                newTag = ByteTag()
-                break
-            case .short:
-                newTag = ShortTag()
-                break
-            case .int:
-                newTag = IntTag()
-                break
-            case .long:
-                newTag = LongTag()
-                break
-            case .float:
-                newTag = FloatTag()
-                break
-            case .double:
-                newTag = DoubleTag()
-                break
-            case .byteArray:
-                newTag = ByteArrayTag()
-                break
-            case .string:
-                newTag = StringTag()
-                break
-            case .list:
-                newTag = ListTag()
-                break
-            case .compound:
-                newTag = CompoundTag()
-                break
-            case .intArray:
-                newTag = IntArrayTag()
-                break
-            case .longArray:
-                newTag = LongArrayTag()
-                break
-            default:
-                // Should never happen since ListType is checked beforehand
-                throw CBStreamError.invalidFormat("Unsupported tag type found in NBT_List: \(listType)")
+                case .byte:
+                    newTag = ByteTag()
+                    break
+                case .short:
+                    newTag = ShortTag()
+                    break
+                case .int:
+                    newTag = IntTag()
+                    break
+                case .long:
+                    newTag = LongTag()
+                    break
+                case .float:
+                    newTag = FloatTag()
+                    break
+                case .double:
+                    newTag = DoubleTag()
+                    break
+                case .byteArray:
+                    newTag = ByteArrayTag()
+                    break
+                case .string:
+                    newTag = StringTag()
+                    break
+                case .list:
+                    newTag = ListTag()
+                    break
+                case .compound:
+                    newTag = CompoundTag()
+                    break
+                case .intArray:
+                    newTag = IntArrayTag()
+                    break
+                case .longArray:
+                    newTag = LongArrayTag()
+                    break
+                default:
+                    // Should never happen since ListType is checked beforehand
+                    throw CBStreamError.invalidFormat("Unsupported tag type found in NBT_List: \(listType)")
             }
             newTag.parent = self
             if try newTag.readTag(readStream, skip) {
@@ -315,50 +315,50 @@ public final class ListTag: NBT {
         }
         
         switch listType {
-        case .byte:
-            try readStream.skip(length)
-            break
-        case .short:
-            try readStream.skip(length * MemoryLayout<Int16>.size)
-            break
-        case .int:
-            try readStream.skip(length * MemoryLayout<Int32>.size)
-            break
-        case .long:
-            try readStream.skip(length * MemoryLayout<Int64>.size)
-            break
-        case .float:
-            try readStream.skip(length * MemoryLayout<Float>.size)
-            break
-        case .double:
-            try readStream.skip(length * MemoryLayout<Double>.size)
-            break
-        default:
-            for _ in 0..<length {
-                switch listType {
-                case .byteArray:
-                    try ByteArrayTag().skipTag(readStream)
-                    break
-                case .string:
-                    try readStream.skipString()
-                    break
-                case .list:
-                    try ListTag().skipTag(readStream)
-                    break
-                case .compound:
-                    try CompoundTag().skipTag(readStream)
-                    break
-                case .intArray:
-                    try IntArrayTag().skipTag(readStream)
-                    break
-                case .longArray:
-                    try LongArrayTag().skipTag(readStream)
-                    break
-                default:
-                    break
+            case .byte:
+                try readStream.skip(length)
+                break
+            case .short:
+                try readStream.skip(length * MemoryLayout<Int16>.size)
+                break
+            case .int:
+                try readStream.skip(length * MemoryLayout<Int32>.size)
+                break
+            case .long:
+                try readStream.skip(length * MemoryLayout<Int64>.size)
+                break
+            case .float:
+                try readStream.skip(length * MemoryLayout<Float>.size)
+                break
+            case .double:
+                try readStream.skip(length * MemoryLayout<Double>.size)
+                break
+            default:
+                for _ in 0..<length {
+                    switch listType {
+                        case .byteArray:
+                            try ByteArrayTag().skipTag(readStream)
+                            break
+                        case .string:
+                            try readStream.skipString()
+                            break
+                        case .list:
+                            try ListTag().skipTag(readStream)
+                            break
+                        case .compound:
+                            try CompoundTag().skipTag(readStream)
+                            break
+                        case .intArray:
+                            try IntArrayTag().skipTag(readStream)
+                            break
+                        case .longArray:
+                            try LongArrayTag().skipTag(readStream)
+                            break
+                        default:
+                            break
+                    }
                 }
-            }
-            break
+                break
         }
     }
     

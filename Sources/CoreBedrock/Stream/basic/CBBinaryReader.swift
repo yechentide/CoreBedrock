@@ -184,16 +184,16 @@ extension CBBinaryReader {
         
         while true {
             switch utf8.decode(&generator) {
-            case .scalarValue(let unicodeScalar):
-                string.append(String(unicodeScalar))
-            case .emptyInput:
-                return string
-            case .error:
-                if let nonUTF8Str = String(data: Data(bytes), encoding: .isoLatin1) {
-                    return nonUTF8Str
-                } else {
-                    throw CBStreamError.stringConversionError
-                }
+                case .scalarValue(let unicodeScalar):
+                    string.append(String(unicodeScalar))
+                case .emptyInput:
+                    return string
+                case .error:
+                    if let nonUTF8Str = String(data: Data(bytes), encoding: .isoLatin1) {
+                        return nonUTF8Str
+                    } else {
+                        throw CBStreamError.stringConversionError
+                    }
             }
         }
     }

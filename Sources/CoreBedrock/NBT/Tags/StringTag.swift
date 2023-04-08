@@ -81,7 +81,7 @@ public final class StringTag: NBT {
         formattedStr.append(": \"")
         formattedStr.append(value)
         formattedStr.append("\"")
-
+        
         return formattedStr
     }
 }
