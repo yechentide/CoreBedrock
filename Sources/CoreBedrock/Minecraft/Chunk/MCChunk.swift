@@ -58,8 +58,8 @@ public struct MCChunk {
     }
 
     public func getTopDownView() -> CGImage {
-        let view = getTopVisibleBlocks().map { $0.color }
-        var rgbaPixels = flip(view)
+        let argbArray = getTopVisibleBlocks().map { $0.argb }
+        var rgbaPixels = flip(argbArray)
         let image = rgbaPixels.withUnsafeMutableBytes { (ptr) -> CGImage in
             let ctx = CGContext(
                 data: ptr.baseAddress,

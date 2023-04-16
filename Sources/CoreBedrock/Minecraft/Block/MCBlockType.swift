@@ -16,9 +16,7 @@ public enum MCBlockType: UInt32 {
     case mangrovePropagule                 = 26
     case bedrock                           = 27
     case flowingWater                      = 28
-    case water                             = 8000
     case lava                              = 29
-    case flowingLava                       = 8001
     case sand                              = 30
     case gravel                            = 32
     case goldOre                           = 33
@@ -66,7 +64,6 @@ public enum MCBlockType: UInt32 {
     case seagrass                          = 113
     case piston                            = 115
     case pistonArmCollision                = 116
-    case stickyPistonArmCollision          = 8002
     case wool                              = 117
     case movingBlock                       = 133
     case yellowFlower                      = 134
@@ -95,7 +92,6 @@ public enum MCBlockType: UInt32 {
     case wheat                             = 168
     case farmland                          = 169
     case litFurnace                        = 170
-    case furnace                           = 8003
     case standingSign                      = 171
     case spruceStandingSign                = 172
     case birchStandingSign                 = 173
@@ -125,11 +121,8 @@ public enum MCBlockType: UInt32 {
     case darkOakPressurePlate              = 197
     case mangrovePressurePlate             = 198
     case redstoneOre                       = 199
-    case litRedstoneOre                    = 8004
     case deepslateRedstoneOre              = 200
-    case litDeepslateRedstoneOre           = 8005
     case redstoneTorch                     = 201
-    case unlitRedstoneTorch                = 8006
     case stoneButton                       = 203
     case snowLayer                         = 204
     case ice                               = 205
@@ -152,7 +145,6 @@ public enum MCBlockType: UInt32 {
     case litPumpkin                        = 223
     case cake                              = 224
     case poweredRepeater                   = 225
-    case unpoweredRepeater                 = 8007
     case stainedGlass                      = 226
     case trapdoor                          = 242
     case spruceTrapdoor                    = 243
@@ -193,7 +185,6 @@ public enum MCBlockType: UInt32 {
     case endStone                          = 292
     case dragonEgg                         = 293
     case redstoneLamp                      = 294
-    case litRedstoneLamp                   = 8008
     case cocoa                             = 295
     case sandstoneStairs                   = 296
     case emeraldOre                        = 297
@@ -223,9 +214,7 @@ public enum MCBlockType: UInt32 {
     case lightWeightedPressurePlate        = 361
     case heavyWeightedPressurePlate        = 362
     case poweredComparator                 = 363
-    case unpoweredComparator               = 8009
     case daylightDetector                  = 364
-    case daylightDetectorInverted          = 8010
     case redstoneBlock                     = 365
     case quartzOre                         = 366
     case hopper                            = 367
@@ -247,7 +236,6 @@ public enum MCBlockType: UInt32 {
     case prismarineBricksStairs            = 417
     case darkPrismarineStairs              = 418
     case stoneBlockSlab2                   = 419
-    case doubleStoneBlockSlab2             = 8011
     case seaLantern                        = 422
     case hayBlock                          = 423
     case carpet                            = 424
@@ -260,15 +248,10 @@ public enum MCBlockType: UInt32 {
     case redSandstone                      = 481
     case redSandstoneStairs                = 484
     case woodenSlab                        = 485
-    case doubleWoodenSlab                  = 8012
     case mangroveDoubleSlab                = 491
-    case mangroveSlab                      = 8013
     case stoneBlockSlab4                   = 492
-    case doubleStoneBlockSlab4             = 8014
     case stoneBlockSlab                    = 493
-    case doubleStoneBlockSlab              = 8015
     case mudBrickDoubleSlab                = 500
-    case mudBrickSlab                      = 8016
     case smoothStone                       = 506
     case spruceFenceGate                   = 510
     case birchFenceGate                    = 511
@@ -321,6 +304,7 @@ public enum MCBlockType: UInt32 {
     case blackGlazedTerracotta             = 579
     case concrete                          = 580
     case concretePowder                    = 596
+    case lavaCauldron                      = 608
     case kelp                              = 613
     case driedKelpBlock                    = 614
     case turtleEgg                         = 615
@@ -352,15 +336,12 @@ public enum MCBlockType: UInt32 {
     case polishedAndesiteStairs            = 677
     case dioriteStairs                     = 678
     case stoneBlockSlab3                   = 679
-    case doubleStoneBlockSlab3             = 8017
     case mudBrickWall                      = 698
     case scaffolding                       = 705
     case loom                              = 706
     case barrel                            = 707
     case smoker                            = 708
-    case litSmoker                         = 8018
     case litBlastFurnace                   = 709
-    case blastFurnace                      = 8019
     case cartographyTable                  = 710
     case fletchingTable                    = 711
     case grindstone                        = 712
@@ -395,9 +376,7 @@ public enum MCBlockType: UInt32 {
     case crimsonPlanks                     = 743
     case warpedPlanks                      = 744
     case crimsonDoubleSlab                 = 745
-    case crimsonSlab                       = 8020
     case warpedDoubleSlab                  = 746
-    case warpedSlab                        = 8021
     case crimsonPressurePlate              = 747
     case warpedPressurePlate               = 748
     case crimsonFence                      = 749
@@ -433,19 +412,16 @@ public enum MCBlockType: UInt32 {
     case blackstoneStairs                  = 783
     case blackstoneWall                    = 784
     case blackstoneDoubleSlab              = 785
-    case blackstoneSlab                    = 8022
     case polishedBlackstone                = 786
     case polishedBlackstoneBricks          = 787
     case crackedPolishedBlackstoneBricks   = 788
     case chiseledPolishedBlackstone        = 789
     case polishedBlackstoneBrickDoubleSlab = 790
-    case polishedBlackstoneBrickSlab       = 8023
     case polishedBlackstoneBrickStairs     = 791
     case polishedBlackstoneBrickWall       = 792
     case gildedBlackstone                  = 793
     case polishedBlackstoneStairs          = 794
     case polishedBlackstoneDoubleSlab      = 795
-    case polishedBlackstoneSlab            = 8024
     case polishedBlackstonePressurePlate   = 796
     case polishedBlackstoneButton          = 797
     case polishedBlackstoneWall            = 798
@@ -516,13 +492,9 @@ public enum MCBlockType: UInt32 {
     case exposedCutCopperStairs            = 863
     case cutCopperStairs                   = 864
     case oxidizedDoubleCutCopperSlab       = 865
-    case oxidizedCutCopperSlab             = 8025
     case weatheredCutCopperSlab            = 866
-    case weatheredDoubleCutCopperSlab      = 8026
     case exposedDoubleCutCopperSlab        = 867
-    case exposedCutCopperSlab              = 8027
     case doubleCutCopperSlab               = 868
-    case cutCopperSlab                     = 8028
     case waxedCopper                       = 869
     case waxedWeatheredCopper              = 870
     case waxedExposedCopper                = 871
@@ -536,19 +508,14 @@ public enum MCBlockType: UInt32 {
     case waxedExposedCutCopperStairs       = 879
     case waxedCutCopperStairs              = 880
     case waxedOxidizedCutCopperSlab        = 881
-    case waxedOxidizedDoubleCutCopperSlab  = 8029
     case waxedWeatheredDoubleCutCopperSlab = 882
-    case waxedWeatheredCutCopperSlab       = 8030
     case waxedExposedCutCopperSlab         = 883
-    case waxedExposedDoubleCutCopperSlab   = 8031
     case waxedDoubleCutCopperSlab          = 884
-    case waxedCutCopperSlab                = 8032
     case lightningRod                      = 885
     case pointedDripstone                  = 886
     case dripstoneBlock                    = 887
     case caveVinesHeadWithBerries          = 888
     case caveVines                         = 889
-    case caveVinesBodyWithBerries          = 8033
     case sporeBlossom                      = 890
     case azalea                            = 891
     case floweringAzalea                   = 892
@@ -563,22 +530,18 @@ public enum MCBlockType: UInt32 {
     case cobbledDeepslate                  = 902
     case cobbledDeepslateStairs            = 903
     case cobbledDeepslateDoubleSlab        = 904
-    case cobbledDeepslateSlab              = 8034
     case cobbledDeepslateWall              = 905
     case polishedDeepslate                 = 906
     case polishedDeepslateStairs           = 907
     case polishedDeepslateSlab             = 908
-    case polishedDeepslateDoubleSlab       = 8035
     case polishedDeepslateWall             = 909
     case deepslateTiles                    = 910
     case deepslateTileStairs               = 911
     case deepslateTileDoubleSlab           = 912
-    case deepslateTileSlab                 = 8036
     case deepslateTileWall                 = 913
     case deepslateBricks                   = 914
     case deepslateBrickStairs              = 915
     case deepslateBrickDoubleSlab          = 916
-    case deepslateBrickSlab                = 8037
     case deepslateBrickWall                = 917
     case chiseledDeepslate                 = 918
     case crackedDeepslateBricks            = 919
@@ -594,148 +557,185 @@ public enum MCBlockType: UInt32 {
     case pearlescentFroglight              = 930
     case frogSpawn                         = 931
     case reinforcedDeepslate               = 932
-    case hardStainedGlassPane              = 8038
-    case infoUpdate2                       = 7808
-    case element84                         = 7692
-    case element85                         = 7691
-    case element86                         = 7690
-    case element87                         = 7689
-    case element80                         = 7688
-    case element81                         = 7687
-    case element82                         = 7686
-    case element83                         = 7685
-    case element88                         = 7684
-    case element89                         = 7683
-    case element97                         = 7682
-    case element96                         = 7681
-    case element95                         = 7680
-    case element94                         = 7679
-    case element93                         = 7678
-    case element92                         = 7677
-    case element91                         = 7676
-    case element90                         = 7675
-    case element99                         = 7674
-    case element98                         = 7673
-    case element68                         = 7672
-    case element69                         = 7671
-    case element62                         = 7670
-    case element63                         = 7669
-    case element60                         = 7668
-    case element61                         = 7667
-    case element66                         = 7666
-    case element67                         = 7665
-    case element64                         = 7664
-    case element65                         = 7663
-    case element79                         = 7662
-    case element78                         = 7661
-    case element75                         = 7660
-    case element74                         = 7659
-    case element77                         = 7658
-    case element76                         = 7657
-    case element71                         = 7656
-    case element70                         = 7655
-    case element73                         = 7654
-    case element72                         = 7653
-    case element40                         = 7652
-    case element41                         = 7651
-    case element42                         = 7650
-    case element43                         = 7649
-    case element44                         = 7648
-    case element45                         = 7647
-    case element46                         = 7646
-    case element47                         = 7645
-    case element48                         = 7644
-    case element49                         = 7643
-    case element53                         = 7642
-    case element52                         = 7641
-    case element51                         = 7640
-    case element50                         = 7639
-    case element57                         = 7638
-    case element56                         = 7637
-    case element55                         = 7636
-    case element54                         = 7635
-    case element59                         = 7634
-    case element58                         = 7633
-    case element26                         = 7632
-    case element27                         = 7631
-    case element24                         = 7630
-    case element25                         = 7629
-    case element22                         = 7628
-    case element23                         = 7627
-    case element20                         = 7626
-    case element21                         = 7625
-    case element28                         = 7624
-    case element29                         = 7623
-    case element39                         = 7622
-    case element38                         = 7621
-    case element31                         = 7620
-    case element30                         = 7619
-    case element33                         = 7618
-    case element32                         = 7617
-    case element35                         = 7616
-    case element34                         = 7615
-    case element37                         = 7614
-    case element36                         = 7613
-    case element19                         = 7612
-    case element18                         = 7611
-    case element17                         = 7610
-    case element16                         = 7609
-    case element15                         = 7608
-    case element14                         = 7607
-    case element13                         = 7606
-    case element12                         = 7605
-    case element11                         = 7604
-    case element10                         = 7603
-    case coloredTorchRg                    = 7530
-    case coloredTorchBp                    = 7518
-    case chemicalHeat                      = 7438
-    case netherreactor                     = 7421
-    case chemistryTable                    = 7294
-    case camera                            = 7284
-    case element8                          = 7283
-    case element9                          = 7282
-    case element6                          = 7281
-    case element7                          = 7280
-    case element4                          = 7279
-    case element5                          = 7278
-    case element2                          = 7277
-    case element3                          = 7276
-    case element0                          = 7275
-    case element1                          = 7274
-    case allow                             = 7082
-    case hardStainedGlass                  = 6208
-    case deny                              = 5753
-    case element118                        = 5572
-    case element114                        = 5571
-    case element115                        = 5570
-    case element116                        = 5569
-    case element117                        = 5568
-    case element110                        = 5567
-    case element111                        = 5566
-    case element112                        = 5565
-    case element113                        = 5564
-    case element109                        = 5563
-    case element108                        = 5562
-    case element107                        = 5561
-    case element106                        = 5560
-    case element105                        = 5559
-    case element104                        = 5558
-    case element103                        = 5557
-    case element102                        = 5556
-    case element101                        = 5555
-    case element100                        = 5554
-    case borderBlock                       = 4899
-    case hardGlass                         = 4766
-    case unknown                           = 4612
-    case reserved6                         = 4603
-    case clientRequestPlaceholderBlock     = 4288
-    case frame                             = 4246
-    case glowingobsidian                   = 3545
-    case underwaterTorch                   = 3450
     case invisibleBedrock                  = 948
+    case underwaterTorch                   = 3450
+    case glowingobsidian                   = 3545
+    case frame                             = 4246
+    case clientRequestPlaceholderBlock     = 4288
+    case reserved6                         = 4603
+    case unknown                           = 4612
+    case hardGlass                         = 4766
+    case borderBlock                       = 4899
+    case element100                        = 5554
+    case element101                        = 5555
+    case element102                        = 5556
+    case element103                        = 5557
+    case element104                        = 5558
+    case element105                        = 5559
+    case element106                        = 5560
+    case element107                        = 5561
+    case element108                        = 5562
+    case element109                        = 5563
+    case element113                        = 5564
+    case element112                        = 5565
+    case element111                        = 5566
+    case element110                        = 5567
+    case element117                        = 5568
+    case element116                        = 5569
+    case element115                        = 5570
+    case element114                        = 5571
+    case element118                        = 5572
+    case deny                              = 5753
+    case hardStainedGlass                  = 6208
+    case allow                             = 7082
+    case element1                          = 7274
+    case element0                          = 7275
+    case element3                          = 7276
+    case element2                          = 7277
+    case element5                          = 7278
+    case element4                          = 7279
+    case element7                          = 7280
+    case element6                          = 7281
+    case element9                          = 7282
+    case element8                          = 7283
+    case camera                            = 7284
+    case chemistryTable                    = 7294
+    case netherreactor                     = 7421
+    case chemicalHeat                      = 7438
+    case coloredTorchBp                    = 7518
+    case coloredTorchRg                    = 7530
+    case element10                         = 7603
+    case element11                         = 7604
+    case element12                         = 7605
+    case element13                         = 7606
+    case element14                         = 7607
+    case element15                         = 7608
+    case element16                         = 7609
+    case element17                         = 7610
+    case element18                         = 7611
+    case element19                         = 7612
+    case element36                         = 7613
+    case element37                         = 7614
+    case element34                         = 7615
+    case element35                         = 7616
+    case element32                         = 7617
+    case element33                         = 7618
+    case element30                         = 7619
+    case element31                         = 7620
+    case element38                         = 7621
+    case element39                         = 7622
+    case element29                         = 7623
+    case element28                         = 7624
+    case element21                         = 7625
+    case element20                         = 7626
+    case element23                         = 7627
+    case element22                         = 7628
+    case element25                         = 7629
+    case element24                         = 7630
+    case element27                         = 7631
+    case element26                         = 7632
+    case element58                         = 7633
+    case element59                         = 7634
+    case element54                         = 7635
+    case element55                         = 7636
+    case element56                         = 7637
+    case element57                         = 7638
+    case element50                         = 7639
+    case element51                         = 7640
+    case element52                         = 7641
+    case element53                         = 7642
+    case element49                         = 7643
+    case element48                         = 7644
+    case element47                         = 7645
+    case element46                         = 7646
+    case element45                         = 7647
+    case element44                         = 7648
+    case element43                         = 7649
+    case element42                         = 7650
+    case element41                         = 7651
+    case element40                         = 7652
+    case element72                         = 7653
+    case element73                         = 7654
+    case element70                         = 7655
+    case element71                         = 7656
+    case element76                         = 7657
+    case element77                         = 7658
+    case element74                         = 7659
+    case element75                         = 7660
+    case element78                         = 7661
+    case element79                         = 7662
+    case element65                         = 7663
+    case element64                         = 7664
+    case element67                         = 7665
+    case element66                         = 7666
+    case element61                         = 7667
+    case element60                         = 7668
+    case element63                         = 7669
+    case element62                         = 7670
+    case element69                         = 7671
+    case element68                         = 7672
+    case element98                         = 7673
+    case element99                         = 7674
+    case element90                         = 7675
+    case element91                         = 7676
+    case element92                         = 7677
+    case element93                         = 7678
+    case element94                         = 7679
+    case element95                         = 7680
+    case element96                         = 7681
+    case element97                         = 7682
+    case element89                         = 7683
+    case element88                         = 7684
+    case element83                         = 7685
+    case element82                         = 7686
+    case element81                         = 7687
+    case element80                         = 7688
+    case element87                         = 7689
+    case element86                         = 7690
+    case element85                         = 7691
+    case element84                         = 7692
+    case infoUpdate2                       = 7808
+    case water                             = 8000
+    case flowingLava                       = 8001
+    case stickyPistonArmCollision          = 8002
+    case furnace                           = 8003
+    case litRedstoneOre                    = 8004
+    case litDeepslateRedstoneOre           = 8005
+    case unlitRedstoneTorch                = 8006
+    case unpoweredRepeater                 = 8007
+    case litRedstoneLamp                   = 8008
+    case unpoweredComparator               = 8009
+    case daylightDetectorInverted          = 8010
+    case doubleStoneBlockSlab2             = 8011
+    case doubleWoodenSlab                  = 8012
+    case mangroveSlab                      = 8013
+    case doubleStoneBlockSlab4             = 8014
+    case doubleStoneBlockSlab              = 8015
+    case mudBrickSlab                      = 8016
+    case doubleStoneBlockSlab3             = 8017
+    case litSmoker                         = 8018
+    case blastFurnace                      = 8019
+    case crimsonSlab                       = 8020
+    case warpedSlab                        = 8021
+    case blackstoneSlab                    = 8022
+    case polishedBlackstoneBrickSlab       = 8023
+    case polishedBlackstoneSlab            = 8024
+    case oxidizedCutCopperSlab             = 8025
+    case weatheredDoubleCutCopperSlab      = 8026
+    case exposedCutCopperSlab              = 8027
+    case cutCopperSlab                     = 8028
+    case waxedOxidizedDoubleCutCopperSlab  = 8029
+    case waxedWeatheredCutCopperSlab       = 8030
+    case waxedExposedDoubleCutCopperSlab   = 8031
+    case waxedCutCopperSlab                = 8032
+    case caveVinesBodyWithBerries          = 8033
+    case cobbledDeepslateSlab              = 8034
+    case polishedDeepslateDoubleSlab       = 8035
+    case deepslateTileSlab                 = 8036
+    case deepslateBrickSlab                = 8037
+    case hardStainedGlassPane              = 8038
     case stonecutter                       = 8039
     case hardGlassPane                     = 8040
-    case lavaCauldron                      = 608
     case infoUpdate                        = 8041
     case glowFrame                         = 8042
 }
@@ -755,9 +755,7 @@ extension MCBlockType: CustomStringConvertible {
             case .mangrovePropagule:                 return "minecraft:mangrove_propagule"
             case .bedrock:                           return "minecraft:bedrock"
             case .flowingWater:                      return "minecraft:flowing_water"
-            case .water:                             return "minecraft:water"
             case .lava:                              return "minecraft:lava"
-            case .flowingLava:                       return "minecraft:flowing_lava"
             case .sand:                              return "minecraft:sand"
             case .gravel:                            return "minecraft:gravel"
             case .goldOre:                           return "minecraft:gold_ore"
@@ -805,7 +803,6 @@ extension MCBlockType: CustomStringConvertible {
             case .seagrass:                          return "minecraft:seagrass"
             case .piston:                            return "minecraft:piston"
             case .pistonArmCollision:                return "minecraft:piston_arm_collision"
-            case .stickyPistonArmCollision:          return "minecraft:sticky_piston_arm_collision"
             case .wool:                              return "minecraft:wool"
             case .movingBlock:                       return "minecraft:moving_block"
             case .yellowFlower:                      return "minecraft:yellow_flower"
@@ -834,7 +831,6 @@ extension MCBlockType: CustomStringConvertible {
             case .wheat:                             return "minecraft:wheat"
             case .farmland:                          return "minecraft:farmland"
             case .litFurnace:                        return "minecraft:lit_furnace"
-            case .furnace:                           return "minecraft:furnace"
             case .standingSign:                      return "minecraft:standing_sign"
             case .spruceStandingSign:                return "minecraft:spruce_standing_sign"
             case .birchStandingSign:                 return "minecraft:birch_standing_sign"
@@ -864,11 +860,8 @@ extension MCBlockType: CustomStringConvertible {
             case .darkOakPressurePlate:              return "minecraft:dark_oak_pressure_plate"
             case .mangrovePressurePlate:             return "minecraft:mangrove_pressure_plate"
             case .redstoneOre:                       return "minecraft:redstone_ore"
-            case .litRedstoneOre:                    return "minecraft:lit_redstone_ore"
             case .deepslateRedstoneOre:              return "minecraft:deepslate_redstone_ore"
-            case .litDeepslateRedstoneOre:           return "minecraft:lit_deepslate_redstone_ore"
             case .redstoneTorch:                     return "minecraft:redstone_torch"
-            case .unlitRedstoneTorch:                return "minecraft:unlit_redstone_torch"
             case .stoneButton:                       return "minecraft:stone_button"
             case .snowLayer:                         return "minecraft:snow_layer"
             case .ice:                               return "minecraft:ice"
@@ -891,7 +884,6 @@ extension MCBlockType: CustomStringConvertible {
             case .litPumpkin:                        return "minecraft:lit_pumpkin"
             case .cake:                              return "minecraft:cake"
             case .poweredRepeater:                   return "minecraft:powered_repeater"
-            case .unpoweredRepeater:                 return "minecraft:unpowered_repeater"
             case .stainedGlass:                      return "minecraft:stained_glass"
             case .trapdoor:                          return "minecraft:trapdoor"
             case .spruceTrapdoor:                    return "minecraft:spruce_trapdoor"
@@ -932,7 +924,6 @@ extension MCBlockType: CustomStringConvertible {
             case .endStone:                          return "minecraft:end_stone"
             case .dragonEgg:                         return "minecraft:dragon_egg"
             case .redstoneLamp:                      return "minecraft:redstone_lamp"
-            case .litRedstoneLamp:                   return "minecraft:lit_redstone_lamp"
             case .cocoa:                             return "minecraft:cocoa"
             case .sandstoneStairs:                   return "minecraft:sandstone_stairs"
             case .emeraldOre:                        return "minecraft:emerald_ore"
@@ -962,9 +953,7 @@ extension MCBlockType: CustomStringConvertible {
             case .lightWeightedPressurePlate:        return "minecraft:light_weighted_pressure_plate"
             case .heavyWeightedPressurePlate:        return "minecraft:heavy_weighted_pressure_plate"
             case .poweredComparator:                 return "minecraft:powered_comparator"
-            case .unpoweredComparator:               return "minecraft:unpowered_comparator"
             case .daylightDetector:                  return "minecraft:daylight_detector"
-            case .daylightDetectorInverted:          return "minecraft:daylight_detector_inverted"
             case .redstoneBlock:                     return "minecraft:redstone_block"
             case .quartzOre:                         return "minecraft:quartz_ore"
             case .hopper:                            return "minecraft:hopper"
@@ -986,7 +975,6 @@ extension MCBlockType: CustomStringConvertible {
             case .prismarineBricksStairs:            return "minecraft:prismarine_bricks_stairs"
             case .darkPrismarineStairs:              return "minecraft:dark_prismarine_stairs"
             case .stoneBlockSlab2:                   return "minecraft:stone_block_slab2"
-            case .doubleStoneBlockSlab2:             return "minecraft:double_stone_block_slab2"
             case .seaLantern:                        return "minecraft:sea_lantern"
             case .hayBlock:                          return "minecraft:hay_block"
             case .carpet:                            return "minecraft:carpet"
@@ -999,15 +987,10 @@ extension MCBlockType: CustomStringConvertible {
             case .redSandstone:                      return "minecraft:red_sandstone"
             case .redSandstoneStairs:                return "minecraft:red_sandstone_stairs"
             case .woodenSlab:                        return "minecraft:wooden_slab"
-            case .doubleWoodenSlab:                  return "minecraft:double_wooden_slab"
             case .mangroveDoubleSlab:                return "minecraft:mangrove_double_slab"
-            case .mangroveSlab:                      return "minecraft:mangrove_slab"
             case .stoneBlockSlab4:                   return "minecraft:stone_block_slab4"
-            case .doubleStoneBlockSlab4:             return "minecraft:double_stone_block_slab4"
             case .stoneBlockSlab:                    return "minecraft:stone_block_slab"
-            case .doubleStoneBlockSlab:              return "minecraft:double_stone_block_slab"
             case .mudBrickDoubleSlab:                return "minecraft:mud_brick_double_slab"
-            case .mudBrickSlab:                      return "minecraft:mud_brick_slab"
             case .smoothStone:                       return "minecraft:smooth_stone"
             case .spruceFenceGate:                   return "minecraft:spruce_fence_gate"
             case .birchFenceGate:                    return "minecraft:birch_fence_gate"
@@ -1060,6 +1043,7 @@ extension MCBlockType: CustomStringConvertible {
             case .blackGlazedTerracotta:             return "minecraft:black_glazed_terracotta"
             case .concrete:                          return "minecraft:concrete"
             case .concretePowder:                    return "minecraft:concrete_powder"
+            case .lavaCauldron:                      return "minecraft:lava_cauldron"
             case .kelp:                              return "minecraft:kelp"
             case .driedKelpBlock:                    return "minecraft:dried_kelp_block"
             case .turtleEgg:                         return "minecraft:turtle_egg"
@@ -1091,15 +1075,12 @@ extension MCBlockType: CustomStringConvertible {
             case .polishedAndesiteStairs:            return "minecraft:polished_andesite_stairs"
             case .dioriteStairs:                     return "minecraft:diorite_stairs"
             case .stoneBlockSlab3:                   return "minecraft:stone_block_slab3"
-            case .doubleStoneBlockSlab3:             return "minecraft:double_stone_block_slab3"
             case .mudBrickWall:                      return "minecraft:mud_brick_wall"
             case .scaffolding:                       return "minecraft:scaffolding"
             case .loom:                              return "minecraft:loom"
             case .barrel:                            return "minecraft:barrel"
             case .smoker:                            return "minecraft:smoker"
-            case .litSmoker:                         return "minecraft:lit_smoker"
             case .litBlastFurnace:                   return "minecraft:lit_blast_furnace"
-            case .blastFurnace:                      return "minecraft:blast_furnace"
             case .cartographyTable:                  return "minecraft:cartography_table"
             case .fletchingTable:                    return "minecraft:fletching_table"
             case .grindstone:                        return "minecraft:grindstone"
@@ -1134,9 +1115,7 @@ extension MCBlockType: CustomStringConvertible {
             case .crimsonPlanks:                     return "minecraft:crimson_planks"
             case .warpedPlanks:                      return "minecraft:warped_planks"
             case .crimsonDoubleSlab:                 return "minecraft:crimson_double_slab"
-            case .crimsonSlab:                       return "minecraft:crimson_slab"
             case .warpedDoubleSlab:                  return "minecraft:warped_double_slab"
-            case .warpedSlab:                        return "minecraft:warped_slab"
             case .crimsonPressurePlate:              return "minecraft:crimson_pressure_plate"
             case .warpedPressurePlate:               return "minecraft:warped_pressure_plate"
             case .crimsonFence:                      return "minecraft:crimson_fence"
@@ -1172,19 +1151,16 @@ extension MCBlockType: CustomStringConvertible {
             case .blackstoneStairs:                  return "minecraft:blackstone_stairs"
             case .blackstoneWall:                    return "minecraft:blackstone_wall"
             case .blackstoneDoubleSlab:              return "minecraft:blackstone_double_slab"
-            case .blackstoneSlab:                    return "minecraft:blackstone_slab"
             case .polishedBlackstone:                return "minecraft:polished_blackstone"
             case .polishedBlackstoneBricks:          return "minecraft:polished_blackstone_bricks"
             case .crackedPolishedBlackstoneBricks:   return "minecraft:cracked_polished_blackstone_bricks"
             case .chiseledPolishedBlackstone:        return "minecraft:chiseled_polished_blackstone"
             case .polishedBlackstoneBrickDoubleSlab: return "minecraft:polished_blackstone_brick_double_slab"
-            case .polishedBlackstoneBrickSlab:       return "minecraft:polished_blackstone_brick_slab"
             case .polishedBlackstoneBrickStairs:     return "minecraft:polished_blackstone_brick_stairs"
             case .polishedBlackstoneBrickWall:       return "minecraft:polished_blackstone_brick_wall"
             case .gildedBlackstone:                  return "minecraft:gilded_blackstone"
             case .polishedBlackstoneStairs:          return "minecraft:polished_blackstone_stairs"
             case .polishedBlackstoneDoubleSlab:      return "minecraft:polished_blackstone_double_slab"
-            case .polishedBlackstoneSlab:            return "minecraft:polished_blackstone_slab"
             case .polishedBlackstonePressurePlate:   return "minecraft:polished_blackstone_pressure_plate"
             case .polishedBlackstoneButton:          return "minecraft:polished_blackstone_button"
             case .polishedBlackstoneWall:            return "minecraft:polished_blackstone_wall"
@@ -1255,13 +1231,9 @@ extension MCBlockType: CustomStringConvertible {
             case .exposedCutCopperStairs:            return "minecraft:exposed_cut_copper_stairs"
             case .cutCopperStairs:                   return "minecraft:cut_copper_stairs"
             case .oxidizedDoubleCutCopperSlab:       return "minecraft:oxidized_double_cut_copper_slab"
-            case .oxidizedCutCopperSlab:             return "minecraft:oxidized_cut_copper_slab"
             case .weatheredCutCopperSlab:            return "minecraft:weathered_cut_copper_slab"
-            case .weatheredDoubleCutCopperSlab:      return "minecraft:weathered_double_cut_copper_slab"
             case .exposedDoubleCutCopperSlab:        return "minecraft:exposed_double_cut_copper_slab"
-            case .exposedCutCopperSlab:              return "minecraft:exposed_cut_copper_slab"
             case .doubleCutCopperSlab:               return "minecraft:double_cut_copper_slab"
-            case .cutCopperSlab:                     return "minecraft:cut_copper_slab"
             case .waxedCopper:                       return "minecraft:waxed_copper"
             case .waxedWeatheredCopper:              return "minecraft:waxed_weathered_copper"
             case .waxedExposedCopper:                return "minecraft:waxed_exposed_copper"
@@ -1275,19 +1247,14 @@ extension MCBlockType: CustomStringConvertible {
             case .waxedExposedCutCopperStairs:       return "minecraft:waxed_exposed_cut_copper_stairs"
             case .waxedCutCopperStairs:              return "minecraft:waxed_cut_copper_stairs"
             case .waxedOxidizedCutCopperSlab:        return "minecraft:waxed_oxidized_cut_copper_slab"
-            case .waxedOxidizedDoubleCutCopperSlab:  return "minecraft:waxed_oxidized_double_cut_copper_slab"
             case .waxedWeatheredDoubleCutCopperSlab: return "minecraft:waxed_weathered_double_cut_copper_slab"
-            case .waxedWeatheredCutCopperSlab:       return "minecraft:waxed_weathered_cut_copper_slab"
             case .waxedExposedCutCopperSlab:         return "minecraft:waxed_exposed_cut_copper_slab"
-            case .waxedExposedDoubleCutCopperSlab:   return "minecraft:waxed_exposed_double_cut_copper_slab"
             case .waxedDoubleCutCopperSlab:          return "minecraft:waxed_double_cut_copper_slab"
-            case .waxedCutCopperSlab:                return "minecraft:waxed_cut_copper_slab"
             case .lightningRod:                      return "minecraft:lightning_rod"
             case .pointedDripstone:                  return "minecraft:pointed_dripstone"
             case .dripstoneBlock:                    return "minecraft:dripstone_block"
             case .caveVinesHeadWithBerries:          return "minecraft:cave_vines_head_with_berries"
             case .caveVines:                         return "minecraft:cave_vines"
-            case .caveVinesBodyWithBerries:          return "minecraft:cave_vines_body_with_berries"
             case .sporeBlossom:                      return "minecraft:spore_blossom"
             case .azalea:                            return "minecraft:azalea"
             case .floweringAzalea:                   return "minecraft:flowering_azalea"
@@ -1302,22 +1269,18 @@ extension MCBlockType: CustomStringConvertible {
             case .cobbledDeepslate:                  return "minecraft:cobbled_deepslate"
             case .cobbledDeepslateStairs:            return "minecraft:cobbled_deepslate_stairs"
             case .cobbledDeepslateDoubleSlab:        return "minecraft:cobbled_deepslate_double_slab"
-            case .cobbledDeepslateSlab:              return "minecraft:cobbled_deepslate_slab"
             case .cobbledDeepslateWall:              return "minecraft:cobbled_deepslate_wall"
             case .polishedDeepslate:                 return "minecraft:polished_deepslate"
             case .polishedDeepslateStairs:           return "minecraft:polished_deepslate_stairs"
             case .polishedDeepslateSlab:             return "minecraft:polished_deepslate_slab"
-            case .polishedDeepslateDoubleSlab:       return "minecraft:polished_deepslate_double_slab"
             case .polishedDeepslateWall:             return "minecraft:polished_deepslate_wall"
             case .deepslateTiles:                    return "minecraft:deepslate_tiles"
             case .deepslateTileStairs:               return "minecraft:deepslate_tile_stairs"
             case .deepslateTileDoubleSlab:           return "minecraft:deepslate_tile_double_slab"
-            case .deepslateTileSlab:                 return "minecraft:deepslate_tile_slab"
             case .deepslateTileWall:                 return "minecraft:deepslate_tile_wall"
             case .deepslateBricks:                   return "minecraft:deepslate_bricks"
             case .deepslateBrickStairs:              return "minecraft:deepslate_brick_stairs"
             case .deepslateBrickDoubleSlab:          return "minecraft:deepslate_brick_double_slab"
-            case .deepslateBrickSlab:                return "minecraft:deepslate_brick_slab"
             case .deepslateBrickWall:                return "minecraft:deepslate_brick_wall"
             case .chiseledDeepslate:                 return "minecraft:chiseled_deepslate"
             case .crackedDeepslateBricks:            return "minecraft:cracked_deepslate_bricks"
@@ -1333,148 +1296,185 @@ extension MCBlockType: CustomStringConvertible {
             case .pearlescentFroglight:              return "minecraft:pearlescent_froglight"
             case .frogSpawn:                         return "minecraft:frog_spawn"
             case .reinforcedDeepslate:               return "minecraft:reinforced_deepslate"
-            case .hardStainedGlassPane:              return "minecraft:hard_stained_glass_pane"
-            case .infoUpdate2:                       return "minecraft:info_update2"
-            case .element84:                         return "minecraft:element_84"
-            case .element85:                         return "minecraft:element_85"
-            case .element86:                         return "minecraft:element_86"
-            case .element87:                         return "minecraft:element_87"
-            case .element80:                         return "minecraft:element_80"
-            case .element81:                         return "minecraft:element_81"
-            case .element82:                         return "minecraft:element_82"
-            case .element83:                         return "minecraft:element_83"
-            case .element88:                         return "minecraft:element_88"
-            case .element89:                         return "minecraft:element_89"
-            case .element97:                         return "minecraft:element_97"
-            case .element96:                         return "minecraft:element_96"
-            case .element95:                         return "minecraft:element_95"
-            case .element94:                         return "minecraft:element_94"
-            case .element93:                         return "minecraft:element_93"
-            case .element92:                         return "minecraft:element_92"
-            case .element91:                         return "minecraft:element_91"
-            case .element90:                         return "minecraft:element_90"
-            case .element99:                         return "minecraft:element_99"
-            case .element98:                         return "minecraft:element_98"
-            case .element68:                         return "minecraft:element_68"
-            case .element69:                         return "minecraft:element_69"
-            case .element62:                         return "minecraft:element_62"
-            case .element63:                         return "minecraft:element_63"
-            case .element60:                         return "minecraft:element_60"
-            case .element61:                         return "minecraft:element_61"
-            case .element66:                         return "minecraft:element_66"
-            case .element67:                         return "minecraft:element_67"
-            case .element64:                         return "minecraft:element_64"
-            case .element65:                         return "minecraft:element_65"
-            case .element79:                         return "minecraft:element_79"
-            case .element78:                         return "minecraft:element_78"
-            case .element75:                         return "minecraft:element_75"
-            case .element74:                         return "minecraft:element_74"
-            case .element77:                         return "minecraft:element_77"
-            case .element76:                         return "minecraft:element_76"
-            case .element71:                         return "minecraft:element_71"
-            case .element70:                         return "minecraft:element_70"
-            case .element73:                         return "minecraft:element_73"
-            case .element72:                         return "minecraft:element_72"
-            case .element40:                         return "minecraft:element_40"
-            case .element41:                         return "minecraft:element_41"
-            case .element42:                         return "minecraft:element_42"
-            case .element43:                         return "minecraft:element_43"
-            case .element44:                         return "minecraft:element_44"
-            case .element45:                         return "minecraft:element_45"
-            case .element46:                         return "minecraft:element_46"
-            case .element47:                         return "minecraft:element_47"
-            case .element48:                         return "minecraft:element_48"
-            case .element49:                         return "minecraft:element_49"
-            case .element53:                         return "minecraft:element_53"
-            case .element52:                         return "minecraft:element_52"
-            case .element51:                         return "minecraft:element_51"
-            case .element50:                         return "minecraft:element_50"
-            case .element57:                         return "minecraft:element_57"
-            case .element56:                         return "minecraft:element_56"
-            case .element55:                         return "minecraft:element_55"
-            case .element54:                         return "minecraft:element_54"
-            case .element59:                         return "minecraft:element_59"
-            case .element58:                         return "minecraft:element_58"
-            case .element26:                         return "minecraft:element_26"
-            case .element27:                         return "minecraft:element_27"
-            case .element24:                         return "minecraft:element_24"
-            case .element25:                         return "minecraft:element_25"
-            case .element22:                         return "minecraft:element_22"
-            case .element23:                         return "minecraft:element_23"
-            case .element20:                         return "minecraft:element_20"
-            case .element21:                         return "minecraft:element_21"
-            case .element28:                         return "minecraft:element_28"
-            case .element29:                         return "minecraft:element_29"
-            case .element39:                         return "minecraft:element_39"
-            case .element38:                         return "minecraft:element_38"
-            case .element31:                         return "minecraft:element_31"
-            case .element30:                         return "minecraft:element_30"
-            case .element33:                         return "minecraft:element_33"
-            case .element32:                         return "minecraft:element_32"
-            case .element35:                         return "minecraft:element_35"
-            case .element34:                         return "minecraft:element_34"
-            case .element37:                         return "minecraft:element_37"
-            case .element36:                         return "minecraft:element_36"
-            case .element19:                         return "minecraft:element_19"
-            case .element18:                         return "minecraft:element_18"
-            case .element17:                         return "minecraft:element_17"
-            case .element16:                         return "minecraft:element_16"
-            case .element15:                         return "minecraft:element_15"
-            case .element14:                         return "minecraft:element_14"
-            case .element13:                         return "minecraft:element_13"
-            case .element12:                         return "minecraft:element_12"
-            case .element11:                         return "minecraft:element_11"
-            case .element10:                         return "minecraft:element_10"
-            case .coloredTorchRg:                    return "minecraft:colored_torch_rg"
-            case .coloredTorchBp:                    return "minecraft:colored_torch_bp"
-            case .chemicalHeat:                      return "minecraft:chemical_heat"
-            case .netherreactor:                     return "minecraft:netherreactor"
-            case .chemistryTable:                    return "minecraft:chemistry_table"
-            case .camera:                            return "minecraft:camera"
-            case .element8:                          return "minecraft:element_8"
-            case .element9:                          return "minecraft:element_9"
-            case .element6:                          return "minecraft:element_6"
-            case .element7:                          return "minecraft:element_7"
-            case .element4:                          return "minecraft:element_4"
-            case .element5:                          return "minecraft:element_5"
-            case .element2:                          return "minecraft:element_2"
-            case .element3:                          return "minecraft:element_3"
-            case .element0:                          return "minecraft:element_0"
-            case .element1:                          return "minecraft:element_1"
-            case .allow:                             return "minecraft:allow"
-            case .hardStainedGlass:                  return "minecraft:hard_stained_glass"
-            case .deny:                              return "minecraft:deny"
-            case .element118:                        return "minecraft:element_118"
-            case .element114:                        return "minecraft:element_114"
-            case .element115:                        return "minecraft:element_115"
-            case .element116:                        return "minecraft:element_116"
-            case .element117:                        return "minecraft:element_117"
-            case .element110:                        return "minecraft:element_110"
-            case .element111:                        return "minecraft:element_111"
-            case .element112:                        return "minecraft:element_112"
-            case .element113:                        return "minecraft:element_113"
-            case .element109:                        return "minecraft:element_109"
-            case .element108:                        return "minecraft:element_108"
-            case .element107:                        return "minecraft:element_107"
-            case .element106:                        return "minecraft:element_106"
-            case .element105:                        return "minecraft:element_105"
-            case .element104:                        return "minecraft:element_104"
-            case .element103:                        return "minecraft:element_103"
-            case .element102:                        return "minecraft:element_102"
-            case .element101:                        return "minecraft:element_101"
-            case .element100:                        return "minecraft:element_100"
-            case .borderBlock:                       return "minecraft:border_block"
-            case .hardGlass:                         return "minecraft:hard_glass"
-            case .unknown:                           return "minecraft:unknown"
-            case .reserved6:                         return "minecraft:reserved6"
-            case .clientRequestPlaceholderBlock:     return "minecraft:client_request_placeholder_block"
-            case .frame:                             return "minecraft:frame"
-            case .glowingobsidian:                   return "minecraft:glowingobsidian"
-            case .underwaterTorch:                   return "minecraft:underwater_torch"
             case .invisibleBedrock:                  return "minecraft:invisible_bedrock"
+            case .underwaterTorch:                   return "minecraft:underwater_torch"
+            case .glowingobsidian:                   return "minecraft:glowingobsidian"
+            case .frame:                             return "minecraft:frame"
+            case .clientRequestPlaceholderBlock:     return "minecraft:client_request_placeholder_block"
+            case .reserved6:                         return "minecraft:reserved6"
+            case .unknown:                           return "minecraft:unknown"
+            case .hardGlass:                         return "minecraft:hard_glass"
+            case .borderBlock:                       return "minecraft:border_block"
+            case .element100:                        return "minecraft:element_100"
+            case .element101:                        return "minecraft:element_101"
+            case .element102:                        return "minecraft:element_102"
+            case .element103:                        return "minecraft:element_103"
+            case .element104:                        return "minecraft:element_104"
+            case .element105:                        return "minecraft:element_105"
+            case .element106:                        return "minecraft:element_106"
+            case .element107:                        return "minecraft:element_107"
+            case .element108:                        return "minecraft:element_108"
+            case .element109:                        return "minecraft:element_109"
+            case .element113:                        return "minecraft:element_113"
+            case .element112:                        return "minecraft:element_112"
+            case .element111:                        return "minecraft:element_111"
+            case .element110:                        return "minecraft:element_110"
+            case .element117:                        return "minecraft:element_117"
+            case .element116:                        return "minecraft:element_116"
+            case .element115:                        return "minecraft:element_115"
+            case .element114:                        return "minecraft:element_114"
+            case .element118:                        return "minecraft:element_118"
+            case .deny:                              return "minecraft:deny"
+            case .hardStainedGlass:                  return "minecraft:hard_stained_glass"
+            case .allow:                             return "minecraft:allow"
+            case .element1:                          return "minecraft:element_1"
+            case .element0:                          return "minecraft:element_0"
+            case .element3:                          return "minecraft:element_3"
+            case .element2:                          return "minecraft:element_2"
+            case .element5:                          return "minecraft:element_5"
+            case .element4:                          return "minecraft:element_4"
+            case .element7:                          return "minecraft:element_7"
+            case .element6:                          return "minecraft:element_6"
+            case .element9:                          return "minecraft:element_9"
+            case .element8:                          return "minecraft:element_8"
+            case .camera:                            return "minecraft:camera"
+            case .chemistryTable:                    return "minecraft:chemistry_table"
+            case .netherreactor:                     return "minecraft:netherreactor"
+            case .chemicalHeat:                      return "minecraft:chemical_heat"
+            case .coloredTorchBp:                    return "minecraft:colored_torch_bp"
+            case .coloredTorchRg:                    return "minecraft:colored_torch_rg"
+            case .element10:                         return "minecraft:element_10"
+            case .element11:                         return "minecraft:element_11"
+            case .element12:                         return "minecraft:element_12"
+            case .element13:                         return "minecraft:element_13"
+            case .element14:                         return "minecraft:element_14"
+            case .element15:                         return "minecraft:element_15"
+            case .element16:                         return "minecraft:element_16"
+            case .element17:                         return "minecraft:element_17"
+            case .element18:                         return "minecraft:element_18"
+            case .element19:                         return "minecraft:element_19"
+            case .element36:                         return "minecraft:element_36"
+            case .element37:                         return "minecraft:element_37"
+            case .element34:                         return "minecraft:element_34"
+            case .element35:                         return "minecraft:element_35"
+            case .element32:                         return "minecraft:element_32"
+            case .element33:                         return "minecraft:element_33"
+            case .element30:                         return "minecraft:element_30"
+            case .element31:                         return "minecraft:element_31"
+            case .element38:                         return "minecraft:element_38"
+            case .element39:                         return "minecraft:element_39"
+            case .element29:                         return "minecraft:element_29"
+            case .element28:                         return "minecraft:element_28"
+            case .element21:                         return "minecraft:element_21"
+            case .element20:                         return "minecraft:element_20"
+            case .element23:                         return "minecraft:element_23"
+            case .element22:                         return "minecraft:element_22"
+            case .element25:                         return "minecraft:element_25"
+            case .element24:                         return "minecraft:element_24"
+            case .element27:                         return "minecraft:element_27"
+            case .element26:                         return "minecraft:element_26"
+            case .element58:                         return "minecraft:element_58"
+            case .element59:                         return "minecraft:element_59"
+            case .element54:                         return "minecraft:element_54"
+            case .element55:                         return "minecraft:element_55"
+            case .element56:                         return "minecraft:element_56"
+            case .element57:                         return "minecraft:element_57"
+            case .element50:                         return "minecraft:element_50"
+            case .element51:                         return "minecraft:element_51"
+            case .element52:                         return "minecraft:element_52"
+            case .element53:                         return "minecraft:element_53"
+            case .element49:                         return "minecraft:element_49"
+            case .element48:                         return "minecraft:element_48"
+            case .element47:                         return "minecraft:element_47"
+            case .element46:                         return "minecraft:element_46"
+            case .element45:                         return "minecraft:element_45"
+            case .element44:                         return "minecraft:element_44"
+            case .element43:                         return "minecraft:element_43"
+            case .element42:                         return "minecraft:element_42"
+            case .element41:                         return "minecraft:element_41"
+            case .element40:                         return "minecraft:element_40"
+            case .element72:                         return "minecraft:element_72"
+            case .element73:                         return "minecraft:element_73"
+            case .element70:                         return "minecraft:element_70"
+            case .element71:                         return "minecraft:element_71"
+            case .element76:                         return "minecraft:element_76"
+            case .element77:                         return "minecraft:element_77"
+            case .element74:                         return "minecraft:element_74"
+            case .element75:                         return "minecraft:element_75"
+            case .element78:                         return "minecraft:element_78"
+            case .element79:                         return "minecraft:element_79"
+            case .element65:                         return "minecraft:element_65"
+            case .element64:                         return "minecraft:element_64"
+            case .element67:                         return "minecraft:element_67"
+            case .element66:                         return "minecraft:element_66"
+            case .element61:                         return "minecraft:element_61"
+            case .element60:                         return "minecraft:element_60"
+            case .element63:                         return "minecraft:element_63"
+            case .element62:                         return "minecraft:element_62"
+            case .element69:                         return "minecraft:element_69"
+            case .element68:                         return "minecraft:element_68"
+            case .element98:                         return "minecraft:element_98"
+            case .element99:                         return "minecraft:element_99"
+            case .element90:                         return "minecraft:element_90"
+            case .element91:                         return "minecraft:element_91"
+            case .element92:                         return "minecraft:element_92"
+            case .element93:                         return "minecraft:element_93"
+            case .element94:                         return "minecraft:element_94"
+            case .element95:                         return "minecraft:element_95"
+            case .element96:                         return "minecraft:element_96"
+            case .element97:                         return "minecraft:element_97"
+            case .element89:                         return "minecraft:element_89"
+            case .element88:                         return "minecraft:element_88"
+            case .element83:                         return "minecraft:element_83"
+            case .element82:                         return "minecraft:element_82"
+            case .element81:                         return "minecraft:element_81"
+            case .element80:                         return "minecraft:element_80"
+            case .element87:                         return "minecraft:element_87"
+            case .element86:                         return "minecraft:element_86"
+            case .element85:                         return "minecraft:element_85"
+            case .element84:                         return "minecraft:element_84"
+            case .infoUpdate2:                       return "minecraft:info_update2"
+            case .water:                             return "minecraft:water"
+            case .flowingLava:                       return "minecraft:flowing_lava"
+            case .stickyPistonArmCollision:          return "minecraft:sticky_piston_arm_collision"
+            case .furnace:                           return "minecraft:furnace"
+            case .litRedstoneOre:                    return "minecraft:lit_redstone_ore"
+            case .litDeepslateRedstoneOre:           return "minecraft:lit_deepslate_redstone_ore"
+            case .unlitRedstoneTorch:                return "minecraft:unlit_redstone_torch"
+            case .unpoweredRepeater:                 return "minecraft:unpowered_repeater"
+            case .litRedstoneLamp:                   return "minecraft:lit_redstone_lamp"
+            case .unpoweredComparator:               return "minecraft:unpowered_comparator"
+            case .daylightDetectorInverted:          return "minecraft:daylight_detector_inverted"
+            case .doubleStoneBlockSlab2:             return "minecraft:double_stone_block_slab2"
+            case .doubleWoodenSlab:                  return "minecraft:double_wooden_slab"
+            case .mangroveSlab:                      return "minecraft:mangrove_slab"
+            case .doubleStoneBlockSlab4:             return "minecraft:double_stone_block_slab4"
+            case .doubleStoneBlockSlab:              return "minecraft:double_stone_block_slab"
+            case .mudBrickSlab:                      return "minecraft:mud_brick_slab"
+            case .doubleStoneBlockSlab3:             return "minecraft:double_stone_block_slab3"
+            case .litSmoker:                         return "minecraft:lit_smoker"
+            case .blastFurnace:                      return "minecraft:blast_furnace"
+            case .crimsonSlab:                       return "minecraft:crimson_slab"
+            case .warpedSlab:                        return "minecraft:warped_slab"
+            case .blackstoneSlab:                    return "minecraft:blackstone_slab"
+            case .polishedBlackstoneBrickSlab:       return "minecraft:polished_blackstone_brick_slab"
+            case .polishedBlackstoneSlab:            return "minecraft:polished_blackstone_slab"
+            case .oxidizedCutCopperSlab:             return "minecraft:oxidized_cut_copper_slab"
+            case .weatheredDoubleCutCopperSlab:      return "minecraft:weathered_double_cut_copper_slab"
+            case .exposedCutCopperSlab:              return "minecraft:exposed_cut_copper_slab"
+            case .cutCopperSlab:                     return "minecraft:cut_copper_slab"
+            case .waxedOxidizedDoubleCutCopperSlab:  return "minecraft:waxed_oxidized_double_cut_copper_slab"
+            case .waxedWeatheredCutCopperSlab:       return "minecraft:waxed_weathered_cut_copper_slab"
+            case .waxedExposedDoubleCutCopperSlab:   return "minecraft:waxed_exposed_double_cut_copper_slab"
+            case .waxedCutCopperSlab:                return "minecraft:waxed_cut_copper_slab"
+            case .caveVinesBodyWithBerries:          return "minecraft:cave_vines_body_with_berries"
+            case .cobbledDeepslateSlab:              return "minecraft:cobbled_deepslate_slab"
+            case .polishedDeepslateDoubleSlab:       return "minecraft:polished_deepslate_double_slab"
+            case .deepslateTileSlab:                 return "minecraft:deepslate_tile_slab"
+            case .deepslateBrickSlab:                return "minecraft:deepslate_brick_slab"
+            case .hardStainedGlassPane:              return "minecraft:hard_stained_glass_pane"
             case .stonecutter:                       return "minecraft:stonecutter"
             case .hardGlassPane:                     return "minecraft:hard_glass_pane"
-            case .lavaCauldron:                      return "minecraft:lava_cauldron"
             case .infoUpdate:                        return "minecraft:info_update"
             case .glowFrame:                         return "minecraft:glow_frame"
         }
@@ -1496,9 +1496,7 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:mangrove_propagule":                     self = .mangrovePropagule
             case "minecraft:bedrock":                                self = .bedrock
             case "minecraft:flowing_water":                          self = .flowingWater
-            case "minecraft:water":                                  self = .water
             case "minecraft:lava":                                   self = .lava
-            case "minecraft:flowing_lava":                           self = .flowingLava
             case "minecraft:sand":                                   self = .sand
             case "minecraft:gravel":                                 self = .gravel
             case "minecraft:gold_ore":                               self = .goldOre
@@ -1546,7 +1544,6 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:seagrass":                               self = .seagrass
             case "minecraft:piston":                                 self = .piston
             case "minecraft:piston_arm_collision":                   self = .pistonArmCollision
-            case "minecraft:sticky_piston_arm_collision":            self = .stickyPistonArmCollision
             case "minecraft:wool":                                   self = .wool
             case "minecraft:moving_block":                           self = .movingBlock
             case "minecraft:yellow_flower":                          self = .yellowFlower
@@ -1575,7 +1572,6 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:wheat":                                  self = .wheat
             case "minecraft:farmland":                               self = .farmland
             case "minecraft:lit_furnace":                            self = .litFurnace
-            case "minecraft:furnace":                                self = .furnace
             case "minecraft:standing_sign":                          self = .standingSign
             case "minecraft:spruce_standing_sign":                   self = .spruceStandingSign
             case "minecraft:birch_standing_sign":                    self = .birchStandingSign
@@ -1605,11 +1601,8 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:dark_oak_pressure_plate":                self = .darkOakPressurePlate
             case "minecraft:mangrove_pressure_plate":                self = .mangrovePressurePlate
             case "minecraft:redstone_ore":                           self = .redstoneOre
-            case "minecraft:lit_redstone_ore":                       self = .litRedstoneOre
             case "minecraft:deepslate_redstone_ore":                 self = .deepslateRedstoneOre
-            case "minecraft:lit_deepslate_redstone_ore":             self = .litDeepslateRedstoneOre
             case "minecraft:redstone_torch":                         self = .redstoneTorch
-            case "minecraft:unlit_redstone_torch":                   self = .unlitRedstoneTorch
             case "minecraft:stone_button":                           self = .stoneButton
             case "minecraft:snow_layer":                             self = .snowLayer
             case "minecraft:ice":                                    self = .ice
@@ -1632,7 +1625,6 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:lit_pumpkin":                            self = .litPumpkin
             case "minecraft:cake":                                   self = .cake
             case "minecraft:powered_repeater":                       self = .poweredRepeater
-            case "minecraft:unpowered_repeater":                     self = .unpoweredRepeater
             case "minecraft:stained_glass":                          self = .stainedGlass
             case "minecraft:trapdoor":                               self = .trapdoor
             case "minecraft:spruce_trapdoor":                        self = .spruceTrapdoor
@@ -1673,7 +1665,6 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:end_stone":                              self = .endStone
             case "minecraft:dragon_egg":                             self = .dragonEgg
             case "minecraft:redstone_lamp":                          self = .redstoneLamp
-            case "minecraft:lit_redstone_lamp":                      self = .litRedstoneLamp
             case "minecraft:cocoa":                                  self = .cocoa
             case "minecraft:sandstone_stairs":                       self = .sandstoneStairs
             case "minecraft:emerald_ore":                            self = .emeraldOre
@@ -1703,9 +1694,7 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:light_weighted_pressure_plate":          self = .lightWeightedPressurePlate
             case "minecraft:heavy_weighted_pressure_plate":          self = .heavyWeightedPressurePlate
             case "minecraft:powered_comparator":                     self = .poweredComparator
-            case "minecraft:unpowered_comparator":                   self = .unpoweredComparator
             case "minecraft:daylight_detector":                      self = .daylightDetector
-            case "minecraft:daylight_detector_inverted":             self = .daylightDetectorInverted
             case "minecraft:redstone_block":                         self = .redstoneBlock
             case "minecraft:quartz_ore":                             self = .quartzOre
             case "minecraft:hopper":                                 self = .hopper
@@ -1727,7 +1716,6 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:prismarine_bricks_stairs":               self = .prismarineBricksStairs
             case "minecraft:dark_prismarine_stairs":                 self = .darkPrismarineStairs
             case "minecraft:stone_block_slab2":                      self = .stoneBlockSlab2
-            case "minecraft:double_stone_block_slab2":               self = .doubleStoneBlockSlab2
             case "minecraft:sea_lantern":                            self = .seaLantern
             case "minecraft:hay_block":                              self = .hayBlock
             case "minecraft:carpet":                                 self = .carpet
@@ -1740,15 +1728,10 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:red_sandstone":                          self = .redSandstone
             case "minecraft:red_sandstone_stairs":                   self = .redSandstoneStairs
             case "minecraft:wooden_slab":                            self = .woodenSlab
-            case "minecraft:double_wooden_slab":                     self = .doubleWoodenSlab
             case "minecraft:mangrove_double_slab":                   self = .mangroveDoubleSlab
-            case "minecraft:mangrove_slab":                          self = .mangroveSlab
             case "minecraft:stone_block_slab4":                      self = .stoneBlockSlab4
-            case "minecraft:double_stone_block_slab4":               self = .doubleStoneBlockSlab4
             case "minecraft:stone_block_slab":                       self = .stoneBlockSlab
-            case "minecraft:double_stone_block_slab":                self = .doubleStoneBlockSlab
             case "minecraft:mud_brick_double_slab":                  self = .mudBrickDoubleSlab
-            case "minecraft:mud_brick_slab":                         self = .mudBrickSlab
             case "minecraft:smooth_stone":                           self = .smoothStone
             case "minecraft:spruce_fence_gate":                      self = .spruceFenceGate
             case "minecraft:birch_fence_gate":                       self = .birchFenceGate
@@ -1801,6 +1784,7 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:black_glazed_terracotta":                self = .blackGlazedTerracotta
             case "minecraft:concrete":                               self = .concrete
             case "minecraft:concrete_powder":                        self = .concretePowder
+            case "minecraft:lava_cauldron":                          self = .lavaCauldron
             case "minecraft:kelp":                                   self = .kelp
             case "minecraft:dried_kelp_block":                       self = .driedKelpBlock
             case "minecraft:turtle_egg":                             self = .turtleEgg
@@ -1832,15 +1816,12 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:polished_andesite_stairs":               self = .polishedAndesiteStairs
             case "minecraft:diorite_stairs":                         self = .dioriteStairs
             case "minecraft:stone_block_slab3":                      self = .stoneBlockSlab3
-            case "minecraft:double_stone_block_slab3":               self = .doubleStoneBlockSlab3
             case "minecraft:mud_brick_wall":                         self = .mudBrickWall
             case "minecraft:scaffolding":                            self = .scaffolding
             case "minecraft:loom":                                   self = .loom
             case "minecraft:barrel":                                 self = .barrel
             case "minecraft:smoker":                                 self = .smoker
-            case "minecraft:lit_smoker":                             self = .litSmoker
             case "minecraft:lit_blast_furnace":                      self = .litBlastFurnace
-            case "minecraft:blast_furnace":                          self = .blastFurnace
             case "minecraft:cartography_table":                      self = .cartographyTable
             case "minecraft:fletching_table":                        self = .fletchingTable
             case "minecraft:grindstone":                             self = .grindstone
@@ -1875,9 +1856,7 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:crimson_planks":                         self = .crimsonPlanks
             case "minecraft:warped_planks":                          self = .warpedPlanks
             case "minecraft:crimson_double_slab":                    self = .crimsonDoubleSlab
-            case "minecraft:crimson_slab":                           self = .crimsonSlab
             case "minecraft:warped_double_slab":                     self = .warpedDoubleSlab
-            case "minecraft:warped_slab":                            self = .warpedSlab
             case "minecraft:crimson_pressure_plate":                 self = .crimsonPressurePlate
             case "minecraft:warped_pressure_plate":                  self = .warpedPressurePlate
             case "minecraft:crimson_fence":                          self = .crimsonFence
@@ -1913,19 +1892,16 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:blackstone_stairs":                      self = .blackstoneStairs
             case "minecraft:blackstone_wall":                        self = .blackstoneWall
             case "minecraft:blackstone_double_slab":                 self = .blackstoneDoubleSlab
-            case "minecraft:blackstone_slab":                        self = .blackstoneSlab
             case "minecraft:polished_blackstone":                    self = .polishedBlackstone
             case "minecraft:polished_blackstone_bricks":             self = .polishedBlackstoneBricks
             case "minecraft:cracked_polished_blackstone_bricks":     self = .crackedPolishedBlackstoneBricks
             case "minecraft:chiseled_polished_blackstone":           self = .chiseledPolishedBlackstone
             case "minecraft:polished_blackstone_brick_double_slab":  self = .polishedBlackstoneBrickDoubleSlab
-            case "minecraft:polished_blackstone_brick_slab":         self = .polishedBlackstoneBrickSlab
             case "minecraft:polished_blackstone_brick_stairs":       self = .polishedBlackstoneBrickStairs
             case "minecraft:polished_blackstone_brick_wall":         self = .polishedBlackstoneBrickWall
             case "minecraft:gilded_blackstone":                      self = .gildedBlackstone
             case "minecraft:polished_blackstone_stairs":             self = .polishedBlackstoneStairs
             case "minecraft:polished_blackstone_double_slab":        self = .polishedBlackstoneDoubleSlab
-            case "minecraft:polished_blackstone_slab":               self = .polishedBlackstoneSlab
             case "minecraft:polished_blackstone_pressure_plate":     self = .polishedBlackstonePressurePlate
             case "minecraft:polished_blackstone_button":             self = .polishedBlackstoneButton
             case "minecraft:polished_blackstone_wall":               self = .polishedBlackstoneWall
@@ -1996,13 +1972,9 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:exposed_cut_copper_stairs":              self = .exposedCutCopperStairs
             case "minecraft:cut_copper_stairs":                      self = .cutCopperStairs
             case "minecraft:oxidized_double_cut_copper_slab":        self = .oxidizedDoubleCutCopperSlab
-            case "minecraft:oxidized_cut_copper_slab":               self = .oxidizedCutCopperSlab
             case "minecraft:weathered_cut_copper_slab":              self = .weatheredCutCopperSlab
-            case "minecraft:weathered_double_cut_copper_slab":       self = .weatheredDoubleCutCopperSlab
             case "minecraft:exposed_double_cut_copper_slab":         self = .exposedDoubleCutCopperSlab
-            case "minecraft:exposed_cut_copper_slab":                self = .exposedCutCopperSlab
             case "minecraft:double_cut_copper_slab":                 self = .doubleCutCopperSlab
-            case "minecraft:cut_copper_slab":                        self = .cutCopperSlab
             case "minecraft:waxed_copper":                           self = .waxedCopper
             case "minecraft:waxed_weathered_copper":                 self = .waxedWeatheredCopper
             case "minecraft:waxed_exposed_copper":                   self = .waxedExposedCopper
@@ -2016,19 +1988,14 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:waxed_exposed_cut_copper_stairs":        self = .waxedExposedCutCopperStairs
             case "minecraft:waxed_cut_copper_stairs":                self = .waxedCutCopperStairs
             case "minecraft:waxed_oxidized_cut_copper_slab":         self = .waxedOxidizedCutCopperSlab
-            case "minecraft:waxed_oxidized_double_cut_copper_slab":  self = .waxedOxidizedDoubleCutCopperSlab
             case "minecraft:waxed_weathered_double_cut_copper_slab": self = .waxedWeatheredDoubleCutCopperSlab
-            case "minecraft:waxed_weathered_cut_copper_slab":        self = .waxedWeatheredCutCopperSlab
             case "minecraft:waxed_exposed_cut_copper_slab":          self = .waxedExposedCutCopperSlab
-            case "minecraft:waxed_exposed_double_cut_copper_slab":   self = .waxedExposedDoubleCutCopperSlab
             case "minecraft:waxed_double_cut_copper_slab":           self = .waxedDoubleCutCopperSlab
-            case "minecraft:waxed_cut_copper_slab":                  self = .waxedCutCopperSlab
             case "minecraft:lightning_rod":                          self = .lightningRod
             case "minecraft:pointed_dripstone":                      self = .pointedDripstone
             case "minecraft:dripstone_block":                        self = .dripstoneBlock
             case "minecraft:cave_vines_head_with_berries":           self = .caveVinesHeadWithBerries
             case "minecraft:cave_vines":                             self = .caveVines
-            case "minecraft:cave_vines_body_with_berries":           self = .caveVinesBodyWithBerries
             case "minecraft:spore_blossom":                          self = .sporeBlossom
             case "minecraft:azalea":                                 self = .azalea
             case "minecraft:flowering_azalea":                       self = .floweringAzalea
@@ -2043,22 +2010,18 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:cobbled_deepslate":                      self = .cobbledDeepslate
             case "minecraft:cobbled_deepslate_stairs":               self = .cobbledDeepslateStairs
             case "minecraft:cobbled_deepslate_double_slab":          self = .cobbledDeepslateDoubleSlab
-            case "minecraft:cobbled_deepslate_slab":                 self = .cobbledDeepslateSlab
             case "minecraft:cobbled_deepslate_wall":                 self = .cobbledDeepslateWall
             case "minecraft:polished_deepslate":                     self = .polishedDeepslate
             case "minecraft:polished_deepslate_stairs":              self = .polishedDeepslateStairs
             case "minecraft:polished_deepslate_slab":                self = .polishedDeepslateSlab
-            case "minecraft:polished_deepslate_double_slab":         self = .polishedDeepslateDoubleSlab
             case "minecraft:polished_deepslate_wall":                self = .polishedDeepslateWall
             case "minecraft:deepslate_tiles":                        self = .deepslateTiles
             case "minecraft:deepslate_tile_stairs":                  self = .deepslateTileStairs
             case "minecraft:deepslate_tile_double_slab":             self = .deepslateTileDoubleSlab
-            case "minecraft:deepslate_tile_slab":                    self = .deepslateTileSlab
             case "minecraft:deepslate_tile_wall":                    self = .deepslateTileWall
             case "minecraft:deepslate_bricks":                       self = .deepslateBricks
             case "minecraft:deepslate_brick_stairs":                 self = .deepslateBrickStairs
             case "minecraft:deepslate_brick_double_slab":            self = .deepslateBrickDoubleSlab
-            case "minecraft:deepslate_brick_slab":                   self = .deepslateBrickSlab
             case "minecraft:deepslate_brick_wall":                   self = .deepslateBrickWall
             case "minecraft:chiseled_deepslate":                     self = .chiseledDeepslate
             case "minecraft:cracked_deepslate_bricks":               self = .crackedDeepslateBricks
@@ -2074,151 +2037,188 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:pearlescent_froglight":                  self = .pearlescentFroglight
             case "minecraft:frog_spawn":                             self = .frogSpawn
             case "minecraft:reinforced_deepslate":                   self = .reinforcedDeepslate
-            case "minecraft:hard_stained_glass_pane":                self = .hardStainedGlassPane
-            case "minecraft:info_update2":                           self = .infoUpdate2
-            case "minecraft:element_84":                             self = .element84
-            case "minecraft:element_85":                             self = .element85
-            case "minecraft:element_86":                             self = .element86
-            case "minecraft:element_87":                             self = .element87
-            case "minecraft:element_80":                             self = .element80
-            case "minecraft:element_81":                             self = .element81
-            case "minecraft:element_82":                             self = .element82
-            case "minecraft:element_83":                             self = .element83
-            case "minecraft:element_88":                             self = .element88
-            case "minecraft:element_89":                             self = .element89
-            case "minecraft:element_97":                             self = .element97
-            case "minecraft:element_96":                             self = .element96
-            case "minecraft:element_95":                             self = .element95
-            case "minecraft:element_94":                             self = .element94
-            case "minecraft:element_93":                             self = .element93
-            case "minecraft:element_92":                             self = .element92
-            case "minecraft:element_91":                             self = .element91
-            case "minecraft:element_90":                             self = .element90
-            case "minecraft:element_99":                             self = .element99
-            case "minecraft:element_98":                             self = .element98
-            case "minecraft:element_68":                             self = .element68
-            case "minecraft:element_69":                             self = .element69
-            case "minecraft:element_62":                             self = .element62
-            case "minecraft:element_63":                             self = .element63
-            case "minecraft:element_60":                             self = .element60
-            case "minecraft:element_61":                             self = .element61
-            case "minecraft:element_66":                             self = .element66
-            case "minecraft:element_67":                             self = .element67
-            case "minecraft:element_64":                             self = .element64
-            case "minecraft:element_65":                             self = .element65
-            case "minecraft:element_79":                             self = .element79
-            case "minecraft:element_78":                             self = .element78
-            case "minecraft:element_75":                             self = .element75
-            case "minecraft:element_74":                             self = .element74
-            case "minecraft:element_77":                             self = .element77
-            case "minecraft:element_76":                             self = .element76
-            case "minecraft:element_71":                             self = .element71
-            case "minecraft:element_70":                             self = .element70
-            case "minecraft:element_73":                             self = .element73
-            case "minecraft:element_72":                             self = .element72
-            case "minecraft:element_40":                             self = .element40
-            case "minecraft:element_41":                             self = .element41
-            case "minecraft:element_42":                             self = .element42
-            case "minecraft:element_43":                             self = .element43
-            case "minecraft:element_44":                             self = .element44
-            case "minecraft:element_45":                             self = .element45
-            case "minecraft:element_46":                             self = .element46
-            case "minecraft:element_47":                             self = .element47
-            case "minecraft:element_48":                             self = .element48
-            case "minecraft:element_49":                             self = .element49
-            case "minecraft:element_53":                             self = .element53
-            case "minecraft:element_52":                             self = .element52
-            case "minecraft:element_51":                             self = .element51
-            case "minecraft:element_50":                             self = .element50
-            case "minecraft:element_57":                             self = .element57
-            case "minecraft:element_56":                             self = .element56
-            case "minecraft:element_55":                             self = .element55
-            case "minecraft:element_54":                             self = .element54
-            case "minecraft:element_59":                             self = .element59
-            case "minecraft:element_58":                             self = .element58
-            case "minecraft:element_26":                             self = .element26
-            case "minecraft:element_27":                             self = .element27
-            case "minecraft:element_24":                             self = .element24
-            case "minecraft:element_25":                             self = .element25
-            case "minecraft:element_22":                             self = .element22
-            case "minecraft:element_23":                             self = .element23
-            case "minecraft:element_20":                             self = .element20
-            case "minecraft:element_21":                             self = .element21
-            case "minecraft:element_28":                             self = .element28
-            case "minecraft:element_29":                             self = .element29
-            case "minecraft:element_39":                             self = .element39
-            case "minecraft:element_38":                             self = .element38
-            case "minecraft:element_31":                             self = .element31
-            case "minecraft:element_30":                             self = .element30
-            case "minecraft:element_33":                             self = .element33
-            case "minecraft:element_32":                             self = .element32
-            case "minecraft:element_35":                             self = .element35
-            case "minecraft:element_34":                             self = .element34
-            case "minecraft:element_37":                             self = .element37
-            case "minecraft:element_36":                             self = .element36
-            case "minecraft:element_19":                             self = .element19
-            case "minecraft:element_18":                             self = .element18
-            case "minecraft:element_17":                             self = .element17
-            case "minecraft:element_16":                             self = .element16
-            case "minecraft:element_15":                             self = .element15
-            case "minecraft:element_14":                             self = .element14
-            case "minecraft:element_13":                             self = .element13
-            case "minecraft:element_12":                             self = .element12
-            case "minecraft:element_11":                             self = .element11
-            case "minecraft:element_10":                             self = .element10
-            case "minecraft:colored_torch_rg":                       self = .coloredTorchRg
-            case "minecraft:colored_torch_bp":                       self = .coloredTorchBp
-            case "minecraft:chemical_heat":                          self = .chemicalHeat
-            case "minecraft:netherreactor":                          self = .netherreactor
-            case "minecraft:chemistry_table":                        self = .chemistryTable
-            case "minecraft:camera":                                 self = .camera
-            case "minecraft:element_8":                              self = .element8
-            case "minecraft:element_9":                              self = .element9
-            case "minecraft:element_6":                              self = .element6
-            case "minecraft:element_7":                              self = .element7
-            case "minecraft:element_4":                              self = .element4
-            case "minecraft:element_5":                              self = .element5
-            case "minecraft:element_2":                              self = .element2
-            case "minecraft:element_3":                              self = .element3
-            case "minecraft:element_0":                              self = .element0
-            case "minecraft:element_1":                              self = .element1
-            case "minecraft:allow":                                  self = .allow
-            case "minecraft:hard_stained_glass":                     self = .hardStainedGlass
-            case "minecraft:deny":                                   self = .deny
-            case "minecraft:element_118":                            self = .element118
-            case "minecraft:element_114":                            self = .element114
-            case "minecraft:element_115":                            self = .element115
-            case "minecraft:element_116":                            self = .element116
-            case "minecraft:element_117":                            self = .element117
-            case "minecraft:element_110":                            self = .element110
-            case "minecraft:element_111":                            self = .element111
-            case "minecraft:element_112":                            self = .element112
-            case "minecraft:element_113":                            self = .element113
-            case "minecraft:element_109":                            self = .element109
-            case "minecraft:element_108":                            self = .element108
-            case "minecraft:element_107":                            self = .element107
-            case "minecraft:element_106":                            self = .element106
-            case "minecraft:element_105":                            self = .element105
-            case "minecraft:element_104":                            self = .element104
-            case "minecraft:element_103":                            self = .element103
-            case "minecraft:element_102":                            self = .element102
-            case "minecraft:element_101":                            self = .element101
-            case "minecraft:element_100":                            self = .element100
-            case "minecraft:border_block":                           self = .borderBlock
-            case "minecraft:hard_glass":                             self = .hardGlass
-            case "minecraft:unknown":                                self = .unknown
-            case "minecraft:reserved6":                              self = .reserved6
-            case "minecraft:client_request_placeholder_block":       self = .clientRequestPlaceholderBlock
-            case "minecraft:frame":                                  self = .frame
-            case "minecraft:glowingobsidian":                        self = .glowingobsidian
-            case "minecraft:underwater_torch":                       self = .underwaterTorch
             case "minecraft:invisible_bedrock":                      self = .invisibleBedrock
+            case "minecraft:underwater_torch":                       self = .underwaterTorch
+            case "minecraft:glowingobsidian":                        self = .glowingobsidian
+            case "minecraft:frame":                                  self = .frame
+            case "minecraft:client_request_placeholder_block":       self = .clientRequestPlaceholderBlock
+            case "minecraft:reserved6":                              self = .reserved6
+            case "minecraft:unknown":                                self = .unknown
+            case "minecraft:hard_glass":                             self = .hardGlass
+            case "minecraft:border_block":                           self = .borderBlock
+            case "minecraft:element_100":                            self = .element100
+            case "minecraft:element_101":                            self = .element101
+            case "minecraft:element_102":                            self = .element102
+            case "minecraft:element_103":                            self = .element103
+            case "minecraft:element_104":                            self = .element104
+            case "minecraft:element_105":                            self = .element105
+            case "minecraft:element_106":                            self = .element106
+            case "minecraft:element_107":                            self = .element107
+            case "minecraft:element_108":                            self = .element108
+            case "minecraft:element_109":                            self = .element109
+            case "minecraft:element_113":                            self = .element113
+            case "minecraft:element_112":                            self = .element112
+            case "minecraft:element_111":                            self = .element111
+            case "minecraft:element_110":                            self = .element110
+            case "minecraft:element_117":                            self = .element117
+            case "minecraft:element_116":                            self = .element116
+            case "minecraft:element_115":                            self = .element115
+            case "minecraft:element_114":                            self = .element114
+            case "minecraft:element_118":                            self = .element118
+            case "minecraft:deny":                                   self = .deny
+            case "minecraft:hard_stained_glass":                     self = .hardStainedGlass
+            case "minecraft:allow":                                  self = .allow
+            case "minecraft:element_1":                              self = .element1
+            case "minecraft:element_0":                              self = .element0
+            case "minecraft:element_3":                              self = .element3
+            case "minecraft:element_2":                              self = .element2
+            case "minecraft:element_5":                              self = .element5
+            case "minecraft:element_4":                              self = .element4
+            case "minecraft:element_7":                              self = .element7
+            case "minecraft:element_6":                              self = .element6
+            case "minecraft:element_9":                              self = .element9
+            case "minecraft:element_8":                              self = .element8
+            case "minecraft:camera":                                 self = .camera
+            case "minecraft:chemistry_table":                        self = .chemistryTable
+            case "minecraft:netherreactor":                          self = .netherreactor
+            case "minecraft:chemical_heat":                          self = .chemicalHeat
+            case "minecraft:colored_torch_bp":                       self = .coloredTorchBp
+            case "minecraft:colored_torch_rg":                       self = .coloredTorchRg
+            case "minecraft:element_10":                             self = .element10
+            case "minecraft:element_11":                             self = .element11
+            case "minecraft:element_12":                             self = .element12
+            case "minecraft:element_13":                             self = .element13
+            case "minecraft:element_14":                             self = .element14
+            case "minecraft:element_15":                             self = .element15
+            case "minecraft:element_16":                             self = .element16
+            case "minecraft:element_17":                             self = .element17
+            case "minecraft:element_18":                             self = .element18
+            case "minecraft:element_19":                             self = .element19
+            case "minecraft:element_36":                             self = .element36
+            case "minecraft:element_37":                             self = .element37
+            case "minecraft:element_34":                             self = .element34
+            case "minecraft:element_35":                             self = .element35
+            case "minecraft:element_32":                             self = .element32
+            case "minecraft:element_33":                             self = .element33
+            case "minecraft:element_30":                             self = .element30
+            case "minecraft:element_31":                             self = .element31
+            case "minecraft:element_38":                             self = .element38
+            case "minecraft:element_39":                             self = .element39
+            case "minecraft:element_29":                             self = .element29
+            case "minecraft:element_28":                             self = .element28
+            case "minecraft:element_21":                             self = .element21
+            case "minecraft:element_20":                             self = .element20
+            case "minecraft:element_23":                             self = .element23
+            case "minecraft:element_22":                             self = .element22
+            case "minecraft:element_25":                             self = .element25
+            case "minecraft:element_24":                             self = .element24
+            case "minecraft:element_27":                             self = .element27
+            case "minecraft:element_26":                             self = .element26
+            case "minecraft:element_58":                             self = .element58
+            case "minecraft:element_59":                             self = .element59
+            case "minecraft:element_54":                             self = .element54
+            case "minecraft:element_55":                             self = .element55
+            case "minecraft:element_56":                             self = .element56
+            case "minecraft:element_57":                             self = .element57
+            case "minecraft:element_50":                             self = .element50
+            case "minecraft:element_51":                             self = .element51
+            case "minecraft:element_52":                             self = .element52
+            case "minecraft:element_53":                             self = .element53
+            case "minecraft:element_49":                             self = .element49
+            case "minecraft:element_48":                             self = .element48
+            case "minecraft:element_47":                             self = .element47
+            case "minecraft:element_46":                             self = .element46
+            case "minecraft:element_45":                             self = .element45
+            case "minecraft:element_44":                             self = .element44
+            case "minecraft:element_43":                             self = .element43
+            case "minecraft:element_42":                             self = .element42
+            case "minecraft:element_41":                             self = .element41
+            case "minecraft:element_40":                             self = .element40
+            case "minecraft:element_72":                             self = .element72
+            case "minecraft:element_73":                             self = .element73
+            case "minecraft:element_70":                             self = .element70
+            case "minecraft:element_71":                             self = .element71
+            case "minecraft:element_76":                             self = .element76
+            case "minecraft:element_77":                             self = .element77
+            case "minecraft:element_74":                             self = .element74
+            case "minecraft:element_75":                             self = .element75
+            case "minecraft:element_78":                             self = .element78
+            case "minecraft:element_79":                             self = .element79
+            case "minecraft:element_65":                             self = .element65
+            case "minecraft:element_64":                             self = .element64
+            case "minecraft:element_67":                             self = .element67
+            case "minecraft:element_66":                             self = .element66
+            case "minecraft:element_61":                             self = .element61
+            case "minecraft:element_60":                             self = .element60
+            case "minecraft:element_63":                             self = .element63
+            case "minecraft:element_62":                             self = .element62
+            case "minecraft:element_69":                             self = .element69
+            case "minecraft:element_68":                             self = .element68
+            case "minecraft:element_98":                             self = .element98
+            case "minecraft:element_99":                             self = .element99
+            case "minecraft:element_90":                             self = .element90
+            case "minecraft:element_91":                             self = .element91
+            case "minecraft:element_92":                             self = .element92
+            case "minecraft:element_93":                             self = .element93
+            case "minecraft:element_94":                             self = .element94
+            case "minecraft:element_95":                             self = .element95
+            case "minecraft:element_96":                             self = .element96
+            case "minecraft:element_97":                             self = .element97
+            case "minecraft:element_89":                             self = .element89
+            case "minecraft:element_88":                             self = .element88
+            case "minecraft:element_83":                             self = .element83
+            case "minecraft:element_82":                             self = .element82
+            case "minecraft:element_81":                             self = .element81
+            case "minecraft:element_80":                             self = .element80
+            case "minecraft:element_87":                             self = .element87
+            case "minecraft:element_86":                             self = .element86
+            case "minecraft:element_85":                             self = .element85
+            case "minecraft:element_84":                             self = .element84
+            case "minecraft:info_update2":                           self = .infoUpdate2
+            case "minecraft:water":                                  self = .water
+            case "minecraft:flowing_lava":                           self = .flowingLava
+            case "minecraft:sticky_piston_arm_collision":            self = .stickyPistonArmCollision
+            case "minecraft:furnace":                                self = .furnace
+            case "minecraft:lit_redstone_ore":                       self = .litRedstoneOre
+            case "minecraft:lit_deepslate_redstone_ore":             self = .litDeepslateRedstoneOre
+            case "minecraft:unlit_redstone_torch":                   self = .unlitRedstoneTorch
+            case "minecraft:unpowered_repeater":                     self = .unpoweredRepeater
+            case "minecraft:lit_redstone_lamp":                      self = .litRedstoneLamp
+            case "minecraft:unpowered_comparator":                   self = .unpoweredComparator
+            case "minecraft:daylight_detector_inverted":             self = .daylightDetectorInverted
+            case "minecraft:double_stone_block_slab2":               self = .doubleStoneBlockSlab2
+            case "minecraft:double_wooden_slab":                     self = .doubleWoodenSlab
+            case "minecraft:mangrove_slab":                          self = .mangroveSlab
+            case "minecraft:double_stone_block_slab4":               self = .doubleStoneBlockSlab4
+            case "minecraft:double_stone_block_slab":                self = .doubleStoneBlockSlab
+            case "minecraft:mud_brick_slab":                         self = .mudBrickSlab
+            case "minecraft:double_stone_block_slab3":               self = .doubleStoneBlockSlab3
+            case "minecraft:lit_smoker":                             self = .litSmoker
+            case "minecraft:blast_furnace":                          self = .blastFurnace
+            case "minecraft:crimson_slab":                           self = .crimsonSlab
+            case "minecraft:warped_slab":                            self = .warpedSlab
+            case "minecraft:blackstone_slab":                        self = .blackstoneSlab
+            case "minecraft:polished_blackstone_brick_slab":         self = .polishedBlackstoneBrickSlab
+            case "minecraft:polished_blackstone_slab":               self = .polishedBlackstoneSlab
+            case "minecraft:oxidized_cut_copper_slab":               self = .oxidizedCutCopperSlab
+            case "minecraft:weathered_double_cut_copper_slab":       self = .weatheredDoubleCutCopperSlab
+            case "minecraft:exposed_cut_copper_slab":                self = .exposedCutCopperSlab
+            case "minecraft:cut_copper_slab":                        self = .cutCopperSlab
+            case "minecraft:waxed_oxidized_double_cut_copper_slab":  self = .waxedOxidizedDoubleCutCopperSlab
+            case "minecraft:waxed_weathered_cut_copper_slab":        self = .waxedWeatheredCutCopperSlab
+            case "minecraft:waxed_exposed_double_cut_copper_slab":   self = .waxedExposedDoubleCutCopperSlab
+            case "minecraft:waxed_cut_copper_slab":                  self = .waxedCutCopperSlab
+            case "minecraft:cave_vines_body_with_berries":           self = .caveVinesBodyWithBerries
+            case "minecraft:cobbled_deepslate_slab":                 self = .cobbledDeepslateSlab
+            case "minecraft:polished_deepslate_double_slab":         self = .polishedDeepslateDoubleSlab
+            case "minecraft:deepslate_tile_slab":                    self = .deepslateTileSlab
+            case "minecraft:deepslate_brick_slab":                   self = .deepslateBrickSlab
+            case "minecraft:hard_stained_glass_pane":                self = .hardStainedGlassPane
             case "minecraft:stonecutter":                            self = .stonecutter
             case "minecraft:hard_glass_pane":                        self = .hardGlassPane
-            case "minecraft:lava_cauldron":                          self = .lavaCauldron
             case "minecraft:info_update":                            self = .infoUpdate
             case "minecraft:glow_frame":                             self = .glowFrame
-            default: self = .unknown
+            default:                                                 self = .unknown
         }
     }
 }
@@ -2226,6 +2226,12 @@ extension MCBlockType: ExpressibleByStringLiteral {
 extension MCBlockType {
     public var isOpaque: Bool {
         switch self {
+            // 
+
+
+
+
+
             case .stone:                             return true
             case .grass:                             return true
             case .dirt:                              return true
@@ -2762,743 +2768,741 @@ extension MCBlockType {
 }
 
 extension MCBlockType {
-    public var color: UInt32 {
+    public var argb: UInt32 {
         switch self {
-            case .air:                               return 0xF0000F
-            case .stone:                             return 0xF0000F
-            case .grass:                             return 0xF0000F
-            case .dirt:                              return 0xF0000F
-            case .podzol:                            return 0xF0000F
-            case .cobblestone:                       return 0xF0000F
-            case .planks:                            return 0xF0000F
-            case .mangrovePlanks:                    return 0xF0000F
-            case .sapling:                           return 0xF0000F
-            case .mangrovePropagule:                 return 0xF0000F
-            case .bedrock:                           return 0xF0000F
-            case .flowingWater:                      return 0xF0000F
-            case .water:                             return 0xF0000F
-            case .lava:                              return 0xF0000F
-            case .flowingLava:                       return 0xF0000F
-            case .sand:                              return 0xF0000F
-            case .gravel:                            return 0xF0000F
-            case .goldOre:                           return 0xF0000F
-            case .deepslateGoldOre:                  return 0xF0000F
-            case .ironOre:                           return 0xF0000F
-            case .deepslateIronOre:                  return 0xF0000F
-            case .coalOre:                           return 0xF0000F
-            case .deepslateCoalOre:                  return 0xF0000F
-            case .netherGoldOre:                     return 0xF0000F
-            case .log:                               return 0xF0000F
-            case .log2:                              return 0xF0000F
-            case .mangroveLog:                       return 0xF0000F
-            case .mangroveRoots:                     return 0xF0000F
-            case .muddyMangroveRoots:                return 0xF0000F
-            case .strippedSpruceLog:                 return 0xF0000F
-            case .strippedBirchLog:                  return 0xF0000F
-            case .strippedJungleLog:                 return 0xF0000F
-            case .strippedAcaciaLog:                 return 0xF0000F
-            case .strippedDarkOakLog:                return 0xF0000F
-            case .strippedOakLog:                    return 0xF0000F
-            case .strippedMangroveLog:               return 0xF0000F
-            case .wood:                              return 0xF0000F
-            case .mangroveWood:                      return 0xF0000F
-            case .strippedMangroveWood:              return 0xF0000F
-            case .leaves:                            return 0xF0000F
-            case .leaves2:                           return 0xF0000F
-            case .mangroveLeaves:                    return 0xF0000F
-            case .azaleaLeaves:                      return 0xF0000F
-            case .azaleaLeavesFlowered:              return 0xF0000F
-            case .sponge:                            return 0xF0000F
-            case .glass:                             return 0xF0000F
-            case .lapisOre:                          return 0xF0000F
-            case .deepslateLapisOre:                 return 0xF0000F
-            case .lapisBlock:                        return 0xF0000F
-            case .dispenser:                         return 0xF0000F
-            case .sandstone:                         return 0xF0000F
-            case .noteblock:                         return 0xF0000F
-            case .bed:                               return 0xF0000F
-            case .goldenRail:                        return 0xF0000F
-            case .detectorRail:                      return 0xF0000F
-            case .stickyPiston:                      return 0xF0000F
-            case .web:                               return 0xF0000F
-            case .tallgrass:                         return 0xF0000F
-            case .deadbush:                          return 0xF0000F
-            case .seagrass:                          return 0xF0000F
-            case .piston:                            return 0xF0000F
-            case .pistonArmCollision:                return 0xF0000F
-            case .stickyPistonArmCollision:          return 0xF0000F
-            case .wool:                              return 0xF0000F
-            case .movingBlock:                       return 0xF0000F
-            case .yellowFlower:                      return 0xF0000F
-            case .redFlower:                         return 0xF0000F
-            case .witherRose:                        return 0xF0000F
-            case .brownMushroom:                     return 0xF0000F
-            case .redMushroom:                       return 0xF0000F
-            case .goldBlock:                         return 0xF0000F
-            case .ironBlock:                         return 0xF0000F
-            case .brickBlock:                        return 0xF0000F
-            case .tnt:                               return 0xF0000F
-            case .bookshelf:                         return 0xF0000F
-            case .mossyCobblestone:                  return 0xF0000F
-            case .obsidian:                          return 0xF0000F
-            case .torch:                             return 0xF0000F
-            case .fire:                              return 0xF0000F
-            case .soulFire:                          return 0xF0000F
-            case .mobSpawner:                        return 0xF0000F
-            case .oakStairs:                         return 0xF0000F
-            case .chest:                             return 0xF0000F
-            case .redstoneWire:                      return 0xF0000F
-            case .diamondOre:                        return 0xF0000F
-            case .deepslateDiamondOre:               return 0xF0000F
-            case .diamondBlock:                      return 0xF0000F
-            case .craftingTable:                     return 0xF0000F
-            case .wheat:                             return 0xF0000F
-            case .farmland:                          return 0xF0000F
-            case .litFurnace:                        return 0xF0000F
-            case .furnace:                           return 0xF0000F
-            case .standingSign:                      return 0xF0000F
-            case .spruceStandingSign:                return 0xF0000F
-            case .birchStandingSign:                 return 0xF0000F
-            case .acaciaStandingSign:                return 0xF0000F
-            case .jungleStandingSign:                return 0xF0000F
-            case .darkoakStandingSign:               return 0xF0000F
-            case .mangroveStandingSign:              return 0xF0000F
-            case .woodenDoor:                        return 0xF0000F
-            case .ladder:                            return 0xF0000F
-            case .rail:                              return 0xF0000F
-            case .stoneStairs:                       return 0xF0000F
-            case .wallSign:                          return 0xF0000F
-            case .spruceWallSign:                    return 0xF0000F
-            case .birchWallSign:                     return 0xF0000F
-            case .acaciaWallSign:                    return 0xF0000F
-            case .jungleWallSign:                    return 0xF0000F
-            case .darkoakWallSign:                   return 0xF0000F
-            case .mangroveWallSign:                  return 0xF0000F
-            case .lever:                             return 0xF0000F
-            case .stonePressurePlate:                return 0xF0000F
-            case .ironDoor:                          return 0xF0000F
-            case .woodenPressurePlate:               return 0xF0000F
-            case .sprucePressurePlate:               return 0xF0000F
-            case .birchPressurePlate:                return 0xF0000F
-            case .junglePressurePlate:               return 0xF0000F
-            case .acaciaPressurePlate:               return 0xF0000F
-            case .darkOakPressurePlate:              return 0xF0000F
-            case .mangrovePressurePlate:             return 0xF0000F
-            case .redstoneOre:                       return 0xF0000F
-            case .litRedstoneOre:                    return 0xF0000F
-            case .deepslateRedstoneOre:              return 0xF0000F
-            case .litDeepslateRedstoneOre:           return 0xF0000F
-            case .redstoneTorch:                     return 0xF0000F
-            case .unlitRedstoneTorch:                return 0xF0000F
-            case .stoneButton:                       return 0xF0000F
-            case .snowLayer:                         return 0xF0000F
-            case .ice:                               return 0xF0000F
-            case .snow:                              return 0xF0000F
-            case .cactus:                            return 0xF0000F
-            case .clay:                              return 0xF0000F
-            case .reeds:                             return 0xF0000F
-            case .jukebox:                           return 0xF0000F
-            case .fence:                             return 0xF0000F
-            case .pumpkin:                           return 0xF0000F
-            case .netherrack:                        return 0xF0000F
-            case .soulSand:                          return 0xF0000F
-            case .soulSoil:                          return 0xF0000F
-            case .basalt:                            return 0xF0000F
-            case .polishedBasalt:                    return 0xF0000F
-            case .soulTorch:                         return 0xF0000F
-            case .glowstone:                         return 0xF0000F
-            case .portal:                            return 0xF0000F
-            case .carvedPumpkin:                     return 0xF0000F
-            case .litPumpkin:                        return 0xF0000F
-            case .cake:                              return 0xF0000F
-            case .poweredRepeater:                   return 0xF0000F
-            case .unpoweredRepeater:                 return 0xF0000F
-            case .stainedGlass:                      return 0xF0000F
-            case .trapdoor:                          return 0xF0000F
-            case .spruceTrapdoor:                    return 0xF0000F
-            case .birchTrapdoor:                     return 0xF0000F
-            case .jungleTrapdoor:                    return 0xF0000F
-            case .acaciaTrapdoor:                    return 0xF0000F
-            case .darkOakTrapdoor:                   return 0xF0000F
-            case .mangroveTrapdoor:                  return 0xF0000F
-            case .stonebrick:                        return 0xF0000F
-            case .packedMud:                         return 0xF0000F
-            case .mudBricks:                         return 0xF0000F
-            case .monsterEgg:                        return 0xF0000F
-            case .brownMushroomBlock:                return 0xF0000F
-            case .redMushroomBlock:                  return 0xF0000F
-            case .ironBars:                          return 0xF0000F
-            case .chain:                             return 0xF0000F
-            case .glassPane:                         return 0xF0000F
-            case .melonBlock:                        return 0xF0000F
-            case .pumpkinStem:                       return 0xF0000F
-            case .melonStem:                         return 0xF0000F
-            case .vine:                              return 0xF0000F
-            case .glowLichen:                        return 0xF0000F
-            case .fenceGate:                         return 0xF0000F
-            case .brickStairs:                       return 0xF0000F
-            case .stoneBrickStairs:                  return 0xF0000F
-            case .mudBrickStairs:                    return 0xF0000F
-            case .mycelium:                          return 0xF0000F
-            case .waterlily:                         return 0xF0000F
-            case .netherBrick:                       return 0xF0000F
-            case .netherBrickFence:                  return 0xF0000F
-            case .netherBrickStairs:                 return 0xF0000F
-            case .netherWart:                        return 0xF0000F
-            case .enchantingTable:                   return 0xF0000F
-            case .brewingStand:                      return 0xF0000F
-            case .cauldron:                          return 0xF0000F
-            case .endPortal:                         return 0xF0000F
-            case .endPortalFrame:                    return 0xF0000F
-            case .endStone:                          return 0xF0000F
-            case .dragonEgg:                         return 0xF0000F
-            case .redstoneLamp:                      return 0xF0000F
-            case .litRedstoneLamp:                   return 0xF0000F
-            case .cocoa:                             return 0xF0000F
-            case .sandstoneStairs:                   return 0xF0000F
-            case .emeraldOre:                        return 0xF0000F
-            case .deepslateEmeraldOre:               return 0xF0000F
-            case .enderChest:                        return 0xF0000F
-            case .tripwireHook:                      return 0xF0000F
-            case .tripWire:                          return 0xF0000F
-            case .emeraldBlock:                      return 0xF0000F
-            case .spruceStairs:                      return 0xF0000F
-            case .birchStairs:                       return 0xF0000F
-            case .jungleStairs:                      return 0xF0000F
-            case .commandBlock:                      return 0xF0000F
-            case .beacon:                            return 0xF0000F
-            case .cobblestoneWall:                   return 0xF0000F
-            case .carrots:                           return 0xF0000F
-            case .potatoes:                          return 0xF0000F
-            case .woodenButton:                      return 0xF0000F
-            case .spruceButton:                      return 0xF0000F
-            case .birchButton:                       return 0xF0000F
-            case .jungleButton:                      return 0xF0000F
-            case .acaciaButton:                      return 0xF0000F
-            case .darkOakButton:                     return 0xF0000F
-            case .mangroveButton:                    return 0xF0000F
-            case .skull:                             return 0xF0000F
-            case .anvil:                             return 0xF0000F
-            case .trappedChest:                      return 0xF0000F
-            case .lightWeightedPressurePlate:        return 0xF0000F
-            case .heavyWeightedPressurePlate:        return 0xF0000F
-            case .poweredComparator:                 return 0xF0000F
-            case .unpoweredComparator:               return 0xF0000F
-            case .daylightDetector:                  return 0xF0000F
-            case .daylightDetectorInverted:          return 0xF0000F
-            case .redstoneBlock:                     return 0xF0000F
-            case .quartzOre:                         return 0xF0000F
-            case .hopper:                            return 0xF0000F
-            case .quartzBlock:                       return 0xF0000F
-            case .quartzStairs:                      return 0xF0000F
-            case .activatorRail:                     return 0xF0000F
-            case .dropper:                           return 0xF0000F
-            case .stainedHardenedClay:               return 0xF0000F
-            case .stainedGlassPane:                  return 0xF0000F
-            case .acaciaStairs:                      return 0xF0000F
-            case .darkOakStairs:                     return 0xF0000F
-            case .mangroveStairs:                    return 0xF0000F
-            case .slime:                             return 0xF0000F
-            case .barrier:                           return 0xF0000F
-            case .lightBlock:                        return 0xF0000F
-            case .ironTrapdoor:                      return 0xF0000F
-            case .prismarine:                        return 0xF0000F
-            case .prismarineStairs:                  return 0xF0000F
-            case .prismarineBricksStairs:            return 0xF0000F
-            case .darkPrismarineStairs:              return 0xF0000F
-            case .stoneBlockSlab2:                   return 0xF0000F
-            case .doubleStoneBlockSlab2:             return 0xF0000F
-            case .seaLantern:                        return 0xF0000F
-            case .hayBlock:                          return 0xF0000F
-            case .carpet:                            return 0xF0000F
-            case .hardenedClay:                      return 0xF0000F
-            case .coalBlock:                         return 0xF0000F
-            case .packedIce:                         return 0xF0000F
-            case .doublePlant:                       return 0xF0000F
-            case .standingBanner:                    return 0xF0000F
-            case .wallBanner:                        return 0xF0000F
-            case .redSandstone:                      return 0xF0000F
-            case .redSandstoneStairs:                return 0xF0000F
-            case .woodenSlab:                        return 0xF0000F
-            case .doubleWoodenSlab:                  return 0xF0000F
-            case .mangroveDoubleSlab:                return 0xF0000F
-            case .mangroveSlab:                      return 0xF0000F
-            case .stoneBlockSlab4:                   return 0xF0000F
-            case .doubleStoneBlockSlab4:             return 0xF0000F
-            case .stoneBlockSlab:                    return 0xF0000F
-            case .doubleStoneBlockSlab:              return 0xF0000F
-            case .mudBrickDoubleSlab:                return 0xF0000F
-            case .mudBrickSlab:                      return 0xF0000F
-            case .smoothStone:                       return 0xF0000F
-            case .spruceFenceGate:                   return 0xF0000F
-            case .birchFenceGate:                    return 0xF0000F
-            case .jungleFenceGate:                   return 0xF0000F
-            case .acaciaFenceGate:                   return 0xF0000F
-            case .darkOakFenceGate:                  return 0xF0000F
-            case .mangroveFenceGate:                 return 0xF0000F
-            case .mangroveFence:                     return 0xF0000F
-            case .spruceDoor:                        return 0xF0000F
-            case .birchDoor:                         return 0xF0000F
-            case .jungleDoor:                        return 0xF0000F
-            case .acaciaDoor:                        return 0xF0000F
-            case .darkOakDoor:                       return 0xF0000F
-            case .mangroveDoor:                      return 0xF0000F
-            case .endRod:                            return 0xF0000F
-            case .chorusPlant:                       return 0xF0000F
-            case .chorusFlower:                      return 0xF0000F
-            case .purpurBlock:                       return 0xF0000F
-            case .purpurStairs:                      return 0xF0000F
-            case .endBricks:                         return 0xF0000F
-            case .beetroot:                          return 0xF0000F
-            case .grassPath:                         return 0xF0000F
-            case .endGateway:                        return 0xF0000F
-            case .repeatingCommandBlock:             return 0xF0000F
-            case .chainCommandBlock:                 return 0xF0000F
-            case .frostedIce:                        return 0xF0000F
-            case .magma:                             return 0xF0000F
-            case .netherWartBlock:                   return 0xF0000F
-            case .redNetherBrick:                    return 0xF0000F
-            case .boneBlock:                         return 0xF0000F
-            case .structureVoid:                     return 0xF0000F
-            case .observer:                          return 0xF0000F
-            case .undyedShulkerBox:                  return 0xF0000F
-            case .shulkerBox:                        return 0xF0000F
-            case .whiteGlazedTerracotta:             return 0xF0000F
-            case .orangeGlazedTerracotta:            return 0xF0000F
-            case .magentaGlazedTerracotta:           return 0xF0000F
-            case .lightBlueGlazedTerracotta:         return 0xF0000F
-            case .yellowGlazedTerracotta:            return 0xF0000F
-            case .limeGlazedTerracotta:              return 0xF0000F
-            case .pinkGlazedTerracotta:              return 0xF0000F
-            case .grayGlazedTerracotta:              return 0xF0000F
-            case .silverGlazedTerracotta:            return 0xF0000F
-            case .cyanGlazedTerracotta:              return 0xF0000F
-            case .purpleGlazedTerracotta:            return 0xF0000F
-            case .blueGlazedTerracotta:              return 0xF0000F
-            case .brownGlazedTerracotta:             return 0xF0000F
-            case .greenGlazedTerracotta:             return 0xF0000F
-            case .redGlazedTerracotta:               return 0xF0000F
-            case .blackGlazedTerracotta:             return 0xF0000F
-            case .concrete:                          return 0xF0000F
-            case .concretePowder:                    return 0xF0000F
-            case .kelp:                              return 0xF0000F
-            case .driedKelpBlock:                    return 0xF0000F
-            case .turtleEgg:                         return 0xF0000F
-            case .coralBlock:                        return 0xF0000F
-            case .coral:                             return 0xF0000F
-            case .coralFanDead:                      return 0xF0000F
-            case .coralFan:                          return 0xF0000F
-            case .coralFanHang:                      return 0xF0000F
-            case .coralFanHang2:                     return 0xF0000F
-            case .coralFanHang3:                     return 0xF0000F
-            case .seaPickle:                         return 0xF0000F
-            case .blueIce:                           return 0xF0000F
-            case .conduit:                           return 0xF0000F
-            case .bambooSapling:                     return 0xF0000F
-            case .bamboo:                            return 0xF0000F
-            case .bubbleColumn:                      return 0xF0000F
-            case .polishedGraniteStairs:             return 0xF0000F
-            case .smoothRedSandstoneStairs:          return 0xF0000F
-            case .mossyStoneBrickStairs:             return 0xF0000F
-            case .polishedDioriteStairs:             return 0xF0000F
-            case .mossyCobblestoneStairs:            return 0xF0000F
-            case .endBrickStairs:                    return 0xF0000F
-            case .normalStoneStairs:                 return 0xF0000F
-            case .smoothSandstoneStairs:             return 0xF0000F
-            case .smoothQuartzStairs:                return 0xF0000F
-            case .graniteStairs:                     return 0xF0000F
-            case .andesiteStairs:                    return 0xF0000F
-            case .redNetherBrickStairs:              return 0xF0000F
-            case .polishedAndesiteStairs:            return 0xF0000F
-            case .dioriteStairs:                     return 0xF0000F
-            case .stoneBlockSlab3:                   return 0xF0000F
-            case .doubleStoneBlockSlab3:             return 0xF0000F
-            case .mudBrickWall:                      return 0xF0000F
-            case .scaffolding:                       return 0xF0000F
-            case .loom:                              return 0xF0000F
-            case .barrel:                            return 0xF0000F
-            case .smoker:                            return 0xF0000F
-            case .litSmoker:                         return 0xF0000F
-            case .litBlastFurnace:                   return 0xF0000F
-            case .blastFurnace:                      return 0xF0000F
-            case .cartographyTable:                  return 0xF0000F
-            case .fletchingTable:                    return 0xF0000F
-            case .grindstone:                        return 0xF0000F
-            case .lectern:                           return 0xF0000F
-            case .smithingTable:                     return 0xF0000F
-            case .stonecutterBlock:                  return 0xF0000F
-            case .bell:                              return 0xF0000F
-            case .lantern:                           return 0xF0000F
-            case .soulLantern:                       return 0xF0000F
-            case .campfire:                          return 0xF0000F
-            case .soulCampfire:                      return 0xF0000F
-            case .sweetBerryBush:                    return 0xF0000F
-            case .warpedStem:                        return 0xF0000F
-            case .strippedWarpedStem:                return 0xF0000F
-            case .warpedHyphae:                      return 0xF0000F
-            case .strippedWarpedHyphae:              return 0xF0000F
-            case .warpedNylium:                      return 0xF0000F
-            case .warpedFungus:                      return 0xF0000F
-            case .warpedWartBlock:                   return 0xF0000F
-            case .warpedRoots:                       return 0xF0000F
-            case .netherSprouts:                     return 0xF0000F
-            case .crimsonStem:                       return 0xF0000F
-            case .strippedCrimsonStem:               return 0xF0000F
-            case .crimsonHyphae:                     return 0xF0000F
-            case .strippedCrimsonHyphae:             return 0xF0000F
-            case .crimsonNylium:                     return 0xF0000F
-            case .crimsonFungus:                     return 0xF0000F
-            case .shroomlight:                       return 0xF0000F
-            case .weepingVines:                      return 0xF0000F
-            case .twistingVines:                     return 0xF0000F
-            case .crimsonRoots:                      return 0xF0000F
-            case .crimsonPlanks:                     return 0xF0000F
-            case .warpedPlanks:                      return 0xF0000F
-            case .crimsonDoubleSlab:                 return 0xF0000F
-            case .crimsonSlab:                       return 0xF0000F
-            case .warpedDoubleSlab:                  return 0xF0000F
-            case .warpedSlab:                        return 0xF0000F
-            case .crimsonPressurePlate:              return 0xF0000F
-            case .warpedPressurePlate:               return 0xF0000F
-            case .crimsonFence:                      return 0xF0000F
-            case .warpedFence:                       return 0xF0000F
-            case .crimsonTrapdoor:                   return 0xF0000F
-            case .warpedTrapdoor:                    return 0xF0000F
-            case .crimsonFenceGate:                  return 0xF0000F
-            case .warpedFenceGate:                   return 0xF0000F
-            case .crimsonStairs:                     return 0xF0000F
-            case .warpedStairs:                      return 0xF0000F
-            case .crimsonButton:                     return 0xF0000F
-            case .warpedButton:                      return 0xF0000F
-            case .crimsonDoor:                       return 0xF0000F
-            case .warpedDoor:                        return 0xF0000F
-            case .crimsonStandingSign:               return 0xF0000F
-            case .warpedStandingSign:                return 0xF0000F
-            case .crimsonWallSign:                   return 0xF0000F
-            case .warpedWallSign:                    return 0xF0000F
-            case .structureBlock:                    return 0xF0000F
-            case .jigsaw:                            return 0xF0000F
-            case .composter:                         return 0xF0000F
-            case .target:                            return 0xF0000F
-            case .beeNest:                           return 0xF0000F
-            case .beehive:                           return 0xF0000F
-            case .honeyBlock:                        return 0xF0000F
-            case .honeycombBlock:                    return 0xF0000F
-            case .netheriteBlock:                    return 0xF0000F
-            case .ancientDebris:                     return 0xF0000F
-            case .cryingObsidian:                    return 0xF0000F
-            case .respawnAnchor:                     return 0xF0000F
-            case .lodestone:                         return 0xF0000F
-            case .blackstone:                        return 0xF0000F
-            case .blackstoneStairs:                  return 0xF0000F
-            case .blackstoneWall:                    return 0xF0000F
-            case .blackstoneDoubleSlab:              return 0xF0000F
-            case .blackstoneSlab:                    return 0xF0000F
-            case .polishedBlackstone:                return 0xF0000F
-            case .polishedBlackstoneBricks:          return 0xF0000F
-            case .crackedPolishedBlackstoneBricks:   return 0xF0000F
-            case .chiseledPolishedBlackstone:        return 0xF0000F
-            case .polishedBlackstoneBrickDoubleSlab: return 0xF0000F
-            case .polishedBlackstoneBrickSlab:       return 0xF0000F
-            case .polishedBlackstoneBrickStairs:     return 0xF0000F
-            case .polishedBlackstoneBrickWall:       return 0xF0000F
-            case .gildedBlackstone:                  return 0xF0000F
-            case .polishedBlackstoneStairs:          return 0xF0000F
-            case .polishedBlackstoneDoubleSlab:      return 0xF0000F
-            case .polishedBlackstoneSlab:            return 0xF0000F
-            case .polishedBlackstonePressurePlate:   return 0xF0000F
-            case .polishedBlackstoneButton:          return 0xF0000F
-            case .polishedBlackstoneWall:            return 0xF0000F
-            case .chiseledNetherBricks:              return 0xF0000F
-            case .crackedNetherBricks:               return 0xF0000F
-            case .quartzBricks:                      return 0xF0000F
-            case .candle:                            return 0xF0000F
-            case .whiteCandle:                       return 0xF0000F
-            case .orangeCandle:                      return 0xF0000F
-            case .magentaCandle:                     return 0xF0000F
-            case .lightBlueCandle:                   return 0xF0000F
-            case .yellowCandle:                      return 0xF0000F
-            case .limeCandle:                        return 0xF0000F
-            case .pinkCandle:                        return 0xF0000F
-            case .grayCandle:                        return 0xF0000F
-            case .lightGrayCandle:                   return 0xF0000F
-            case .cyanCandle:                        return 0xF0000F
-            case .purpleCandle:                      return 0xF0000F
-            case .blueCandle:                        return 0xF0000F
-            case .brownCandle:                       return 0xF0000F
-            case .greenCandle:                       return 0xF0000F
-            case .redCandle:                         return 0xF0000F
-            case .blackCandle:                       return 0xF0000F
-            case .candleCake:                        return 0xF0000F
-            case .whiteCandleCake:                   return 0xF0000F
-            case .orangeCandleCake:                  return 0xF0000F
-            case .magentaCandleCake:                 return 0xF0000F
-            case .lightBlueCandleCake:               return 0xF0000F
-            case .yellowCandleCake:                  return 0xF0000F
-            case .limeCandleCake:                    return 0xF0000F
-            case .pinkCandleCake:                    return 0xF0000F
-            case .grayCandleCake:                    return 0xF0000F
-            case .lightGrayCandleCake:               return 0xF0000F
-            case .cyanCandleCake:                    return 0xF0000F
-            case .purpleCandleCake:                  return 0xF0000F
-            case .blueCandleCake:                    return 0xF0000F
-            case .brownCandleCake:                   return 0xF0000F
-            case .greenCandleCake:                   return 0xF0000F
-            case .redCandleCake:                     return 0xF0000F
-            case .blackCandleCake:                   return 0xF0000F
-            case .amethystBlock:                     return 0xF0000F
-            case .buddingAmethyst:                   return 0xF0000F
-            case .amethystCluster:                   return 0xF0000F
-            case .largeAmethystBud:                  return 0xF0000F
-            case .mediumAmethystBud:                 return 0xF0000F
-            case .smallAmethystBud:                  return 0xF0000F
-            case .tuff:                              return 0xF0000F
-            case .calcite:                           return 0xF0000F
-            case .tintedGlass:                       return 0xF0000F
-            case .powderSnow:                        return 0xF0000F
-            case .sculkSensor:                       return 0xF0000F
-            case .sculk:                             return 0xF0000F
-            case .sculkVein:                         return 0xF0000F
-            case .sculkCatalyst:                     return 0xF0000F
-            case .sculkShrieker:                     return 0xF0000F
-            case .oxidizedCopper:                    return 0xF0000F
-            case .weatheredCopper:                   return 0xF0000F
-            case .exposedCopper:                     return 0xF0000F
-            case .copperBlock:                       return 0xF0000F
-            case .copperOre:                         return 0xF0000F
-            case .deepslateCopperOre:                return 0xF0000F
-            case .oxidizedCutCopper:                 return 0xF0000F
-            case .weatheredCutCopper:                return 0xF0000F
-            case .exposedCutCopper:                  return 0xF0000F
-            case .cutCopper:                         return 0xF0000F
-            case .oxidizedCutCopperStairs:           return 0xF0000F
-            case .weatheredCutCopperStairs:          return 0xF0000F
-            case .exposedCutCopperStairs:            return 0xF0000F
-            case .cutCopperStairs:                   return 0xF0000F
-            case .oxidizedDoubleCutCopperSlab:       return 0xF0000F
-            case .oxidizedCutCopperSlab:             return 0xF0000F
-            case .weatheredCutCopperSlab:            return 0xF0000F
-            case .weatheredDoubleCutCopperSlab:      return 0xF0000F
-            case .exposedDoubleCutCopperSlab:        return 0xF0000F
-            case .exposedCutCopperSlab:              return 0xF0000F
-            case .doubleCutCopperSlab:               return 0xF0000F
-            case .cutCopperSlab:                     return 0xF0000F
-            case .waxedCopper:                       return 0xF0000F
-            case .waxedWeatheredCopper:              return 0xF0000F
-            case .waxedExposedCopper:                return 0xF0000F
-            case .waxedOxidizedCopper:               return 0xF0000F
-            case .waxedOxidizedCutCopper:            return 0xF0000F
-            case .waxedWeatheredCutCopper:           return 0xF0000F
-            case .waxedExposedCutCopper:             return 0xF0000F
-            case .waxedCutCopper:                    return 0xF0000F
-            case .waxedOxidizedCutCopperStairs:      return 0xF0000F
-            case .waxedWeatheredCutCopperStairs:     return 0xF0000F
-            case .waxedExposedCutCopperStairs:       return 0xF0000F
-            case .waxedCutCopperStairs:              return 0xF0000F
-            case .waxedOxidizedCutCopperSlab:        return 0xF0000F
-            case .waxedOxidizedDoubleCutCopperSlab:  return 0xF0000F
-            case .waxedWeatheredDoubleCutCopperSlab: return 0xF0000F
-            case .waxedWeatheredCutCopperSlab:       return 0xF0000F
-            case .waxedExposedCutCopperSlab:         return 0xF0000F
-            case .waxedExposedDoubleCutCopperSlab:   return 0xF0000F
-            case .waxedDoubleCutCopperSlab:          return 0xF0000F
-            case .waxedCutCopperSlab:                return 0xF0000F
-            case .lightningRod:                      return 0xF0000F
-            case .pointedDripstone:                  return 0xF0000F
-            case .dripstoneBlock:                    return 0xF0000F
-            case .caveVinesHeadWithBerries:          return 0xF0000F
-            case .caveVines:                         return 0xF0000F
-            case .caveVinesBodyWithBerries:          return 0xF0000F
-            case .sporeBlossom:                      return 0xF0000F
-            case .azalea:                            return 0xF0000F
-            case .floweringAzalea:                   return 0xF0000F
-            case .mossCarpet:                        return 0xF0000F
-            case .mossBlock:                         return 0xF0000F
-            case .bigDripleaf:                       return 0xF0000F
-            case .smallDripleafBlock:                return 0xF0000F
-            case .hangingRoots:                      return 0xF0000F
-            case .dirtWithRoots:                     return 0xF0000F
-            case .mud:                               return 0xF0000F
-            case .deepslate:                         return 0xF0000F
-            case .cobbledDeepslate:                  return 0xF0000F
-            case .cobbledDeepslateStairs:            return 0xF0000F
-            case .cobbledDeepslateDoubleSlab:        return 0xF0000F
-            case .cobbledDeepslateSlab:              return 0xF0000F
-            case .cobbledDeepslateWall:              return 0xF0000F
-            case .polishedDeepslate:                 return 0xF0000F
-            case .polishedDeepslateStairs:           return 0xF0000F
-            case .polishedDeepslateSlab:             return 0xF0000F
-            case .polishedDeepslateDoubleSlab:       return 0xF0000F
-            case .polishedDeepslateWall:             return 0xF0000F
-            case .deepslateTiles:                    return 0xF0000F
-            case .deepslateTileStairs:               return 0xF0000F
-            case .deepslateTileDoubleSlab:           return 0xF0000F
-            case .deepslateTileSlab:                 return 0xF0000F
-            case .deepslateTileWall:                 return 0xF0000F
-            case .deepslateBricks:                   return 0xF0000F
-            case .deepslateBrickStairs:              return 0xF0000F
-            case .deepslateBrickDoubleSlab:          return 0xF0000F
-            case .deepslateBrickSlab:                return 0xF0000F
-            case .deepslateBrickWall:                return 0xF0000F
-            case .chiseledDeepslate:                 return 0xF0000F
-            case .crackedDeepslateBricks:            return 0xF0000F
-            case .crackedDeepslateTiles:             return 0xF0000F
-            case .infestedDeepslate:                 return 0xF0000F
-            case .smoothBasalt:                      return 0xF0000F
-            case .rawIronBlock:                      return 0xF0000F
-            case .rawCopperBlock:                    return 0xF0000F
-            case .rawGoldBlock:                      return 0xF0000F
-            case .flowerPot:                         return 0xF0000F
-            case .ochreFroglight:                    return 0xF0000F
-            case .verdantFroglight:                  return 0xF0000F
-            case .pearlescentFroglight:              return 0xF0000F
-            case .frogSpawn:                         return 0xF0000F
-            case .reinforcedDeepslate:               return 0xF0000F
-            case .hardStainedGlassPane:              return 0xF0000F
-            case .infoUpdate2:                       return 0xF0000F
-            case .element84:                         return 0xF0000F
-            case .element85:                         return 0xF0000F
-            case .element86:                         return 0xF0000F
-            case .element87:                         return 0xF0000F
-            case .element80:                         return 0xF0000F
-            case .element81:                         return 0xF0000F
-            case .element82:                         return 0xF0000F
-            case .element83:                         return 0xF0000F
-            case .element88:                         return 0xF0000F
-            case .element89:                         return 0xF0000F
-            case .element97:                         return 0xF0000F
-            case .element96:                         return 0xF0000F
-            case .element95:                         return 0xF0000F
-            case .element94:                         return 0xF0000F
-            case .element93:                         return 0xF0000F
-            case .element92:                         return 0xF0000F
-            case .element91:                         return 0xF0000F
-            case .element90:                         return 0xF0000F
-            case .element99:                         return 0xF0000F
-            case .element98:                         return 0xF0000F
-            case .element68:                         return 0xF0000F
-            case .element69:                         return 0xF0000F
-            case .element62:                         return 0xF0000F
-            case .element63:                         return 0xF0000F
-            case .element60:                         return 0xF0000F
-            case .element61:                         return 0xF0000F
-            case .element66:                         return 0xF0000F
-            case .element67:                         return 0xF0000F
-            case .element64:                         return 0xF0000F
-            case .element65:                         return 0xF0000F
-            case .element79:                         return 0xF0000F
-            case .element78:                         return 0xF0000F
-            case .element75:                         return 0xF0000F
-            case .element74:                         return 0xF0000F
-            case .element77:                         return 0xF0000F
-            case .element76:                         return 0xF0000F
-            case .element71:                         return 0xF0000F
-            case .element70:                         return 0xF0000F
-            case .element73:                         return 0xF0000F
-            case .element72:                         return 0xF0000F
-            case .element40:                         return 0xF0000F
-            case .element41:                         return 0xF0000F
-            case .element42:                         return 0xF0000F
-            case .element43:                         return 0xF0000F
-            case .element44:                         return 0xF0000F
-            case .element45:                         return 0xF0000F
-            case .element46:                         return 0xF0000F
-            case .element47:                         return 0xF0000F
-            case .element48:                         return 0xF0000F
-            case .element49:                         return 0xF0000F
-            case .element53:                         return 0xF0000F
-            case .element52:                         return 0xF0000F
-            case .element51:                         return 0xF0000F
-            case .element50:                         return 0xF0000F
-            case .element57:                         return 0xF0000F
-            case .element56:                         return 0xF0000F
-            case .element55:                         return 0xF0000F
-            case .element54:                         return 0xF0000F
-            case .element59:                         return 0xF0000F
-            case .element58:                         return 0xF0000F
-            case .element26:                         return 0xF0000F
-            case .element27:                         return 0xF0000F
-            case .element24:                         return 0xF0000F
-            case .element25:                         return 0xF0000F
-            case .element22:                         return 0xF0000F
-            case .element23:                         return 0xF0000F
-            case .element20:                         return 0xF0000F
-            case .element21:                         return 0xF0000F
-            case .element28:                         return 0xF0000F
-            case .element29:                         return 0xF0000F
-            case .element39:                         return 0xF0000F
-            case .element38:                         return 0xF0000F
-            case .element31:                         return 0xF0000F
-            case .element30:                         return 0xF0000F
-            case .element33:                         return 0xF0000F
-            case .element32:                         return 0xF0000F
-            case .element35:                         return 0xF0000F
-            case .element34:                         return 0xF0000F
-            case .element37:                         return 0xF0000F
-            case .element36:                         return 0xF0000F
-            case .element19:                         return 0xF0000F
-            case .element18:                         return 0xF0000F
-            case .element17:                         return 0xF0000F
-            case .element16:                         return 0xF0000F
-            case .element15:                         return 0xF0000F
-            case .element14:                         return 0xF0000F
-            case .element13:                         return 0xF0000F
-            case .element12:                         return 0xF0000F
-            case .element11:                         return 0xF0000F
-            case .element10:                         return 0xF0000F
-            case .coloredTorchRg:                    return 0xF0000F
-            case .coloredTorchBp:                    return 0xF0000F
-            case .chemicalHeat:                      return 0xF0000F
-            case .netherreactor:                     return 0xF0000F
-            case .chemistryTable:                    return 0xF0000F
-            case .camera:                            return 0xF0000F
-            case .element8:                          return 0xF0000F
-            case .element9:                          return 0xF0000F
-            case .element6:                          return 0xF0000F
-            case .element7:                          return 0xF0000F
-            case .element4:                          return 0xF0000F
-            case .element5:                          return 0xF0000F
-            case .element2:                          return 0xF0000F
-            case .element3:                          return 0xF0000F
-            case .element0:                          return 0xF0000F
-            case .element1:                          return 0xF0000F
-            case .allow:                             return 0xF0000F
-            case .hardStainedGlass:                  return 0xF0000F
-            case .deny:                              return 0xF0000F
-            case .element118:                        return 0xF0000F
-            case .element114:                        return 0xF0000F
-            case .element115:                        return 0xF0000F
-            case .element116:                        return 0xF0000F
-            case .element117:                        return 0xF0000F
-            case .element110:                        return 0xF0000F
-            case .element111:                        return 0xF0000F
-            case .element112:                        return 0xF0000F
-            case .element113:                        return 0xF0000F
-            case .element109:                        return 0xF0000F
-            case .element108:                        return 0xF0000F
-            case .element107:                        return 0xF0000F
-            case .element106:                        return 0xF0000F
-            case .element105:                        return 0xF0000F
-            case .element104:                        return 0xF0000F
-            case .element103:                        return 0xF0000F
-            case .element102:                        return 0xF0000F
-            case .element101:                        return 0xF0000F
-            case .element100:                        return 0xF0000F
-            case .borderBlock:                       return 0xF0000F
-            case .hardGlass:                         return 0xF0000F
-            case .unknown:                           return 0xF0000F
-            case .reserved6:                         return 0xF0000F
-            case .clientRequestPlaceholderBlock:     return 0xF0000F
-            case .frame:                             return 0xF0000F
-            case .glowingobsidian:                   return 0xF0000F
-            case .underwaterTorch:                   return 0xF0000F
-            case .invisibleBedrock:                  return 0xF0000F
-            case .stonecutter:                       return 0xF0000F
-            case .hardGlassPane:                     return 0xF0000F
-            case .lavaCauldron:                      return 0xF0000F
-            case .infoUpdate:                        return 0xF0000F
-            case .glowFrame:                         return 0xF0000F
-//            default:                                 return 0
+            case .stone:                             return 0xFF6F6F6F
+            case .grass:                             return 0xFF82943A
+            case .dirt:                              return 0xFF956C4C
+            case .podzol:                            return 0xFF694317
+            case .cobblestone:                       return 0xFF6F6F6F
+            case .planks:                            return 0xFF7F5530
+            case .mangrovePlanks:                    return 0xFF894C39
+            case .sapling:                           return 0xFF3F8D2E
+            case .mangrovePropagule:                 return 0xFF894C39
+            case .bedrock:                           return 0xFF6F6F6F
+            case .flowingWater:                      return 0xFF
+            case .water:                             return 0xFF
+            case .lava:                              return 0xFFB34703
+            case .flowingLava:                       return 0xFFB34703
+            case .sand:                              return 0xFFC9C09A
+            case .gravel:                            return 0xFF6F6F6F
+            case .goldOre:                           return 0xFF6F6F6F
+            case .deepslateGoldOre:                  return 0xFF686868
+            case .ironOre:                           return 0xFF6F6F6F
+            case .deepslateIronOre:                  return 0xFF686868
+            case .coalOre:                           return 0xFF6F6F6F
+            case .deepslateCoalOre:                  return 0xFF686868
+            case .netherGoldOre:                     return 0xFFFEAD2A
+            case .log:                               return 0xFF8D7647
+            case .log2:                              return 0xFF8D7647
+            case .mangroveLog:                       return 0xFF894C39
+            case .mangroveRoots:                     return 0xFF894C39
+            case .muddyMangroveRoots:                return 0xFF894C39
+            case .strippedSpruceLog:                 return 0xFF
+            case .strippedBirchLog:                  return 0xFF
+            case .strippedJungleLog:                 return 0xFF
+            case .strippedAcaciaLog:                 return 0xFF
+            case .strippedDarkOakLog:                return 0xFF
+            case .strippedOakLog:                    return 0xFF
+            case .strippedMangroveLog:               return 0xFF894C39
+            case .wood:                              return 0xFF
+            case .mangroveWood:                      return 0xFF894C39
+            case .strippedMangroveWood:              return 0xFF894C39
+            case .leaves:                            return 0xFF
+            case .leaves2:                           return 0xFF
+            case .mangroveLeaves:                    return 0xFF3B4910
+            case .azaleaLeaves:                      return 0xFF
+            case .azaleaLeavesFlowered:              return 0xFF
+            case .sponge:                            return 0xFF
+            case .glass:                             return 0xFF
+            case .lapisOre:                          return 0xFF6F6F6F
+            case .deepslateLapisOre:                 return 0xFF686868
+            case .lapisBlock:                        return 0xFF
+            case .dispenser:                         return 0xFF
+            case .sandstone:                         return 0xFF
+            case .noteblock:                         return 0xFF
+            case .bed:                               return 0xFF
+            case .goldenRail:                        return 0xFF
+            case .detectorRail:                      return 0xFF
+            case .stickyPiston:                      return 0xFF
+            case .web:                               return 0xFF
+            case .tallgrass:                         return 0xFF
+            case .deadbush:                          return 0xFF
+            case .seagrass:                          return 0xFF
+            case .piston:                            return 0xFF
+            case .pistonArmCollision:                return 0xFF
+            case .stickyPistonArmCollision:          return 0xFF
+            case .wool:                              return 0xFF
+            case .movingBlock:                       return 0xFF
+            case .yellowFlower:                      return 0xFF
+            case .redFlower:                         return 0xFF
+            case .witherRose:                        return 0xFF
+            case .brownMushroom:                     return 0xFF
+            case .redMushroom:                       return 0xFF
+            case .goldBlock:                         return 0xFF
+            case .ironBlock:                         return 0xFF
+            case .brickBlock:                        return 0xFF
+            case .tnt:                               return 0xFF
+            case .bookshelf:                         return 0xFF
+            case .mossyCobblestone:                  return 0xFF
+            case .obsidian:                          return 0xFF
+            case .torch:                             return 0xFF
+            case .fire:                              return 0xFF
+            case .soulFire:                          return 0xFF
+            case .mobSpawner:                        return 0xFF
+            case .oakStairs:                         return 0xFF
+            case .chest:                             return 0xFF8D7647
+            case .redstoneWire:                      return 0xFF
+            case .diamondOre:                        return 0xFF6F6F6F
+            case .deepslateDiamondOre:               return 0xFF686868
+            case .diamondBlock:                      return 0xFF
+            case .craftingTable:                     return 0xFF
+            case .wheat:                             return 0xFF
+            case .farmland:                          return 0xFF
+            case .litFurnace:                        return 0xFF
+            case .furnace:                           return 0xFF
+            case .standingSign:                      return 0xFF
+            case .spruceStandingSign:                return 0xFF
+            case .birchStandingSign:                 return 0xFF
+            case .acaciaStandingSign:                return 0xFF
+            case .jungleStandingSign:                return 0xFF
+            case .darkoakStandingSign:               return 0xFF
+            case .mangroveStandingSign:              return 0xFF894C39
+            case .woodenDoor:                        return 0xFF
+            case .ladder:                            return 0xFF
+            case .rail:                              return 0xFF
+            case .stoneStairs:                       return 0xFF
+            case .wallSign:                          return 0xFF
+            case .spruceWallSign:                    return 0xFF
+            case .birchWallSign:                     return 0xFF
+            case .acaciaWallSign:                    return 0xFF
+            case .jungleWallSign:                    return 0xFF
+            case .darkoakWallSign:                   return 0xFF
+            case .mangroveWallSign:                  return 0xFF894C39
+            case .lever:                             return 0xFF
+            case .stonePressurePlate:                return 0xFF
+            case .ironDoor:                          return 0xFF
+            case .woodenPressurePlate:               return 0xFF
+            case .sprucePressurePlate:               return 0xFF
+            case .birchPressurePlate:                return 0xFF
+            case .junglePressurePlate:               return 0xFF
+            case .acaciaPressurePlate:               return 0xFF
+            case .darkOakPressurePlate:              return 0xFF
+            case .mangrovePressurePlate:             return 0xFF894C39
+            case .redstoneOre:                       return 0xFF6F6F6F
+            case .litRedstoneOre:                    return 0xFF6F6F6F
+            case .deepslateRedstoneOre:              return 0xFF686868
+            case .litDeepslateRedstoneOre:           return 0xFF686868
+            case .redstoneTorch:                     return 0xFF
+            case .unlitRedstoneTorch:                return 0xFF
+            case .stoneButton:                       return 0xFF
+            case .snowLayer:                         return 0xFF
+            case .ice:                               return 0xFF
+            case .snow:                              return 0xFF
+            case .cactus:                            return 0xFF
+            case .clay:                              return 0xFFA2A6B6
+            case .reeds:                             return 0xFF
+            case .jukebox:                           return 0xFF
+            case .fence:                             return 0xFF
+            case .pumpkin:                           return 0xFF
+            case .netherrack:                        return 0xFF
+            case .soulSand:                          return 0xFF
+            case .soulSoil:                          return 0xFF
+            case .basalt:                            return 0xFF
+            case .polishedBasalt:                    return 0xFF
+            case .soulTorch:                         return 0xFF
+            case .glowstone:                         return 0xFF
+            case .portal:                            return 0xFF
+            case .carvedPumpkin:                     return 0xFF
+            case .litPumpkin:                        return 0xFF
+            case .cake:                              return 0xFF
+            case .poweredRepeater:                   return 0xFF
+            case .unpoweredRepeater:                 return 0xFF
+            case .stainedGlass:                      return 0xFF
+            case .trapdoor:                          return 0xFF
+            case .spruceTrapdoor:                    return 0xFF
+            case .birchTrapdoor:                     return 0xFF
+            case .jungleTrapdoor:                    return 0xFF
+            case .acaciaTrapdoor:                    return 0xFF
+            case .darkOakTrapdoor:                   return 0xFF
+            case .mangroveTrapdoor:                  return 0xFF894C39
+            case .stonebrick:                        return 0xFF
+            case .packedMud:                         return 0xFF
+            case .mudBricks:                         return 0xFF
+            case .monsterEgg:                        return 0xFF
+            case .brownMushroomBlock:                return 0xFF
+            case .redMushroomBlock:                  return 0xFF
+            case .ironBars:                          return 0xFF
+            case .chain:                             return 0xFF
+            case .glassPane:                         return 0xFF
+            case .melonBlock:                        return 0xFF
+            case .pumpkinStem:                       return 0xFF
+            case .melonStem:                         return 0xFF
+            case .vine:                              return 0xFF
+            case .glowLichen:                        return 0xFF
+            case .fenceGate:                         return 0xFF
+            case .brickStairs:                       return 0xFF
+            case .stoneBrickStairs:                  return 0xFF
+            case .mudBrickStairs:                    return 0xFF
+            case .mycelium:                          return 0xFF
+            case .waterlily:                         return 0xFF
+            case .netherBrick:                       return 0xFF
+            case .netherBrickFence:                  return 0xFF
+            case .netherBrickStairs:                 return 0xFF
+            case .netherWart:                        return 0xFF
+            case .enchantingTable:                   return 0xFF
+            case .brewingStand:                      return 0xFF
+            case .cauldron:                          return 0xFF
+            case .endPortal:                         return 0xFF
+            case .endPortalFrame:                    return 0xFF
+            case .endStone:                          return 0xFF
+            case .dragonEgg:                         return 0xFF
+            case .redstoneLamp:                      return 0xFF
+            case .litRedstoneLamp:                   return 0xFF
+            case .cocoa:                             return 0xFF
+            case .sandstoneStairs:                   return 0xFF
+            case .emeraldOre:                        return 0xFF6F6F6F
+            case .deepslateEmeraldOre:               return 0xFF686868
+            case .enderChest:                        return 0xFF
+            case .tripwireHook:                      return 0xFF
+            case .tripWire:                          return 0xFF
+            case .emeraldBlock:                      return 0xFF
+            case .spruceStairs:                      return 0xFF
+            case .birchStairs:                       return 0xFF
+            case .jungleStairs:                      return 0xFF
+            case .commandBlock:                      return 0xFF
+            case .beacon:                            return 0xFF
+            case .cobblestoneWall:                   return 0xFF
+            case .carrots:                           return 0xFF
+            case .potatoes:                          return 0xFF
+            case .woodenButton:                      return 0xFF
+            case .spruceButton:                      return 0xFF
+            case .birchButton:                       return 0xFF
+            case .jungleButton:                      return 0xFF
+            case .acaciaButton:                      return 0xFF
+            case .darkOakButton:                     return 0xFF
+            case .mangroveButton:                    return 0xFF894C39
+            case .skull:                             return 0xFF
+            case .anvil:                             return 0xFF
+            case .trappedChest:                      return 0xFF
+            case .lightWeightedPressurePlate:        return 0xFF
+            case .heavyWeightedPressurePlate:        return 0xFF
+            case .poweredComparator:                 return 0xFF
+            case .unpoweredComparator:               return 0xFF
+            case .daylightDetector:                  return 0xFF
+            case .daylightDetectorInverted:          return 0xFF
+            case .redstoneBlock:                     return 0xFF
+            case .quartzOre:                         return 0xFF6F6F6F
+            case .hopper:                            return 0xFF
+            case .quartzBlock:                       return 0xFF
+            case .quartzStairs:                      return 0xFF
+            case .activatorRail:                     return 0xFF
+            case .dropper:                           return 0xFF
+            case .stainedHardenedClay:               return 0xFF
+            case .stainedGlassPane:                  return 0xFF
+            case .acaciaStairs:                      return 0xFF
+            case .darkOakStairs:                     return 0xFF
+            case .mangroveStairs:                    return 0xFF894C39
+            case .slime:                             return 0xFF
+            case .barrier:                           return 0xFF
+            case .lightBlock:                        return 0xFF
+            case .ironTrapdoor:                      return 0xFF
+            case .prismarine:                        return 0xFF
+            case .prismarineStairs:                  return 0xFF
+            case .prismarineBricksStairs:            return 0xFF
+            case .darkPrismarineStairs:              return 0xFF
+            case .stoneBlockSlab2:                   return 0xFF
+            case .doubleStoneBlockSlab2:             return 0xFF
+            case .seaLantern:                        return 0xFF
+            case .hayBlock:                          return 0xFF
+            case .carpet:                            return 0xFF
+            case .hardenedClay:                      return 0xFF
+            case .coalBlock:                         return 0xFF
+            case .packedIce:                         return 0xFF
+            case .doublePlant:                       return 0xFF
+            case .standingBanner:                    return 0xFF
+            case .wallBanner:                        return 0xFF
+            case .redSandstone:                      return 0xFF
+            case .redSandstoneStairs:                return 0xFF
+            case .woodenSlab:                        return 0xFF
+            case .doubleWoodenSlab:                  return 0xFF
+            case .mangroveDoubleSlab:                return 0xFF894C39
+            case .mangroveSlab:                      return 0xFF894C39
+            case .stoneBlockSlab4:                   return 0xFF
+            case .doubleStoneBlockSlab4:             return 0xFF
+            case .stoneBlockSlab:                    return 0xFF
+            case .doubleStoneBlockSlab:              return 0xFF
+            case .mudBrickDoubleSlab:                return 0xFF
+            case .mudBrickSlab:                      return 0xFF
+            case .smoothStone:                       return 0xFF
+            case .spruceFenceGate:                   return 0xFF
+            case .birchFenceGate:                    return 0xFF
+            case .jungleFenceGate:                   return 0xFF
+            case .acaciaFenceGate:                   return 0xFF
+            case .darkOakFenceGate:                  return 0xFF
+            case .mangroveFenceGate:                 return 0xFF894C39
+            case .mangroveFence:                     return 0xFF894C39
+            case .spruceDoor:                        return 0xFF
+            case .birchDoor:                         return 0xFF
+            case .jungleDoor:                        return 0xFF
+            case .acaciaDoor:                        return 0xFF
+            case .darkOakDoor:                       return 0xFF
+            case .mangroveDoor:                      return 0xFF894C39
+            case .endRod:                            return 0xFF
+            case .chorusPlant:                       return 0xFF
+            case .chorusFlower:                      return 0xFF
+            case .purpurBlock:                       return 0xFF
+            case .purpurStairs:                      return 0xFF
+            case .endBricks:                         return 0xFF
+            case .beetroot:                          return 0xFF
+            case .grassPath:                         return 0xFF
+            case .endGateway:                        return 0xFF
+            case .repeatingCommandBlock:             return 0xFF
+            case .chainCommandBlock:                 return 0xFF
+            case .frostedIce:                        return 0xFF
+            case .magma:                             return 0xFF
+            case .netherWartBlock:                   return 0xFF
+            case .redNetherBrick:                    return 0xFF
+            case .boneBlock:                         return 0xFF
+            case .structureVoid:                     return 0xFF
+            case .observer:                          return 0xFF
+            case .undyedShulkerBox:                  return 0xFF
+            case .shulkerBox:                        return 0xFF
+            case .whiteGlazedTerracotta:             return 0xFF
+            case .orangeGlazedTerracotta:            return 0xFF
+            case .magentaGlazedTerracotta:           return 0xFF
+            case .lightBlueGlazedTerracotta:         return 0xFF
+            case .yellowGlazedTerracotta:            return 0xFF
+            case .limeGlazedTerracotta:              return 0xFF
+            case .pinkGlazedTerracotta:              return 0xFF
+            case .grayGlazedTerracotta:              return 0xFF
+            case .silverGlazedTerracotta:            return 0xFF
+            case .cyanGlazedTerracotta:              return 0xFF
+            case .purpleGlazedTerracotta:            return 0xFF
+            case .blueGlazedTerracotta:              return 0xFF
+            case .brownGlazedTerracotta:             return 0xFF
+            case .greenGlazedTerracotta:             return 0xFF
+            case .redGlazedTerracotta:               return 0xFF
+            case .blackGlazedTerracotta:             return 0xFF
+            case .concrete:                          return 0xFF
+            case .concretePowder:                    return 0xFF
+            case .kelp:                              return 0xFF
+            case .driedKelpBlock:                    return 0xFF
+            case .turtleEgg:                         return 0xFF
+            case .coralBlock:                        return 0xFF
+            case .coral:                             return 0xFF
+            case .coralFanDead:                      return 0xFF
+            case .coralFan:                          return 0xFF
+            case .coralFanHang:                      return 0xFF
+            case .coralFanHang2:                     return 0xFF
+            case .coralFanHang3:                     return 0xFF
+            case .seaPickle:                         return 0xFF
+            case .blueIce:                           return 0xFF
+            case .conduit:                           return 0xFF
+            case .bambooSapling:                     return 0xFF
+            case .bamboo:                            return 0xFF
+            case .bubbleColumn:                      return 0xFF
+            case .polishedGraniteStairs:             return 0xFF
+            case .smoothRedSandstoneStairs:          return 0xFF
+            case .mossyStoneBrickStairs:             return 0xFF
+            case .polishedDioriteStairs:             return 0xFF
+            case .mossyCobblestoneStairs:            return 0xFF
+            case .endBrickStairs:                    return 0xFF
+            case .normalStoneStairs:                 return 0xFF
+            case .smoothSandstoneStairs:             return 0xFF
+            case .smoothQuartzStairs:                return 0xFF
+            case .graniteStairs:                     return 0xFF
+            case .andesiteStairs:                    return 0xFF
+            case .redNetherBrickStairs:              return 0xFF
+            case .polishedAndesiteStairs:            return 0xFF
+            case .dioriteStairs:                     return 0xFF
+            case .stoneBlockSlab3:                   return 0xFF
+            case .doubleStoneBlockSlab3:             return 0xFF
+            case .mudBrickWall:                      return 0xFF
+            case .scaffolding:                       return 0xFF
+            case .loom:                              return 0xFF
+            case .barrel:                            return 0xFF
+            case .smoker:                            return 0xFF
+            case .litSmoker:                         return 0xFF
+            case .litBlastFurnace:                   return 0xFF
+            case .blastFurnace:                      return 0xFF
+            case .cartographyTable:                  return 0xFF
+            case .fletchingTable:                    return 0xFF
+            case .grindstone:                        return 0xFF
+            case .lectern:                           return 0xFF
+            case .smithingTable:                     return 0xFF
+            case .stonecutterBlock:                  return 0xFF
+            case .bell:                              return 0xFF
+            case .lantern:                           return 0xFF
+            case .soulLantern:                       return 0xFF
+            case .campfire:                          return 0xFF
+            case .soulCampfire:                      return 0xFF
+            case .sweetBerryBush:                    return 0xFF
+            case .warpedStem:                        return 0xFF
+            case .strippedWarpedStem:                return 0xFF
+            case .warpedHyphae:                      return 0xFF
+            case .strippedWarpedHyphae:              return 0xFF
+            case .warpedNylium:                      return 0xFF
+            case .warpedFungus:                      return 0xFF
+            case .warpedWartBlock:                   return 0xFF
+            case .warpedRoots:                       return 0xFF
+            case .netherSprouts:                     return 0xFF
+            case .crimsonStem:                       return 0xFF
+            case .strippedCrimsonStem:               return 0xFF
+            case .crimsonHyphae:                     return 0xFF
+            case .strippedCrimsonHyphae:             return 0xFF
+            case .crimsonNylium:                     return 0xFF
+            case .crimsonFungus:                     return 0xFF
+            case .shroomlight:                       return 0xFF
+            case .weepingVines:                      return 0xFF
+            case .twistingVines:                     return 0xFF
+            case .crimsonRoots:                      return 0xFF
+            case .crimsonPlanks:                     return 0xFF
+            case .warpedPlanks:                      return 0xFF
+            case .crimsonDoubleSlab:                 return 0xFF
+            case .crimsonSlab:                       return 0xFF
+            case .warpedDoubleSlab:                  return 0xFF
+            case .warpedSlab:                        return 0xFF
+            case .crimsonPressurePlate:              return 0xFF
+            case .warpedPressurePlate:               return 0xFF
+            case .crimsonFence:                      return 0xFF
+            case .warpedFence:                       return 0xFF
+            case .crimsonTrapdoor:                   return 0xFF
+            case .warpedTrapdoor:                    return 0xFF
+            case .crimsonFenceGate:                  return 0xFF
+            case .warpedFenceGate:                   return 0xFF
+            case .crimsonStairs:                     return 0xFF
+            case .warpedStairs:                      return 0xFF
+            case .crimsonButton:                     return 0xFF
+            case .warpedButton:                      return 0xFF
+            case .crimsonDoor:                       return 0xFF
+            case .warpedDoor:                        return 0xFF
+            case .crimsonStandingSign:               return 0xFF
+            case .warpedStandingSign:                return 0xFF
+            case .crimsonWallSign:                   return 0xFF
+            case .warpedWallSign:                    return 0xFF
+            case .structureBlock:                    return 0xFF
+            case .jigsaw:                            return 0xFF
+            case .composter:                         return 0xFF
+            case .target:                            return 0xFF
+            case .beeNest:                           return 0xFF
+            case .beehive:                           return 0xFF
+            case .honeyBlock:                        return 0xFF
+            case .honeycombBlock:                    return 0xFF
+            case .netheriteBlock:                    return 0xFF
+            case .ancientDebris:                     return 0xFF
+            case .cryingObsidian:                    return 0xFF
+            case .respawnAnchor:                     return 0xFF
+            case .lodestone:                         return 0xFF
+            case .blackstone:                        return 0xFF
+            case .blackstoneStairs:                  return 0xFF
+            case .blackstoneWall:                    return 0xFF
+            case .blackstoneDoubleSlab:              return 0xFF
+            case .blackstoneSlab:                    return 0xFF
+            case .polishedBlackstone:                return 0xFF
+            case .polishedBlackstoneBricks:          return 0xFF
+            case .crackedPolishedBlackstoneBricks:   return 0xFF
+            case .chiseledPolishedBlackstone:        return 0xFF
+            case .polishedBlackstoneBrickDoubleSlab: return 0xFF
+            case .polishedBlackstoneBrickSlab:       return 0xFF
+            case .polishedBlackstoneBrickStairs:     return 0xFF
+            case .polishedBlackstoneBrickWall:       return 0xFF
+            case .gildedBlackstone:                  return 0xFF
+            case .polishedBlackstoneStairs:          return 0xFF
+            case .polishedBlackstoneDoubleSlab:      return 0xFF
+            case .polishedBlackstoneSlab:            return 0xFF
+            case .polishedBlackstonePressurePlate:   return 0xFF
+            case .polishedBlackstoneButton:          return 0xFF
+            case .polishedBlackstoneWall:            return 0xFF
+            case .chiseledNetherBricks:              return 0xFF
+            case .crackedNetherBricks:               return 0xFF
+            case .quartzBricks:                      return 0xFF
+            case .candle:                            return 0xFF
+            case .whiteCandle:                       return 0xFF
+            case .orangeCandle:                      return 0xFF
+            case .magentaCandle:                     return 0xFF
+            case .lightBlueCandle:                   return 0xFF
+            case .yellowCandle:                      return 0xFF
+            case .limeCandle:                        return 0xFF
+            case .pinkCandle:                        return 0xFF
+            case .grayCandle:                        return 0xFF
+            case .lightGrayCandle:                   return 0xFF
+            case .cyanCandle:                        return 0xFF
+            case .purpleCandle:                      return 0xFF
+            case .blueCandle:                        return 0xFF
+            case .brownCandle:                       return 0xFF
+            case .greenCandle:                       return 0xFF
+            case .redCandle:                         return 0xFF
+            case .blackCandle:                       return 0xFF
+            case .candleCake:                        return 0xFF
+            case .whiteCandleCake:                   return 0xFF
+            case .orangeCandleCake:                  return 0xFF
+            case .magentaCandleCake:                 return 0xFF
+            case .lightBlueCandleCake:               return 0xFF
+            case .yellowCandleCake:                  return 0xFF
+            case .limeCandleCake:                    return 0xFF
+            case .pinkCandleCake:                    return 0xFF
+            case .grayCandleCake:                    return 0xFF
+            case .lightGrayCandleCake:               return 0xFF
+            case .cyanCandleCake:                    return 0xFF
+            case .purpleCandleCake:                  return 0xFF
+            case .blueCandleCake:                    return 0xFF
+            case .brownCandleCake:                   return 0xFF
+            case .greenCandleCake:                   return 0xFF
+            case .redCandleCake:                     return 0xFF
+            case .blackCandleCake:                   return 0xFF
+            case .amethystBlock:                     return 0xFF
+            case .buddingAmethyst:                   return 0xFF
+            case .amethystCluster:                   return 0xFF
+            case .largeAmethystBud:                  return 0xFF
+            case .mediumAmethystBud:                 return 0xFF
+            case .smallAmethystBud:                  return 0xFF
+            case .tuff:                              return 0xFF
+            case .calcite:                           return 0xFF
+            case .tintedGlass:                       return 0xFF
+            case .powderSnow:                        return 0xFF
+            case .sculkSensor:                       return 0xFF
+            case .sculk:                             return 0xFF
+            case .sculkVein:                         return 0xFF
+            case .sculkCatalyst:                     return 0xFF
+            case .sculkShrieker:                     return 0xFF
+            case .oxidizedCopper:                    return 0xFF
+            case .weatheredCopper:                   return 0xFF
+            case .exposedCopper:                     return 0xFF
+            case .copperBlock:                       return 0xFF
+            case .copperOre:                         return 0xFF6F6F6F
+            case .deepslateCopperOre:                return 0xFF686868
+            case .oxidizedCutCopper:                 return 0xFF
+            case .weatheredCutCopper:                return 0xFF
+            case .exposedCutCopper:                  return 0xFF
+            case .cutCopper:                         return 0xFF
+            case .oxidizedCutCopperStairs:           return 0xFF
+            case .weatheredCutCopperStairs:          return 0xFF
+            case .exposedCutCopperStairs:            return 0xFF
+            case .cutCopperStairs:                   return 0xFF
+            case .oxidizedDoubleCutCopperSlab:       return 0xFF
+            case .oxidizedCutCopperSlab:             return 0xFF
+            case .weatheredCutCopperSlab:            return 0xFF
+            case .weatheredDoubleCutCopperSlab:      return 0xFF
+            case .exposedDoubleCutCopperSlab:        return 0xFF
+            case .exposedCutCopperSlab:              return 0xFF
+            case .doubleCutCopperSlab:               return 0xFF
+            case .cutCopperSlab:                     return 0xFF
+            case .waxedCopper:                       return 0xFF
+            case .waxedWeatheredCopper:              return 0xFF
+            case .waxedExposedCopper:                return 0xFF
+            case .waxedOxidizedCopper:               return 0xFF
+            case .waxedOxidizedCutCopper:            return 0xFF
+            case .waxedWeatheredCutCopper:           return 0xFF
+            case .waxedExposedCutCopper:             return 0xFF
+            case .waxedCutCopper:                    return 0xFF
+            case .waxedOxidizedCutCopperStairs:      return 0xFF
+            case .waxedWeatheredCutCopperStairs:     return 0xFF
+            case .waxedExposedCutCopperStairs:       return 0xFF
+            case .waxedCutCopperStairs:              return 0xFF
+            case .waxedOxidizedCutCopperSlab:        return 0xFF
+            case .waxedOxidizedDoubleCutCopperSlab:  return 0xFF
+            case .waxedWeatheredDoubleCutCopperSlab: return 0xFF
+            case .waxedWeatheredCutCopperSlab:       return 0xFF
+            case .waxedExposedCutCopperSlab:         return 0xFF
+            case .waxedExposedDoubleCutCopperSlab:   return 0xFF
+            case .waxedDoubleCutCopperSlab:          return 0xFF
+            case .waxedCutCopperSlab:                return 0xFF
+            case .lightningRod:                      return 0xFF
+            case .pointedDripstone:                  return 0xFF
+            case .dripstoneBlock:                    return 0xFF
+            case .caveVinesHeadWithBerries:          return 0xFF
+            case .caveVines:                         return 0xFF
+            case .caveVinesBodyWithBerries:          return 0xFF
+            case .sporeBlossom:                      return 0xFF
+            case .azalea:                            return 0xFF
+            case .floweringAzalea:                   return 0xFF
+            case .mossCarpet:                        return 0xFF
+            case .mossBlock:                         return 0xFF
+            case .bigDripleaf:                       return 0xFF
+            case .smallDripleafBlock:                return 0xFF
+            case .hangingRoots:                      return 0xFF
+            case .dirtWithRoots:                     return 0xFF
+            case .mud:                               return 0xFF
+            case .deepslate:                         return 0xFF
+            case .cobbledDeepslate:                  return 0xFF
+            case .cobbledDeepslateStairs:            return 0xFF
+            case .cobbledDeepslateDoubleSlab:        return 0xFF
+            case .cobbledDeepslateSlab:              return 0xFF
+            case .cobbledDeepslateWall:              return 0xFF
+            case .polishedDeepslate:                 return 0xFF
+            case .polishedDeepslateStairs:           return 0xFF
+            case .polishedDeepslateSlab:             return 0xFF
+            case .polishedDeepslateDoubleSlab:       return 0xFF
+            case .polishedDeepslateWall:             return 0xFF
+            case .deepslateTiles:                    return 0xFF
+            case .deepslateTileStairs:               return 0xFF
+            case .deepslateTileDoubleSlab:           return 0xFF
+            case .deepslateTileSlab:                 return 0xFF
+            case .deepslateTileWall:                 return 0xFF
+            case .deepslateBricks:                   return 0xFF
+            case .deepslateBrickStairs:              return 0xFF
+            case .deepslateBrickDoubleSlab:          return 0xFF
+            case .deepslateBrickSlab:                return 0xFF
+            case .deepslateBrickWall:                return 0xFF
+            case .chiseledDeepslate:                 return 0xFF
+            case .crackedDeepslateBricks:            return 0xFF
+            case .crackedDeepslateTiles:             return 0xFF
+            case .infestedDeepslate:                 return 0xFF
+            case .smoothBasalt:                      return 0xFF
+            case .rawIronBlock:                      return 0xFF
+            case .rawCopperBlock:                    return 0xFF
+            case .rawGoldBlock:                      return 0xFF
+            case .flowerPot:                         return 0xFF
+            case .ochreFroglight:                    return 0xFF
+            case .verdantFroglight:                  return 0xFF
+            case .pearlescentFroglight:              return 0xFF
+            case .frogSpawn:                         return 0xFF
+            case .reinforcedDeepslate:               return 0xFF
+            case .hardStainedGlassPane:              return 0xFF
+            case .infoUpdate2:                       return 0xFF
+            case .element84:                         return 0xFF
+            case .element85:                         return 0xFF
+            case .element86:                         return 0xFF
+            case .element87:                         return 0xFF
+            case .element80:                         return 0xFF
+            case .element81:                         return 0xFF
+            case .element82:                         return 0xFF
+            case .element83:                         return 0xFF
+            case .element88:                         return 0xFF
+            case .element89:                         return 0xFF
+            case .element97:                         return 0xFF
+            case .element96:                         return 0xFF
+            case .element95:                         return 0xFF
+            case .element94:                         return 0xFF
+            case .element93:                         return 0xFF
+            case .element92:                         return 0xFF
+            case .element91:                         return 0xFF
+            case .element90:                         return 0xFF
+            case .element99:                         return 0xFF
+            case .element98:                         return 0xFF
+            case .element68:                         return 0xFF
+            case .element69:                         return 0xFF
+            case .element62:                         return 0xFF
+            case .element63:                         return 0xFF
+            case .element60:                         return 0xFF
+            case .element61:                         return 0xFF
+            case .element66:                         return 0xFF
+            case .element67:                         return 0xFF
+            case .element64:                         return 0xFF
+            case .element65:                         return 0xFF
+            case .element79:                         return 0xFF
+            case .element78:                         return 0xFF
+            case .element75:                         return 0xFF
+            case .element74:                         return 0xFF
+            case .element77:                         return 0xFF
+            case .element76:                         return 0xFF
+            case .element71:                         return 0xFF
+            case .element70:                         return 0xFF
+            case .element73:                         return 0xFF
+            case .element72:                         return 0xFF
+            case .element40:                         return 0xFF
+            case .element41:                         return 0xFF
+            case .element42:                         return 0xFF
+            case .element43:                         return 0xFF
+            case .element44:                         return 0xFF
+            case .element45:                         return 0xFF
+            case .element46:                         return 0xFF
+            case .element47:                         return 0xFF
+            case .element48:                         return 0xFF
+            case .element49:                         return 0xFF
+            case .element53:                         return 0xFF
+            case .element52:                         return 0xFF
+            case .element51:                         return 0xFF
+            case .element50:                         return 0xFF
+            case .element57:                         return 0xFF
+            case .element56:                         return 0xFF
+            case .element55:                         return 0xFF
+            case .element54:                         return 0xFF
+            case .element59:                         return 0xFF
+            case .element58:                         return 0xFF
+            case .element26:                         return 0xFF
+            case .element27:                         return 0xFF
+            case .element24:                         return 0xFF
+            case .element25:                         return 0xFF
+            case .element22:                         return 0xFF
+            case .element23:                         return 0xFF
+            case .element20:                         return 0xFF
+            case .element21:                         return 0xFF
+            case .element28:                         return 0xFF
+            case .element29:                         return 0xFF
+            case .element39:                         return 0xFF
+            case .element38:                         return 0xFF
+            case .element31:                         return 0xFF
+            case .element30:                         return 0xFF
+            case .element33:                         return 0xFF
+            case .element32:                         return 0xFF
+            case .element35:                         return 0xFF
+            case .element34:                         return 0xFF
+            case .element37:                         return 0xFF
+            case .element36:                         return 0xFF
+            case .element19:                         return 0xFF
+            case .element18:                         return 0xFF
+            case .element17:                         return 0xFF
+            case .element16:                         return 0xFF
+            case .element15:                         return 0xFF
+            case .element14:                         return 0xFF
+            case .element13:                         return 0xFF
+            case .element12:                         return 0xFF
+            case .element11:                         return 0xFF
+            case .element10:                         return 0xFF
+            case .coloredTorchRg:                    return 0xFF
+            case .coloredTorchBp:                    return 0xFF
+            case .chemicalHeat:                      return 0xFF
+            case .netherreactor:                     return 0xFF
+            case .chemistryTable:                    return 0xFF
+            case .camera:                            return 0xFF
+            case .element8:                          return 0xFF
+            case .element9:                          return 0xFF
+            case .element6:                          return 0xFF
+            case .element7:                          return 0xFF
+            case .element4:                          return 0xFF
+            case .element5:                          return 0xFF
+            case .element2:                          return 0xFF
+            case .element3:                          return 0xFF
+            case .element0:                          return 0xFF
+            case .element1:                          return 0xFF
+            case .allow:                             return 0xFF
+            case .hardStainedGlass:                  return 0xFF
+            case .deny:                              return 0xFF
+            case .element118:                        return 0xFF
+            case .element114:                        return 0xFF
+            case .element115:                        return 0xFF
+            case .element116:                        return 0xFF
+            case .element117:                        return 0xFF
+            case .element110:                        return 0xFF
+            case .element111:                        return 0xFF
+            case .element112:                        return 0xFF
+            case .element113:                        return 0xFF
+            case .element109:                        return 0xFF
+            case .element108:                        return 0xFF
+            case .element107:                        return 0xFF
+            case .element106:                        return 0xFF
+            case .element105:                        return 0xFF
+            case .element104:                        return 0xFF
+            case .element103:                        return 0xFF
+            case .element102:                        return 0xFF
+            case .element101:                        return 0xFF
+            case .element100:                        return 0xFF
+            case .borderBlock:                       return 0xFF
+            case .hardGlass:                         return 0xFF
+            case .reserved6:                         return 0xFF
+            case .clientRequestPlaceholderBlock:     return 0xFF
+            case .frame:                             return 0xFF
+            case .glowingobsidian:                   return 0xFF
+            case .underwaterTorch:                   return 0xFF
+            case .invisibleBedrock:                  return 0xFF
+            case .stonecutter:                       return 0xFF
+            case .hardGlassPane:                     return 0xFF
+            case .lavaCauldron:                      return 0xFF
+            case .infoUpdate:                        return 0xFF
+            case .glowFrame:                         return 0xFF
+            default:                                 return 0x00000000
         }
     }
 }
