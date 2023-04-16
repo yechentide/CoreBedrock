@@ -1,0 +1,323 @@
+Stick
+========== Beds
+White Bed
+Light Gray Bed
+Gray Bed
+Black Bed
+Brown Bed
+Red Bed
+Orange Bed
+Yellow Bed
+Lime Bed
+Green Bed
+Cyan Bed
+Light Blue Bed
+Blue Bed
+Purple Bed
+Magenta Bed
+Pink Bed
+
+Torch
+Soul Torch
+Sea Pickle
+Lantern
+Soul Lantern
+
+========== Candles
+Candle
+White Candle
+Light Gray Candle
+Gray Candle
+Black Candle
+Brown Candle
+Red Candle
+Orange Candle
+Yellow Candle
+Lime Candle
+Green Candle
+Cyan Candle
+Light Blue Candle
+Blue Candle
+Purple Candle
+Magenta Candle
+Pink Candle
+
+Crafting Table
+Cartography Table
+Fletching Table
+Smithing Table
+Beehive
+Campfire
+Soul Campfire
+Furnace
+Blast Furnace
+Smoker
+Respawn Anchor
+Brewing Stand
+Anvils
+Grindstone
+Enchantment Table
+Bookshelf
+Lectern
+Cauldron
+Composter
+
+========== Chests
+Chest
+Trapped Chest
+Ender Chest
+
+Barrel
+
+========== Shulker Boxes
+Shulker Box
+White Shulker Box
+Light Gray Shulker Box
+Gray Shulker Box
+Black Shulker Box
+Brown Shulker Box
+Red Shulker Box
+Orange Shulker Box
+Yellow Shulker Box
+Lime Shulker Box
+Green Shulker Box
+Cyan Shulker Box
+Light Blue Shulker Box
+Blue Shulker Box
+Purple Shulker Box
+Magenta Shulker Box
+Pink Shulker Box
+
+Armor Stand
+Note Block
+Jukebox
+
+========== Records
+Music Disc (C418-13)
+Music Disc (C418-cat)
+Music Disc (C418-blocks)
+Music Disc (C418-chirp)
+Music Disc (C418-far)
+Music Disc (C418-mall)
+Music Disc (C418-mellohi)
+Music Disc (C418-stal)
+Music Disc (C418-strad)
+Music Disc (C418-ward)
+Music Disc (C418-11)
+Music Disc (C418-wait)
+Music Disc (Lena Raine - otherside)
+Music Disc (Samuel Aberg - 5)
+Music Disc (Lena Raine - Pigstep)
+
+Disc Fragment (Music Disc - 5)
+Glowstone Dust
+Glowstone
+Redstone Lamp
+Sea Lantern
+
+========== Signs
+Oak Sign
+Spruce Sign
+Birch Sign
+Jungle Sign
+Acacia Sign
+Dark Oka Sign
+Mangrove Sign
+Crimson Sign
+Warped Sign
+
+Painting
+Item Frame
+Glow Item Frame
+Honey Bottle
+Flower Pot
+Bowl
+Bucket
+Milk
+Water Bucket
+Lava Bucket
+Bucket of Cod
+Bucket of Salmon
+Bucket of Tropical Fish
+Bucket of Pufferfish
+Power Snow Bucket
+Bucket of Axolotl
+Bucket of Tadpole
+
+========== Mob Skulls
+Head
+Zombie Head
+Creeper Head
+Dragon Head
+Skeleton Head
+Wither Head
+
+Beacon
+Bell
+Conduit
+Stonecutter
+End Portal Frame
+Coal
+Charcoal
+Diamond
+Iron Nugget
+Raw Iron
+Raw Gold
+Raw Copper
+Copper Ingot
+Iron Ingot
+Netherite Scrap
+Netherite Ingot
+Gold Nugget
+Gold Ingot
+Emerald
+Nether Quartz
+Clay
+Brick
+Nether Brick
+Prismarine Shard
+Amethyst Shard
+Prismarine Crystals
+Nautilus Shell
+Heart of the Sea
+Scute
+Phantom Membrane
+String
+Feather
+Flint
+Gunpowder
+Leather
+Rabbit Hide
+Rabbit's Foot
+Fire Charge
+Blaze Rod
+Blaze Powder
+Magma Cream
+Fermented Spider Eye
+Echo Shard
+Dragon's Breath
+Shulker Shell
+Ghast Tear
+Slimeball
+Ender Pearl
+Eye of Ender
+Nether Star
+End Rod
+Lightning Rod
+End Crystal
+Paper
+Book
+Book & Quill
+
+========== Enchanted Books
+
+
+========== Boats / Boats with Chest
+Oak Boats
+Spruce Boats
+Birch Boats
+Jungle Boats
+Acacia Boats
+Dark Oka Boats
+Mangrove Boats
+Crimson Boats
+Warped Boats
+
+========== Rails
+Rail
+Powered Rail
+Detector Rail
+Activator Rail
+
+========== Minecarts
+Minecart
+Minecart with Chest
+Minecart with Hopper
+Minecart with TNT
+
+Redstone Dust
+Block of Redstone
+Redstone Torch
+Lever
+
+========== Buttons
+Oak Button
+Spruce Button
+Birch Button
+Jungle Button
+Acacia Button
+Dark Oka Button
+Mangrove Button
+Crimson Button
+Warped Button
+Stone Button
+Polished Blackstone Button
+
+Tripwire Hook
+
+========== Pressure Plates
+Oak Pressure Plate
+Spruce Pressure Plate
+Birch Pressure Plate
+Jungle Pressure Plate
+Acacia Pressure Plate
+Dark Oka Pressure Plate
+Mangrove Pressure Plate
+Crimson Pressure Plate
+Warped Pressure Plate
+Stone Pressure Plates
+Polished Blackstone Pressure Plates
+Weighted Pressure Plates (Light)
+Weighted Pressure Plates (Heavy)
+
+Observer
+Daylight Sensor
+Redstone Repeater
+Redstone Comparator
+Hopper
+Dropper
+Dispenser
+Piston
+Sticky Piston
+TNT
+Name Tag
+Loom
+
+========== Banners
+Illager Banner
+White Banner
+Light Gray Banner
+Gray Banner
+Black Banner
+Brown Banner
+Red Banner
+Orange Banner
+Yellow Banner
+Lime Banner
+Green Banner
+Cyan Banner
+Light Blue Banner
+Blue Banner
+Purple Banner
+Magenta Banner
+Pink Banner
+
+========== Banner patterns
+Banner pattern (Creeper Charge)
+Banner pattern (Skull Charge)
+Banner pattern (Flower Charge)
+Banner pattern (Thing)
+Banner pattern (Field Masoned)
+Banner pattern (Bordure Indented)
+Banner pattern (Snout)
+Banner pattern (Globe)
+
+========== Fireworks
+Firework Rocket
+Firework Rocket 16color
+
+========== Firework Charges
+Firework Star 16color
+
+Chain
+Target

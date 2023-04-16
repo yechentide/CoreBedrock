@@ -1,0 +1,371 @@
+Nether Wart Block
+Warped Wart Block
+Shroomlight
+Crimson Nylium
+Warped Nylium
+Basalt
+Polished Basalt
+Smooth Basalt
+Soul Soil
+Dirt
+Coarse Dirt
+Farmland
+Grass Block
+Dirt Path
+Podzol
+Mycelium
+Mud
+
+Stone
+========== Ores
+Iron Ore, Gold Ore, Diamond Ore, Lapis Lazuli Ore, Redstone Ore, Coal Ore, Copper Ore, Emerald Ore,
+Nether Quartz Ore, Nether Gold Ore, Ancient Debris,
+Deepslate Iron Ore, Deepslate Gold Ore, Deepslate Diamond Ore, Deepslate Lapis Lazuli Ore, Deepslate Redstone Ore, Deepslate Emerald Ore, Deepslate Coal Ore, Deepslate Copper Ore
+Gravel
+========== Stone
+Granite
+Diorite
+Andesite
+Blackstone
+Deepslate
+Polished Granite
+Polished Diorite
+Polished Andesite
+Polished Blackstone
+Polished Deepslate
+Sand
+Red Sand
+Cactus
+========== Logs
+Oak Log
+Stripped Oak Log
+Spruce Log
+Stripped Spruce Log
+Birch Log
+Stripped Birch Log
+Jungle Log
+Stripped Jungle Log
+Acacia Log
+Stripped Acacia Log
+Dark Oka Log
+Stripped Dark Oka Log
+Mangrove Log
+Stripped Mangrove Log
+Crimson Stem
+Stripped Crimson Stem
+Warped Stem
+Stripped Warped Stem
+========== Woods
+Oak Wood
+Stripped Oak Wood
+Spruce Wood
+Stripped Spruce Wood
+Birch Wood
+Stripped Birch Wood
+Jungle Wood
+Stripped Jungle Wood
+Acacia Wood
+Stripped Acacia Wood
+Dark Oka Wood
+Stripped Dark Oka Wood
+Mangrove Wood
+Stripped Mangrove Wood
+Crimson Hyphae
+Stripped Crimson Hyphae
+Warped Hyphae
+Stripped Warped Hyphae
+========== Leaves
+Oak Leaves
+Spruce Leaves
+Birch Leaves
+Jungle Leaves
+Acacia Leaves
+Dark Oka Leaves
+Mangrove Leaves
+Azalea Leaves
+Flowering Azalea Leaves
+========== Saplings
+Oak Sapling
+Spruce Sapling
+Birch Sapling
+Jungle Sapling
+Acacia Sapling
+Dark Oka Sapling
+Mangrove Propagule
+========== Seeds
+Seeds
+Pumpkin Seeds
+Melon Seeds
+Beetroot Seeds
+========== Crops
+Wheat
+Beetroot
+Potato
+Poisonous Potato
+Carrot
+Golden Carrot
+Apple
+Golden Apple
+Enchanted Apple
+Melon (整个)
+Melon (一片)
+Glistering Melon
+Sweet Berries
+Glow Berries
+Pumpkin
+Carved Pumpkin
+Jack o'Lantern
+Honeycomb
+
+========== Ground Cover
+Fern
+Large Fern
+Grass
+Double Tallgrass
+Nether Sprouts
+========== Coral Decorations
+Fire Coral
+Brain Coral
+Bubble Coral
+Tube Coral
+Horn Coral
+Dead Fire Coral
+Dead Brain Coral
+Dead Bubble Coral
+Dead Tube Coral
+Dead Horn Coral
+Fire Coral Fan
+Brain Coral Fan
+Bubble Coral Fan
+Tube Coral Fan
+Horn Coral Fan
+Dead Fire Coral Fan
+Dead Brain Coral Fan
+Dead Bubble Coral Fan
+Dead Tube Coral Fan
+Dead Horn Coral Fan
+========== Flowers
+Crimson Roots
+Warped Roots
+Dandelion
+Poppy
+Blue Orchid
+Allium
+Azure Bluet
+Red Tulip
+Orange Tulip
+White Tulip
+Pink Tulip
+Oxeye Daisy
+Cornflower
+Lily of the Valley
+Sunflower
+Lilac
+Rose Bush
+Peony
+Wither Rose
+========== Dyes
+White Dye
+Light Gray Dye
+Gray Dye
+Black Dye
+Brown Dye
+Red Dye
+Orange Dye
+Yellow Dye
+Lime Dye
+Green Dye
+Cyan Dye
+Light Blue Dye
+Blue Dye
+Purple Dye
+Magenta Dye
+Pink Dye
+Ink Sac
+Glow Ink Sac
+Cocoa Beans
+Lapis Lazuli
+Bone Meal
+Vines
+Weeping Vines
+Twisting Vines
+Lily Pad
+Seagrass
+Kelp
+Dead Bush
+Bamboo
+
+Snow
+Ice
+Packed Ice
+Blue Ice
+Top Snow
+Pointed Dripstone
+Dripstone Block
+Moss Carpet
+Moss Block
+Rooted Dirt
+Hanging Roots
+Mangrove Roots
+Muddy Mangrove Roots
+Big Dripleaf
+Small Dripleaf
+Spore Blossom
+Azalea
+Flowering Azalea
+Glow Lichen
+Block of Amethyst
+Budding Amethyst
+Amethyst Cluster
+Large Amethyst Bud
+Medium Amethyst Bud
+Small Amethyst Bud
+Tuff
+Calcite
+========== Raw Food
+Raw Chicken
+Raw Porkchop
+Raw Beef
+Raw Mutton
+Raw Rabbit
+Raw Cod
+Raw Salmon
+Tropical Fish
+Pufferfish
+========== Mushrooms
+Brown Mushroom
+Red Mushroom
+Crimson Fungus
+Warped Fungus
+Brown Mushroom Block
+Red Mushroom Block
+Mushroom Stem
+Mushroom
+Egg
+Sugar Canes
+Sugar
+Rotten Flesh
+Bone
+Cobweb
+Spider Eye
+Monster Spawner
+========== Infested Stone
+Infested Stone
+Infested Cobblestone
+Infested Stone Brick
+Infested Mossy Stone Brick
+Infested Cracked Stone Brick
+Infested Chiseled Stone Brick
+Infested Deepslate
+Dragon Egg
+Sea Turtle Egg
+Frogspawn
+Pearlescent Froglight
+Verdant Froglight
+Ochre Froglight
+========== Mob Eggs
+Spawn Chicken
+Spawn Bee
+Spawn Cow
+Spawn Pig
+Spawn Sheep
+Spawn Wolf
+Spawn Polar Bear
+Spawn Ocelot
+Spawn Cat
+Spawn Mooshroom
+Spawn Bat
+Spawn Parrot
+Spawn Rabbit
+Spawn Llama
+Spawn Horse
+Spawn Donkey
+Spawn Mule
+Spawn Skeleton Horse
+Spawn Zombie Horse
+Spawn Tropical Fish
+Spawn Cod
+Spawn Pufferfish
+Spawn Salmon
+Spawn Dolphin
+Spawn Sea Turtle
+Spawn Panda
+Spawn Fox
+Spawn Creeper
+Spawn Enderman
+Spawn Silverfish
+Spawn Skeleton
+Spawn Wither Skeleton
+Spawn Stray
+Spawn Slime
+Spawn Spider
+Spawn Zombie
+Spawn Zombified Piglin
+Spawn Husk
+Spawn Drowned
+Spawn Squid
+Spawn Glow Squid
+Spawn Cave Spider
+Spawn Witch
+Spawn Guardian
+Spawn Elder Guardian
+Spawn Endermite
+Spawn Magma Cube
+Spawn Strider
+Spawn Hoglin
+Spawn Piglin
+Spawn Zoglin
+Spawn Piglin Brute
+Spawn Goat
+Spawn Axolotl
+Spawn Warden
+Spawn Allay
+Spawn Frog
+Spawn Tadpole
+Spawn Trader Llama
+Spawn Ghast
+Spawn Blaze
+Spawn Shulker
+Spawn Vindicator
+Spawn Evoker
+Spawn Vex
+Spawn Villager
+Spawn Wandering Trader
+Spawn Zombie Villager
+Spawn Phantom
+Spawn Pillager
+Spawn Ravager
+Spawn Iron Golem
+Spawn Snow Golem
+Obsidian
+Crying Obsidian
+Bedrock
+Soul Sand
+Netherrack
+Magma Block
+Nether Wart
+End Stone
+Chorus Flower
+Chorus Plant
+Chorus Fruit
+Popped Chorus Fruit
+Sponge
+Wet Sponge
+========== Coral Blocks
+Fire Coral Block
+Brain Coral Block
+Bubble Coral Block
+Tube Coral Block
+Horn Coral Block
+Dead Fire Coral Block
+Dead Brain Coral Block
+Dead Bubble Coral Block
+Dead Tube Coral Block
+Dead Horn Coral Block
+========== Sculk
+Sculk
+Sculk Vein
+Sculk Catalyst
+Sculk Shrieker
+Sculk Sensor
+Reinforced Deepslate

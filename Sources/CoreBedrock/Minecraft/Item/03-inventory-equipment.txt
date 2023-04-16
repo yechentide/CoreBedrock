@@ -1,0 +1,161 @@
+========== Helmets
+Leather Cap
+Chain Helmet
+Iron Helmet
+Golden Helmet
+Diamond Helmet
+Netherite Helmet
+========== Chestplates
+Leather Tunic
+Chian Chestplate
+Iron Chestplate
+Golden Chestplate
+Diamond Chestplate
+Netherite Chestplate
+========== Leggings
+Leather Pants
+Chian Leggings
+Iron Leggings
+Golden Leggings
+Diamond Leggings
+Netherite Leggings
+========== Boots
+Leather Boots
+Chian Boots
+Iron Boots
+Golden Boots
+Diamond Boots
+Netherite Boots
+========== Swords
+Wooden Sword
+Stone Sword
+Iron Sword
+Golden Sword
+Diamond Sword
+Netherite Sword
+========== Axes
+Wooden Axe
+Stone Axe
+Iron Axe
+Golden Axe
+Diamond Axe
+Netherite Axe
+========== Pickaxes
+Wooden Pickaxe
+Stone Pickaxe
+Iron Pickaxe
+Golden Pickaxe
+Diamond Pickaxe
+Netherite Pickaxe
+========== Shovels
+Wooden Shovel
+Stone Shovel
+Iron Shovel
+Golden Shovel
+Diamond Shovel
+Netherite Shovel
+========== Hoes
+Wooden Hoe
+Stone Hoe
+Iron Hoe
+Golden Hoe
+Diamond Hoe
+Netherite Hoe
+
+Bow
+Crossbow
+
+========== Arrows
+Arrow
+Arrow of Night Vision
+Arrow of Invisibility
+Arrow of Leaping
+Arrow of Resistance
+Arrow of Swiftness
+Arrow of Slowness
+Arrow of Water Breathing
+Arrow of Healing
+Arrow of Harming
+Arrow of Poison
+Arrow of Regeneration
+Arrow of Strength
+Arrow of Weakness
+Arrow of Decay
+Arrow of the Turtle Master
+Arrow of Slow Falling
+
+Shield
+
+========== Cooked Food
+Cooked Chicken
+Cooked Porkchop
+Cooked Beef
+Cooked Mutton
+Cooked Rabbit
+Cooked Cod
+Cooked Salmon
+
+========== Miscellaneous Foods
+Bread
+Mushroom Stew
+Beetroot Soup
+Rabbit Stew
+Baked Potato
+Cookie
+Pumpkin Pie
+Cake
+Dried Kelp
+
+Fishing Rod
+Carrot on a Stick
+Warped Fungus on a Stick
+Snowball
+Shears
+Flint and Steel
+Lead
+Clock
+Compass
+Recovery Compass
+
+Goat Horn
+Empty Map
+Empty Locator Map
+Saddle
+
+========== Horse Armor
+Leather Horse Armor
+Iron Horse Armor
+Golden Horse Armor
+Diamond Horse Armor
+
+Trident
+Turtle Shell
+Elytra
+Totem of Undying
+Glass Bottle
+Bottle o' Enchanting
+
+========== Potions / Splash Potions / Lingering Potions
+Water Bottle
+Mundane Potion
+Long Mundane Potion
+Thick Potion
+Awkward Potion
+Potion of Night Vision
+Potion of Invisibility
+Potion of Leaping
+Potion of Fire Resistance
+Potion of Swiftness
+Potion of Slowness
+Potion of Water Breathing
+Potion of Healing
+Potion of Harming
+Potion of Poison
+Potion of Regeneration
+Potion of Strength
+Potion of Weakness
+Potion of Decay
+Potion of the Turtle Master
+Potion of Slow Falling
+
+Spyglass

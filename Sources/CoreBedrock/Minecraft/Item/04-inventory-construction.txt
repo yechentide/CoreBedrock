@@ -1,0 +1,358 @@
+========== Planks
+Oak Planks
+Spruce Planks
+Birch Planks
+Jungle Planks
+Acacia Planks
+Dark Oka Planks
+Mangrove Planks
+Crimson Planks
+Warped Planks
+
+========== Walls
+Cobblestone Wall
+Mossy Cobblestone Wall
+Granite Wall
+Diorite Wall
+Andesite Wall
+Sandstone Wall
+Red Sandstone Wall
+Stone Brick Wall
+Mossy Stone Brick Wall
+Brick Wall
+Nether Brick Wall
+Red Nether Brick Wall
+End Stone Brick Wall
+Prismarine Wall
+Blackstone Wall
+Polished Blackstone Wall
+Polished Blackstone Brick Wall
+Cobbled Deepslate Wall
+Deepslate Tile Wall
+Polished Deepslate Wall
+Deepslate Brick Wall
+Mud Brick Wall
+
+========== Fences
+Oak Fence
+Spruce Fence
+Birch Fence
+Jungle Fence
+Acacia Fence
+Dark Oka Fence
+Mangrove Fence
+Crimson Fence
+Warped Fence
+Nether Brick Fence
+
+========== Fence Gates
+Oak Fence Gate
+Spruce Fence Gate
+Birch Fence Gate
+Jungle Fence Gate
+Acacia Fence Gate
+Dark Oka Fence Gate
+Mangrove Fence Gate
+Crimson Fence Gate
+Warped Fence Gate
+
+========== Stairs
+Stone Stairs
+Cobblestone Stairs
+Mossy Cobblestone Stairs
+Oak Stairs
+Spruce Stairs
+Birch Stairs
+Jungle Stairs
+Acacia Stairs
+Dark Oka Stairs
+Mangrove Stairs
+Stone Brick Stairs
+Mossy Stone Brick Stairs
+Sandstone Stairs
+Smooth Sandstone Stairs
+Red Sandstone Stairs
+Smooth Red Sandstone Stairs
+Granite Stairs
+Polished Granite Stairs
+Diorite Stairs
+Polished Diorite Stairs
+Andesite Stairs
+Polished Andesite Stairs
+Brick Stairs
+Nether Brick Stairs
+Red Nether Stairs
+End Stone Brick Stairs
+Quartz Stairs
+Smooth Quartz Stairs
+Purpur Stairs
+Prismarine Stairs
+Dark Prismarine Stairs
+Prismarine Brick Stairs
+Crimson Stairs
+Warped Stairs
+Blackstone Stairs
+Polished Blackstone Stairs
+Polished Blackstone Brick Stairs
+Cut Copper Stairs
+Exposed Cut Copper Stairs
+Weathered Cut Copper Stairs
+Oxidized Cut Copper Stairs
+Waxed Cut Copper Stairs
+Waxed Exposed Cut Copper Stairs
+Waxed Weathered Cut Copper Stairs
+Waxed Oxidized Cut Copper Stairs
+Cobbled Deepslate Stairs
+Deepslate Tile Stairs
+Polished Deepslate Stairs
+Deepslate Brick Stairs
+Mud Brick Stairs
+
+========== Doors
+Oak Door
+Spruce Door
+Birch Door
+Jungle Door
+Acacia Door
+Dark Oka Door
+Mangrove Door
+Crimson Door
+Warped Door
+Iron Door
+
+========== Trapdoors
+Oak Trapdoors
+Spruce Trapdoors
+Birch Trapdoors
+Jungle Trapdoors
+Acacia Trapdoors
+Dark Oka Trapdoors
+Mangrove Trapdoors
+Crimson Trapdoors
+Warped Trapdoors
+Iron Trapdoors
+
+Iron Bars
+
+Tinted Glass
+========== Glass / Glass Panes
+Glass
+White Stained Glass
+Light Gray Stained Glass
+Gray Stained Glass
+Black Stained Glass
+Brown Stained Glass
+Red Stained Glass
+Orange Stained Glass
+Yellow Stained Glass
+Lime Stained Glass
+Green Stained Glass
+Cyan Stained Glass
+Light Blue Stained Glass
+Blue Stained Glass
+Purple Stained Glass
+Magenta Stained Glass
+Pink Stained Glass
+
+ladder
+Scaffolding
+
+========== Slabs
+Smooth Stone Slab
+Stone Slab
+Cobblestone Slab
+Mossy Cobblestone Slab
+Oak Slab
+Spruce Slab
+Birch Slab
+Jungle Slab
+Acacia Slab
+Dark Oka Slab
+Mangrove Slab
+Stone Brick Slab
+Mossy Stone Brick Slab
+Sandstone Slab
+Cut Sandstone Slab
+Smooth Sandstone Slab
+Red Sandstone Slab
+Cut Red Sandstone Slab
+Smooth Red Sandstone Slab
+Granite Slab
+Polished Granite Slab
+Diorite Slab
+Polished Diorite Slab
+Andesite Slab
+Polished Andesite Slab
+Brick Slab
+Nether Brick Slab
+Red Nether Slab
+End Stone Brick Slab
+Quartz Slab
+Smooth Quartz Slab
+Purpur Slab
+Prismarine Slab
+Dark Prismarine Slab
+Prismarine Brick Slab
+Crimson Slab
+Warped Slab
+Blackstone Slab
+Polished Blackstone Slab
+Polished Blackstone Brick Slab
+Cut Copper Slab
+Exposed Cut Copper Slab
+Weathered Cut Copper Slab
+Oxidized Cut Copper Slab
+Waxed Cut Copper Slab
+Waxed Exposed Cut Copper Slab
+Waxed Weathered Cut Copper Slab
+Waxed Oxidized Cut Copper Slab
+Cobbled Deepslate Slab
+Deepslate Tile Slab
+Polished Deepslate Slab
+Deepslate Brick Slab
+Mud Brick Slab
+
+Brick Block
+Chiseled Nether Bricks
+Cracked Nether Bricks
+Quartz Bricks
+
+========== Decorative Stone
+Stone Bricks
+Mossy Stone Bricks
+Cracked Stone Bricks
+Chiseled Stone Bricks
+End Stone Bricks
+Prismarine Bricks
+Polished Blackstone Bricks
+Cracked Polished Blackstone Bricks
+Gilded Blackstone
+Chiseled Polished Blackstone
+Deepslate Tiles
+Cracked Deepslate Tiles
+Deepslate Bricks
+Cracked Deepslate Bricks
+Chiseled Deepslate
+
+
+Cobblestone
+Mossy Cobblestone
+Cobbled Deepslate
+Smooth Stone
+
+========== Sandstone
+Sandstone
+Chiseled Sandstone
+Cut Sandstone
+Smooth Sandstone
+Red Sandstone
+Chiseled Red Sandstone
+Cut Red Sandstone
+Smooth Red Sandstone
+
+Block of Coal
+Dried Kelp Block
+Block of Gold
+Block of Iron
+
+========== Copper
+Block of Copper
+Exposed Copper
+Weathered Copper
+Oxidized Copper
+Waxed Block of Copper
+Waxed Exposed Copper
+Waxed Weathered Copper
+Waxed Oxidized Copper
+Cut Copper
+Exposed Cut Copper
+Weathered Cut Copper
+Oxidized Cut Copper
+Waxed Cut Copper
+Waxed Exposed Cut Copper
+Waxed Weathered Cut Copper
+Waxed Oxidized Cut Copper
+
+Block of Emerald
+Block of Diamond
+Block of Lapis Lazuli
+Block of Raw Iron
+Block of Raw Copper
+Block of Raw Gold
+Block of Quartz
+Pillar Quartz Block
+Chiseled Quartz Block
+Smooth Quartz Block
+Prismarine
+Dark Prismarine
+Slime Block
+Honey Block
+Honeycomb Block
+Hay Bale
+Bone Block
+Nether Brick Block
+Red Nether Brick
+Block of Netherite
+Lodestone
+
+========== Wool / Wool Carpet
+White Wool
+Light Gray Wool
+Gray Wool
+Black Wool
+Brown Wool
+Red Wool
+Orange Wool
+Yellow Wool
+Lime Wool
+Green Wool
+Cyan Wool
+Light Blue Wool
+Blue Wool
+Purple Wool
+Magenta Wool
+Pink Wool
+
+========== Concrete / Concrete Powder
+White Concrete
+Light Gray Concrete
+Gray Concrete
+Black Concrete
+Brown Concrete
+Red Concrete
+Orange Concrete
+Yellow Concrete
+Lime Concrete
+Green Concrete
+Cyan Concrete
+Light Blue Concrete
+Blue Concrete
+Purple Concrete
+Magenta Concrete
+Pink Concrete
+
+Clay Block
+
+Terracotta
+========== Terracotta / Glazed Terracotta
+White Terracotta
+Light Gray Terracotta
+Gray Terracotta
+Black Terracotta
+Brown Terracotta
+Red Terracotta
+Orange Terracotta
+Yellow Terracotta
+Lime Terracotta
+Green Terracotta
+Cyan Terracotta
+Light Blue Terracotta
+Blue Terracotta
+Purple Terracotta
+Magenta Terracotta
+Pink Terracotta
+
+Purpur Block
+Purpur Pillar
+Packed Mud
+Mud Bricks
