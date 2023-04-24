@@ -1,6 +1,6 @@
 import Foundation
 
-public enum MCStringKey: String, CaseIterable {
+public enum MCStringKeyType: String, CaseIterable {
     case autonomousEntities             = "AutonomousEntities"
     case biomeData                      = "BiomeData"
     case dimension0                     = "dimension0"
