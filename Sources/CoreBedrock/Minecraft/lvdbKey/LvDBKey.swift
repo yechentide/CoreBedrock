@@ -30,8 +30,8 @@ public struct LvDBKey {
             return LvDBKey(data: data, type: .unknown)
         }
 
-        let x = data[0..<4].int32!
-        let z = data[4..<8].int32!
+//        let x = data[0..<4].int32!
+//        let z = data[4..<8].int32!
         var index = 8
         var dimension = MCDimension.overworld
         if data.count > 10 {

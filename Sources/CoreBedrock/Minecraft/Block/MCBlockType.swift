@@ -2712,11 +2712,11 @@ extension MCBlockType {
     }
 }
 
-//extension MCBlockType {
-//    public var argb: UInt32 {
-//        return 0xFF6F6F6F
-//    }
-//}
+extension MCBlockType {
+    public var argb: UInt32 {
+        return 0xFF6F6F6F
+    }
+}
 
 extension MCBlockType {
     public var isDyeable: Bool {
