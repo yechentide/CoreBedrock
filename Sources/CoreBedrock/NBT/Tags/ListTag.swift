@@ -24,7 +24,7 @@ public final class ListTag: NBT {
     }
     
     /// Creates an unnamed `ListTag` with empty contents and an explicitly specified list type.
-    /// - Parameter listType: The `NBTType` to assign to this list. May be `.unknown` (to infer type from the first element of tags).
+    /// - Parameter listType: The `TagType` to assign to this list. May be `.unknown` (to infer type from the first element of tags).
     convenience public init(listType: TagType) throws {
         try self.init(name: nil, listType: listType)
     }
@@ -40,7 +40,7 @@ public final class ListTag: NBT {
     /// Creates an unnamed `ListTag` with the given contents, and an explicitly specified list type.
     /// - Parameters:
     ///   - tags: Collection of tags to insert into the list. All tags are expected to be of the same type (matching `listType`).
-    ///   - listType: The `NBTType` to assign to this list. May be `.unknown` (to infer type from the first element of tags).
+    ///   - listType: The `TagType` to assign to this list. May be `.unknown` (to infer type from the first element of tags).
     convenience public init(_ tags: [NBT], listType: TagType) throws {
         try self.init(name: nil, tags, listType: listType)
     }
@@ -48,7 +48,7 @@ public final class ListTag: NBT {
     /// Creates an `ListTag` with the given name, empty contents, and an explicitly specified list type.
     /// - Parameters:
     ///   - name: The name to assign to this tag. May be `nil`.
-    ///   - listType: The `NBTType` to assign to this list. May be `.unknown` (to infer type from the first element of tags).
+    ///   - listType: The `TagType` to assign to this list. May be `.unknown` (to infer type from the first element of tags).
     public init(name: String?, listType: TagType) throws {
         super.init()
         self.name = name
@@ -59,7 +59,7 @@ public final class ListTag: NBT {
     /// - Parameters:
     ///   - name: The name to assign to this tag. May be `nil`.
     ///   - tags: Collection of tags to insert into the list. All tags are expected to be of the same type (matching `listType`).
-    ///   - listType: The `NBTType` to assign to this list. May be `.unknown` (to infer type from the first element of tags).
+    ///   - listType: The `TagType` to assign to this list. May be `.unknown` (to infer type from the first element of tags).
     public init(name: String?, _ tags: [NBT], listType: TagType) throws {
         super.init()
         self.name = name
@@ -106,7 +106,7 @@ public final class ListTag: NBT {
             let actualType = _tags[0].tagType
             // We can safely assume that ALL tags have the same TagType as the first tag.
             if actualType != newType {
-                throw CBStreamError.argumentError("Given NBTType (\(newType)) does not match actual element type (\(actualType)).")
+                throw CBStreamError.argumentError("Given TagType (\(newType)) does not match actual element type (\(actualType)).")
             }
         }
         _listType = newType
@@ -115,6 +115,16 @@ public final class ListTag: NBT {
     /// Gets the number of tags contained in the `ListTag`.
     public var count: Int {
         return _tags.count
+    }
+
+    /// Gets or sets a collection containing all tags in this `ListTag`.
+    public var tags: [NBT] {
+        get {
+            return _tags
+        }
+        set {
+            _tags = newValue
+        }
     }
     
     /// Gets or sets the tag at the specified index..

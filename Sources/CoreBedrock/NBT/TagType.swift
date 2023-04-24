@@ -51,3 +51,38 @@ extension TagType: Comparable {
         return lhs.rawValue == rhs.rawValue
     }
 }
+
+extension TagType: CustomStringConvertible {
+    public var description: String {
+        switch self {
+            case .byte:
+                return "TAG_Byte"
+            case .byteArray:
+                return "TAG_Byte_Array"
+            case .compound:
+                return "TAG_Compound"
+            case .double:
+                return "TAG_Double"
+            case .end:
+                return "TAG_End"
+            case .float:
+                return "TAG_Float"
+            case .int:
+                return "TAG_Int"
+            case .intArray:
+                return "TAG_Int_Array"
+            case .list:
+                return "TAG_List"
+            case .long:
+                return "TAG_Long"
+            case .longArray:
+                return "TAG_Long_Array"
+            case .short:
+                return "TAG_Short"
+            case .string:
+                return "TAG_String"
+            default:
+                return "UNKNOWN";
+        }
+    }
+}

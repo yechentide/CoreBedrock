@@ -69,9 +69,14 @@ public final class CompoundTag: NBT {
         return Array(_keys.keys)
     }
     
-    /// Gets a collection containing all tags in this `CompoundTag`.
+    /// Gets or sets a collection containing all tags in this `CompoundTag`.
     public var tags: [NBT] {
-        return Array(_tags)
+        get {
+            return _tags
+        }
+        set {
+            _tags = newValue
+        }
     }
     
     /// Gets the number of tags contained in the `CompoundTag`.

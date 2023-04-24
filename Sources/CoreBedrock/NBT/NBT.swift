@@ -246,37 +246,8 @@ public class NBT {
         }
     }
     
-    static func getCanonicalTagName(_ type: TagType) -> String {
-        switch type {
-            case .byte:
-                return "TAG_Byte"
-            case .byteArray:
-                return "TAG_Byte_Array"
-            case .compound:
-                return "TAG_Compound"
-            case .double:
-                return "TAG_Double"
-            case .end:
-                return "TAG_End"
-            case .float:
-                return "TAG_Float"
-            case .int:
-                return "TAG_Int"
-            case .intArray:
-                return "TAG_Int_Array"
-            case .list:
-                return "TAG_List"
-            case .long:
-                return "TAG_Long"
-            case .longArray:
-                return "TAG_Long_Array"
-            case .short:
-                return "TAG_Short"
-            case .string:
-                return "TAG_String"
-            default:
-                return "UNKNOWN";
-        }
+    public static func getCanonicalTagName(_ type: TagType) -> String {
+        return type.description
     }
 }
 

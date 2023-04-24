@@ -2712,15 +2712,15 @@ extension MCBlockType {
     }
 }
 
-extension MCBlockType {
-    public var argb: UInt32 {
-        return (111, 111, 111)
-    }
-}
+//extension MCBlockType {
+//    public var argb: UInt32 {
+//        return 0xFF6F6F6F
+//    }
+//}
 
 extension MCBlockType {
     public var isDyeable: Bool {
-        if self.description.endWith("_terracotta") {
+        if self.description.hasSuffix("_terracotta") {
             return true
         }
         switch self {
