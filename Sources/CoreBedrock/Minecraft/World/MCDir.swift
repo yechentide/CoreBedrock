@@ -37,17 +37,6 @@ public struct MCDir: Identifiable {
         return false
     }
 
-//    public static var testWorld: MCDir {
-//        return MCDir()
-//    }
-//
-//    private init() {
-//        self.dirURL = URL(fileURLWithPath: "./test")
-//        self.useSecurityScope = false
-//        self.worldName = "test world"
-//        self.worldImage = nil
-//    }
-
     public init(dirURL: URL, useSecurityScope: Bool, worldName: String, worldImage: CGImage?) {
         self.dirURL = dirURL
         self.useSecurityScope = useSecurityScope
