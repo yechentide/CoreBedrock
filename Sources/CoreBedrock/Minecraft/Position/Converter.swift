@@ -8,7 +8,7 @@ public func convertPos<T: SignedInteger>(from pos: T, _ type: PositionConvertTyp
     switch type {
         case .blockToChunk:
             return pos >> 4
-        case . blockToRegion:
+        case .blockToRegion:
             return pos >> 9
         case .chunkToRegion:
             return pos >> 5
