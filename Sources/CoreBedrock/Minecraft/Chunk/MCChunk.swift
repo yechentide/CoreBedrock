@@ -2,8 +2,12 @@ import CoreGraphics
 import LvDBWrapper
 
 public struct MCChunk {
+    public static let length = 16
     public static var viewSize: Int {
-        MCSubChunk.length * MCSubChunk.length
+        length * length
+    }
+    public static func getRange(chunkIndex: Int32) -> ClosedRange<Int> {
+        return Int(chunkIndex)*length ... Int(chunkIndex+1)*length-1
     }
 
     public let x: Int32
@@ -49,9 +53,9 @@ public struct MCChunk {
         assert(array.count == Self.viewSize)
         var flipped = [UInt32](repeating: 0, count: Self.viewSize)
         for i in 0..<Self.viewSize {
-            let x = i / MCSubChunk.length
-            let y = i % MCSubChunk.length
-            let index = y * MCSubChunk.length + x
+            let x = i / Self.length
+            let y = i % Self.length
+            let index = y * Self.length + x
             flipped[index] = array[i]
         }
         return flipped
@@ -63,10 +67,10 @@ public struct MCChunk {
         let image = rgbaPixels.withUnsafeMutableBytes { (ptr) -> CGImage in
             let ctx = CGContext(
                 data: ptr.baseAddress,
-                width: MCSubChunk.length,
-                height: MCSubChunk.length,
+                width: Self.length,
+                height: Self.length,
                 bitsPerComponent: 8,
-                bytesPerRow: 4 * MCSubChunk.length,
+                bytesPerRow: 4 * Self.length,
                 space: CGColorSpace(name: CGColorSpace.sRGB)!,
                 bitmapInfo: CGBitmapInfo.byteOrder32Little.rawValue +
                             CGImageAlphaInfo.premultipliedFirst.rawValue

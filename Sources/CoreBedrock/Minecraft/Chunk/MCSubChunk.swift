@@ -144,13 +144,12 @@ fileprivate func parseStorageLayer(layerData: Data, byteOffset: inout Int) -> St
 }
 
 public struct MCSubChunk {
-    public static let length = 16
-    public static let localPosRange = 0..<length
+    public static let localPosRange = 0..<MCChunk.length
     public static func offset(_ localX: Int, _ localY: Int, _ localZ: Int) -> Int? {
         guard localPosRange ~= localX, localPosRange ~= localY, localPosRange ~= localZ else {
             return nil
         }
-        return (localX * length + localZ) * length + localY
+        return (localX * MCChunk.length + localZ) * MCChunk.length + localY
     }
 
     public let x: Int32
