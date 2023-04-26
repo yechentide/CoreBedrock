@@ -5,7 +5,9 @@ public class MCWorld {
     public let dirURL: URL
     public let db: LvDB
 
-    public var levelData: MCLevelData
+    public var version: Int32
+    public var metaData: Data
+    public var name = "Unknown"
     public private(set) var keysCount: UInt64 = 0
 
     public init(from dirURL: URL) throws {
@@ -15,7 +17,16 @@ public class MCWorld {
 
         self.dirURL = dirURL
         self.db = db
-        self.levelData = try MCLevelData(srcURL: dirURL.appendingPathComponent("level.dat", isDirectory: false))
+
+        let metaDataURL = dirURL.appendingPathComponent("level.dat", isDirectory: false)
+        guard let metaData = try? Data(contentsOf: metaDataURL), metaData.count > 8 else {
+            throw CBLvDBError.failedParseLevelData(metaDataURL)
+        }
+        self.version = metaData[0...3].int32!
+        self.metaData = metaData[8...]
+
+        updateWorldNameFromMetaData()
+
         db.seekToFirst()
         while db.valid() {
             keysCount += 1
@@ -23,18 +34,35 @@ public class MCWorld {
         }
     }
 
-    public var worldName: String {
-        get {
-            levelData.worldName
+    func updateWorldNameFromMetaData() {
+        // 08 09 00 4C 65 76 65 6C 4E 61 6D 65
+        // LevelName
+        let prefix = Data([0x08, 0x09, 0x00, 0x4C, 0x65, 0x76, 0x65, 0x6C, 0x4E, 0x61, 0x6D, 0x65])
+        guard let range = metaData.firstRange(of: prefix) else {
+            return
         }
-        set {
-            guard newValue.count > 0, worldName != newValue else { return }
-            let levelDataURL = dirURL.appendingPathComponent("level.dat", isDirectory: false)
-            let nameFileURL = dirURL.appendingPathComponent("levelname.txt", isDirectory: false)
-            levelData.worldName = newValue
-            levelData.save(to: levelDataURL)
-            try? newValue.write(to: nameFileURL, atomically: true, encoding: .utf8)
+        let start = range.upperBound + 1
+        let reader = CBReader(CBBuffer(metaData[start...]))
+        if let nameTag = try? reader.readAsTag() as? StringTag {
+            name = nameTag.value
+        } else {
+            name = "Unknown"
         }
+    }
+
+    public func saveMetaData() {
+        do {
+            let metaDataURL = dirURL.appendingPathComponent("level.dat", isDirectory: false)
+            let data = version.data + Int32(metaData.count).data + metaData
+            try data.write(to: metaDataURL)
+        } catch {
+            fatalError("Error: can not save meta data")
+        }
+    }
+
+    public func saveWorldNameToFile() {
+        let nameFileURL = dirURL.appendingPathComponent("levelname.txt", isDirectory: false)
+        try? name.write(to: nameFileURL, atomically: true, encoding: .utf8)
     }
 }
 
