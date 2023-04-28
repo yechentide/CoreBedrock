@@ -52,17 +52,26 @@ public class MCWorld {
         }
     }
 
-    public func saveMetaData() {
+    public func updateMetaData(with newTag: CompoundTag) {
         do {
+            let ms = CBBuffer()
+            let writer = try CBWriter(stream: ms, rootTagName: "")
+            for tag in newTag {
+                try writer.writeTag(tag: tag)
+            }
+            try writer.endCompound()
+            try writer.finish()
+            let tagData = Data(ms.toArray())
+            let newMetaData = version.data + Int32(tagData.count).data + tagData
+
             let metaDataURL = dirURL.appendingPathComponent("level.dat", isDirectory: false)
-            let data = version.data + Int32(metaData.count).data + metaData
-            try data.write(to: metaDataURL)
+            try newMetaData.write(to: metaDataURL)
         } catch {
             fatalError("Error: can not save meta data")
         }
     }
 
-    public func saveWorldNameToFile() {
+    public func updateWorldNameFile() {
         let nameFileURL = dirURL.appendingPathComponent("levelname.txt", isDirectory: false)
         try? name.write(to: nameFileURL, atomically: true, encoding: .utf8)
     }
