@@ -7,7 +7,7 @@ public struct MCDir: Identifiable {
     public let dirURL: URL
     private let useSecurityScope: Bool
 
-    public var worldName: String = "Unknown"
+    public var worldName: String = "???"
     public var worldImage: CGImage? = nil
 
     public static func isMCWorldDir(dirURL: URL, useSecurityScope: Bool) throws -> Bool {
@@ -45,6 +45,13 @@ public struct MCDir: Identifiable {
     }
 
     public init(dirURL: URL, useSecurityScope: Bool) throws {
+        guard !useSecurityScope || dirURL.startAccessingSecurityScopedResource() else {
+            throw CBLvDBError.invalidSecurityScope(dirURL)
+        }
+        defer {
+            if useSecurityScope { dirURL.stopAccessingSecurityScopedResource() }
+        }
+
         let isMCDir = try Self.isMCWorldDir(dirURL: dirURL, useSecurityScope: useSecurityScope)
         if !isMCDir {
             throw CBLvDBError.invalidWorldDirectory(dirURL)
@@ -53,15 +60,8 @@ public struct MCDir: Identifiable {
         self.dirURL = dirURL
         self.useSecurityScope = useSecurityScope
 
-        guard !useSecurityScope || dirURL.startAccessingSecurityScopedResource() else {
-            throw CBLvDBError.invalidSecurityScope(dirURL)
-        }
-        defer {
-            if useSecurityScope { dirURL.stopAccessingSecurityScopedResource() }
-        }
-
         let levelNameFileURL = dirURL.appendingPathComponent("levelname.txt", isDirectory: false)
-        if let fileData = try? Data(contentsOf: levelNameFileURL), let name = String(data: fileData, encoding: .utf8) {
+        if let name = try? String(contentsOf: levelNameFileURL, encoding: .utf8) {
             self.worldName = name
         }
 

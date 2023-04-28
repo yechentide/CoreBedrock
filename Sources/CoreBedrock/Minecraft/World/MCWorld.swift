@@ -6,7 +6,7 @@ public class MCWorld {
     public let db: LvDB
 
     public var metaData: Data
-    public var name = "Unknown"
+    public var name = "???"
     public private(set) var keysCount: UInt64 = 0
 
     public var version: Int32 {
@@ -36,9 +36,9 @@ public class MCWorld {
         }
     }
 
-    func readWorldNameFile() {
+    public func readWorldNameFile() {
         let nameFileURL = dirURL.appendingPathComponent("levelname.txt", isDirectory: false)
-        name = (try? String(contentsOf: nameFileURL)) ?? "Unknown"
+        name = (try? String(contentsOf: nameFileURL, encoding: .utf8)) ?? "???"
     }
 
     public func updateMetaData(with newTag: CompoundTag) {
