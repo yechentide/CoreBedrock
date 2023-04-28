@@ -27,7 +27,7 @@ public class MCWorld {
         }
         self.metaData = metaData
 
-        updateWorldNameFromMetaData()
+        readWorldNameFile()
 
         db.seekToFirst()
         while db.valid() {
@@ -36,20 +36,9 @@ public class MCWorld {
         }
     }
 
-    func updateWorldNameFromMetaData() {
-        // 08 09 00 4C 65 76 65 6C 4E 61 6D 65
-        // LevelName
-        let prefix = Data([0x08, 0x09, 0x00, 0x4C, 0x65, 0x76, 0x65, 0x6C, 0x4E, 0x61, 0x6D, 0x65])
-        guard let range = metaData.firstRange(of: prefix) else {
-            return
-        }
-        let start = range.upperBound + 1
-        let reader = CBReader(CBBuffer(metaData[start...]))
-        if let nameTag = try? reader.readAsTag() as? StringTag {
-            name = nameTag.value
-        } else {
-            name = "Unknown"
-        }
+    func readWorldNameFile() {
+        let nameFileURL = dirURL.appendingPathComponent("levelname.txt", isDirectory: false)
+        name = (try? String(contentsOf: nameFileURL)) ?? "Unknown"
     }
 
     public func updateMetaData(with newTag: CompoundTag) {
