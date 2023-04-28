@@ -5,10 +5,13 @@ public class MCWorld {
     public let dirURL: URL
     public let db: LvDB
 
-    public var version: Int32
     public var metaData: Data
     public var name = "Unknown"
     public private(set) var keysCount: UInt64 = 0
+
+    public var version: Int32 {
+        metaData[0..<4].int32!
+    }
 
     public init(from dirURL: URL) throws {
         guard let db = LvDB(dbPath: dirURL.appendingPathComponent("db", isDirectory: true).path) else {
@@ -22,8 +25,7 @@ public class MCWorld {
         guard let metaData = try? Data(contentsOf: metaDataURL), metaData.count > 8 else {
             throw CBLvDBError.failedParseLevelData(metaDataURL)
         }
-        self.version = metaData[0...3].int32!
-        self.metaData = metaData[8...]
+        self.metaData = metaData
 
         updateWorldNameFromMetaData()
 
