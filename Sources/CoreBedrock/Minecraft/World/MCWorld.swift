@@ -62,10 +62,10 @@ public class MCWorld {
             try writer.endCompound()
             try writer.finish()
             let tagData = Data(ms.toArray())
-            let newMetaData = version.data + Int32(tagData.count).data + tagData
+            metaData = version.data + Int32(tagData.count).data + tagData
 
             let metaDataURL = dirURL.appendingPathComponent("level.dat", isDirectory: false)
-            try newMetaData.write(to: metaDataURL)
+            try metaData.write(to: metaDataURL)
         } catch {
             fatalError("Error: can not save meta data")
         }
