@@ -49,7 +49,7 @@ public struct LvDBKey {
         return LvDBKey(data: data, type: .subChunk(dimension, chunkType))
     }
 
-    public static func makeSubChunkKeyPrefix(x: Int32, z: Int32, dimension: MCDimension) -> Data {
+    public static func makeChunkKeyPrefix(x: Int32, z: Int32, dimension: MCDimension) -> Data {
         var data = x.data + z.data
         if dimension != .overworld {
             data += dimension.rawValue.data
@@ -57,8 +57,8 @@ public struct LvDBKey {
         return data
     }
 
-    public static func makeSubChunkKey(x: Int32, z: Int32, dimension: MCDimension, type: MCChunkKeyType, yIndex: Int8? = nil) -> Data {
-        var data = makeSubChunkKeyPrefix(x: x, z: z, dimension: dimension)
+    public static func makeChunkKey(x: Int32, z: Int32, dimension: MCDimension, type: MCChunkKeyType, yIndex: Int8? = nil) -> Data {
+        var data = makeChunkKeyPrefix(x: x, z: z, dimension: dimension)
         data += type.rawValue.data
         if type == .subChunkPrefix, let yIndex = yIndex {
             data += yIndex.data
