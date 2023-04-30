@@ -1,9 +1,7 @@
 import Foundation
 import CoreGraphics
 
-public struct MCDir: Identifiable {
-    public var id = UUID()
-
+public struct MCDir {
     public let dirURL: URL
     private let useSecurityScope: Bool
 
