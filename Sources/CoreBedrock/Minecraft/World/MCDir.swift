@@ -7,6 +7,8 @@ public struct MCDir: Identifiable {
     public let dirURL: URL
     private let useSecurityScope: Bool
 
+    public var dirSize: String? = nil
+    public var lastOpened: Date? = nil
     public var worldName: String = "???"
     public var worldImage: CGImage? = nil
 
@@ -59,6 +61,8 @@ public struct MCDir: Identifiable {
 
         self.dirURL = dirURL
         self.useSecurityScope = useSecurityScope
+        self.dirSize = try dirURL.formattedDirectorySize()
+        self.lastOpened = try dirURL.resourceValues(forKeys: [.contentAccessDateKey]).contentAccessDate
 
         let levelNameFileURL = dirURL.appendingPathComponent("levelname.txt", isDirectory: false)
         if let name = try? String(contentsOf: levelNameFileURL, encoding: .utf8) {
@@ -69,6 +73,17 @@ public struct MCDir: Identifiable {
         if let jpgImage = CGImage.loadJPG(url: imageURL) {
             self.worldImage = jpgImage
         }
+    }
+
+    public var lastOpenedLocalDate: String {
+        guard let date = self.lastOpened else {
+            return "???"
+        }
+        let localDateFormatter = DateFormatter()
+        localDateFormatter.dateStyle = .medium
+        localDateFormatter.timeStyle = .medium
+        localDateFormatter.dateFormat = "yyyy/MM/dd"
+        return localDateFormatter.string(from: date)
     }
 
     public func move(to dstDir: URL, dstUseSecurityScope: Bool = true) throws -> MCDir {
