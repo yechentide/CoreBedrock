@@ -83,11 +83,10 @@ extension LvDB {
     }
 
     private func getChunkKeys(with prefix: Data) -> [Data] {
-        let start = prefix + MCChunkKeyType.keyTypeStartWith.data
         var keyList = [Data]()
-        seek(start)
+        seek(prefix)
         while valid() {
-            guard let key = key(), key[0..<prefix.count] == prefix else {
+            guard let key = key(), key.count >= prefix.count, key[0..<prefix.count] == prefix else {
                 break
             }
             keyList.append(key)
