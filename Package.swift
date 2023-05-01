@@ -13,7 +13,7 @@ let package = Package(
         .library(name: "CoreBedrock", targets: ["CoreBedrock"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/yechentide/LvDBWrapper", exact: "1.1.0"),
+        .package(url: "https://github.com/yechentide/LvDBWrapper", branch: "main"),
         .package(url: "https://github.com/mw99/DataCompression", exact: "3.8.0")
     ],
     targets: [

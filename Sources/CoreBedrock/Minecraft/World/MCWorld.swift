@@ -36,6 +36,10 @@ public class MCWorld {
         }
     }
 
+    public func closeDB() {
+        db.close()
+    }
+
     public func readWorldNameFile() {
         let nameFileURL = dirURL.appendingPathComponent("levelname.txt", isDirectory: false)
         name = (try? String(contentsOf: nameFileURL, encoding: .utf8)) ?? "???"
