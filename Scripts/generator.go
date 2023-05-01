@@ -4,8 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 )
+
+const repoRootDirPath = "/Users/tide/Downloads/BedrockLab/repos/minecraft-data"
 
 type Biome struct {
 	ID            int32  `json:"id"`
@@ -29,18 +32,21 @@ func toCamelCase(str string) string {
 }
 
 func main() {
-	// exportBlockTypeEnum()
+	exportBlockTypeEnum()
 	// exportBiomeTypeEnum()
 }
 
 func exportBlockTypeEnum() {
-	blockJsonData, err := os.ReadFile("/Users/tide/Downloads/minecraft-data/data/bedrock/1.19.1/blocks.json")
+	blockJsonData, err := os.ReadFile(repoRootDirPath + "/data/bedrock/1.19.1/blocks.json")
 	if err != nil {
 		panic(err)
 	}
 
 	var blockList []Block
 	json.Unmarshal(blockJsonData, &blockList)
+	sort.Slice(blockList, func(i, j int) bool {
+		return blockList[i].ID < blockList[j].ID
+	})
 
 	camelCaseNameMaxLength := 0
 	snakeNameMaxLength := 0
@@ -88,7 +94,7 @@ func exportBlockTypeEnum() {
 	for _, block := range blockList {
 		builder.WriteString(fmt.Sprintf(format03, "\"minecraft:"+block.Name+"\":", block.CamelCaseName))
 	}
-	builder.WriteString("            default: self = .unknown\n")
+	builder.WriteString("            default:                                                 self = .unknown\n")
 	builder.WriteString("        }\n")
 	builder.WriteString("    }\n")
 	builder.WriteString("}\n")
@@ -128,7 +134,7 @@ func exportBlockTypeEnum() {
 }
 
 func exportBiomeTypeEnum() {
-	biomeJsonData, err := os.ReadFile("/Users/tide/Downloads/minecraft-data/data/bedrock/1.19.1/biomes.json")
+	biomeJsonData, err := os.ReadFile(repoRootDirPath + "/data/bedrock/1.19.1/biomes.json")
 	if err != nil {
 		panic(err)
 	}
