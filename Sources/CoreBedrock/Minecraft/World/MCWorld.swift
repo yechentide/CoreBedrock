@@ -7,7 +7,7 @@ public class MCWorld {
 
     public var metaData: Data
     public var name = "???"
-    public private(set) var keysCount: UInt64 = 0
+    public var keysCount: UInt64 = 0
 
     public var version: Int32 {
         metaData[0..<4].int32!
