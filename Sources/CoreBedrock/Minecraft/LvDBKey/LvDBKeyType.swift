@@ -1,4 +1,4 @@
-public enum LvDBKeyType {
+public enum LvDBKeyType: Equatable {
     case subChunk(MCDimension, MCChunkKeyType)
     case string(MCStringKeyType)
     case player
