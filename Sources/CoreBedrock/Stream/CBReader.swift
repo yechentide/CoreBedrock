@@ -140,13 +140,13 @@ public class CBReader {
                 }
                 // Read next tag, check if we've hit the end
                 tagStartOffset = _reader.baseStream.position - _streamStartOffset
-                
+
                 let oldState = _state
                 // Set state to error in case reader.ReadTagType throws
                 _state = .error
                 tagType = try _reader.readTagType()
                 _state = oldState
-                
+
                 if tagType == .end {
                     tagName = nil
                     tagsRead += 1
@@ -312,6 +312,9 @@ public class CBReader {
     public func resetState() {
         _state = .atStreamBeginning
     }
+
+    /// tmp property to avoid weak `parent` references becoming nil due to instance being released
+    var parentMap: [String:NBT] = [:]
     
     /// Reads the entirety of the current tag, including any descendants,
     /// and constructs an NbtTag object of the appropriate type.
@@ -367,12 +370,14 @@ public class CBReader {
             if tagType == .compound {
                 thisTag = CompoundTag(name: tagName)
                 try addToParent(child: thisTag, parent: parent)
+                parentMap[parent.path] = parent
                 parent = thisTag
                 parentDepth = depth
             }
             else if tagType == .list {
                 thisTag = try ListTag(name: tagName, listType: listType)
                 try addToParent(child: thisTag, parent: parent)
+                parentMap[parent.path] = parent
                 parent = thisTag
                 parentDepth = depth
             }

@@ -6,7 +6,7 @@ public class NBT {
     public static var defaultIndentString: String = "  "
     
     /// Parent compound tag, either ListTag or CompoundTag, if any. May be `nil` for detached tags.
-    public internal(set) var parent: NBT?
+    public internal(set) weak var parent: NBT?
     
     /// The type of this tag.
     public var tagType: TagType {
