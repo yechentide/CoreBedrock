@@ -3,11 +3,10 @@ import LvDBWrapper
 extension LvDB {
     public func getStringKey(type: MCStringKeyType) -> Data? {
         let keyData = type.rawValue.data(using: .utf8)!
-        seek(keyData)
-        if valid() {
-            return keyData
+        guard contains(keyData) else {
+            return nil
         }
-        return nil
+        return keyData
     }
 
     public func getAllStringKeys(exclude: [MCStringKeyType] = []) -> [Data] {
@@ -16,87 +15,86 @@ extension LvDB {
 
         for strKeyType in MCStringKeyType.allCases {
             guard !excludeTypes.contains(strKeyType),
-                  let keyData = strKeyType.rawValue.data(using: .utf8)
+                  let keyData = strKeyType.rawValue.data(using: .utf8),
+                  contains(keyData)
             else {
                 continue
-            }
-            seek(keyData)
-            if valid() {
-                keys.append(keyData)
-            }
-        }
-        return keys
-    }
-
-    public func getPrefixedKeys(with prefix: String) -> [Data] {
-        guard let prefixData = prefix.data(using: .utf8) else {
-            return []
-        }
-        var keys = [Data]()
-        seek(prefixData)
-        while valid() {
-            defer {
-                next()
-            }
-            guard let keyData = key() else {
-                continue
-            }
-            guard keyData.count >= prefix.count,
-                  keyData[0..<prefix.count] == prefixData
-            else {
-                break
             }
             keys.append(keyData)
         }
         return keys
     }
 
-    public func getChunkKeys(x: Int32, z: Int32, dimension: MCDimension, includeDigp: Bool = false, includeActor: Bool = false) -> [Data] {
-        var keys = [Data]()
+    public func getPointerAndActorKeys(x: Int32, z: Int32, dimension: MCDimension) -> [Data] {
         let keyPrefix = LvDBKey.makeChunkKeyPrefix(x: x, z: z, dimension: dimension)
-        keys = getChunkKeys(with: keyPrefix)
-
-        guard includeDigp || includeActor else {
-            return keys
-        }
+        var keys = [Data]()
 
         let digpKey = "digp".data(using: .utf8)! + keyPrefix
-        guard let digpData = get(digpKey), digpData.count > 0, digpData.count % 8 == 0 else {
+        guard contains(digpKey),
+              let digpData = get(digpKey),
+              digpData.count > 0,
+              digpData.count % 8 == 0
+        else {
             return keys
         }
-        if includeDigp {
-            keys.append(digpKey)
-        }
-
-        guard includeActor else {
-            return keys
-        }
+        keys.append(digpKey)
 
         for i in 0..<digpData.count/8 {
             let actorKey = "actorprefix".data(using: .utf8)! + digpData[i*8...i*8+7]
-            seek(actorKey)
-            if valid() {
-                keys.append(actorKey)
+            guard contains(actorKey) else {
+                continue
+            }
+            keys.append(actorKey)
+        }
+        return keys
+    }
+
+    public func getChunkKeys(x: Int32, z: Int32, dimension: MCDimension) -> [Data] {
+        let keyPrefix = LvDBKey.makeChunkKeyPrefix(x: x, z: z, dimension: dimension)
+        var keys = [Data]()
+
+        (Int8(-4)...Int8(20)).forEach { yIndex in
+            let key = keyPrefix + MCChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
+            if contains(key) {
+                keys.append(key)
+            }
+        }
+
+        MCChunkKeyType.allCases.forEach { type in
+            guard type != .subChunkPrefix else {
+                return
+            }
+            let key = keyPrefix + type.rawValue.data
+            if contains(key) {
+                keys.append(key)
+            }
+        }
+
+        return keys
+    }
+
+    public func getPrefixedKeys(with prefix: Data) -> [Data] {
+        var keys = [Data]()
+        seek(prefix)
+        while valid() {
+            defer {
+                next()
+            }
+            guard let keyData = key(),
+                  keyData.count >= prefix.count,
+                  keyData[0..<prefix.count] == prefix
+            else {
+                break
+            }
+            if contains(keyData) {
+                keys.append(keyData)
             }
         }
         return keys
     }
 
-    private func getChunkKeys(with prefix: Data) -> [Data] {
-        var keyList = [Data]()
-        seek(prefix)
-        while valid() {
-            guard let key = key(), key.count >= prefix.count, key[0..<prefix.count] == prefix else {
-                break
-            }
-            keyList.append(key)
-            next()
-        }
-        return keyList
-    }
-
     private func removeSubChunkKeys(with prefix: Data) {
-        getChunkKeys(with: prefix).forEach { key in
+        getPrefixedKeys(with: prefix).forEach { key in
             let _ = remove(key)
         }
     }
