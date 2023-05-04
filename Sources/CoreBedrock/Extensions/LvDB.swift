@@ -132,6 +132,7 @@ extension LvDB {
             let prefix = LvDBKey.makeChunkKeyPrefix(x: $0.x, z: $0.z, dimension: dimension)
             removeChunkKeys(keyPrefix: prefix, completion: completion)
             removeActorAndDigpKeys(keyPrefix: prefix, completion: completion)
+            completion?(Data(), true)
         }
     }
 }
