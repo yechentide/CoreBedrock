@@ -92,26 +92,36 @@ extension LvDB {
         }
         return keys
     }
+}
 
-    private func removeSubChunkKeys(with prefix: Data) {
-        getPrefixedKeys(with: prefix).forEach { key in
-            let _ = remove(key)
+extension LvDB {
+    public func removeChunkKeys(keyPrefix: Data, completion: ((Data, Bool) -> Void)? = nil) {
+        (Int8(-4)...Int8(20)).forEach { yIndex in
+            let key = keyPrefix + MCChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
+            guard contains(key) else {
+                return
+            }
+            let result = remove(key)
+            completion?(key, result)
         }
     }
 
-    private func removeActorAndDigpKeys(with prefix: Data) {
-        let digpKey = "digp".data(using: .utf8)! + prefix
+    public func removeActorAndDigpKeys(keyPrefix: Data, completion: ((Data, Bool) -> Void)? = nil) {
+        let digpKey = "digp".data(using: .utf8)! + keyPrefix
+
         guard let digpData = get(digpKey), digpData.count > 0, digpData.count % 8 == 0 else {
             return
         }
         for i in 0..<digpData.count/8 {
             let actorprefixKey = "actorprefix".data(using: .utf8)! + digpData[i*8...i*8+7]
-            remove(actorprefixKey)
+            let result = remove(actorprefixKey)
+            completion?(actorprefixKey, result)
         }
-        remove(digpKey)
+        let result = remove(digpKey)
+        completion?(digpKey, result)
     }
 
-    public func removeChunks(xRange: ClosedRange<Int32>, zRange: ClosedRange<Int32>, dimension: MCDimension) {
+    public func removeChunks(xRange: ClosedRange<Int32>, zRange: ClosedRange<Int32>, dimension: MCDimension, completion: ((Data, Bool) -> Void)? = nil) {
         var list = [Pos2Di32]()
         for x in xRange {
             for z in zRange {
@@ -120,8 +130,8 @@ extension LvDB {
         }
         list.forEach {
             let prefix = LvDBKey.makeChunkKeyPrefix(x: $0.x, z: $0.z, dimension: dimension)
-            removeSubChunkKeys(with: prefix)
-            removeActorAndDigpKeys(with: prefix)
+            removeChunkKeys(keyPrefix: prefix, completion: completion)
+            removeActorAndDigpKeys(keyPrefix: prefix, completion: completion)
         }
     }
 }
