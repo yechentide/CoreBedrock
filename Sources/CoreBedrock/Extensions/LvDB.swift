@@ -104,6 +104,17 @@ extension LvDB {
             let result = remove(key)
             completion?(key, result)
         }
+        MCChunkKeyType.allCases.forEach { chunkKeyType in
+            guard chunkKeyType != .subChunkPrefix else {
+                return
+            }
+            let key = keyPrefix + chunkKeyType.rawValue.data
+            guard contains(key) else {
+                return
+            }
+            let result = remove(key)
+            completion?(key, result)
+        }
     }
 
     public func removeActorAndDigpKeys(keyPrefix: Data, completion: ((Data, Bool) -> Void)? = nil) {
