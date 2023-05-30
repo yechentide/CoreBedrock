@@ -11,6 +11,13 @@ public enum LvDBKeyType: Equatable {
 
     public var isNBT: Bool {
         switch self {
+            case .subChunk(_, let subChunkType):
+                switch subChunkType {
+                    case .blockEntity, .pendingTicks, .randomTicks, .biomeState:
+                        return true
+                    default:
+                        return false
+                }
             case .string(let strType):
                 switch strType {
                     case .localPlayer, .autonomousEntities, .biomeData,

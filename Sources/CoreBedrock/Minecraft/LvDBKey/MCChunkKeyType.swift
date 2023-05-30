@@ -8,10 +8,8 @@ public enum MCChunkKeyType: UInt8, CaseIterable {
     
     case data3D                 = 0x2B
     case chunkVersion           = 0x2C      // This was moved to the front as needed for the extended heights feature. Old chunks will not have this data.
-    case data2D                 = 0x2D      // Biomes and elevation
     case subChunkPrefix         = 0x2F      // Terrain for a 16×16×16 subchunk
     case blockEntity            = 0x31      // Block entity data (little-endian NBT)
-    case entity                 = 0x32      // Entity data (little-endian NBT)
     case pendingTicks           = 0x33      // Pending tick data (little-endian NBT)
     case biomeState             = 0x35
     case finalizedState         = 0x36      // A 32-bit little endian integer
@@ -26,6 +24,8 @@ public enum MCChunkKeyType: UInt8, CaseIterable {
     case actorDigestVersion     = 0x41
     
     // legacy key types
+    case data2D                 = 0x2D              // Biomes and elevation
+    case entity                 = 0x32              // Entity data (little-endian NBT)
     case legacyData2D           = 0x2E
     case legacyTerrain          = 0x30              // Terrain for an entire chunk
     case legacyBlockExtraData   = 0x34
