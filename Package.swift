@@ -17,11 +17,7 @@ let package = Package(
         .package(url: "https://github.com/mw99/DataCompression", exact: "3.8.0")
     ],
     targets: [
-        .target(name: "CoreBedrock",
-                dependencies: ["LvDBWrapper", "DataCompression"],
-                resources: [
-                    .process("./Extensions/endian.md")
-                ]),
+        .target(name: "CoreBedrock", dependencies: ["LvDBWrapper", "DataCompression"]),
         .testTarget(name: "CoreBedrockTests",
                     dependencies: ["CoreBedrock"],
                     resources: [
