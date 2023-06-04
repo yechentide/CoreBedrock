@@ -13,11 +13,18 @@ let package = Package(
         .library(name: "CoreBedrock", targets: ["CoreBedrock"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/apple/swift-algorithms", from: "1.0.0"),
         .package(url: "https://github.com/yechentide/LvDBWrapper", branch: "main"),
-        .package(url: "https://github.com/mw99/DataCompression", exact: "3.8.0")
+        .package(url: "https://github.com/mw99/DataCompression", exact: "3.8.0"),
     ],
     targets: [
-        .target(name: "CoreBedrock", dependencies: ["LvDBWrapper", "DataCompression"]),
+        .target(name: "CoreBedrock",
+                dependencies: [
+                    .product(name: "Algorithms", package: "swift-algorithms"),
+                    "LvDBWrapper",
+                    "DataCompression",
+                ]
+        ),
         .testTarget(name: "CoreBedrockTests",
                     dependencies: ["CoreBedrock"],
                     resources: [
