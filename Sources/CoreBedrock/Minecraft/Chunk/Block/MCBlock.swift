@@ -1,27 +1,28 @@
 public class MCBlock {
-    public let name: String
+    public let type: MCBlockType
     public let states: CompoundTag
     public let version: Int32
 
-    public init(name: String, states: CompoundTag, version: Int32) {
-        self.name = name
+    public init(type: MCBlockType, states: CompoundTag, version: Int32) {
+        self.type = type
         self.states = states
         self.version = version
     }
 
     public static func decode(_ tag: CompoundTag) -> MCBlock? {
-        let nameTag = tag["name"] as? StringTag
-        let statesTag = tag["states"] as? CompoundTag
-        let versionTag = tag["version"] as? IntTag
-        guard let name = nameTag, let states = statesTag, let version = versionTag else {
+        guard let nameTag = tag["name"] as? StringTag,
+              let statesTag = tag["states"] as? CompoundTag,
+              let versionTag = tag["version"] as? IntTag
+        else {
             return nil
         }
-        return MCBlock(name: name.value, states: states, version: version.value)
+        let blockType = MCBlockType(stringLiteral: nameTag.value)
+        return MCBlock(type: blockType, states: statesTag, version: versionTag.value)
     }
 
     public func encode() -> CompoundTag {
         let rootTag = CompoundTag()
-        let nameTag = StringTag(name: "name", name)
+        let nameTag = StringTag(name: "name", type.description)
         let versionTag = IntTag(name: "version", version)
         try! rootTag.append(nameTag)
         try! rootTag.append(states)
