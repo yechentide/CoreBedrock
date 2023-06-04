@@ -147,3 +147,46 @@ extension LvDB {
         }
     }
 }
+
+extension LvDB {
+    public func load_v9(x: Int32, z: Int32, dimension: MCDimension) -> MCChunk? {
+        let keyPrefix = LvDBKey.makeChunkKeyPrefix(x: x, z: z, dimension: dimension)
+
+        var biomeLayers = [MCBiomeLayer]()
+        let data3DKey = keyPrefix + MCChunkKeyType.data3D.rawValue.data
+        if contains(data3DKey), let data3D = get(data3DKey), data3D.count > 512 {
+//            let heightMap = data3D[0..<512]
+            if let layers = try? BiomeDecoder().decode(data: data3D, offset: 512) {
+                biomeLayers = layers
+            }
+        }
+
+        var subChunkKeys = [Data]()
+        (Int8(-4)...Int8(20)).forEach { yIndex in
+            let key = keyPrefix + MCChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
+            if contains(key) {
+                subChunkKeys.append(key)
+            }
+        }
+        guard biomeLayers.count == subChunkKeys.count else { return nil }
+
+        var subChunks = [MCSubChunk]()
+        for i in 0..<subChunkKeys.count {
+            guard let subChunkData = get(subChunkKeys[i]), subChunkData.count > 4 else { return nil }
+            let storageVersion = subChunkData[0]
+            assert(storageVersion == 9)
+
+            let storageLayerCount = Int(subChunkData[1])
+            let yIndex = subChunkData[2].data.int8
+
+            if let layers = try? BlockDecoder().decode(data: subChunkData, offset: 3, layerCount: storageLayerCount) {
+                let subChunk = MCSubChunk(x: x, yIndex: yIndex, z: z, version: storageVersion, biomeLayer: biomeLayers[i], blockLayers: layers)
+                subChunks.append(subChunk)
+            } else {
+                return nil
+            }
+        }
+
+        return MCChunk(x: x, z: z, dimension: dimension, subChunks: subChunks)
+    }
+}

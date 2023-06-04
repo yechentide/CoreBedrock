@@ -854,3 +854,42 @@ public class CBReader {
         _valueCache = nil
     }
 }
+
+extension CBReader {
+    static let wordBitSize = 32
+
+    var unreadCount: Int {
+        return _reader.unreadCount
+    }
+
+    func readUInt8() throws -> UInt8 {
+        return try _reader.readByte()
+    }
+
+    func readUInt32() throws -> UInt32 {
+        return try _reader.readUInt32()
+    }
+
+    func readWords(bitsPerBlock: Int) throws -> [UInt16]? {
+        let blocksPerWord = Self.wordBitSize / bitsPerBlock
+        let totalWords = Int(ceil(   Double(MCSubChunk.totalBlockCount) / Double(blocksPerWord)   ))
+        let totalBytes = totalWords * 4
+        guard _reader.unreadCount >= totalBytes else {
+            return nil
+        }
+
+        let mask: UInt32 = ~(UInt32(0xFFFF) << bitsPerBlock)
+        var elements = [UInt16]()
+
+        for _ in 0 ..< totalWords {
+            let word = try _reader.readUInt32()
+            for i in 0 ..< blocksPerWord {
+                guard elements.count < MCSubChunk.totalBlockCount else { break }
+                let element: UInt32 = mask & (word >> (i * bitsPerBlock))
+                elements.append(UInt16(element))
+            }
+        }
+
+        return elements.count == MCSubChunk.totalBlockCount ? elements : nil
+    }
+}

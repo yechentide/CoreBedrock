@@ -21,6 +21,10 @@ final class CBBinaryReader {
     
     /// Exposes access to the underlying stream of the `CBBinaryReader`.
     var baseStream: CBBuffer { return _buffer }
+
+    var unreadCount: Int {
+        return _buffer.length - _buffer.position
+    }
     
     /// Converts a byte array ([UInt8]) to its number equivalent. This is intended
     /// to be used with FixedWidthIntegers, Floats, and Doubles.
@@ -125,6 +129,14 @@ extension CBBinaryReader {
         }
         return fromByteArray(bytes, Int16.self)
     }
+
+    func readUInt16() throws -> UInt16 {
+        var bytes = try readBytes(2)
+        if _swapNeeded {
+            bytes.reverse()
+        }
+        return fromByteArray(bytes, UInt16.self)
+    }
     
     /// Reads a 4-byte signed integer from the current stream and advances the current position of the stream by four bytes.
     /// - Throws: An `endOfStream` error if the end of the stream is reached; a `streamIsClosed` error if the stream is closed.
@@ -135,6 +147,14 @@ extension CBBinaryReader {
             bytes.reverse()
         }
         return fromByteArray(bytes, Int32.self)
+    }
+
+    func readUInt32() throws -> UInt32 {
+        var bytes = try readBytes(4)
+        if _swapNeeded {
+            bytes.reverse()
+        }
+        return fromByteArray(bytes, UInt32.self)
     }
     
     /// Reads an 8-byte signed integer from the current stream and advances the current position of the stream by eight bytes.
