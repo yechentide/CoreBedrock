@@ -272,3 +272,10 @@ extension MCBiomeType: ExpressibleByStringLiteral {
         }
     }
 }
+
+extension MCBiomeType {
+    public static func fromUInt32(_ value: UInt32) -> MCBiomeType? {
+        let uint16 = UInt16(value)
+        return MCBiomeType(rawValue: uint16)
+    }
+}
