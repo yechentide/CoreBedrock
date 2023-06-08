@@ -1,3 +1,4 @@
+import Foundation
 /**
  Minecraft blocks
 
@@ -2712,22 +2713,591 @@ extension MCBlockType {
     }
 }
 
+//extension MCBlockType {
+//    public var isDyeable: Bool {
+//        if self.description.hasSuffix("_terracotta") {
+//            return true
+//        }
+//        switch self {
+//            case .bed, .glass, .shulkerBox, .wool, .carpet, .concrete, .concretePowder:
+//                return true
+//            default:
+//                return false
+//        }
+//    }
+//}
+
 extension MCBlockType {
-    public var argb: UInt32 {
-        return 0xFF6F6F6F
+    public enum DefaultColor {
+        case oakPlanks
+        case sprucePlanks
+        case birchPlanks
+        case junglePlanks
+        case acaciaPlanks
+        case darkOakPlanks
+        case mangrovePlanks
+        case crimsonPlanks
+        case warpedPlanks
+
+        case normalStone
+        case deepslate
+        case blackStone
+        case mossyStone
+        case polishedBlackStone
+
+        case andesite
+        case diorite
+        case granite
+
+        case redBricks
+        case sand
+        case redSand
+        case quartz
+        case prismarineNormal
+        case prismarineDark
+
+        case netherBricks
+        case redNetherBricks
+        case endPurple
+        case endBricks
+
+        case furnace
+        case chest
+
+        var argb: UInt32 {
+            switch self {
+                case .oakPlanks:                return 0xFF7F5530    // (127, 085, 048)
+                case .sprucePlanks:             return 0xFF7A5933    // (122, 089, 051)
+                case .birchPlanks:              return 0xFFF4E6A1    // (244, 230, 161)
+                case .junglePlanks:             return 0xFF956C4C    // (149, 108, 076)
+                case .acaciaPlanks:             return 0xFFB86237    // (184, 098, 055)
+                case .darkOakPlanks:            return 0xFF654B32    // (101, 075, 050)
+                case .mangrovePlanks:           return 0xFF894C39    // (137, 076, 057)
+                case .crimsonPlanks:            return 0xFF7D3955    // (125, 057, 085)
+                case .warpedPlanks:             return 0xFF388180    // (056, 129, 128)
+
+                case .normalStone:              return 0xFF6F6F6F    // (111, 111, 111)
+                case .deepslate:                return 0xFF686868    // (104, 104, 104)
+                case .blackStone:               return 0xFF302B35    // (048, 043, 053)
+                case .mossyStone:               return 0xFF738352    // (115, 131, 082)
+                case .polishedBlackStone:       return 0xFF3B3846    // (059, 056, 070)
+
+                case .andesite:                 return 0xFFA5A897    // (165, 168, 151)
+                case .diorite:                  return 0xFFFCF9F2    // (252, 249, 242)
+                case .granite:                  return 0xFF956C4C    // (149, 108, 076)
+
+                case .redBricks:                return 0xFFAF624C    // (175, 098, 076)
+                case .sand:                     return 0xFFC9C09A    // (201, 192, 154)
+                case .redSand:                  return 0xFFB86621    // (184, 102, 033)
+                case .quartz:                   return 0xFFEBE3DB    // (235, 227, 219)
+                case .prismarineNormal:         return 0xFF4B7D97    // (075, 125, 151)
+                case .prismarineDark:           return 0xFF376150    // (055, 097, 080)
+
+                case .netherBricks:             return 0xFF211114    // (033, 017, 020)
+                case .redNetherBricks:          return 0xFF590000    // (089, 000, 000)
+                case .endPurple:                return 0xFFAA7AAA    // (170, 122, 170)
+                case .endBricks:                return 0xFFE9F8AD    // (233, 248, 173)
+
+                case .furnace:                  return 0xFF838383    // (131, 131, 131)
+                case .chest:                    return 0xFF8D7647    // (141, 118, 071)
+            }
+        }
+    }
+
+    public var argb: UInt32? {
+        switch self {
+            /* ========== ========== ========== Nature ========== ========== ========== */
+            case .netherWartBlock:                   return 0xFF7A0100    // (122, 001, 000)
+            case .warpedWartBlock:                   return 0xFF119983    // (017, 153, 131)
+            case .shroomlight:                       return 0xFFFBAA6C    // (251, 170, 108)
+            case .crimsonNylium:                     return 0xFF921818    // (146, 024, 024)
+            case .warpedNylium:                      return 0xFF167D84    // (022, 125, 132)
+            case .basalt:                            return 0xFF5B5B5B    // (091, 091, 091)
+            case .polishedBasalt:                    return 0xFF737373    // (115, 115, 115)
+            case .smoothBasalt:                      return 0xFF5B5B5B    // (091, 091, 091)
+            case .soulSoil:                          return 0xFF5A4437    // (090, 068, 055)
+            // case .dirt:                              return (149, 108, 76)
+            // [dirt_type] 0: dirt, 1: coarse dirt
+            case .farmland:                          return 0xFF956C4C    // (149, 108, 076)
+            case .grass:                             return 0xFF82943A    // (130, 148, 058)
+            case .grassPath:                         return 0xFFCCCCCC    // (204, 204, 204)
+            case .podzol:                            return 0xFF694317    // (105, 067, 023)
+            case .mycelium:                          return 0xFF726061    // (114, 096, 097)
+            case .mud:                               return 0xFF39373C    // (057, 055, 060)
+
+            // case .stone:                             return nil
+            // [stone_type] 0: stone, 1: granite, 2: polished granite, 3: diorite, 4: polished diorite, 5: andesite: 6: polished andesite
+
+            case .coalOre:                           return Self.DefaultColor.normalStone.argb
+            case .copperOre:                         return Self.DefaultColor.normalStone.argb
+            case .ironOre:                           return Self.DefaultColor.normalStone.argb
+            case .goldOre:                           return Self.DefaultColor.normalStone.argb
+            case .lapisOre:                          return Self.DefaultColor.normalStone.argb
+            case .redstoneOre:                       return Self.DefaultColor.normalStone.argb
+            case .litRedstoneOre:                    return Self.DefaultColor.normalStone.argb
+            case .emeraldOre:                        return Self.DefaultColor.normalStone.argb
+            case .diamondOre:                        return Self.DefaultColor.normalStone.argb
+            case .netherGoldOre:                     return 0xFFF5AD2A    // (245, 173, 042)
+            case .quartzOre:                         return 0xFFAA7069    // (170, 112, 105)
+            case .ancientDebris:                     return 0xFF7D5F58    // (125, 095, 088)
+            case .deepslateCoalOre:                  return Self.DefaultColor.deepslate.argb
+            case .deepslateCopperOre:                return Self.DefaultColor.deepslate.argb
+            case .deepslateIronOre:                  return Self.DefaultColor.deepslate.argb
+            case .deepslateGoldOre:                  return Self.DefaultColor.deepslate.argb
+            case .deepslateLapisOre:                 return Self.DefaultColor.deepslate.argb
+            case .deepslateRedstoneOre:              return Self.DefaultColor.deepslate.argb
+            case .litDeepslateRedstoneOre:           return Self.DefaultColor.deepslate.argb
+            case .deepslateEmeraldOre:               return Self.DefaultColor.deepslate.argb
+            case .deepslateDiamondOre:               return Self.DefaultColor.deepslate.argb
+
+            case .gravel:                            return Self.DefaultColor.normalStone.argb
+
+            case .blackstone:                        return Self.DefaultColor.blackStone.argb
+            case .deepslate:                         return Self.DefaultColor.deepslate.argb
+            case .polishedBlackstone:                return Self.DefaultColor.polishedBlackStone.argb
+            case .polishedDeepslate:                 return Self.DefaultColor.deepslate.argb
+
+            // case .sand:                              return (201,192,154)
+            // [sand_type] 0: sand, 1: red sand
+            case .cactus:                            return 0xFF5A8A2A    // (090, 138, 042)
+
+            // case .log:                               return nil
+            // [old_log_type] 0: oak, 1: spruce, 2: birch, 3: jungle
+            // case .log2:                              return nil
+            // [new_log_type] 0: acacia, 1: dark oak
+            case .mangroveLog:                       return 0xFF59472B    // (089, 071, 043)
+            case .crimsonStem:                       return Self.DefaultColor.crimsonPlanks.argb
+            case .warpedStem:                        return Self.DefaultColor.warpedPlanks.argb
+            case .strippedOakLog:                    return 0xFF947340    // (148, 115, 064)
+            case .strippedSpruceLog:                 return 0xFF785A36    // (120, 090, 054)
+            case .strippedBirchLog:                  return 0xFFCDBA7E    // (205, 186, 126)
+            case .strippedJungleLog:                 return 0xFFAD7E52    // (173, 126, 082)
+            case .strippedAcaciaLog:                 return 0xFFB86237    // (184, 098, 055)
+            case .strippedDarkOakLog:                return 0xFF6B5333    // (107, 083, 051)
+            case .strippedMangroveLog:               return Self.DefaultColor.mangrovePlanks.argb
+            case .strippedCrimsonStem:               return 0xFF943D61    // (148, 061, 097)
+            case .strippedWarpedStem:                return 0xFF439F9D    // (067, 159, 157)
+
+            // case .wood:                              return nil
+            // [wood_type] 0: oak, 1: spruce, 2: birch, 3: jungle, 4: acacia, 5: dark oak
+            // [stripped_bit] 0: false, 1: true
+            case .mangroveWood:                      return 0xFF59472B    // (089, 071, 043)
+            case .crimsonHyphae:                     return 0xFF941515    // (148, 021, 021)
+            case .warpedHyphae:                      return 0xFF16605A    // (022, 096, 090)
+            case .strippedMangroveWood:              return Self.DefaultColor.mangrovePlanks.argb
+            case .strippedCrimsonHyphae:             return 0xFF943D61    // (148, 061, 097)
+            case .strippedWarpedHyphae:              return 0xFF439F9D    // (067, 159, 157)
+
+            // case .leaves:                            return nil
+            // [old_leaf_type] 0: oak, 1: spruce, 2: birch, 3: jungle
+            // case .leaves2:                           return nil
+            // [new_leaf_type] 0: acacia, 1: dark oak
+            case .mangroveLeaves:                    return 0xFF3B4910    // (059, 073, 016)
+            case .azaleaLeaves:                      return 0xFF6F902C    // (111, 144, 044)
+            case .azaleaLeavesFlowered:              return 0xFFB861CC    // (184, 097, 204)
+
+            case .beeNest:                           return 0xFFC68443    // (198, 132, 067)
+            case .melonBlock:                        return 0xFF7DCA19    // (125, 202, 025)
+            case .pumpkin:                           return 0xFFD57D32    // (213, 125, 050)
+            case .carvedPumpkin:                     return 0xFFD57D32    // (213, 125, 050)
+            case .litPumpkin:                        return 0xFFD57D32    // (213, 125, 050)
+            case .honeycombBlock:                    return 0xFFE58A08    // (229, 138, 008)
+
+            case .snow:                              return 0xFFE5E5E5    // (229, 229, 229)
+            case .ice:                               return 0xFF9E9EFC    // (158, 158, 252)
+            case .packedIce:                         return 0xFF9E9EFC    // (158, 158, 252)
+            case .blueIce:                           return 0xFF6697F6    // (102, 151, 246)
+            case .snowLayer:                         return 0xFFFCFCFC    // (252, 252, 252)
+            case .dripstoneBlock:                    return 0xFF8C7461    // (140, 116, 097)
+
+            case .mossCarpet:                        return 0xFF6F902C    // (111, 144, 044)
+            case .mossBlock:                         return 0xFF6F902C    // (111, 144, 044)
+            case .dirtWithRoots:                     return 0xFF956C4C    // (149, 108, 076)
+            case .mangroveRoots:                     return 0xFF59472B    // (089, 071, 043)
+            case .muddyMangroveRoots:                return 0xFF39373C    // (057, 055, 060)
+            case .azalea:                            return 0xFF6F902C    // (111, 144, 044)
+            case .floweringAzalea:                   return 0xFFB861CC    // (184, 097, 204)
+
+            case .amethystBlock:                     return 0xFF9168AE    // (145, 104, 174)
+            case .buddingAmethyst:                   return 0xFF9168AE    // (145, 104, 174)
+            case .tuff:                              return Self.DefaultColor.normalStone.argb
+            case .calcite:                           return 0xFFFCF9F2    // (252, 249, 242)
+
+            case .brownMushroomBlock:                return 0xFF957150    // (149, 113, 080)
+            case .redMushroomBlock:                  return 0xFFC72A29    // (199, 042, 041)
+
+            case .mobSpawner:                        return 0xFF182B38    // (024, 043, 056)
+            case .monsterEgg:                        return Self.DefaultColor.normalStone.argb
+            case .infestedDeepslate:                 return Self.DefaultColor.deepslate.argb
+            case .dragonEgg:                         return 0xFF090909    // (009, 009, 009)
+
+            case .ochreFroglight:                    return 0xFFFCF9F2    // (252, 249, 242)
+            case .verdantFroglight:                  return 0xFFFCF9F2    // (252, 249, 242)
+            case .pearlescentFroglight:              return 0xFFFCF9F2    // (252, 249, 242)
+
+            case .obsidian:                          return 0xFF1D0E34    // (029, 014, 052)
+            case .cryingObsidian:                    return 0xFF2A0177    // (042, 001, 119)
+            case .bedrock:                           return Self.DefaultColor.normalStone.argb
+            case .soulSand:                          return 0xFF48362B    // (072, 054, 043)
+            case .netherrack:                        return 0xFF56201F    // (086, 032, 031)
+            case .magma:                             return 0xFFB54009    // (181, 064, 009)
+
+            case .endStone:                          return 0xFFDBDBAC    // (219, 219, 172)
+            case .chorusPlant:                       return 0xFF5A335A    // (090, 051, 090)
+            case .chorusFlower:                      return 0xFF9F779F    // (159, 119, 159)
+
+            case .sponge:                            return 0xFFCBCC49    // (203, 204, 073)
+            // case .coralBlock:                        return nil
+            // [coral_color] 0: tube, 1: brain, 2: bubble, 3: fire, 4: horn
+
+            case .sculk:                             return 0xFF052931    // (005, 041, 049)
+            case .sculkSensor:                       return 0xFF074756    // (007, 071, 086)
+            case .sculkCatalyst:                     return 0xFF052931    // (005, 041, 049)
+            case .sculkShrieker:                     return 0xFF052931    // (005, 041, 049)
+
+            case .reinforcedDeepslate:               return Self.DefaultColor.deepslate.argb
+
+            /* ========== ========== ========== Items ========== ========== ========== */
+            // case .bed:                               return nil
+            // 0 ~ 15
+            case .craftingTable:                     return 0xFF9C5831    // (156, 088, 049)
+            case .cartographyTable:                  return 0xFF563518    // (086, 053, 024)
+            case .fletchingTable:                    return 0xFFD4BF83    // (212, 191, 131)
+            case .smithingTable:                     return 0xFF3F4152    // (063, 065, 082)
+            case .beehive:                           return 0xFFB6925E    // (182, 146, 094)
+            case .furnace:                           return Self.DefaultColor.furnace.argb
+            case .litFurnace:                        return Self.DefaultColor.furnace.argb
+            case .blastFurnace:                      return Self.DefaultColor.furnace.argb
+            case .litBlastFurnace:                   return Self.DefaultColor.furnace.argb
+            case .smoker:                            return Self.DefaultColor.furnace.argb
+            case .litSmoker:                         return Self.DefaultColor.furnace.argb
+            case .respawnAnchor:                     return 0xFF8108E1    // (129, 008, 225)
+            case .anvil:                             return 0xFF494949    // (073, 073, 073)
+            case .grindstone:                        return 0xFF8D8D8D    // (141, 141, 141)
+            case .enchantingTable:                   return 0xFF49EACF    // (073, 234, 207)
+            case .bookshelf:                         return 0xFFC09B61    // (192, 155, 097)
+            case .lectern:                           return 0xFFA48049    // (164, 128, 073)
+            case .cauldron:                          return 0xFF353434    // (053, 052, 052)
+            case .composter:                         return 0xFF8B5B31    // (139, 091, 049)
+
+            case .lantern:                           return 0xFF484F64    // (072, 079, 100)
+
+            case .chest:                             return Self.DefaultColor.chest.argb
+            case .trappedChest:                      return Self.DefaultColor.chest.argb
+            case .enderChest:                        return 0xFF273638    // (039, 054, 056)
+
+            case .barrel:                            return 0xFF89663C    // (137, 102, 060)
+
+            case .undyedShulkerBox:                  return 0xFF956595    // (149, 101, 149)
+            // case .shulkerBox:                        return nil
+            // [color] 0 ~ 15
+
+            case .noteblock:                         return 0xFF925C40    // (146, 092, 064)
+            case .jukebox:                           return 0xFF7A4F38    // (122, 079, 056)
+            case .glowstone:                         return 0xFFF8D773    // (248, 215, 115)
+            case .redstoneLamp:                      return 0xFFAD683A    // (173, 104, 058)
+            case .litRedstoneLamp:                   return 0xFFF8D773    // (248, 215, 115)
+            case .seaLantern:                        return 0xFFFCF9F2    // (252, 249, 242)
+
+            case .beacon:                            return 0xFF48D2CA    // (072, 210, 202)
+            case .bell:                              return 0xFFFAD338    // (250, 211, 056)
+            case .stonecutter:                       return Self.DefaultColor.furnace.argb
+            case .stonecutterBlock:                  return Self.DefaultColor.furnace.argb
+            case .endPortalFrame:                    return 0xFF417266    // (065, 114, 102)
+            case .endPortal:                         return 0xFF041218    // (004, 018, 024)
+
+            case .rail:                              return 0xFF9A9A9A    // (154, 154, 154)
+            case .goldenRail:                        return 0xFF9A9A9A    // (154, 154, 154)
+            case .detectorRail:                      return 0xFF9A9A9A    // (154, 154, 154)
+            case .activatorRail:                     return 0xFF9A9A9A    // (154, 154, 154)
+            case .redstoneBlock:                     return 0xFFA21808    // (162, 024, 008)
+            case .observer:                          return 0xFF646464    // (100, 100, 100)
+            case .daylightDetector:                  return 0xFFBCA88C    // (188, 168, 140)
+            case .daylightDetectorInverted:          return 0xFFBCA88C    // (188, 168, 140)
+            case .hopper:                            return 0xFF464646    // (070, 070, 070)
+            case .dropper:                           return Self.DefaultColor.furnace.argb
+            case .dispenser:                         return Self.DefaultColor.furnace.argb
+            case .piston:                            return Self.DefaultColor.furnace.argb
+            case .pistonArmCollision:                return Self.DefaultColor.furnace.argb
+            case .stickyPiston:                      return Self.DefaultColor.furnace.argb
+            case .stickyPistonArmCollision:          return Self.DefaultColor.furnace.argb
+            case .tnt:                               return 0xFFD82E1A    // (216, 046, 026)
+            case .loom:                              return 0xFFC8A470    // (200, 164, 112)
+            case .target:                            return 0xFFB73131    // (183, 049, 049)
+
+            /* ========== ========== ========== Equipment ========== ========== ========== */
+
+            /* ========== ========== ========== Construction ========== ========== ========== */
+            // case .planks:                            return nil
+            // [wood_type] 0: oak, 1: spruce, 2: birch, 3: jungle, 4: acacia, 5: dark oak
+            case .mangrovePlanks:                    return Self.DefaultColor.mangrovePlanks.argb
+            case .crimsonPlanks:                     return Self.DefaultColor.crimsonPlanks.argb
+            case .warpedPlanks:                      return Self.DefaultColor.warpedPlanks.argb
+
+            // case .cobblestoneWall:                   return nil
+            // [wall_block_type] 0: cobblestone, 1: mossy_cobblestone, 2: granite, 3: diorite, 4: andesite, 5: sandstone, 6: brick, 7: stone_brick, 8: mossy_stone_brick, 9: nether_brick, 10: end_brick, 11: prismarine, 12: red_sandstone, 13: red_nether_brick
+            case .blackstoneWall:                    return Self.DefaultColor.blackStone.argb
+            case .polishedBlackstoneWall:            return Self.DefaultColor.polishedBlackStone.argb
+            case .polishedBlackstoneBrickWall:       return Self.DefaultColor.polishedBlackStone.argb
+            case .cobbledDeepslateWall:              return Self.DefaultColor.deepslate.argb
+            case .deepslateTileWall:                 return Self.DefaultColor.deepslate.argb
+            case .polishedDeepslateWall:             return Self.DefaultColor.deepslate.argb
+            case .deepslateBrickWall:                return Self.DefaultColor.deepslate.argb
+            case .mudBrickWall:                      return 0xFF93704F    // (147, 112, 079)
+
+            // case .fence:                             return nil
+            // [wood_type] 0: oak, 1: spruce, 2: birch, 3: jungle, 4: acacia, 5: dark oak
+            case .mangroveFence:                     return Self.DefaultColor.mangrovePlanks.argb
+            case .crimsonFence:                      return Self.DefaultColor.crimsonPlanks.argb
+            case .warpedFence:                       return Self.DefaultColor.warpedPlanks.argb
+            case .netherBrickFence:                  return Self.DefaultColor.netherBricks.argb
+
+            case .fenceGate:                         return Self.DefaultColor.oakPlanks.argb
+            case .spruceFenceGate:                   return Self.DefaultColor.sprucePlanks.argb
+            case .birchFenceGate:                    return Self.DefaultColor.birchPlanks.argb
+            case .jungleFenceGate:                   return Self.DefaultColor.junglePlanks.argb
+            case .acaciaFenceGate:                   return Self.DefaultColor.acaciaPlanks.argb
+            case .darkOakFenceGate:                  return Self.DefaultColor.darkOakPlanks.argb
+            case .mangroveFenceGate:                 return Self.DefaultColor.mangrovePlanks.argb
+            case .crimsonFenceGate:                  return Self.DefaultColor.crimsonPlanks.argb
+            case .warpedFenceGate:                   return Self.DefaultColor.warpedPlanks.argb
+
+            case .normalStoneStairs:                 return Self.DefaultColor.normalStone.argb
+            case .stoneStairs:                       return Self.DefaultColor.normalStone.argb
+            case .mossyCobblestoneStairs:            return 0xFF738352    // (115, 131, 082)
+            case .oakStairs:                         return Self.DefaultColor.oakPlanks.argb
+            case .spruceStairs:                      return Self.DefaultColor.sprucePlanks.argb
+            case .birchStairs:                       return Self.DefaultColor.birchPlanks.argb
+            case .jungleStairs:                      return Self.DefaultColor.junglePlanks.argb
+            case .acaciaStairs:                      return Self.DefaultColor.acaciaPlanks.argb
+            case .darkOakStairs:                     return Self.DefaultColor.darkOakPlanks.argb
+            case .mangroveStairs:                    return Self.DefaultColor.mangrovePlanks.argb
+            case .stoneBrickStairs:                  return Self.DefaultColor.normalStone.argb
+            case .mossyStoneBrickStairs:             return 0xFF738352    // (115, 131, 082)
+            case .sandstoneStairs:                   return Self.DefaultColor.sand.argb
+            case .smoothSandstoneStairs:             return Self.DefaultColor.sand.argb
+            case .redSandstoneStairs:                return Self.DefaultColor.redSand.argb
+            case .smoothRedSandstoneStairs:          return Self.DefaultColor.redSand.argb
+            case .graniteStairs:                     return Self.DefaultColor.granite.argb
+            case .polishedGraniteStairs:             return Self.DefaultColor.granite.argb
+            case .dioriteStairs:                     return Self.DefaultColor.diorite.argb
+            case .polishedDioriteStairs:             return Self.DefaultColor.diorite.argb
+            case .andesiteStairs:                    return Self.DefaultColor.andesite.argb
+            case .polishedAndesiteStairs:            return Self.DefaultColor.andesite.argb
+            case .brickStairs:                       return Self.DefaultColor.redBricks.argb
+            case .netherBrickStairs:                 return Self.DefaultColor.netherBricks.argb
+            case .redNetherBrickStairs:              return Self.DefaultColor.redNetherBricks.argb
+            case .endBrickStairs:                    return Self.DefaultColor.endBricks.argb
+            case .quartzStairs:                      return Self.DefaultColor.quartz.argb
+            case .smoothQuartzStairs:                return Self.DefaultColor.quartz.argb
+            case .purpurStairs:                      return Self.DefaultColor.endPurple.argb
+            case .prismarineStairs:                  return Self.DefaultColor.prismarineNormal.argb
+            case .darkPrismarineStairs:              return Self.DefaultColor.prismarineDark.argb
+            case .prismarineBricksStairs:            return 0xFF59ADA2    // (089, 173, 162)
+            case .crimsonStairs:                     return Self.DefaultColor.crimsonPlanks.argb
+            case .warpedStairs:                      return Self.DefaultColor.warpedPlanks.argb
+            case .blackstoneStairs:                  return Self.DefaultColor.blackStone.argb
+            case .polishedBlackstoneStairs:          return Self.DefaultColor.polishedBlackStone.argb
+            case .polishedBlackstoneBrickStairs:     return Self.DefaultColor.polishedBlackStone.argb
+            case .cutCopperStairs:                   return 0xFFE0806B    // (224, 128, 107)
+            case .exposedCutCopperStairs:            return 0xFF968A68    // (150, 138, 104)
+            case .weatheredCutCopperStairs:          return 0xFF639E76    // (099, 158, 118)
+            case .oxidizedCutCopperStairs:           return 0xFF4B9282    // (075, 146, 130)
+            case .waxedCutCopperStairs:              return 0xFFE0806B    // (224, 128, 107)
+            case .waxedExposedCutCopperStairs:       return 0xFF968A68    // (150, 138, 104)
+            case .waxedWeatheredCutCopperStairs:     return 0xFF639E76    // (099, 158, 118)
+            case .waxedOxidizedCutCopperStairs:      return 0xFF4B9282    // (075, 146, 130)
+            case .cobbledDeepslateStairs:            return Self.DefaultColor.deepslate.argb
+            case .deepslateTileStairs:               return Self.DefaultColor.deepslate.argb
+            case .polishedDeepslateStairs:           return Self.DefaultColor.deepslate.argb
+            case .deepslateBrickStairs:              return Self.DefaultColor.deepslate.argb
+            case .mudBrickStairs:                    return 0xFF93704F    // (147, 112, 079)
+
+            case .tintedGlass:                       return nil
+            case .glass:                             return 0x11FFFFFF
+            // case .stainedGlass:                      return nil
+            // [color] 0 ~ 15
+
+            case .scaffolding:                       return 0xFFE1C473    // (225, 196, 115)
+
+            // case .stoneBlockSlab:                    return nil
+            // [stone_slab_type] 0: smooth_stone, 1: sandstone, 2: wood, 3: cobblestone, 4: brick, 5: stone_brick, 6: quartz, 7: nether_brick
+            // case .stoneBlockSlab2:                   return nil
+            // [stone_slab_type_2] 0: red_sandstone, 1: purpur, 2: prismarine_rough, 3: prismarine_dark, 4: prismarine_brick, 5: mossy_cobblestone, 6: smooth_sandstone, 7: red_nether_brick
+            // case .stoneBlockSlab3:                   return nil
+            // [stone_slab_type_3] 0: end_stone_brick, 1: smooth_red_sandstone, 2: polished_andesite, 3: andesite, 4: diorite, 5: polished_diorite, 6: granite, 7: polished_granite
+            // case .stoneBlockSlab4:                   return nil
+            // [stone_slab_type_4] 0: mossy_stone_brick, 1: smooth_quartz, 2: stone, 3: cut_sandstone, 4: cut_red_sandstone
+            // case .woodenSlab:                        return nil
+            // [wood_type] 0: oak, 1: spruce, 2: birch, 3: jungle, 4: acacia, 5: dark_oak
+            case .mangroveSlab:                      return Self.DefaultColor.mangrovePlanks.argb
+            case .crimsonSlab:                       return Self.DefaultColor.crimsonPlanks.argb
+            case .warpedSlab:                        return Self.DefaultColor.warpedPlanks.argb
+            case .blackstoneSlab:                    return Self.DefaultColor.blackStone.argb
+            case .polishedBlackstoneSlab:            return Self.DefaultColor.polishedBlackStone.argb
+            case .polishedBlackstoneBrickSlab:       return Self.DefaultColor.polishedBlackStone.argb
+            case .cutCopperSlab:                     return 0xFFE0806B    // (224, 128, 107)
+            case .exposedCutCopperSlab:              return 0xFF968A68    // (150, 138, 104)
+            case .weatheredCutCopperSlab:            return 0xFF639E76    // (099, 158, 118)
+            case .oxidizedCutCopperSlab:             return 0xFF4B9282    // (075, 146, 130)
+            case .waxedCutCopperSlab:                return 0xFFE0806B    // (224, 128, 107)
+            case .waxedExposedCutCopperSlab:         return 0xFF968A68    // (150, 138, 104)
+            case .waxedWeatheredCutCopperSlab:       return 0xFF639E76    // (099, 158, 118)
+            case .waxedOxidizedCutCopperSlab:        return 0xFF4B9282    // (075, 146, 130)
+            case .cobbledDeepslateSlab:              return Self.DefaultColor.deepslate.argb
+            case .deepslateTileSlab:                 return Self.DefaultColor.deepslate.argb
+            case .polishedDeepslateSlab:             return Self.DefaultColor.deepslate.argb
+            case .deepslateBrickSlab:                return Self.DefaultColor.deepslate.argb
+            case .mudBrickSlab:                      return 0xFF93704F    // (147, 112, 079)
+
+            // case .doubleStoneBlockSlab:              return nil
+            // case .doubleStoneBlockSlab2:             return nil
+            // case .doubleStoneBlockSlab3:             return nil
+            // case .doubleStoneBlockSlab4:             return nil
+            // case .doubleWoodenSlab:                  return nil
+            case .mangroveDoubleSlab:                return Self.DefaultColor.mangrovePlanks.argb
+            case .crimsonDoubleSlab:                 return Self.DefaultColor.crimsonPlanks.argb
+            case .warpedDoubleSlab:                  return Self.DefaultColor.warpedPlanks.argb
+            case .blackstoneDoubleSlab:              return Self.DefaultColor.blackStone.argb
+            case .polishedBlackstoneDoubleSlab:      return Self.DefaultColor.polishedBlackStone.argb
+            case .polishedBlackstoneBrickDoubleSlab: return Self.DefaultColor.polishedBlackStone.argb
+            case .doubleCutCopperSlab:               return 0xFFE0806B    // (224, 128, 107)
+            case .exposedDoubleCutCopperSlab:        return 0xFF968A68    // (150, 138, 104)
+            case .weatheredDoubleCutCopperSlab:      return 0xFF639E76    // (099, 158, 118)
+            case .oxidizedDoubleCutCopperSlab:       return 0xFF4B9282    // (075, 146, 130)
+            case .waxedDoubleCutCopperSlab:          return 0xFFE0806B    // (224, 128, 107)
+            case .waxedExposedDoubleCutCopperSlab:   return 0xFF968A68    // (150, 138, 104)
+            case .waxedWeatheredDoubleCutCopperSlab: return 0xFF639E76    // (099, 158, 118)
+            case .waxedOxidizedDoubleCutCopperSlab:  return 0xFF4B9282    // (075, 146, 130)
+            case .cobbledDeepslateDoubleSlab:        return Self.DefaultColor.deepslate.argb
+            case .deepslateTileDoubleSlab:           return Self.DefaultColor.deepslate.argb
+            case .polishedDeepslateDoubleSlab:       return Self.DefaultColor.deepslate.argb
+            case .deepslateBrickDoubleSlab:          return Self.DefaultColor.deepslate.argb
+            case .mudBrickDoubleSlab:                return 0xFF93704F    // (147, 112, 079)
+
+            case .brickBlock:                        return Self.DefaultColor.redBricks.argb
+            case .chiseledNetherBricks:              return Self.DefaultColor.netherBricks.argb
+            case .crackedNetherBricks:               return Self.DefaultColor.netherBricks.argb
+            case .quartzBricks:                      return Self.DefaultColor.quartz.argb
+
+            // case .stonebrick:                        return Self.DefaultColor.normalStone.argb
+            // [stone_brick_type] 0: stone bricks, 1: mossy stone bricks, 2: cracked stone bricks, 3: chiseled stone bricks, 4: smooth stone bricks
+            case .endBricks:                         return Self.DefaultColor.endBricks.argb
+            case .polishedBlackstoneBricks:          return Self.DefaultColor.polishedBlackStone.argb
+            case .crackedPolishedBlackstoneBricks:   return 0xFF201C17    // (032, 028, 023)
+            case .gildedBlackstone:                  return 0xFF7D440E    // (125, 068, 014)
+            case .chiseledPolishedBlackstone:        return Self.DefaultColor.polishedBlackStone.argb
+            case .deepslateTiles:                    return Self.DefaultColor.deepslate.argb
+            case .crackedDeepslateTiles:             return Self.DefaultColor.deepslate.argb
+            case .deepslateBricks:                   return Self.DefaultColor.deepslate.argb
+            case .crackedDeepslateBricks:            return Self.DefaultColor.deepslate.argb
+            case .chiseledDeepslate:                 return Self.DefaultColor.deepslate.argb
+
+            case .cobblestone:                       return Self.DefaultColor.normalStone.argb
+            case .mossyCobblestone:                  return 0xFF738352    // (115, 131, 082)
+            case .cobbledDeepslate:                  return Self.DefaultColor.deepslate.argb
+            case .smoothStone:                       return nil
+
+            // case .sandstone:                         return (201,192,154)
+            // [sand_stone_type] 0: sandstone, 1: chiseled sandstone, 2: cut sandstone, 3: smooth sandstone
+            // case .redSandstone:                      return (184, 102, 33)
+            // [sand_stone_type] 0: sandstone, 1: chiseled sandstone, 2: cut sandstone, 3: smooth sandstone
+
+            case .coalBlock:                         return 0xFF0D0D0D    // (013, 013, 013)
+            case .driedKelpBlock:                    return 0xFF2B3720    // (043, 055, 032)
+            case .goldBlock:                         return 0xFFFBDD48    // (251, 221, 072)
+            case .ironBlock:                         return 0xFFE3E3E3    // (227, 227, 227)
+
+            case .copperBlock:                       return 0xFFE0806B    // (224, 128, 107)
+            case .exposedCopper:                     return 0xFF968A68    // (150, 138, 104)
+            case .weatheredCopper:                   return 0xFF639E76    // (099, 158, 118)
+            case .oxidizedCopper:                    return 0xFF4B9282    // (075, 146, 130)
+            case .waxedCopper:                       return 0xFFE0806B    // (224, 128, 107)
+            case .waxedExposedCopper:                return 0xFF968A68    // (150, 138, 104)
+            case .waxedWeatheredCopper:              return 0xFF639E76    // (099, 158, 118)
+            case .waxedOxidizedCopper:               return 0xFF4B9282    // (075, 146, 130)
+            case .cutCopper:                         return 0xFFE0806B    // (224, 128, 107)
+            case .exposedCutCopper:                  return 0xFF968A68    // (150, 138, 104)
+            case .weatheredCutCopper:                return 0xFF639E76    // (099, 158, 118)
+            case .oxidizedCutCopper:                 return 0xFF4B9282    // (075, 146, 130)
+            case .waxedCutCopper:                    return 0xFFE0806B    // (224, 128, 107)
+            case .waxedExposedCutCopper:             return 0xFF968A68    // (150, 138, 104)
+            case .waxedWeatheredCutCopper:           return 0xFF639E76    // (099, 158, 118)
+            case .waxedOxidizedCutCopper:            return 0xFF4B9282    // (075, 146, 130)
+
+            case .emeraldBlock:                      return 0xFF3EF082    // (062, 240, 130)
+            case .diamondBlock:                      return 0xFF64F2E0    // (100, 242, 224)
+            case .lapisBlock:                        return 0xFF183B73    // (024, 059, 115)
+            case .rawIronBlock:                      return 0xFF6D5940    // (109, 089, 064)
+            case .rawCopperBlock:                    return 0xFF91533E    // (145, 083, 062)
+            case .rawGoldBlock:                      return 0xFFAD8922    // (173, 137, 034)
+            case .quartzBlock:                       return Self.DefaultColor.quartz.argb
+            // [chisel_type] 0: default, 1: chiseled, 2: pillar, 3: smooth
+            // case .prismarine:                        return nil
+            // [prismarine_block_type] 0: default, 1: dark, 2: bricks
+            case .slime:                             return 0xFF70BB5E    // (112, 187, 094)
+            case .honeyBlock:                        return 0xFFE99126    // (233, 145, 038)
+            case .hayBlock:                          return 0xFFCBB007    // (203, 176, 007)
+            case .boneBlock:                         return 0xFFC7C3A5    // (199, 195, 165)
+            case .netherBrick:                       return Self.DefaultColor.netherBricks.argb
+            case .redNetherBrick:                    return Self.DefaultColor.redNetherBricks.argb
+            case .netheriteBlock:                    return 0xFF4C484C    // (076, 072, 076)
+            case .lodestone:                         return 0xFFA0A2AA    // (160, 162, 170)
+
+            // case .carpet:                            return nil
+            // [color] 0 ~ 15
+            // case .wool:                              return nil
+            // [color] 0 ~ 15
+            // case .concrete:                          return nil
+            // [color] 0 ~ 15
+            // case .concretePowder:                    return nil
+            // [color] 0 ~ 15
+            case .clay:                              return 0xFFA2A6B6    // (162, 166, 182)
+            // case .hardenedClay:                      return (162, 166, 182)
+            // [color] 0 ~ 15
+            // case .stainedHardenedClay:               return (162, 166, 182)
+            // [color] 0 ~ 15
+
+            case .whiteGlazedTerracotta:             return 0xFFF6FCFB    // (246, 252, 251)
+            case .orangeGlazedTerracotta:            return 0xFF1AC4C5    // (026, 196, 197)
+            case .magentaGlazedTerracotta:           return 0xFFC957C0    // (201, 087, 192)
+            case .lightBlueGlazedTerracotta:         return 0xFF56BBDC    // (086, 187, 220)
+            case .yellowGlazedTerracotta:            return 0xFFFBDB5D    // (251, 219, 093)
+            case .limeGlazedTerracotta:              return 0xFF89D623    // (137, 214, 035)
+            case .pinkGlazedTerracotta:              return 0xFFF1B3C9    // (241, 179, 201)
+            case .grayGlazedTerracotta:              return 0xFF5E7276    // (094, 114, 118)
+            case .silverGlazedTerracotta:            return 0xFFC7CBCF    // (199, 203, 207)
+            case .cyanGlazedTerracotta:              return 0xFF149FA0    // (020, 159, 160)
+            case .purpleGlazedTerracotta:            return 0xFF9235C6    // (146, 053, 198)
+            case .blueGlazedTerracotta:              return 0xFF3B42A7    // (059, 066, 167)
+            case .brownGlazedTerracotta:             return 0xFFA7784F    // (167, 120, 079)
+            case .greenGlazedTerracotta:             return 0xFF6F9724    // (111, 151, 036)
+            case .redGlazedTerracotta:               return 0xFFCA4139    // (202, 065, 057)
+            case .blackGlazedTerracotta:             return 0xFF18181B    // (024, 024, 027)
+
+            case .purpurBlock:                       return Self.DefaultColor.endPurple.argb
+            // [chisel_type] 0: default, 1: chiseled, 2: pillar, 3: smooth
+            case .packedMud:                         return 0xFF93704F    // (147, 112, 079)
+            case .mudBricks:                         return 0xFF93704F    // (147, 112, 079)
+
+            /* ========== ========== ========== Others ========== ========== ========== */
+            case .netherreactor:                     return 0xFF211114    // (033, 017, 020)
+            case .endGateway:                        return 0xFF030D14    // (003, 013, 020)
+            case .powderSnow:                        return 0xFFFCFCFC    // (252, 252, 252)
+            case .water:                             return 0xFF3F76E4    // (063, 118, 228)
+            case .lava:                              return 0xFFB34703    // (179, 071, 003)
+            case .flowingWater:                      return 0xFF3F76E4    // (063, 118, 228)
+            case .flowingLava:                       return 0xFFB34703    // (179, 071, 003)
+            case .portal:                            return 0xFF4E1E87    // (078, 030, 135)
+            case .frostedIce:                        return 0xFF6D92C1    // (109, 146, 193)
+
+            case .commandBlock:                      return 0xFFC47D4E    // (196, 125, 078)
+            case .repeatingCommandBlock:             return 0xFF694EC5    // (105, 078, 197)
+            case .chainCommandBlock:                 return 0xFF9FC1B2    // (159, 193, 178)
+            case .structureBlock:                    return 0xFF937894    // (147, 120, 148)
+
+            default:                                 return nil
+        }
     }
 }
 
-extension MCBlockType {
-    public var isDyeable: Bool {
-        if self.description.hasSuffix("_terracotta") {
-            return true
-        }
-        switch self {
-            case .bed, .glass, .shulkerBox, .wool, .carpet, .concrete, .concretePowder:
-                return true
-            default:
-                return false
-        }
-    }
-}
