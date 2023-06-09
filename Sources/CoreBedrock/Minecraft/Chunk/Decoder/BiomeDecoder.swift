@@ -1,6 +1,8 @@
 import Foundation
 
 public struct BiomeDecoder {
+    public init() {}
+
     public func decode(data: Data, offset: Int) throws -> [MCBiomeLayer]? {
         guard data.count > offset else { return nil }
         let reader = CBReader(CBBuffer(data[offset...]))

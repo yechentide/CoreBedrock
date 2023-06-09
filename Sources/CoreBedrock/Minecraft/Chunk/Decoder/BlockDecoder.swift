@@ -6,6 +6,8 @@ import Foundation
 //}
 
 public struct BlockDecoder {
+    public init() {}
+
     public func decode(data: Data, offset: Int, layerCount: Int) throws -> [MCBlockLayer]? {
         guard data.count > offset, layerCount > 0 else { return nil }
         let reader = CBReader(CBBuffer(data[offset...]))

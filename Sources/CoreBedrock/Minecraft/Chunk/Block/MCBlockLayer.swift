@@ -1,8 +1,8 @@
 import Foundation
 
 public class MCBlockLayer {
-    var palettes: [MCBlock]
-    var map: [UInt16]
+    public var palettes: [MCBlock]
+    public var map: [UInt16]
 
     public init() {
         palettes = [MCBlock]()

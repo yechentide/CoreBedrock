@@ -886,7 +886,7 @@ extension CBReader {
             for i in 0 ..< blocksPerWord {
                 guard elements.count < MCSubChunk.totalBlockCount else { break }
                 let element: UInt32 = mask & (word >> (i * bitsPerBlock))
-                elements.append(UInt16(element))
+                elements.append(UInt16(truncatingIfNeeded: element))
             }
         }
 
