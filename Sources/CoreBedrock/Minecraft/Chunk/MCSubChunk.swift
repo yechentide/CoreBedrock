@@ -1,149 +1,7 @@
 import Foundation
 
-fileprivate struct StorageLayer {
-    static let wordBitSize = 32
-    static var wordByteSize: Int {
-        wordBitSize / 8
-    }
-    enum PaletteMetaType: UInt8 {
-        case persistence = 0
-        case runtime = 1
-    }
-
-    let paletteType: PaletteMetaType
-    let blocksPerWord: Int
-    var bitsPerBlock: Int {
-        Self.wordBitSize / blocksPerWord
-    }
-    var totalWords: Int {
-        Int( ceil(16 * 16 * 16 / Double(blocksPerWord)) )
-    }
-    var blockMask: UInt32 {
-        var mask = UInt32(0)
-        for _ in 1...bitsPerBlock {
-            mask <<= 1
-            mask |= 0x1
-        }
-        return mask
-    }
-    let blockData: Data
-    let palettes: [(tag: CompoundTag, block: MCBlockType)]
-
-    private func getBlocksFrom(_ wordData: Data) -> [UInt32] {
-        assert(wordData.count == Self.wordByteSize)
-        var blocks = [UInt32]()
-        var word = wordData.uint32!
-        var offset = 0
-
-        while offset < Self.wordBitSize && blocks.count < blocksPerWord {
-            let block = word & blockMask
-            blocks.append(block)
-            word >>= bitsPerBlock
-            offset += bitsPerBlock
-        }
-
-        return blocks
-    }
-
-    private func getBlockFrom(_ wordData: Data, index: Int) -> UInt32 {
-        guard (0..<blocksPerWord).contains(index) else {
-            fatalError("\(#function): out of range")
-        }
-        assert(wordData.count == Self.wordByteSize)
-
-        let word = wordData.uint32! >> (bitsPerBlock * index)
-        return word & blockMask
-    }
-
-    func getBlock(blockOffset: Int) -> MCBlockType {
-        let wordIndex = ceil(Double(blockOffset) / Double(blocksPerWord)) - 1
-        let start = Int(wordIndex) * Self.wordByteSize
-        let end = start + Self.wordByteSize
-        let wordData = blockData[start..<end]
-
-        let blockIndex = blockOffset % blocksPerWord - 1
-        let paletteIndex = getBlockFrom(wordData, index: blockIndex)
-
-        return palettes[Int(paletteIndex)].block
-    }
-
-    func getTopVisibleBlocks() -> [MCBlockType] {
-        let blockData = Data(blockData)
-        var topVisibleBlocks = [MCBlockType]()
-        var buffer = [UInt32]()
-
-        for i in 0..<totalWords {
-            let range = i * Self.wordByteSize ..< (i+1) * Self.wordByteSize
-            let wordData = Data(blockData[range])
-            buffer.append(contentsOf: getBlocksFrom(wordData))
-
-            while buffer.count >= 16 {
-                let paletteIndex = buffer[0..<16].last(where: {
-                    let paletteIndex = Int($0)
-                    let block = palettes[paletteIndex].block
-                    return block.isOpaque
-                }) ?? buffer[15]
-                let block = palettes[Int(paletteIndex)].block
-                topVisibleBlocks.append(block)
-                buffer = [UInt32](buffer[16...])
-            }
-        }
-
-        return topVisibleBlocks
-    }
-}
-
-fileprivate func parsePalette(_ byte: UInt8) -> (type: StorageLayer.PaletteMetaType, blocksPerWord: Int)? {
-    let paletteType = StorageLayer.PaletteMetaType(rawValue: byte & 0x1)!
-    let bitsPerBlock = Int(byte >> 1)
-    switch bitsPerBlock {
-        case 1...6, 8, 16:
-            return (paletteType, StorageLayer.wordBitSize / bitsPerBlock)
-        default:
-            print("Unsupported palette type: \(bitsPerBlock)")
-            return nil
-    }
-}
-
-fileprivate func convertToBlockFrom(tag: CompoundTag) -> MCBlockType {
-    if let nameTag = tag["name"] as? StringTag {
-        let blockName = nameTag.value.dropFirst(10)
-        let block = MCBlockType(stringLiteral: String(blockName))
-        return block
-    }
-    return .unknown
-}
-
-fileprivate func parseStorageLayer(layerData: Data, byteOffset: inout Int) -> StorageLayer? {
-    guard let (paletteType, blocksPerWord) = parsePalette(layerData[0]) else { return nil }
-    let totalWords = Int(ceil(16 * 16 * 16 / Double(blocksPerWord)))
-    let blockDataCount = totalWords * 4
-    if layerData.count < 1 + blockDataCount + 4 { return nil }
-
-    var offset = 1 + blockDataCount
-    let paletteCount = Data(layerData[offset..<offset+4]).int32!
-    offset += 4
-
-    var palettes = [(CompoundTag, MCBlockType)]()
-    let reader = CBReader(CBBuffer(layerData[offset...]))
-    for _ in 0..<paletteCount {
-        guard let paletteTag = try? reader.readAsTag() as? CompoundTag else {
-            return nil
-        }
-        let block = convertToBlockFrom(tag: paletteTag)
-        palettes.append((paletteTag, block))
-        reader.resetState()
-    }
-    offset += reader.baseStream.position
-    byteOffset += offset
-
-    return StorageLayer(paletteType: paletteType,
-                        blocksPerWord: blocksPerWord,
-                        blockData: layerData[1...blockDataCount],
-                        palettes: palettes)
-}
-
-public struct MCSubChunk {
+public class MCSubChunk {
+    static let totalBlockCount = 4096 // 16 * 16 * 16
     public static let localPosRange = 0..<MCChunk.length
     public static func offset(_ localX: Int, _ localY: Int, _ localZ: Int) -> Int? {
         guard localPosRange ~= localX, localPosRange ~= localY, localPosRange ~= localZ else {
@@ -156,43 +14,72 @@ public struct MCSubChunk {
     public let yIndex: Int8
     public let z: Int32
     public let version: UInt8
-    private let storageLayers: [StorageLayer]
 
-    public var storageLayersCount: Int {
-        storageLayers.count
+    public let biomeLayer: MCBiomeLayer
+    public let blockLayers: [MCBlockLayer]
+
+    public init(x: Int32, yIndex: Int8, z: Int32, version: UInt8, biomeLayer: MCBiomeLayer, blockLayers: [MCBlockLayer]) {
+        self.x = x
+        self.yIndex = yIndex
+        self.z = z
+        self.version = version
+        self.biomeLayer = biomeLayer
+        self.blockLayers = blockLayers
     }
 
-    public static func parseSubChunkData(x: Int32, yIndex:Int8, z: Int32, from subChunkData: Data) -> MCSubChunk? {
-        guard subChunkData.count > 4 else { return nil }
-
-        let storageVersion = subChunkData[0]
-        assert(storageVersion == 9)
-
-        let storageLayerCount = subChunkData[1]
-        let subChunkYIndex = subChunkData[2].data.int8
-        guard subChunkYIndex == yIndex else { return nil }
-
-        var offset = 3
-        var storageLayers = [StorageLayer]()
-        for _ in 1...storageLayerCount {
-            if let layer = parseStorageLayer(layerData: Data(subChunkData[offset...]), byteOffset: &offset) {
-                storageLayers.append(layer)
-            }
+    public func getBlock(_ localX: Int, _ localY: Int, _ localZ: Int) -> MCBlock? {
+        guard blockLayers.count > 0 else {
+            print("\(#function): no storage layers")
+            return nil
+        }
+        guard let offset = Self.offset(localX, localY, localZ) else {
+            print("\(#function): wrong postions")
+            return nil
         }
 
-        return MCSubChunk(x: x, yIndex: yIndex, z: z, version: storageVersion, storageLayers: storageLayers)
+        let index = blockLayers[0].map[offset]
+        return blockLayers[0].palettes[Int(index)]
     }
 
-    public func getBlock(_ localX: Int, _ localY: Int, _ localZ: Int) -> MCBlockType {
-        guard storageLayers.count > 0 else {
-            fatalError("\(#function): no storage layers")
+    public func getBiome(_ localX: Int, _ localY: Int, _ localZ: Int) -> MCBiomeType? {
+        guard let offset = Self.offset(localX, localY, localZ) else {
+            print("\(#function): wrong postions")
+            return nil
         }
-        let offset = Self.offset(localX, localY, localZ)!
-        let block = storageLayers[0].getBlock(blockOffset: offset)
-        return block
+        let index = biomeLayer.map[offset]
+        return biomeLayer.palettes[Int(index)]
     }
 
-    public func getTopVisibleBlocks() -> [MCBlockType] {
-        return storageLayers[0].getTopVisibleBlocks()
+    public func getTopDownBlocks(_ localX: Int, _ localZ: Int) -> [MCBlock]? {
+        guard blockLayers.count > 0 else {
+            print("\(#function): no storage layers")
+            return nil
+        }
+        guard let offset = Self.offset(localX, 0, localZ) else {
+            print("\(#function): wrong postions")
+            return nil
+        }
+
+        let topDownBlocks = stride(from: offset+MCChunk.length, through: offset, by: -1).map {
+            let index = blockLayers[0].map[$0]
+            return blockLayers[0].palettes[Int(index)]
+        }
+        return topDownBlocks
+    }
+
+    public func getTopDownBiomes(_ localX: Int, _ localZ: Int) -> [MCBiomeType]? {
+        guard let offset = Self.offset(localX, 0, localZ) else {
+            print("\(#function): wrong postions")
+            return nil
+        }
+        if biomeLayer.palettes.count == 1 {
+            return biomeLayer.palettes
+        }
+
+        let topDownBiomes = stride(from: offset+MCChunk.length, through: offset, by: -1).map {
+            let index = biomeLayer.map[$0]
+            return biomeLayer.palettes[Int(index)]
+        }
+        return topDownBiomes
     }
 }
