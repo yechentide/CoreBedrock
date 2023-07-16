@@ -5,12 +5,17 @@ public struct MCDir {
     public let dirURL: URL
     private let useSecurityScope: Bool
 
+    public let worldMeta: MCWorldMeta
+    public var worldImage: CGImage? = nil
     public var dirSize: String? = nil
     public var lastOpened: Date? = nil
-    public var worldName: String = "???"
-    public var worldImage: CGImage? = nil
+
+    public var worldName: String {
+        worldMeta.worldName ?? "???"
+    }
 
     public static func isMCWorldDir(dirURL: URL, useSecurityScope: Bool) throws -> Bool {
+        guard FileManager.default.dirExists(at: dirURL) else { return false }
         guard !useSecurityScope || dirURL.startAccessingSecurityScopedResource() else {
             throw CBLvDBError.invalidSecurityScope(dirURL)
         }
@@ -37,14 +42,19 @@ public struct MCDir {
         return false
     }
 
-    public init(dirURL: URL, useSecurityScope: Bool, worldName: String, worldImage: CGImage?) {
+    public init(dirURL: URL, useSecurityScope: Bool, worldMeta: MCWorldMeta, worldImage: CGImage?) {
         self.dirURL = dirURL
         self.useSecurityScope = useSecurityScope
-        self.worldName = worldName
+        self.worldMeta = worldMeta
         self.worldImage = worldImage
     }
 
     public init(dirURL: URL, useSecurityScope: Bool) throws {
+        let isMCDir = try Self.isMCWorldDir(dirURL: dirURL, useSecurityScope: useSecurityScope)
+        if !isMCDir {
+            throw CBLvDBError.invalidWorldDirectory(dirURL)
+        }
+
         guard !useSecurityScope || dirURL.startAccessingSecurityScopedResource() else {
             throw CBLvDBError.invalidSecurityScope(dirURL)
         }
@@ -52,20 +62,13 @@ public struct MCDir {
             if useSecurityScope { dirURL.stopAccessingSecurityScopedResource() }
         }
 
-        let isMCDir = try Self.isMCWorldDir(dirURL: dirURL, useSecurityScope: useSecurityScope)
-        if !isMCDir {
-            throw CBLvDBError.invalidWorldDirectory(dirURL)
-        }
-
         self.dirURL = dirURL
         self.useSecurityScope = useSecurityScope
         self.dirSize = try dirURL.formattedDirectorySize()
         self.lastOpened = try dirURL.resourceValues(forKeys: [.contentAccessDateKey]).contentAccessDate
 
-        let levelNameFileURL = dirURL.appendingPathComponent("levelname.txt", isDirectory: false)
-        if let name = try? String(contentsOf: levelNameFileURL, encoding: .utf8) {
-            self.worldName = name
-        }
+        let levelDatURL = dirURL.appendingPathComponent("level.dat", isDirectory: false)
+        self.worldMeta = try MCWorldMeta(from: levelDatURL)
 
         let imageURL = dirURL.appendingPathComponent("world_icon.jpeg", isDirectory: false)
         if let jpgImage = CGImage.loadJPG(url: imageURL) {
@@ -98,7 +101,7 @@ public struct MCDir {
 
         let dstURL = dstDir.appendingPathComponent(self.dirURL.lastPathComponent, isDirectory: true)
         try FileManager.default.moveItem(at: self.dirURL, to: dstURL)
-        return MCDir(dirURL: dstURL, useSecurityScope: true, worldName: worldName, worldImage: worldImage)
+        return MCDir(dirURL: dstURL, useSecurityScope: true, worldMeta: worldMeta, worldImage: worldImage)
     }
 
     public func copy(to dstDir: URL, dstUseSecurityScope: Bool = true, newDirName: String? = nil) throws -> MCDir {
@@ -116,7 +119,7 @@ public struct MCDir {
         let oldName = dirURL.lastPathComponent
         let dstURL = dstDir.appendingPathComponent(newDirName ?? oldName, isDirectory: true)
         try FileManager.default.copyItem(at: dirURL, to: dstURL)
-        return MCDir(dirURL: dstURL, useSecurityScope: false, worldName: worldName, worldImage: worldImage)
+        return MCDir(dirURL: dstURL, useSecurityScope: false, worldMeta: worldMeta, worldImage: worldImage)
     }
 
     public func delete() throws {
@@ -134,6 +137,6 @@ public struct MCDir {
         guard !useSecurityScope else {
             throw CBLvDBError.parsingWorldOutsideTheSandbox(dirURL)
         }
-        return try MCWorld(from: dirURL)
+        return try MCWorld(from: dirURL, meta: worldMeta)
     }
 }
