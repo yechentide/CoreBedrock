@@ -71,10 +71,10 @@ public struct MCWorldMeta {
         return inventoryVersion
     }
 
-    public var lastPlayedDate: String {
+    public var lastPlayedDate: String? {
         guard let lastPlayed = tag["LastPlayed"]?.longValue
         else {
-            return "???"
+            return nil
         }
         let lastPlayedDate = Date(timeIntervalSince1970: TimeInterval(lastPlayed))
         return Date.formatDate(lastPlayedDate)
@@ -87,7 +87,7 @@ public struct MCWorldMeta {
             return nil
         }
         return lastOpenedWithVertion.tags
-            .map {"\($0)"}
+            .map {"\($0.intValue)"}
             .joined(separator: ".")
     }
 
