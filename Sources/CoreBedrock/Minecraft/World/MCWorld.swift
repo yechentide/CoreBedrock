@@ -7,7 +7,6 @@ public class MCWorld {
 
     public var worldName = "???"
     public let meta: MCWorldMeta
-    public var keysCount: UInt64 = 0
 
     public var levelDatURL: URL {
         dirURL.appendingPathComponent("level.dat", isDirectory: false)
@@ -33,12 +32,6 @@ public class MCWorld {
         }
         if let name = self.meta.worldName {
             self.worldName = name
-        }
-
-        db.seekToFirst()
-        while db.valid() {
-            keysCount += 1
-            db.next()
         }
     }
 
