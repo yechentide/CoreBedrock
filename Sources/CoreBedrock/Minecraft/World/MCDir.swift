@@ -3,7 +3,6 @@ import CoreGraphics
 
 public struct MCDir {
     public let dirURL: URL
-    private let useSecurityScope: Bool
 
     public let worldMeta: MCWorldMeta
     public var worldImage: CGImage? = nil
@@ -14,14 +13,8 @@ public struct MCDir {
         worldMeta.worldName ?? "???"
     }
 
-    public static func isMCWorldDir(dirURL: URL, useSecurityScope: Bool) throws -> Bool {
+    public static func isMCWorldDir(dirURL: URL) throws -> Bool {
         guard FileManager.default.dirExists(at: dirURL) else { return false }
-        guard !useSecurityScope || dirURL.startAccessingSecurityScopedResource() else {
-            throw CBLvDBError.invalidSecurityScope(dirURL)
-        }
-        defer {
-            if useSecurityScope { dirURL.stopAccessingSecurityScopedResource() }
-        }
 
         var (hasDB, hasLevelDat, hasLevelName) = (false, false, false)
         let keys : [URLResourceKey] = [.nameKey, .isDirectoryKey]
@@ -42,28 +35,21 @@ public struct MCDir {
         return false
     }
 
-    public init(dirURL: URL, useSecurityScope: Bool, worldMeta: MCWorldMeta, worldImage: CGImage?) {
+    public init(dirURL: URL, worldMeta: MCWorldMeta, worldImage: CGImage?, dirSize: String?, lastOpened: Date?) {
         self.dirURL = dirURL
-        self.useSecurityScope = useSecurityScope
         self.worldMeta = worldMeta
         self.worldImage = worldImage
+        self.dirSize = dirSize
+        self.lastOpened = lastOpened
     }
 
-    public init(dirURL: URL, useSecurityScope: Bool) throws {
-        let isMCDir = try Self.isMCWorldDir(dirURL: dirURL, useSecurityScope: useSecurityScope)
+    public init(dirURL: URL) throws {
+        let isMCDir = try Self.isMCWorldDir(dirURL: dirURL)
         if !isMCDir {
             throw CBLvDBError.invalidWorldDirectory(dirURL)
         }
 
-        guard !useSecurityScope || dirURL.startAccessingSecurityScopedResource() else {
-            throw CBLvDBError.invalidSecurityScope(dirURL)
-        }
-        defer {
-            if useSecurityScope { dirURL.stopAccessingSecurityScopedResource() }
-        }
-
         self.dirURL = dirURL
-        self.useSecurityScope = useSecurityScope
         self.dirSize = try dirURL.formattedDirectorySize()
         self.lastOpened = try dirURL.resourceValues(forKeys: [.contentAccessDateKey]).contentAccessDate
 
@@ -87,56 +73,24 @@ public struct MCDir {
         return localDateFormatter.string(from: date)
     }
 
-    public func move(to dstDir: URL, dstUseSecurityScope: Bool = true) throws -> MCDir {
-        guard !useSecurityScope || dirURL.startAccessingSecurityScopedResource() else {
-            throw CBLvDBError.invalidSecurityScope(dirURL)
-        }
-        guard !dstUseSecurityScope || dstDir.startAccessingSecurityScopedResource() else {
-            throw CBLvDBError.invalidSecurityScope(dirURL)
-        }
-        defer {
-            if useSecurityScope { dirURL.stopAccessingSecurityScopedResource() }
-            if dstUseSecurityScope { dstDir.stopAccessingSecurityScopedResource() }
-        }
-
+    public func move(to dstDir: URL) throws -> MCDir {
         let dstURL = dstDir.appendingPathComponent(self.dirURL.lastPathComponent, isDirectory: true)
         try FileManager.default.moveItem(at: self.dirURL, to: dstURL)
-        return MCDir(dirURL: dstURL, useSecurityScope: true, worldMeta: worldMeta, worldImage: worldImage)
+        return MCDir(dirURL: dstURL, worldMeta: worldMeta, worldImage: worldImage, dirSize: dirSize, lastOpened: lastOpened)
     }
 
-    public func copy(to dstDir: URL, dstUseSecurityScope: Bool = true, newDirName: String? = nil) throws -> MCDir {
-        guard !useSecurityScope || dirURL.startAccessingSecurityScopedResource() else {
-            throw CBLvDBError.invalidSecurityScope(dirURL)
-        }
-        guard !dstUseSecurityScope || dstDir.startAccessingSecurityScopedResource() else {
-            throw CBLvDBError.invalidSecurityScope(dirURL)
-        }
-        defer {
-            if useSecurityScope { dirURL.stopAccessingSecurityScopedResource() }
-            if dstUseSecurityScope { dstDir.stopAccessingSecurityScopedResource() }
-        }
-
+    public func copy(to dstDir: URL, newDirName: String? = nil) throws -> MCDir {
         let oldName = dirURL.lastPathComponent
         let dstURL = dstDir.appendingPathComponent(newDirName ?? oldName, isDirectory: true)
         try FileManager.default.copyItem(at: dirURL, to: dstURL)
-        return MCDir(dirURL: dstURL, useSecurityScope: false, worldMeta: worldMeta, worldImage: worldImage)
+        return MCDir(dirURL: dstURL, worldMeta: worldMeta, worldImage: worldImage, dirSize: dirSize, lastOpened: lastOpened)
     }
 
     public func delete() throws {
-        guard !useSecurityScope || dirURL.startAccessingSecurityScopedResource() else {
-            throw CBLvDBError.invalidSecurityScope(dirURL)
-        }
-        defer {
-            if useSecurityScope { dirURL.stopAccessingSecurityScopedResource() }
-        }
-
         try FileManager.default.removeItem(at: dirURL)
     }
 
     public func parse() throws -> MCWorld {
-        guard !useSecurityScope else {
-            throw CBLvDBError.parsingWorldOutsideTheSandbox(dirURL)
-        }
         return try MCWorld(from: dirURL, meta: worldMeta)
     }
 }
