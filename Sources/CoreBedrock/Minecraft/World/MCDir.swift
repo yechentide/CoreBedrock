@@ -16,7 +16,7 @@ public struct MCDir {
     public static func isMCWorldDir(dirURL: URL) throws -> Bool {
         guard FileManager.default.dirExists(at: dirURL) else { return false }
 
-        var (hasDB, hasLevelDat, hasLevelName) = (false, false, false)
+        var (hasDB, hasLevelDat) = (false, false)
         let keys : [URLResourceKey] = [.nameKey, .isDirectoryKey]
         let contents = try FileManager.default.contentsOfDirectory(at: dirURL, includingPropertiesForKeys: keys)
 
@@ -26,12 +26,10 @@ public struct MCDir {
                 hasDB = true
             } else if attributes.name == "level.dat" && attributes.isDirectory! == false {
                 hasLevelDat = true
-            } else if attributes.name == "levelname.txt" && attributes.isDirectory! == false {
-                hasLevelName = true
             }
         }
 
-        if hasDB && hasLevelDat && hasLevelName { return true }
+        if hasDB && hasLevelDat { return true }
         return false
     }
 
