@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/yechentide/LvDBWrapper",
       "state" : {
-        "branch" : "main",
-        "revision" : "d9eb52d8cbaace7c979c2f463601254a66e974f5"
+        "revision" : "402b5cef16fbb1c2c1df75c145cddadb3722088a",
+        "version" : "1.2.0"
       }
     },
     {

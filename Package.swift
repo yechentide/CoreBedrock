@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-algorithms", from: "1.0.0"),
-        .package(url: "https://github.com/yechentide/LvDBWrapper", branch: "main"),
+        .package(url: "https://github.com/yechentide/LvDBWrapper", exact: "1.2.0"),
         .package(url: "https://github.com/mw99/DataCompression", exact: "3.8.0"),
     ],
     targets: [

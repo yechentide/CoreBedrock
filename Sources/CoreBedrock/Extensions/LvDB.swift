@@ -75,12 +75,18 @@ extension LvDB {
 
     public func getPrefixedKeys(with prefix: Data) -> [Data] {
         var keys = [Data]()
-        seek(prefix)
-        while valid() {
+        guard let iter = makeIterator() else {
+            return keys
+        }
+        defer {
+            iter.destroy()
+        }
+        iter.seek(prefix)
+        while iter.valid() {
             defer {
-                next()
+                iter.next()
             }
-            guard let keyData = key(),
+            guard let keyData = iter.key(),
                   keyData.count >= prefix.count,
                   keyData[0..<prefix.count] == prefix
             else {
