@@ -29,6 +29,7 @@ let package = Package(
                     dependencies: ["CoreBedrock"],
                     resources: [
                         .process("TestData/nbt"),
+                        .process("TestData/subchunkData"),
                         .copy("TestData/world")
                     ]),
     ]
