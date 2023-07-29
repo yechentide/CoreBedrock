@@ -2,7 +2,7 @@ import Foundation
 
 public struct MCWorldMeta {
     public let version: Int32
-    public let tag: CompoundTag
+    public var tag: CompoundTag
 
     public init(version: Int32, tag: CompoundTag) {
         self.version = version

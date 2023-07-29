@@ -6,7 +6,7 @@ public class MCWorld {
     public let db: LvDB
 
     public var worldName = "???"
-    public let meta: MCWorldMeta
+    public var meta: MCWorldMeta
 
     public var levelDatURL: URL {
         dirURL.appendingPathComponent("level.dat", isDirectory: false)
