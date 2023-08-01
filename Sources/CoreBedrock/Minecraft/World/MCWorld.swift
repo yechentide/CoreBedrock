@@ -39,11 +39,16 @@ public class MCWorld {
         db.close()
     }
 
-    public func updateMetaData(with newTag: CompoundTag) throws {
+    public func updateMetaFile() throws {
         let tagData = try meta.toData()
         let metaRawData = meta.version.data + Int32(tagData.count).data + tagData
         try metaRawData.write(to: levelDatURL)
         updateWorldNameFile()
+    }
+
+    public func updateMetaFile(with newTag: CompoundTag) throws {
+        meta.tag = newTag
+        try updateMetaFile()
     }
 
     public func updateWorldNameFile() {
