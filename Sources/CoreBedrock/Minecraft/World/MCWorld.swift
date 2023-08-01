@@ -39,6 +39,10 @@ public class MCWorld {
         db.close()
     }
 
+    public func loadMetaFile() throws {
+        self.meta = try MCWorldMeta(from: levelDatURL)
+    }
+
     public func updateMetaFile() throws {
         let tagData = try meta.toData()
         let metaRawData = meta.version.data + Int32(tagData.count).data + tagData
