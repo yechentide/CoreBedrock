@@ -36,7 +36,11 @@ public struct MCChunk {
                 }
             }
             if indexInView == view.count {
-                view.append(MCBlock(type: .unknown, states: CompoundTag(), version: 0))
+                view.append(
+                    MCBlock(type: .unknown,
+                            nameTag: StringTag(name: "name", "Unknown"),
+                            states: CompoundTag(), version: 0)
+                )
             }
         }
         return view

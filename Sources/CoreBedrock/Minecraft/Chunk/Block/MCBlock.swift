@@ -1,10 +1,12 @@
 public class MCBlock {
     public let type: MCBlockType
+    public let nameTag: StringTag
     public let states: CompoundTag
     public let version: Int32
 
-    public init(type: MCBlockType, states: CompoundTag, version: Int32) {
+    public init(type: MCBlockType, nameTag: StringTag, states: CompoundTag, version: Int32) {
         self.type = type
+        self.nameTag = nameTag
         self.states = states
         self.version = version
     }
@@ -17,17 +19,20 @@ public class MCBlock {
             return nil
         }
         let blockType = MCBlockType(stringLiteral: nameTag.value)
-        return MCBlock(type: blockType, states: statesTag, version: versionTag.value)
+        return MCBlock(type: blockType, nameTag: nameTag, states: statesTag, version: versionTag.value)
     }
 
     public func encode() -> CompoundTag {
         let rootTag = CompoundTag()
-        let nameTag = StringTag(name: "name", type.description)
         let versionTag = IntTag(name: "version", version)
         try! rootTag.append(nameTag)
         try! rootTag.append(states)
         try! rootTag.append(versionTag)
         return rootTag
+    }
+
+    public var name: String {
+        nameTag.value
     }
 
     public var argbHex: UInt32? {
