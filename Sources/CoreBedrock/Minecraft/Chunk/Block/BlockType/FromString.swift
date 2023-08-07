@@ -75,7 +75,7 @@ extension MCBlockType {
                     case "smooth":      return .smoothQuartzBlock
                     default:            return .quartzBlock
                 }
-            case "minecraft:purple_block":
+            case "minecraft:purpur_block":
                 guard let tag = stateTag["chisel_type"] as? StringTag else {
                     return .purpurBlock
                 }
@@ -251,7 +251,7 @@ extension MCBlockType {
                 }
                 switch tag.value {
                     case "red_sandstone":       return .redSandstoneSlab
-                    case "purple":              return .purpurSlab
+                    case "purpur":              return .purpurSlab
                     case "prismarine_rough":    return .prismarineRoughSlab
                     case "prismarine_dark":     return .prismarineDarkSlab
                     case "prismarine_brick":    return .prismarineBrickSlab
@@ -266,7 +266,7 @@ extension MCBlockType {
                 }
                 switch tag.value {
                     case "red_sandstone":       return .redSandstoneDoubleSlab
-                    case "purple":              return .purpurDoubleSlab
+                    case "purpur":              return .purpurDoubleSlab
                     case "prismarine_rough":    return .prismarineRoughDoubleSlab
                     case "prismarine_dark":     return .prismarineDarkDoubleSlab
                     case "prismarine_brick":    return .prismarineBrickDoubleSlab
@@ -788,7 +788,7 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:prismarine":                             self = .prismarine
             case "minecraft:quartz_bricks":                          self = .quartzBricks
             case "minecraft:quartz_block":                           self = .quartzBlock
-            case "minecraft:purple_block":                           self = .purpurBlock
+            case "minecraft:purpur_block":                           self = .purpurBlock
 
             case "minecraft:sandstone":                              self = .sandstone
             case "minecraft:red_sandstone":                          self = .redSandstone
@@ -938,7 +938,7 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:end_brick_stairs":                       self = .endBrickStairs
             case "minecraft:quartz_stairs":                          self = .quartzStairs
             case "minecraft:smooth_quartz_stairs":                   self = .smoothQuartzStairs
-            case "minecraft:purple_stairs":                          self = .purpurStairs
+            case "minecraft:purpur_stairs":                          self = .purpurStairs
             case "minecraft:prismarine_stairs":                      self = .prismarineStairs
             case "minecraft:dark_prismarine_stairs":                 self = .darkPrismarineStairs
             case "minecraft:prismarine_bricks_stairs":               self = .prismarineBricksStairs
@@ -1036,7 +1036,7 @@ extension MCBlockType: ExpressibleByStringLiteral {
             case "minecraft:birch_hanging_sign":                     self = .birchHangingSign
             case "minecraft:acacia_hanging_sign":                    self = .acaciaHangingSign
             case "minecraft:jungle_hanging_sign":                    self = .jungleHangingSign
-            case "minecraft:darkoak_hanging_sign":                   self = .darkOakHangingSign
+            case "minecraft:dark_oak_hanging_sign":                  self = .darkOakHangingSign
             case "minecraft:mangrove_hanging_sign":                  self = .mangroveHangingSign
             case "minecraft:cherry_hanging_sign":                    self = .cherryHangingSign
             case "minecraft:bamboo_hanging_sign":                    self = .bambooHangingSign

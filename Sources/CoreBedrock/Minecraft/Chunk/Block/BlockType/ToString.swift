@@ -297,10 +297,10 @@ extension MCBlockType: CustomStringConvertible {
             case .chiseledQuartzBlock:                      return "minecraft:quartz_block"
             case .smoothQuartzBlock:                        return "minecraft:quartz_block"
 
-            case .purpurBlock:                              return "minecraft:purple_block"
-            case .pillarPurpurBlock:                        return "minecraft:purple_block"
-            case .chiseledPurpurBlock:                      return "minecraft:purple_block"
-            case .smoothPurpurBlock:                        return "minecraft:purple_block"
+            case .purpurBlock:                              return "minecraft:purpur_block"
+            case .pillarPurpurBlock:                        return "minecraft:purpur_block"
+            case .chiseledPurpurBlock:                      return "minecraft:purpur_block"
+            case .smoothPurpurBlock:                        return "minecraft:purpur_block"
 
             case .sandstone:                                return "minecraft:sandstone"
             case .chiseledSandstone:                        return "minecraft:sandstone"
@@ -493,7 +493,7 @@ extension MCBlockType: CustomStringConvertible {
             case .endBrickStairs:                           return "minecraft:end_brick_stairs"
             case .quartzStairs:                             return "minecraft:quartz_stairs"
             case .smoothQuartzStairs:                       return "minecraft:smooth_quartz_stairs"
-            case .purpurStairs:                             return "minecraft:purple_stairs"
+            case .purpurStairs:                             return "minecraft:purpur_stairs"
             case .prismarineStairs:                         return "minecraft:prismarine_stairs"
             case .darkPrismarineStairs:                     return "minecraft:dark_prismarine_stairs"
             case .prismarineBricksStairs:                   return "minecraft:prismarine_bricks_stairs"
