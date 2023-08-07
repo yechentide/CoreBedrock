@@ -649,7 +649,7 @@ extension MCBlockType: CustomStringConvertible {
             case .birchHangingSign:                         return "minecraft:birch_hanging_sign"
             case .jungleHangingSign:                        return "minecraft:jungle_hanging_sign"
             case .acaciaHangingSign:                        return "minecraft:acacia_hanging_sign"
-            case .darkOakHangingSign:                       return "minecraft:darkoak_hanging_sign"
+            case .darkOakHangingSign:                       return "minecraft:dark_oak_hanging_sign"
             case .mangroveHangingSign:                      return "minecraft:mangrove_hanging_sign"
             case .cherryHangingSign:                        return "minecraft:cherry_hanging_sign"
             case .bambooHangingSign:                        return "minecraft:bamboo_hanging_sign"
