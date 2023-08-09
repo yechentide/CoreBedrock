@@ -6,10 +6,10 @@ extension MCBlockType {
             case .unknown:                                  return nil
             case .air:                                      return nil
             case .bedrock:                                  return Self.DefaultColor.normalStone.argb
-            case .fire:                                     return nil
-            case .water:                                    return 0xFF3F76E4    // (063, 118, 228)
+            case .fire:                                     return 0xFF // (202, 115, 3)
+            case .water:                                    return Self.DefaultColor.water.argb
             case .lava:                                     return 0xFFB34703    // (179, 071, 003)
-            case .flowingWater:                             return 0xFF3F76E4    // (063, 118, 228)
+            case .flowingWater:                             return Self.DefaultColor.water.argb
             case .flowingLava:                              return 0xFFB34703    // (179, 071, 003)
             case .obsidian:                                 return 0xFF1D0E34    // (029, 014, 052)
             case .cryingObsidian:                           return 0xFF2A0177    // (042, 001, 119)
@@ -17,7 +17,7 @@ extension MCBlockType {
             /* ---------- ---------- ---------- Overworld ---------- ---------- ---------- */
             case .grass:                                    return 0xFF82943A    // (130, 148, 058)
             case .dirt:                                     return 0xFF956C4C    // (149, 108, 76)
-            case .coarseDirt:                               return 0xFF956C4C    // (149, 108, 76)
+            case .coarseDirt:                               return 0xFF // (96, 67, 45)
             case .farmland:                                 return 0xFF956C4C    // (149, 108, 076)
             case .dirtPath:                                 return 0xFFCCCCCC    // (204, 204, 204)
             case .podzol:                                   return 0xFF694317    // (105, 067, 023)
@@ -25,82 +25,82 @@ extension MCBlockType {
 
             case .gravel:                                   return Self.DefaultColor.normalStone.argb
             case .sand:                                     return Self.DefaultColor.sand.argb
-            case .redSand:                                  return Self.DefaultColor.redSand.argb
+            case .redSand:                                  return 0xFF // 201, 109, 36
             case .suspiciousGravel:                         return Self.DefaultColor.normalStone.argb
             case .suspiciousSand:                           return Self.DefaultColor.sand.argb
 
-            case .web:                                      return nil
+            case .web:                                      return 0xFF // 255, 255, 255
             case .beeNest:                                  return 0xFFC68443    // (198, 132, 067)
 
             case .mobSpawner:                               return 0xFF182B38    // (024, 043, 056)
             case .infestedStone:                            return Self.DefaultColor.normalStone.argb
             case .infestedCobblestone:                      return Self.DefaultColor.normalStone.argb
             case .infestedStoneBrick:                       return Self.DefaultColor.normalStone.argb
-            case .infestedMossyStoneBrick:                  return Self.DefaultColor.normalStone.argb
+            case .infestedMossyStoneBrick:                  return Self.DefaultColor.mossyStone.argb
             case .infestedCrackedStoneBrick:                return Self.DefaultColor.normalStone.argb
             case .infestedChiseledStoneBrick:               return Self.DefaultColor.normalStone.argb
             case .infestedDeepslate:                        return Self.DefaultColor.deepslate.argb
-            case .turtleEgg:                                return nil
-            case .snifferEgg:                               return nil
-            case .frogSpawn:                                return nil
+            case .turtleEgg:                                return 0xFF // 224, 219, 197
+            case .snifferEgg:                               return 0xFF // 186, 77, 57
+            case .frogSpawn:                                return 0xFF // 55, 55, 220
 
-            case .ochreFroglight:                           return 0xFFFCF9F2    // (252, 249, 242)
-            case .verdantFroglight:                         return 0xFFFCF9F2    // (252, 249, 242)
-            case .pearlescentFroglight:                     return 0xFFFCF9F2    // (252, 249, 242)
+            case .ochreFroglight:                           return 0xFF // 213, 201, 140
+            case .verdantFroglight:                         return 0xFF // 109, 144, 129
+            case .pearlescentFroglight:                     return 0xFF // 208, 109, 142
             case .sponge:                                   return 0xFFCBCC49    // (203, 204, 073)
 
             // Plants
             case .cactus:                                   return 0xFF5A8A2A    // (090, 138, 042)
             case .reeds:                                    return nil
-            case .wheat:                                    return nil
-            case .pumpkinStem:                              return nil
-            case .melonStem:                                return nil
-            case .beetroot:                                 return nil
-            case .cocoa:                                    return nil
-            case .vine:                                     return nil
-            case .torchflowerCrop:                          return nil
-            case .pitcherCrop:                              return nil
-            case .potatoes:                                 return nil
-            case .carrots:                                  return nil
+            case .wheat:                                    return 0xFF // 0, 123, 0
+            case .pumpkinStem:                              return 0xFF // 72, 65, 9
+            case .melonStem:                                return 0xFF // 72, 65, 9
+            case .beetroot:                                 return 0xFF // 0, 106, 0
+            case .cocoa:                                    return 0xFF // 109, 112, 52
+            case .vine:                                     return 0xFF // 67, 97, 26
+            case .torchflowerCrop:                          return Self.DefaultColor.torchFlower.argb
+            case .pitcherCrop:                              return Self.DefaultColor.pitcher.argb
+            case .potatoes:                                 return 0xFF // 0, 106, 0
+            case .carrots:                                  return 0xFF // 0, 106, 0
             case .melonBlock:                               return 0xFF7DCA19    // (125, 202, 025)
             case .pumpkin:                                  return 0xFFD57D32    // (213, 125, 050)
             case .carvedPumpkin:                            return 0xFFD57D32    // (213, 125, 050)
             case .litPumpkin:                               return 0xFFD57D32    // (213, 125, 050)
-            case .sweetBerryBush:                           return nil
-            case .caveVines:                                return nil
-            case .caveVinesHeadWithBerries:                 return nil
-            case .caveVinesBodyWithBerries:                 return nil
-            case .bamboo:                                   return nil
-            case .brownMushroom:                            return nil
-            case .redMushroom:                              return nil
+            case .sweetBerryBush:                           return 0xFF // 40, 97, 63
+            case .caveVines:                                return 0xFF // 106, 126, 48
+            case .caveVinesHeadWithBerries:                 return 0xFF // 106, 126, 48
+            case .caveVinesBodyWithBerries:                 return 0xFF // 106, 126, 48
+            case .bamboo:                                   return 0xFF // 67, 103, 8
+            case .brownMushroom:                            return 0xFF // 0, 123, 0
+            case .redMushroom:                              return 0xFF // 0, 123, 0
 
             case .brownMushroomBlock:                       return 0xFF957150    // (149, 113, 080)
             case .redMushroomBlock:                         return 0xFFC72A29    // (199, 042, 041)
 
-            case .deadbush:                                 return nil
-            case .tallgrass:                                return nil
-            case .doublePlant:                              return nil
+            case .deadbush:                                 return 0xFF // 146, 99, 40
+            case .tallgrass:                                return 0xFF // 109, 141, 35
+            case .doublePlant:                              return 0xFF // 109, 141, 35
             case .yellowFlower:                             return nil
             case .redFlower:                                return nil
-            case .pitcherPlant:                             return nil
-            case .pinkPetals:                               return nil
-            case .witherRose:                               return nil
-            case .torchflower:                              return nil
+            case .pitcherPlant:                             return Self.DefaultColor.pitcher.argb
+            case .pinkPetals:                               return Self.DefaultColor.cheryLeaves.argb
+            case .witherRose:                               return 0xFF // 23, 18, 16
+            case .torchflower:                              return Self.DefaultColor.torchFlower.argb
 
-            case .waterlily:                                return nil
-            case .seagrass:                                 return nil
-            case .kelp:                                     return nil
-            case .driedKelpBlock:                           return 0xFF2B3720    // (043, 055, 032)
+            case .waterlily:                                return 0xFF // 0, 123, 0
+            case .seagrass:                                 return 0xFF // 55, 55, 220
+            case .kelp:                                     return 0xFF // 55, 55, 220
+            case .driedKelpBlock:                           return 0xFF // 88, 109, 44
 
             // Ocean Biome
-            case .bubbleColumn:                             return nil
-            case .seaPickle:                                return nil
+            case .bubbleColumn:                             return 0xFF // 55, 55, 220
+            case .seaPickle:                                return 0xFF // 106, 113, 42
             case .seaLantern:                               return 0xFFFCF9F2    // (252, 249, 242)
-            case .conduit:                                  return nil
+            case .conduit:                                  return 0xFF // 126, 113, 81
 
             // Snow Biome
-            case .snow:                                     return 0xFFE5E5E5    // (229, 229, 229)
-            case .snowLayer:                                return 0xFFFCFCFC    // (252, 252, 252)
+            case .snow:                                     return 0xFFFCFCFC    // (252, 252, 252)
+            case .snowLayer:                                return 0xFFE5E5E5    // (229, 229, 229)
             case .powderSnow:                               return 0xFFFCFCFC    // (252, 252, 252)
             case .ice:                                      return 0xFF9E9EFC    // (158, 158, 252)
             case .blueIce:                                  return 0xFF6697F6    // (102, 151, 246)
@@ -108,16 +108,16 @@ extension MCBlockType {
             case .frostedIce:                               return 0xFF6D92C1    // (109, 146, 193)
 
             // Caves & Cliffs
-            case .glowLichen:                               return nil
+            case .glowLichen:                               return 0xFF // 109, 144, 129
             case .dripstoneBlock:                           return 0xFF8C7461    // (140, 116, 097)
             case .pointedDripstone:                         return 0xFF8C7461    // (140, 116, 097)
             case .mossBlock:                                return 0xFF6F902C    // (111, 144, 044)
             case .mossCarpet:                               return 0xFF6F902C    // (111, 144, 044)
             case .dirtWithRoots:                            return 0xFF956C4C    // (149, 108, 076)
-            case .hangingRoots:                             return nil
-            case .bigDripleaf:                              return nil
-            case .smallDripleafBlock:                       return nil
-            case .sporeBlossom:                             return nil
+            case .hangingRoots:                             return 0xFF // 0, 106, 0
+            case .bigDripleaf:                              return 0xFF // 0, 106, 0
+            case .smallDripleafBlock:                       return 0xFF // 0, 106, 0
+            case .sporeBlossom:                             return 0xFF // 184, 97, 204
             case .azalea:                                   return 0xFF6F902C    // (111, 144, 044)
             case .floweringAzalea:                          return 0xFFB861CC    // (184, 097, 204)
             case .amethystBlock:                            return 0xFF9168AE    // (145, 104, 174)
@@ -127,7 +127,7 @@ extension MCBlockType {
             case .mediumAmethystBud:                        return 0x3A9168AE    // (145, 104, 174)
             case .smallAmethystBud:                         return 0x1A9168AE    // (145, 104, 174)
             case .tuff:                                     return Self.DefaultColor.normalStone.argb
-            case .calcite:                                  return 0xFFFCF9F2    // (252, 249, 242)
+            case .calcite:                                  return Self.DefaultColor.diorite.argb
 
             // Mangrove Swamp Biome
             case .mud:                                      return 0xFF39373C    // (057, 055, 060)
@@ -135,13 +135,13 @@ extension MCBlockType {
             case .mangroveRoots:                            return 0xFF59472B    // (089, 071, 043)
 
             // Deep Dark Biome
-            case .reinforcedDeepslate:                      return nil
-            case .sculkSensor:                              return 0xFF074756    // (007, 071, 086)
-            case .sculk:                                    return 0xFF052931    // (005, 041, 049)
-            case .sculkVein:                                return nil
-            case .sculkCatalyst:                            return 0xFF052931    // (005, 041, 049)
-            case .sculkShrieker:                            return 0xFF052931    // (005, 041, 049)
-            case .calibratedSculkSensor:                    return nil
+            case .reinforcedDeepslate:                      return Self.DefaultColor.deepslate.argb
+            case .sculkSensor:                              return Self.DefaultColor.sculkSensor.argb
+            case .sculk:                                    return Self.DefaultColor.sculk.argb
+            case .sculkVein:                                return 0xFF // 11, 15, 19
+            case .sculkCatalyst:                            return Self.DefaultColor.sculk.argb
+            case .sculkShrieker:                            return Self.DefaultColor.sculk.argb
+            case .calibratedSculkSensor:                    return Self.DefaultColor.sculkSensor.argb
 
             /* ---------- ---------- ---------- The Nether ---------- ---------- ---------- */
             case .netherrack:                               return 0xFF56201F    // (086, 032, 031)
@@ -158,19 +158,19 @@ extension MCBlockType {
             case .soulSand:                                 return 0xFF48362B    // (072, 054, 043)
 
             case .portal:                                   return 0xFF4E1E87    // (078, 030, 135)
-            case .soulFire:                                 return nil
+            case .soulFire:                                 return 0xFF // 123, 239, 242
             case .magma:                                    return 0xFFB54009    // (181, 064, 009)
             case .glowstone:                                return 0xFFF8D773    // (248, 215, 115)
 
             // Plants
-            case .netherWart:                               return nil
-            case .crimsonRoots:                             return nil
-            case .warpedRoots:                              return nil
-            case .netherSprouts:                            return nil
-            case .weepingVines:                             return nil
-            case .twistingVines:                            return nil
-            case .crimsonFungus:                            return nil
-            case .warpedFungus:                             return nil
+            case .netherWart:                               return 0xFF // 163, 35, 41
+            case .crimsonRoots:                             return 0xFF // 171, 16, 28
+            case .warpedRoots:                              return 0xFF // 20, 178, 131
+            case .netherSprouts:                            return 0xFF // 20, 178, 131
+            case .weepingVines:                             return 0xFF // 171, 16, 28
+            case .twistingVines:                            return 0xFF // 20, 178, 131
+            case .crimsonFungus:                            return 0xFF // 162, 36, 40
+            case .warpedFungus:                             return 0xFF // 20, 178, 131
 
             /* ---------- ---------- ---------- The End ---------- ---------- ---------- */
             case .endStone:                                 return 0xFFDBDBAC    // (219, 219, 172)
@@ -219,25 +219,25 @@ extension MCBlockType {
             case .netheriteBlock:                           return 0xFF4C484C    // (076, 072, 076)
             case .ancientDebris:                            return 0xFF7D5F58    // (125, 095, 088)
 
-            case .copperBlock:                              return 0xFFE0806B    // (224, 128, 107)
-            case .exposedCopper:                            return 0xFF968A68    // (150, 138, 104)
-            case .oxidizedCopper:                           return 0xFF4B9282    // (075, 146, 130)
-            case .weatheredCopper:                          return 0xFF639E76    // (099, 158, 118)
+            case .copperBlock:                              return Self.DefaultColor.copper.argb
+            case .exposedCopper:                            return Self.DefaultColor.exposedCopper.argb
+            case .oxidizedCopper:                           return Self.DefaultColor.oxidizedCopper.argb
+            case .weatheredCopper:                          return Self.DefaultColor.weatheredCopper.argb
 
-            case .cutCopper:                                return 0xFFE0806B    // (224, 128, 107)
-            case .exposedCutCopper:                         return 0xFF968A68    // (150, 138, 104)
-            case .oxidizedCutCopper:                        return 0xFF4B9282    // (075, 146, 130)
-            case .weatheredCutCopper:                       return 0xFF639E76    // (099, 158, 118)
+            case .cutCopper:                                return Self.DefaultColor.copper.argb
+            case .exposedCutCopper:                         return Self.DefaultColor.exposedCopper.argb
+            case .oxidizedCutCopper:                        return Self.DefaultColor.oxidizedCopper.argb
+            case .weatheredCutCopper:                       return Self.DefaultColor.weatheredCopper.argb
 
-            case .waxedCopper:                              return 0xFFE0806B    // (224, 128, 107)
-            case .waxedExposedCopper:                       return 0xFF968A68    // (150, 138, 104)
-            case .waxedOxidizedCopper:                      return 0xFF4B9282    // (075, 146, 130)
-            case .waxedWeatheredCopper:                     return 0xFF639E76    // (099, 158, 118)
+            case .waxedCopper:                              return Self.DefaultColor.copper.argb
+            case .waxedExposedCopper:                       return Self.DefaultColor.exposedCopper.argb
+            case .waxedOxidizedCopper:                      return Self.DefaultColor.oxidizedCopper.argb
+            case .waxedWeatheredCopper:                     return Self.DefaultColor.weatheredCopper.argb
 
-            case .waxedCutCopper:                           return 0xFFE0806B    // (224, 128, 107)
-            case .waxedExposedCutCopper:                    return 0xFF968A68    // (150, 138, 104)
-            case .waxedOxidizedCutCopper:                   return 0xFF4B9282    // (075, 146, 130)
-            case .waxedWeatheredCutCopper:                  return 0xFF639E76    // (099, 158, 118)
+            case .waxedCutCopper:                           return Self.DefaultColor.copper.argb
+            case .waxedExposedCutCopper:                    return Self.DefaultColor.exposedCopper.argb
+            case .waxedOxidizedCutCopper:                   return Self.DefaultColor.oxidizedCopper.argb
+            case .waxedWeatheredCutCopper:                  return Self.DefaultColor.weatheredCopper.argb
 
             /* ---------- ---------- ---------- Stones ---------- ---------- ---------- */
             case .boneBlock:                                return 0xFFC7C3A5    // (199, 195, 165)
@@ -276,7 +276,7 @@ extension MCBlockType {
             case .crackedDeepslateBricks:                   return Self.DefaultColor.deepslate.argb
             case .chiseledDeepslate:                        return Self.DefaultColor.deepslate.argb
 
-            case .smoothStone:                              return nil
+            case .smoothStone:                              return 0xFF // 96, 96, 96
             case .redBrickBlock:                            return Self.DefaultColor.redBricks.argb
             case .packedMud:                                return 0xFF93704F    // (147, 112, 079)
             case .mudBricks:                                return 0xFF93704F    // (147, 112, 079)
@@ -312,14 +312,14 @@ extension MCBlockType {
             case .smoothRedSandstone:                       return Self.DefaultColor.redSand.argb
 
             /* ---------- ---------- ---------- Trees ---------- ---------- ---------- */
-            case .oakLog:                                   return nil
-            case .spruceLog:                                return nil
-            case .birchLog:                                 return nil
-            case .jungleLog:                                return nil
-            case .acaciaLog:                                return nil
-            case .darkOakLog:                               return nil
-            case .mangroveLog:                              return 0xFF59472B    // (089, 071, 043)
-            case .cherryLog:                                return nil
+            case .oakLog:                                   return Self.DefaultColor.oakLog.argb
+            case .spruceLog:                                return Self.DefaultColor.spruceLog.argb
+            case .birchLog:                                 return Self.DefaultColor.birchLog.argb
+            case .jungleLog:                                return Self.DefaultColor.jungleLog.argb
+            case .acaciaLog:                                return Self.DefaultColor.acaciaLog.argb
+            case .darkOakLog:                               return Self.DefaultColor.darkOakLog.argb
+            case .mangroveLog:                              return Self.DefaultColor.mangroveLog.argb
+            case .cherryLog:                                return Self.DefaultColor.cherryLog.argb
             case .crimsonStem:                              return Self.DefaultColor.crimsonPlanks.argb
             case .warpedStem:                               return Self.DefaultColor.warpedPlanks.argb
 
@@ -329,79 +329,79 @@ extension MCBlockType {
             case .strippedJungleLog:                        return 0xFFAD7E52    // (173, 126, 082)
             case .strippedAcaciaLog:                        return 0xFFB86237    // (184, 098, 055)
             case .strippedDarkOakLog:                       return 0xFF6B5333    // (107, 083, 051)
-            case .strippedMangroveLog:                      return Self.DefaultColor.mangrovePlanks.argb
-            case .strippedCherryLog:                        return nil
+            case .strippedMangroveLog:                      return 0xFF894C39    // (137, 076, 057)
+            case .strippedCherryLog:                        return 0xFF // (214, 146, 151)
             case .strippedCrimsonStem:                      return 0xFF943D61    // (148, 061, 097)
             case .strippedWarpedStem:                       return 0xFF439F9D    // (067, 159, 157)
 
-            case .oakWood:                                  return nil
-            case .spruceWood:                               return nil
-            case .birchWood:                                return nil
-            case .jungleWood:                               return nil
-            case .acaciaWood:                               return nil
-            case .darkOakWood:                              return nil
-            case .mangroveWood:                             return 0xFF59472B    // (089, 071, 043)
-            case .cherryWood:                               return nil
-            case .bambooBlock:                              return nil
+            case .oakWood:                                  return Self.DefaultColor.oakLog.argb
+            case .spruceWood:                               return Self.DefaultColor.spruceLog.argb
+            case .birchWood:                                return Self.DefaultColor.birchLog.argb
+            case .jungleWood:                               return Self.DefaultColor.jungleLog.argb
+            case .acaciaWood:                               return Self.DefaultColor.acaciaLog.argb
+            case .darkOakWood:                              return Self.DefaultColor.darkOakLog.argb
+            case .mangroveWood:                             return Self.DefaultColor.mangroveLog.argb
+            case .cherryWood:                               return Self.DefaultColor.cherryLog.argb
+            case .bambooBlock:                              return 0xFF // 127, 132, 56
             case .crimsonHyphae:                            return 0xFF941515    // (148, 021, 021)
             case .warpedHyphae:                             return 0xFF16605A    // (022, 096, 090)
 
-            case .strippedOakWood:                          return nil
-            case .strippedSpruceWood:                       return nil
-            case .strippedBirchWood:                        return nil
-            case .strippedJungleWood:                       return nil
-            case .strippedAcaciaWood:                       return nil
-            case .strippedDarkOakWood:                      return nil
+            case .strippedOakWood:                          return 0xFF // 127, 85, 48
+            case .strippedSpruceWood:                       return 0xFF // 120, 90, 54
+            case .strippedBirchWood:                        return 0xFF // 205, 186, 126
+            case .strippedJungleWood:                       return 0xFF // 173, 126, 82
+            case .strippedAcaciaWood:                       return 0xFF // 185, 94, 61
+            case .strippedDarkOakWood:                      return 0xFF // 107, 83, 51
             case .strippedMangroveWood:                     return Self.DefaultColor.mangrovePlanks.argb
-            case .strippedCherryWood:                       return nil
-            case .strippedBambooBlock:                      return nil
+            case .strippedCherryWood:                       return 0xFF // (214, 146, 151)
+            case .strippedBambooBlock:                      return Self.DefaultColor.bambooPlanks.argb
             case .strippedCrimsonHyphae:                    return 0xFF943D61    // (148, 061, 097)
             case .strippedWarpedHyphae:                     return 0xFF439F9D    // (067, 159, 157)
 
-            case .oakPlanks:                                return nil
-            case .sprucePlanks:                             return nil
-            case .birchPlanks:                              return nil
-            case .junglePlanks:                             return nil
-            case .acaciaPlanks:                             return nil
-            case .darkOakPlanks:                            return nil
+            case .oakPlanks:                                return Self.DefaultColor.oakPlanks.argb
+            case .sprucePlanks:                             return Self.DefaultColor.sprucePlanks.argb
+            case .birchPlanks:                              return Self.DefaultColor.birchPlanks.argb
+            case .junglePlanks:                             return Self.DefaultColor.junglePlanks.argb
+            case .acaciaPlanks:                             return Self.DefaultColor.acaciaPlanks.argb
+            case .darkOakPlanks:                            return Self.DefaultColor.darkOakPlanks.argb
             case .mangrovePlanks:                           return Self.DefaultColor.mangrovePlanks.argb
-            case .cherryPlanks:                             return nil
-            case .bambooPlanks:                             return nil
-            case .bambooMosaic:                             return nil
+            case .cherryPlanks:                             return Self.DefaultColor.cherryPlanks.argb
+            case .bambooPlanks:                             return Self.DefaultColor.bambooPlanks.argb
+            case .bambooMosaic:                             return Self.DefaultColor.bambooPlanks.argb
             case .crimsonPlanks:                            return Self.DefaultColor.crimsonPlanks.argb
             case .warpedPlanks:                             return Self.DefaultColor.warpedPlanks.argb
 
-            case .oakLeaves:                                return nil
-            case .spruceLeaves:                             return nil
-            case .birchLeaves:                              return nil
-            case .jungleLeaves:                             return nil
-            case .acaciaLeaves:                             return nil
-            case .darkOakLeaves:                            return nil
+            case .oakLeaves:                                return 0xFF // 56, 95, 31
+            case .spruceLeaves:                             return 0xFF // 56, 95, 31
+            case .birchLeaves:                              return 0xFF // 67, 124, 37
+            case .jungleLeaves:                             return 0xFF // 56, 95, 31
+            case .acaciaLeaves:                             return 0xFF // 63, 89, 25
+            case .darkOakLeaves:                            return 0xFF // 58, 82, 23
             case .mangroveLeaves:                           return 0xFF3B4910    // (059, 073, 016)
-            case .cherryLeaves:                             return nil
+            case .cherryLeaves:                             return 0xFF // 243, 159, 209
             case .azaleaLeaves:                             return 0xFF6F902C    // (111, 144, 044)
             case .azaleaLeavesFlowered:                     return 0xFFB861CC    // (184, 097, 204)
 
-            case .oakSapling:                               return nil
-            case .spruceSapling:                            return nil
-            case .birchSapling:                             return nil
-            case .jungleSapling:                            return nil
-            case .acaciaSapling:                            return nil
-            case .darkOakSapling:                           return nil
-            case .mangrovePropagule:                        return nil
-            case .cherrySapling:                            return nil
-            case .bambooSapling:                            return nil
+            case .oakSapling:                               return 0xFF // 63, 141, 46
+            case .spruceSapling:                            return 0xFF // 34, 52, 34
+            case .birchSapling:                             return 0xFF // 107, 156, 55
+            case .jungleSapling:                            return 0xFF // 41, 73, 12
+            case .acaciaSapling:                            return 0xFF // 125, 150, 33
+            case .darkOakSapling:                           return 0xFF // 31, 100, 25
+            case .mangrovePropagule:                        return 0xFF // 0, 106, 0
+            case .cherrySapling:                            return 0xFF // 243, 159, 209
+            case .bambooSapling:                            return 0xFF // 67, 103, 8
 
             /* ---------- ---------- ---------- Fences & Gates ---------- ---------- ---------- */
-            case .oakFence:                                 return nil
-            case .spruceFence:                              return nil
-            case .birchFence:                               return nil
-            case .jungleFence:                              return nil
-            case .acaciaFence:                              return nil
-            case .darkOakFence:                             return nil
+            case .oakFence:                                 return Self.DefaultColor.oakPlanks.argb
+            case .spruceFence:                              return Self.DefaultColor.sprucePlanks.argb
+            case .birchFence:                               return Self.DefaultColor.birchPlanks.argb
+            case .jungleFence:                              return Self.DefaultColor.junglePlanks.argb
+            case .acaciaFence:                              return Self.DefaultColor.acaciaPlanks.argb
+            case .darkOakFence:                             return Self.DefaultColor.darkOakPlanks.argb
             case .mangroveFence:                            return Self.DefaultColor.mangrovePlanks.argb
-            case .cherryFence:                              return nil
-            case .bambooFence:                              return nil
+            case .cherryFence:                              return Self.DefaultColor.cherryPlanks.argb
+            case .bambooFence:                              return Self.DefaultColor.bambooPlanks.argb
             case .crimsonFence:                             return Self.DefaultColor.crimsonPlanks.argb
             case .warpedFence:                              return Self.DefaultColor.warpedPlanks.argb
             case .netherBrickFence:                         return Self.DefaultColor.netherBricks.argb
@@ -413,8 +413,8 @@ extension MCBlockType {
             case .acaciaFenceGate:                          return Self.DefaultColor.acaciaPlanks.argb
             case .darkOakFenceGate:                         return Self.DefaultColor.darkOakPlanks.argb
             case .mangroveFenceGate:                        return Self.DefaultColor.mangrovePlanks.argb
-            case .cherryFenceGate:                          return nil
-            case .bambooFenceGate:                          return nil
+            case .cherryFenceGate:                          return Self.DefaultColor.cherryPlanks.argb
+            case .bambooFenceGate:                          return Self.DefaultColor.bambooPlanks.argb
             case .crimsonFenceGate:                         return Self.DefaultColor.crimsonPlanks.argb
             case .warpedFenceGate:                          return Self.DefaultColor.warpedPlanks.argb
 
@@ -443,7 +443,7 @@ extension MCBlockType {
             case .polishedDeepslateWall:                    return Self.DefaultColor.deepslate.argb
             case .deepslateBrickWall:                       return Self.DefaultColor.deepslate.argb
 
-            case .mudBrickWall:                             return 0xFF93704F    // (147, 112, 079)
+            case .mudBrickWall:                             return Self.DefaultColor.mudBricks.argb
 
             /* ---------- ---------- ---------- Stairs ---------- ---------- ---------- */
             case .oakStairs:                                return Self.DefaultColor.oakPlanks.argb
@@ -453,9 +453,9 @@ extension MCBlockType {
             case .acaciaStairs:                             return Self.DefaultColor.acaciaPlanks.argb
             case .darkOakStairs:                            return Self.DefaultColor.darkOakPlanks.argb
             case .mangroveStairs:                           return Self.DefaultColor.mangrovePlanks.argb
-            case .cherryStairs:                             return nil
-            case .bambooStairs:                             return nil
-            case .bambooMosaicStairs:                       return nil
+            case .cherryStairs:                             return Self.DefaultColor.cherryPlanks.argb
+            case .bambooStairs:                             return Self.DefaultColor.bambooPlanks.argb
+            case .bambooMosaicStairs:                       return Self.DefaultColor.bambooPlanks.argb
             case .crimsonStairs:                            return Self.DefaultColor.crimsonPlanks.argb
             case .warpedStairs:                             return Self.DefaultColor.warpedPlanks.argb
 
@@ -477,7 +477,7 @@ extension MCBlockType {
             case .smoothSandstoneStairs:                    return Self.DefaultColor.sand.argb
             case .smoothRedSandstoneStairs:                 return Self.DefaultColor.redSand.argb
             case .redBrickStairs:                           return Self.DefaultColor.redBricks.argb
-            case .mudBrickStairs:                           return 0xFF93704F    // (147, 112, 079)
+            case .mudBrickStairs:                           return Self.DefaultColor.mudBricks.argb
 
             case .blackstoneStairs:                         return Self.DefaultColor.blackStone.argb
             case .polishedBlackstoneStairs:                 return Self.DefaultColor.polishedBlackStone.argb
@@ -515,9 +515,9 @@ extension MCBlockType {
             case .acaciaSlab:                               return Self.DefaultColor.acaciaPlanks.argb
             case .darkOakSlab:                              return Self.DefaultColor.darkOakPlanks.argb
             case .mangroveSlab:                             return Self.DefaultColor.mangrovePlanks.argb
-            case .cherrySlab:                               return nil
-            case .bambooSlab:                               return nil
-            case .bambooMosaicSlab:                         return nil
+            case .cherrySlab:                               return Self.DefaultColor.cherryPlanks.argb
+            case .bambooSlab:                               return Self.DefaultColor.bambooPlanks.argb
+            case .bambooMosaicSlab:                         return Self.DefaultColor.bambooPlanks.argb
             case .crimsonSlab:                              return Self.DefaultColor.crimsonPlanks.argb
             case .warpedSlab:                               return Self.DefaultColor.warpedPlanks.argb
 
@@ -528,71 +528,71 @@ extension MCBlockType {
             case .acaciaDoubleSlab:                         return Self.DefaultColor.acaciaPlanks.argb
             case .darkOakDoubleSlab:                        return Self.DefaultColor.darkOakPlanks.argb
             case .mangroveDoubleSlab:                       return Self.DefaultColor.mangrovePlanks.argb
-            case .cherryDoubleSlab:                         return nil
-            case .bambooDoubleSlab:                         return nil
-            case .bambooMosaicDoubleSlab:                   return nil
+            case .cherryDoubleSlab:                         return Self.DefaultColor.cherryPlanks.argb
+            case .bambooDoubleSlab:                         return Self.DefaultColor.bambooPlanks.argb
+            case .bambooMosaicDoubleSlab:                   return Self.DefaultColor.bambooPlanks.argb
             case .crimsonDoubleSlab:                        return Self.DefaultColor.crimsonPlanks.argb
             case .warpedDoubleSlab:                         return Self.DefaultColor.warpedPlanks.argb
 
-            case .smoothStoneSlab:                          return nil
-            case .cobblestoneSlab:                          return nil
-            case .stoneBrickSlab:                           return nil
-            case .sandstoneSlab:                            return nil
-            case .redBrickSlab:                             return nil
-            case .netherBrickSlab:                          return nil
-            case .quartzSlab:                               return nil
-            case .smoothStoneDoubleSlab:                    return nil
-            case .cobblestoneDoubleSlab:                    return nil
-            case .stoneBrickDoubleSlab:                     return nil
-            case .sandstoneDoubleSlab:                      return nil
-            case .redBrickDoubleSlab:                       return nil
-            case .netherBrickDoubleSlab:                    return nil
-            case .quartzDoubleSlab:                         return nil
+            case .smoothStoneSlab:                          return Self.DefaultColor.normalStone.argb
+            case .cobblestoneSlab:                          return Self.DefaultColor.normalStone.argb
+            case .stoneBrickSlab:                           return Self.DefaultColor.normalStone.argb
+            case .sandstoneSlab:                            return Self.DefaultColor.sand.argb
+            case .redBrickSlab:                             return Self.DefaultColor.redBricks.argb
+            case .netherBrickSlab:                          return Self.DefaultColor.netherBricks.argb
+            case .quartzSlab:                               return Self.DefaultColor.quartz.argb
+            case .smoothStoneDoubleSlab:                    return Self.DefaultColor.normalStone.argb
+            case .cobblestoneDoubleSlab:                    return Self.DefaultColor.normalStone.argb
+            case .stoneBrickDoubleSlab:                     return Self.DefaultColor.normalStone.argb
+            case .sandstoneDoubleSlab:                      return Self.DefaultColor.sand.argb
+            case .redBrickDoubleSlab:                       return Self.DefaultColor.redBricks.argb
+            case .netherBrickDoubleSlab:                    return Self.DefaultColor.netherBricks.argb
+            case .quartzDoubleSlab:                         return Self.DefaultColor.quartz.argb
 
-            case .mossyCobblestoneSlab:                     return nil
-            case .smoothSandstoneSlab:                      return nil
-            case .redSandstoneSlab:                         return nil
-            case .redNetherBrickSlab:                       return nil
-            case .purpurSlab:                               return nil
-            case .prismarineRoughSlab:                      return nil
-            case .prismarineDarkSlab:                       return nil
-            case .prismarineBrickSlab:                      return nil
-            case .mossyCobblestoneDoubleSlab:               return nil
-            case .smoothSandstoneDoubleSlab:                return nil
-            case .redSandstoneDoubleSlab:                   return nil
-            case .redNetherBrickDoubleSlab:                 return nil
-            case .purpurDoubleSlab:                         return nil
-            case .prismarineRoughDoubleSlab:                return nil
-            case .prismarineDarkDoubleSlab:                 return nil
-            case .prismarineBrickDoubleSlab:                return nil
+            case .mossyCobblestoneSlab:                     return Self.DefaultColor.mossyStone.argb
+            case .smoothSandstoneSlab:                      return Self.DefaultColor.sand.argb
+            case .redSandstoneSlab:                         return Self.DefaultColor.redSand.argb
+            case .redNetherBrickSlab:                       return Self.DefaultColor.redNetherBricks.argb
+            case .purpurSlab:                               return Self.DefaultColor.endPurple.argb
+            case .prismarineRoughSlab:                      return Self.DefaultColor.prismarineNormal.argb
+            case .prismarineDarkSlab:                       return Self.DefaultColor.prismarineDark.argb
+            case .prismarineBrickSlab:                      return 0xFF // 89, 173, 162
+            case .mossyCobblestoneDoubleSlab:               return Self.DefaultColor.mossyStone.argb
+            case .smoothSandstoneDoubleSlab:                return Self.DefaultColor.sand.argb
+            case .redSandstoneDoubleSlab:                   return Self.DefaultColor.redSand.argb
+            case .redNetherBrickDoubleSlab:                 return Self.DefaultColor.redNetherBricks.argb
+            case .purpurDoubleSlab:                         return Self.DefaultColor.endPurple.argb
+            case .prismarineRoughDoubleSlab:                return Self.DefaultColor.prismarineNormal.argb
+            case .prismarineDarkDoubleSlab:                 return Self.DefaultColor.prismarineDark.argb
+            case .prismarineBrickDoubleSlab:                return 0xFF // 89, 173, 162
 
-            case .smoothRedSandstoneSlab:                   return nil
-            case .graniteSlab:                              return nil
-            case .dioriteSlab:                              return nil
-            case .andesiteSlab:                             return nil
-            case .polishedGraniteSlab:                      return nil
-            case .polishedDioriteSlab:                      return nil
-            case .polishedAndesiteSlab:                     return nil
-            case .endStoneBrickSlab:                        return nil
-            case .smoothRedSandstoneDoubleSlab:             return nil
-            case .graniteDoubleSlab:                        return nil
-            case .dioriteDoubleSlab:                        return nil
-            case .andesiteDoubleSlab:                       return nil
-            case .polishedGraniteDoubleSlab:                return nil
-            case .polishedDioriteDoubleSlab:                return nil
-            case .polishedAndesiteDoubleSlab:               return nil
-            case .endStoneBrickDoubleSlab:                  return nil
+            case .smoothRedSandstoneSlab:                   return Self.DefaultColor.redSand.argb
+            case .graniteSlab:                              return Self.DefaultColor.granite.argb
+            case .dioriteSlab:                              return Self.DefaultColor.diorite.argb
+            case .andesiteSlab:                             return Self.DefaultColor.andesite.argb
+            case .polishedGraniteSlab:                      return Self.DefaultColor.granite.argb
+            case .polishedDioriteSlab:                      return Self.DefaultColor.diorite.argb
+            case .polishedAndesiteSlab:                     return Self.DefaultColor.andesite.argb
+            case .endStoneBrickSlab:                        return Self.DefaultColor.endBricks.argb
+            case .smoothRedSandstoneDoubleSlab:             return Self.DefaultColor.redSand.argb
+            case .graniteDoubleSlab:                        return Self.DefaultColor.granite.argb
+            case .dioriteDoubleSlab:                        return Self.DefaultColor.diorite.argb
+            case .andesiteDoubleSlab:                       return Self.DefaultColor.andesite.argb
+            case .polishedGraniteDoubleSlab:                return Self.DefaultColor.granite.argb
+            case .polishedDioriteDoubleSlab:                return Self.DefaultColor.diorite.argb
+            case .polishedAndesiteDoubleSlab:               return Self.DefaultColor.andesite.argb
+            case .endStoneBrickDoubleSlab:                  return Self.DefaultColor.endBricks.argb
 
-            case .stoneSlab:                                return nil
-            case .mossyStoneBrickSlab:                      return nil
-            case .cutSandstoneSlab:                         return nil
-            case .cutRedSandstoneSlab:                      return nil
-            case .smoothQuartzSlab:                         return nil
-            case .stoneDoubleSlab:                          return nil
-            case .mossyStoneBrickDoubleSlab:                return nil
-            case .cutSandstoneDoubleSlab:                   return nil
-            case .cutRedSandstoneDoubleSlab:                return nil
-            case .smoothQuartzDoubleSlab:                   return nil
+            case .stoneSlab:                                return Self.DefaultColor.normalStone.argb
+            case .mossyStoneBrickSlab:                      return Self.DefaultColor.mossyStone.argb
+            case .cutSandstoneSlab:                         return Self.DefaultColor.sand.argb
+            case .cutRedSandstoneSlab:                      return Self.DefaultColor.redSand.argb
+            case .smoothQuartzSlab:                         return Self.DefaultColor.quartz.argb
+            case .stoneDoubleSlab:                          return Self.DefaultColor.normalStone.argb
+            case .mossyStoneBrickDoubleSlab:                return Self.DefaultColor.mossyStone.argb
+            case .cutSandstoneDoubleSlab:                   return Self.DefaultColor.sand.argb
+            case .cutRedSandstoneDoubleSlab:                return Self.DefaultColor.redSand.argb
+            case .smoothQuartzDoubleSlab:                   return Self.DefaultColor.quartz.argb
 
             case .blackstoneSlab:                           return Self.DefaultColor.blackStone.argb
             case .polishedBlackstoneSlab:                   return Self.DefaultColor.polishedBlackStone.argb
@@ -610,8 +610,8 @@ extension MCBlockType {
             case .polishedDeepslateDoubleSlab:              return Self.DefaultColor.deepslate.argb
             case .deepslateBrickDoubleSlab:                 return Self.DefaultColor.deepslate.argb
 
-            case .mudBrickSlab:                             return 0xFF93704F    // (147, 112, 079)
-            case .mudBrickDoubleSlab:                       return 0xFF93704F    // (147, 112, 079)
+            case .mudBrickSlab:                             return Self.DefaultColor.mudBricks.argb
+            case .mudBrickDoubleSlab:                       return Self.DefaultColor.mudBricks.argb
 
             case .cutCopperSlab:                            return Self.DefaultColor.copper.argb
             case .exposedCutCopperSlab:                     return Self.DefaultColor.exposedCopper.argb
@@ -632,83 +632,83 @@ extension MCBlockType {
             case .waxedWeatheredDoubleCutCopperSlab:        return Self.DefaultColor.weatheredCopper.argb
 
             /* ---------- ---------- ---------- Signs ---------- ---------- ---------- */
-            case .oakStandingSign:                          return nil
-            case .spruceStandingSign:                       return nil
-            case .birchStandingSign:                        return nil
-            case .acaciaStandingSign:                       return nil
-            case .jungleStandingSign:                       return nil
-            case .darkoakStandingSign:                      return nil
-            case .mangroveStandingSign:                     return nil
-            case .cherryStandingSign:                       return nil
-            case .bambooStandingSign:                       return nil
-            case .crimsonStandingSign:                      return nil
-            case .warpedStandingSign:                       return nil
+            case .oakStandingSign:                          return Self.DefaultColor.oakPlanks.argb
+            case .spruceStandingSign:                       return Self.DefaultColor.sprucePlanks.argb
+            case .birchStandingSign:                        return Self.DefaultColor.birchPlanks.argb
+            case .acaciaStandingSign:                       return Self.DefaultColor.acaciaPlanks.argb
+            case .jungleStandingSign:                       return Self.DefaultColor.junglePlanks.argb
+            case .darkoakStandingSign:                      return Self.DefaultColor.darkOakPlanks.argb
+            case .mangroveStandingSign:                     return Self.DefaultColor.mangrovePlanks.argb
+            case .cherryStandingSign:                       return Self.DefaultColor.cherryPlanks.argb
+            case .bambooStandingSign:                       return Self.DefaultColor.bambooPlanks.argb
+            case .crimsonStandingSign:                      return Self.DefaultColor.crimsonPlanks.argb
+            case .warpedStandingSign:                       return Self.DefaultColor.warpedPlanks.argb
 
-            case .oakHangingSign:                           return nil
-            case .spruceHangingSign:                        return nil
-            case .birchHangingSign:                         return nil
-            case .jungleHangingSign:                        return nil
-            case .acaciaHangingSign:                        return nil
-            case .darkOakHangingSign:                       return nil
-            case .mangroveHangingSign:                      return nil
-            case .cherryHangingSign:                        return nil
-            case .bambooHangingSign:                        return nil
-            case .crimsonHangingSign:                       return nil
-            case .warpedHangingSign:                        return nil
+            case .oakHangingSign:                           return Self.DefaultColor.oakPlanks.argb
+            case .spruceHangingSign:                        return Self.DefaultColor.sprucePlanks.argb
+            case .birchHangingSign:                         return Self.DefaultColor.birchPlanks.argb
+            case .jungleHangingSign:                        return Self.DefaultColor.junglePlanks.argb
+            case .acaciaHangingSign:                        return Self.DefaultColor.acaciaPlanks.argb
+            case .darkOakHangingSign:                       return Self.DefaultColor.darkOakPlanks.argb
+            case .mangroveHangingSign:                      return Self.DefaultColor.mangrovePlanks.argb
+            case .cherryHangingSign:                        return Self.DefaultColor.cherryPlanks.argb
+            case .bambooHangingSign:                        return Self.DefaultColor.bambooPlanks.argb
+            case .crimsonHangingSign:                       return Self.DefaultColor.crimsonPlanks.argb
+            case .warpedHangingSign:                        return Self.DefaultColor.warpedPlanks.argb
 
-            case .oakWallSign:                              return nil
-            case .spruceWallSign:                           return nil
-            case .birchWallSign:                            return nil
-            case .acaciaWallSign:                           return nil
-            case .jungleWallSign:                           return nil
-            case .darkoakWallSign:                          return nil
-            case .mangroveWallSign:                         return nil
-            case .cherryWallSign:                           return nil
-            case .bambooWallSign:                           return nil
-            case .crimsonWallSign:                          return nil
-            case .warpedWallSign:                           return nil
+            case .oakWallSign:                              return Self.DefaultColor.oakPlanks.argb
+            case .spruceWallSign:                           return Self.DefaultColor.sprucePlanks.argb
+            case .birchWallSign:                            return Self.DefaultColor.birchPlanks.argb
+            case .jungleWallSign:                           return Self.DefaultColor.junglePlanks.argb
+            case .acaciaWallSign:                           return Self.DefaultColor.acaciaPlanks.argb
+            case .darkoakWallSign:                          return Self.DefaultColor.darkOakPlanks.argb
+            case .mangroveWallSign:                         return Self.DefaultColor.mangrovePlanks.argb
+            case .cherryWallSign:                           return Self.DefaultColor.cherryPlanks.argb
+            case .bambooWallSign:                           return Self.DefaultColor.bambooPlanks.argb
+            case .crimsonWallSign:                          return Self.DefaultColor.crimsonPlanks.argb
+            case .warpedWallSign:                           return Self.DefaultColor.warpedPlanks.argb
 
             /* ---------- ---------- ---------- Doors & Trapdoors ---------- ---------- ---------- */
-            case .oakDoor:                                  return nil
-            case .spruceDoor:                               return nil
-            case .birchDoor:                                return nil
-            case .jungleDoor:                               return nil
-            case .acaciaDoor:                               return nil
-            case .darkOakDoor:                              return nil
-            case .mangroveDoor:                             return nil
-            case .cherryDoor:                               return nil
-            case .bambooDoor:                               return nil
-            case .crimsonDoor:                              return nil
-            case .warpedDoor:                               return nil
-            case .ironDoor:                                 return nil
+            case .oakDoor:                                  return Self.DefaultColor.oakPlanks.argb
+            case .spruceDoor:                               return Self.DefaultColor.sprucePlanks.argb
+            case .birchDoor:                                return Self.DefaultColor.birchPlanks.argb
+            case .jungleDoor:                               return Self.DefaultColor.junglePlanks.argb
+            case .acaciaDoor:                               return Self.DefaultColor.acaciaPlanks.argb
+            case .darkOakDoor:                              return Self.DefaultColor.darkOakPlanks.argb
+            case .mangroveDoor:                             return Self.DefaultColor.mangrovePlanks.argb
+            case .cherryDoor:                               return Self.DefaultColor.cherryPlanks.argb
+            case .bambooDoor:                               return Self.DefaultColor.bambooPlanks.argb
+            case .crimsonDoor:                              return Self.DefaultColor.crimsonPlanks.argb
+            case .warpedDoor:                               return Self.DefaultColor.warpedPlanks.argb
+            case .ironDoor:                                 return 0xFF // 227, 227, 227
 
-            case .oakTrapdoor:                              return nil
-            case .spruceTrapdoor:                           return nil
-            case .birchTrapdoor:                            return nil
-            case .jungleTrapdoor:                           return nil
-            case .acaciaTrapdoor:                           return nil
-            case .darkOakTrapdoor:                          return nil
-            case .mangroveTrapdoor:                         return nil
-            case .cherryTrapdoor:                           return nil
-            case .bambooTrapdoor:                           return nil
-            case .crimsonTrapdoor:                          return nil
-            case .warpedTrapdoor:                           return nil
-            case .ironTrapdoor:                             return nil
+            case .oakTrapdoor:                              return Self.DefaultColor.oakPlanks.argb
+            case .spruceTrapdoor:                           return Self.DefaultColor.sprucePlanks.argb
+            case .birchTrapdoor:                            return Self.DefaultColor.birchPlanks.argb
+            case .jungleTrapdoor:                           return Self.DefaultColor.junglePlanks.argb
+            case .acaciaTrapdoor:                           return Self.DefaultColor.acaciaPlanks.argb
+            case .darkOakTrapdoor:                          return Self.DefaultColor.darkOakPlanks.argb
+            case .mangroveTrapdoor:                         return Self.DefaultColor.mangrovePlanks.argb
+            case .cherryTrapdoor:                           return Self.DefaultColor.cherryPlanks.argb
+            case .bambooTrapdoor:                           return Self.DefaultColor.bambooPlanks.argb
+            case .crimsonTrapdoor:                          return Self.DefaultColor.crimsonPlanks.argb
+            case .warpedTrapdoor:                           return Self.DefaultColor.warpedPlanks.argb
+            case .ironTrapdoor:                             return 0xFF // 227, 227, 227
 
             /* ---------- ---------- ---------- Village Blocks ---------- ---------- ---------- */
-            case .ironBars:                                 return nil
-            case .ladder:                                   return nil
+            case .ironBars:                                 return 0xFF // 154, 154, 154
+            case .ladder:                                   return 0xFF // 79, 79, 79
             case .scaffolding:                              return 0xFFE1C473    // (225, 196, 115)
             case .honeycombBlock:                           return 0xFFE58A08    // (229, 138, 008)
             case .lodestone:                                return 0xFFA0A2AA    // (160, 162, 170)
             case .hayBlock:                                 return 0xFFCBB007    // (203, 176, 007)
 
-            case .torch:                                    return nil
-            case .soulTorch:                                return nil
+            case .torch:                                    return 0xFF // 79, 79, 79
+            case .soulTorch:                                return 0xFF // 123, 239, 242
             case .lantern:                                  return 0xFF484F64    // (072, 079, 100)
-            case .soulLantern:                              return nil
-            case .campfire:                                 return nil
-            case .soulCampfire:                             return nil
+            case .soulLantern:                              return 0xFF // 123, 239, 242
+            case .campfire:                                 return 0xFF // 199, 107, 3
+            case .soulCampfire:                             return 0xFF // 123, 239, 242
 
             case .craftingTable:                            return 0xFF9C5831    // (156, 088, 049)
             case .cartographyTable:                         return 0xFF563518    // (086, 053, 024)
@@ -722,19 +722,19 @@ extension MCBlockType {
             case .smoker:                                   return Self.DefaultColor.furnace.argb
             case .litSmoker:                                return Self.DefaultColor.furnace.argb
             case .respawnAnchor:                            return 0xFF8108E1    // (129, 008, 225)
-            case .brewingStand:                             return nil
+            case .brewingStand:                             return 0xFF // 47, 47, 47
             case .anvil:                                    return Self.DefaultColor.anvil.argb
             case .grindstone:                               return 0xFF8D8D8D    // (141, 141, 141)
             case .enchantingTable:                          return 0xFF49EACF    // (073, 234, 207)
             case .bookshelf:                                return 0xFFC09B61    // (192, 155, 097)
-            case .chiseledBookshelf:                        return nil
+            case .chiseledBookshelf:                        return Self.DefaultColor.bookshelf.argb
             case .lectern:                                  return 0xFFA48049    // (164, 128, 073)
             case .composter:                                return 0xFF8B5B31    // (139, 091, 049)
 
             case .emptyCauldron:                            return 0xFF353434    // (053, 052, 052)
-            case .waterCauldron:                            return nil
-            case .lavaCauldron:                             return nil
-            case .powerSnowCauldron:                        return nil
+            case .waterCauldron:                            return 0xFF //  // (53, 52, 52)
+            case .lavaCauldron:                             return 0xFF //  // (53, 52, 52)
+            case .powerSnowCauldron:                        return 0xFF //  // (53, 52, 52)
 
             case .chest:                                    return Self.DefaultColor.chest.argb
             case .trappedChest:                             return Self.DefaultColor.chest.argb
@@ -745,17 +745,17 @@ extension MCBlockType {
             case .jukebox:                                  return 0xFF7A4F38    // (122, 079, 056)
             case .frame:                                    return nil
             case .glowFrame:                                return nil
-            case .flowerPot:                                return nil
+            case .flowerPot:                                return Self.DefaultColor.potter.argb
             case .beacon:                                   return 0xFF48D2CA    // (072, 210, 202)
             case .bell:                                     return 0xFFFAD338    // (250, 211, 056)
             case .stonecutterBlock:                         return Self.DefaultColor.furnace.argb
             case .loom:                                     return 0xFFC8A470    // (200, 164, 112)
-            case .decoratedPot:                             return nil
-            case .chain:                                    return nil
-            case .endRod:                                   return nil
-            case .lightningRod:                             return nil
+            case .decoratedPot:                             return Self.DefaultColor.potter.argb
+            case .chain:                                    return 0xFF // 60, 65, 80
+            case .endRod:                                   return 0xFF // 79, 79, 79
+            case .lightningRod:                             return 0xFF // 186, 109, 44
 
-            case .skull:                                    return nil
+            case .skull:                                    return 0xFF // 
             case .rail:                                     return Self.DefaultColor.rail.argb
             case .goldenRail:                               return Self.DefaultColor.rail.argb
             case .detectorRail:                             return Self.DefaultColor.rail.argb
@@ -766,57 +766,57 @@ extension MCBlockType {
             case .repeatingCommandBlock:                    return 0xFF694EC5    // (105, 078, 197)
             case .chainCommandBlock:                        return 0xFF9FC1B2    // (159, 193, 178)
             case .structureBlock:                           return 0xFF937894    // (147, 120, 148)
-            case .structureVoid:                            return nil
-            case .movingBlock:                              return nil
-            case .lightBlock:                               return nil
-            case .barrier:                                  return nil
-            case .jigsaw:                                   return nil
+            case .structureVoid:                            return 0xFF // 
+            case .movingBlock:                              return 0xFF // 
+            case .lightBlock:                               return 0xFF // 
+            case .barrier:                                  return 0xFF // 
+            case .jigsaw:                                   return 0xFF // 147, 120, 148
 
-            case .woodenButton:                             return nil
-            case .spruceButton:                             return nil
-            case .birchButton:                              return nil
-            case .jungleButton:                             return nil
-            case .acaciaButton:                             return nil
-            case .darkOakButton:                            return nil
-            case .mangroveButton:                           return nil
-            case .cherryButton:                             return nil
-            case .bambooButton:                             return nil
-            case .crimsonButton:                            return nil
-            case .warpedButton:                             return nil
-            case .stoneButton:                              return nil
-            case .polishedBlackstoneButton:                 return nil
+            case .woodenButton:                             return Self.DefaultColor.oakPlanks.argb
+            case .spruceButton:                             return Self.DefaultColor.sprucePlanks.argb
+            case .birchButton:                              return Self.DefaultColor.birchPlanks.argb
+            case .jungleButton:                             return Self.DefaultColor.junglePlanks.argb
+            case .acaciaButton:                             return Self.DefaultColor.acaciaPlanks.argb
+            case .darkOakButton:                            return Self.DefaultColor.darkOakPlanks.argb
+            case .mangroveButton:                           return Self.DefaultColor.mangrovePlanks.argb
+            case .cherryButton:                             return Self.DefaultColor.cherryPlanks.argb
+            case .bambooButton:                             return Self.DefaultColor.bambooPlanks.argb
+            case .crimsonButton:                            return Self.DefaultColor.crimsonPlanks.argb
+            case .warpedButton:                             return Self.DefaultColor.warpedPlanks.argb
+            case .stoneButton:                              return Self.DefaultColor.normalStone.argb
+            case .polishedBlackstoneButton:                 return Self.DefaultColor.polishedBlackStone.argb
 
-            case .woodenPressurePlate:                      return nil
-            case .sprucePressurePlate:                      return nil
-            case .birchPressurePlate:                       return nil
-            case .junglePressurePlate:                      return nil
-            case .acaciaPressurePlate:                      return nil
-            case .darkOakPressurePlate:                     return nil
-            case .mangrovePressurePlate:                    return nil
-            case .cherryPressurePlate:                      return nil
-            case .bambooPressurePlate:                      return nil
-            case .crimsonPressurePlate:                     return nil
-            case .warpedPressurePlate:                      return nil
-            case .stonePressurePlate:                       return nil
-            case .lightWeightedPressurePlate:               return nil
-            case .heavyWeightedPressurePlate:               return nil
-            case .polishedBlackstonePressurePlate:          return nil
+            case .woodenPressurePlate:                      return Self.DefaultColor.oakPlanks.argb
+            case .sprucePressurePlate:                      return Self.DefaultColor.sprucePlanks.argb
+            case .birchPressurePlate:                       return Self.DefaultColor.birchPlanks.argb
+            case .junglePressurePlate:                      return Self.DefaultColor.junglePlanks.argb
+            case .acaciaPressurePlate:                      return Self.DefaultColor.acaciaPlanks.argb
+            case .darkOakPressurePlate:                     return Self.DefaultColor.darkOakPlanks.argb
+            case .mangrovePressurePlate:                    return Self.DefaultColor.mangrovePlanks.argb
+            case .cherryPressurePlate:                      return Self.DefaultColor.cherryPlanks.argb
+            case .bambooPressurePlate:                      return Self.DefaultColor.bambooPlanks.argb
+            case .crimsonPressurePlate:                     return Self.DefaultColor.crimsonPlanks.argb
+            case .warpedPressurePlate:                      return Self.DefaultColor.warpedPlanks.argb
+            case .stonePressurePlate:                       return Self.DefaultColor.normalStone.argb
+            case .lightWeightedPressurePlate:               return 0xFF // 202, 171, 50
+            case .heavyWeightedPressurePlate:               return 0xFF // 182, 182, 182
+            case .polishedBlackstonePressurePlate:          return Self.DefaultColor.polishedBlackStone.argb
 
-            case .redstoneWire:                             return nil
-            case .redstoneTorch:                            return nil
-            case .unlitRedstoneTorch:                       return nil
-            case .lever:                                    return nil
-            case .tripwireHook:                             return nil
-            case .tripWire:                                 return nil
+            case .redstoneWire:                             return 0xFF // 75, 1, 0
+            case .redstoneTorch:                            return 0xFF // 
+            case .unlitRedstoneTorch:                       return 0xFF // 
+            case .lever:                                    return 0xFF // 134, 133, 134
+            case .tripwireHook:                             return 0xFF // 135, 135, 135
+            case .tripWire:                                 return 0xFF // 
             case .redstoneLamp:                             return 0xFFAD683A    // (173, 104, 058)
             case .litRedstoneLamp:                          return 0xFFF8D773    // (248, 215, 115)
             case .observer:                                 return 0xFF646464    // (100, 100, 100)
             case .daylightDetector:                         return 0xFFBCA88C    // (188, 168, 140)
             case .daylightDetectorInverted:                 return 0xFFBCA88C    // (188, 168, 140)
-            case .poweredRepeater:                          return nil
-            case .unpoweredRepeater:                        return nil
-            case .poweredComparator:                        return nil
-            case .unpoweredComparator:                      return nil
+            case .poweredRepeater:                          return 0xFF // 185, 185, 185
+            case .unpoweredRepeater:                        return 0xFF // 185, 185, 185
+            case .poweredComparator:                        return 0xFF // 185, 185, 185
+            case .unpoweredComparator:                      return 0xFF // 185, 185, 185
             case .hopper:                                   return 0xFF464646    // (070, 070, 070)
             case .dropper:                                  return Self.DefaultColor.furnace.argb
             case .dispenser:                                return Self.DefaultColor.furnace.argb
@@ -830,190 +830,192 @@ extension MCBlockType {
             case .honeyBlock:                               return 0x7AE99126    // (233, 145, 038)
 
             /* ---------- ---------- ---------- Colored Blocks ---------- ---------- ---------- */
-            case .bed:                                      return nil
-            case .standingBanner:                           return nil
-            case .wallBanner:                               return nil
+            case .bed:                                      return 0xFF // 247, 247, 247
+            case .standingBanner:                           return 0xFF // 
+            case .wallBanner:                               return 0xFF // 
 
-            case .tintedGlass:                              return nil
+            case .tintedGlass:                              return 0xFF // 
             case .glass:                                    return 0x11FFFFFF
-            case .glassPane:                                return nil
-            case .whiteStainedGlass:                        return nil
-            case .lightGrayStainedGlass:                    return nil
-            case .grayStainedGlass:                         return nil
-            case .blackStainedGlass:                        return nil
-            case .brownStainedGlass:                        return nil
-            case .redStainedGlass:                          return nil
-            case .orangeStainedGlass:                       return nil
-            case .yellowStainedGlass:                       return nil
-            case .limeStainedGlass:                         return nil
-            case .greenStainedGlass:                        return nil
-            case .cyanStainedGlass:                         return nil
-            case .lightBlueStainedGlass:                    return nil
-            case .blueStainedGlass:                         return nil
-            case .purpleStainedGlass:                       return nil
-            case .magentaStainedGlass:                      return nil
-            case .pinkStainedGlass:                         return nil
-            case .whiteStainedGlassPane:                    return nil
-            case .lightGrayStainedGlassPane:                return nil
-            case .grayStainedGlassPane:                     return nil
-            case .blackStainedGlassPane:                    return nil
-            case .brownStainedGlassPane:                    return nil
-            case .redStainedGlassPane:                      return nil
-            case .orangeStainedGlassPane:                   return nil
-            case .yellowStainedGlassPane:                   return nil
-            case .limeStainedGlassPane:                     return nil
-            case .greenStainedGlassPane:                    return nil
-            case .cyanStainedGlassPane:                     return nil
-            case .lightBlueStainedGlassPane:                return nil
-            case .blueStainedGlassPane:                     return nil
-            case .purpleStainedGlassPane:                   return nil
-            case .magentaStainedGlassPane:                  return nil
-            case .pinkStainedGlassPane:                     return nil
+
+            case .glassPane:                                return 0xFF // 
+            case .whiteStainedGlass:                        return 0xFF // 
+            case .lightGrayStainedGlass:                    return 0xFF // 
+            case .grayStainedGlass:                         return 0xFF // 
+            case .blackStainedGlass:                        return 0xFF // 21, 21, 21
+            case .brownStainedGlass:                        return 0xFF // 
+            case .redStainedGlass:                          return 0xFF // 
+            case .orangeStainedGlass:                       return 0xFF // 
+            case .yellowStainedGlass:                       return 0xFF // 
+            case .limeStainedGlass:                         return 0xFF // 
+            case .greenStainedGlass:                        return 0xFF // 
+            case .cyanStainedGlass:                         return 0xFF // 
+            case .lightBlueStainedGlass:                    return 0xFF // 
+            case .blueStainedGlass:                         return 0xFF // 
+            case .purpleStainedGlass:                       return 0xFF // 
+            case .magentaStainedGlass:                      return 0xFF // 
+            case .pinkStainedGlass:                         return 0xFF // 
+
+            case .whiteStainedGlassPane:                    return 0xFF // 
+            case .lightGrayStainedGlassPane:                return 0xFF // 
+            case .grayStainedGlassPane:                     return 0xFF // 
+            case .blackStainedGlassPane:                    return 0xFF // 
+            case .brownStainedGlassPane:                    return 0xFF // 
+            case .redStainedGlassPane:                      return 0xFF // 
+            case .orangeStainedGlassPane:                   return 0xFF // 
+            case .yellowStainedGlassPane:                   return 0xFF // 
+            case .limeStainedGlassPane:                     return 0xFF // 
+            case .greenStainedGlassPane:                    return 0xFF // 
+            case .cyanStainedGlassPane:                     return 0xFF // 
+            case .lightBlueStainedGlassPane:                return 0xFF // 
+            case .blueStainedGlassPane:                     return 0xFF // 
+            case .purpleStainedGlassPane:                   return 0xFF // 
+            case .magentaStainedGlassPane:                  return 0xFF // 
+            case .pinkStainedGlassPane:                     return 0xFF // 
 
             case .undyedShulkerBox:                         return 0xFF956595    // (149, 101, 149)
-            case .whiteShulkerBox:                          return nil
-            case .lightGrayShulkerBox:                      return nil
-            case .grayShulkerBox:                           return nil
-            case .blackShulkerBox:                          return nil
-            case .brownShulkerBox:                          return nil
-            case .redShulkerBox:                            return nil
-            case .orangeShulkerBox:                         return nil
-            case .yellowShulkerBox:                         return nil
-            case .limeShulkerBox:                           return nil
-            case .greenShulkerBox:                          return nil
-            case .cyanShulkerBox:                           return nil
-            case .lightBlueShulkerBox:                      return nil
-            case .blueShulkerBox:                           return nil
-            case .purpleShulkerBox:                         return nil
-            case .magentaShulkerBox:                        return nil
-            case .pinkShulkerBox:                           return nil
+            case .whiteShulkerBox:                          return 0xFF // 225, 230, 230
+            case .lightGrayShulkerBox:                      return 0xFF // 135, 135, 126
+            case .grayShulkerBox:                           return 0xFF // 59, 63, 67
+            case .blackShulkerBox:                          return 0xFF // 31, 31, 34
+            case .brownShulkerBox:                          return 0xFF // 111, 69, 39
+            case .redShulkerBox:                            return 0xFF // 152, 35, 33
+            case .orangeShulkerBox:                         return 0xFF // 225, 230, 230
+            case .yellowShulkerBox:                         return 0xFF // 249, 194, 34
+            case .limeShulkerBox:                           return 0xFF // 108, 183, 24
+            case .greenShulkerBox:                          return 0xFF // 83, 107, 29
+            case .cyanShulkerBox:                           return 0xFF // 22, 133, 144
+            case .lightBlueShulkerBox:                      return 0xFF // 57, 177, 215
+            case .blueShulkerBox:                           return 0xFF // 49, 52, 152
+            case .purpleShulkerBox:                         return 0xFF // 115, 38, 167
+            case .magentaShulkerBox:                        return 0xFF // 183, 61, 172
+            case .pinkShulkerBox:                           return 0xFF // 239, 135, 166
 
-            // case .wool:                                  return nil
-            case .whiteWool:                                return nil
-            case .lightGrayWool:                            return nil
-            case .grayWool:                                 return nil
-            case .blackWool:                                return nil
-            case .brownWool:                                return nil
-            case .redWool:                                  return nil
-            case .orangeWool:                               return nil
-            case .yellowWool:                               return nil
-            case .limeWool:                                 return nil
-            case .greenWool:                                return nil
-            case .cyanWool:                                 return nil
-            case .lightBlueWool:                            return nil
-            case .blueWool:                                 return nil
-            case .purpleWool:                               return nil
-            case .magentaWool:                              return nil
-            case .pinkWool:                                 return nil
+            // case .wool:                                  return 0xFF // 
+            case .whiteWool:                                return 0xFF // 247, 247, 247
+            case .lightGrayWool:                            return 0xFF // 151, 151, 145
+            case .grayWool:                                 return 0xFF // 70, 78, 81
+            case .blackWool:                                return 0xFF // 28, 28, 32
+            case .brownWool:                                return 0xFF // 125, 79, 46
+            case .redWool:                                  return 0xFF // 170, 42, 36
+            case .orangeWool:                               return 0xFF // 244, 122, 25
+            case .yellowWool:                               return 0xFF // 249, 206, 47
+            case .limeWool:                                 return 0xFF // 123, 193, 27
+            case .greenWool:                                return 0xFF // 91, 119, 22
+            case .cyanWool:                                 return 0xFF // 22, 153, 154
+            case .lightBlueWool:                            return 0xFF // 65, 186, 220
+            case .blueWool:                                 return 0xFF // 57, 63, 164
+            case .purpleWool:                               return 0xFF // 132, 47, 179
+            case .magentaWool:                              return 0xFF // 193, 73, 183
+            case .pinkWool:                                 return 0xFF // 241, 160, 186
 
-            // case .carpet:                                return nil
-            case .whiteCarpet:                              return nil
-            case .lightGrayCarpet:                          return nil
-            case .grayCarpet:                               return nil
-            case .blackCarpet:                              return nil
-            case .brownCarpet:                              return nil
-            case .redCarpet:                                return nil
-            case .orangeCarpet:                             return nil
-            case .yellowCarpet:                             return nil
-            case .limeCarpet:                               return nil
-            case .greenCarpet:                              return nil
-            case .cyanCarpet:                               return nil
-            case .lightBlueCarpet:                          return nil
-            case .blueCarpet:                               return nil
-            case .purpleCarpet:                             return nil
-            case .magentaCarpet:                            return nil
-            case .pinkCarpet:                               return nil
+            // case .carpet:                                return 0xFF // 
+            case .whiteCarpet:                              return 0xFF // 247, 247, 247
+            case .lightGrayCarpet:                          return 0xFF // 151, 151, 145
+            case .grayCarpet:                               return 0xFF // 70, 78, 81
+            case .blackCarpet:                              return 0xFF // 28, 28, 32
+            case .brownCarpet:                              return 0xFF // 125, 79, 46
+            case .redCarpet:                                return 0xFF // 170, 42, 36
+            case .orangeCarpet:                             return 0xFF // 244, 122, 25
+            case .yellowCarpet:                             return 0xFF // 249, 206, 47
+            case .limeCarpet:                               return 0xFF // 123, 193, 27
+            case .greenCarpet:                              return 0xFF // 91, 119, 22
+            case .cyanCarpet:                               return 0xFF // 22, 153, 154
+            case .lightBlueCarpet:                          return 0xFF // 65, 186, 220
+            case .blueCarpet:                               return 0xFF // 57, 63, 164
+            case .purpleCarpet:                             return 0xFF // 132, 47, 179
+            case .magentaCarpet:                            return 0xFF // 193, 73, 183
+            case .pinkCarpet:                               return 0xFF // 241, 160, 186
 
-            case .candle:                                   return nil
-            case .whiteCandle:                              return nil
-            case .lightGrayCandle:                          return nil
-            case .grayCandle:                               return nil
-            case .blackCandle:                              return nil
-            case .brownCandle:                              return nil
-            case .redCandle:                                return nil
-            case .orangeCandle:                             return nil
-            case .yellowCandle:                             return nil
-            case .limeCandle:                               return nil
-            case .greenCandle:                              return nil
-            case .cyanCandle:                               return nil
-            case .lightBlueCandle:                          return nil
-            case .blueCandle:                               return nil
-            case .purpleCandle:                             return nil
-            case .magentaCandle:                            return nil
-            case .pinkCandle:                               return nil
+            case .candle:                                   return 0xFF // 
+            case .whiteCandle:                              return 0xFF // 
+            case .lightGrayCandle:                          return 0xFF // 
+            case .grayCandle:                               return 0xFF // 
+            case .blackCandle:                              return 0xFF // 
+            case .brownCandle:                              return 0xFF // 
+            case .redCandle:                                return 0xFF // 
+            case .orangeCandle:                             return 0xFF // 
+            case .yellowCandle:                             return 0xFF // 
+            case .limeCandle:                               return 0xFF // 
+            case .greenCandle:                              return 0xFF // 
+            case .cyanCandle:                               return 0xFF // 
+            case .lightBlueCandle:                          return 0xFF // 
+            case .blueCandle:                               return 0xFF // 
+            case .purpleCandle:                             return 0xFF // 
+            case .magentaCandle:                            return 0xFF // 
+            case .pinkCandle:                               return 0xFF // 
 
-            case .cake:                                     return nil
-            case .candleCake:                               return nil
-            case .whiteCandleCake:                          return nil
-            case .lightGrayCandleCake:                      return nil
-            case .grayCandleCake:                           return nil
-            case .blackCandleCake:                          return nil
-            case .brownCandleCake:                          return nil
-            case .redCandleCake:                            return nil
-            case .orangeCandleCake:                         return nil
-            case .yellowCandleCake:                         return nil
-            case .limeCandleCake:                           return nil
-            case .greenCandleCake:                          return nil
-            case .cyanCandleCake:                           return nil
-            case .lightBlueCandleCake:                      return nil
-            case .blueCandleCake:                           return nil
-            case .purpleCandleCake:                         return nil
-            case .magentaCandleCake:                        return nil
-            case .pinkCandleCake:                           return nil
+            case .cake:                                     return 0xFF // 238, 229, 203
+            case .candleCake:                               return 0xFF // 238, 229, 203
+            case .whiteCandleCake:                          return 0xFF // 238, 229, 203
+            case .lightGrayCandleCake:                      return 0xFF // 238, 229, 203
+            case .grayCandleCake:                           return 0xFF // 238, 229, 203
+            case .blackCandleCake:                          return 0xFF // 238, 229, 203
+            case .brownCandleCake:                          return 0xFF // 238, 229, 203
+            case .redCandleCake:                            return 0xFF // 238, 229, 203
+            case .orangeCandleCake:                         return 0xFF // 238, 229, 203
+            case .yellowCandleCake:                         return 0xFF // 238, 229, 203
+            case .limeCandleCake:                           return 0xFF // 238, 229, 203
+            case .greenCandleCake:                          return 0xFF // 238, 229, 203
+            case .cyanCandleCake:                           return 0xFF // 238, 229, 203
+            case .lightBlueCandleCake:                      return 0xFF // 238, 229, 203
+            case .blueCandleCake:                           return 0xFF // 238, 229, 203
+            case .purpleCandleCake:                         return 0xFF // 238, 229, 203
+            case .magentaCandleCake:                        return 0xFF // 238, 229, 203
+            case .pinkCandleCake:                           return 0xFF // 238, 229, 203
 
-            case .whiteConcretePowder:                      return nil
-            case .lightGrayConcretePowder:                  return nil
-            case .grayConcretePowder:                       return nil
-            case .blackConcretePowder:                      return nil
-            case .brownConcretePowder:                      return nil
-            case .redConcretePowder:                        return nil
-            case .orangeConcretePowder:                     return nil
-            case .yellowConcretePowder:                     return nil
-            case .limeConcretePowder:                       return nil
-            case .greenConcretePowder:                      return nil
-            case .cyanConcretePowder:                       return nil
-            case .lightBlueConcretePowder:                  return nil
-            case .blueConcretePowder:                       return nil
-            case .purpleConcretePowder:                     return nil
-            case .magentaConcretePowder:                    return nil
-            case .pinkConcretePowder:                       return nil
+            case .whiteConcretePowder:                      return 0xFF // 222, 223, 224
+            case .lightGrayConcretePowder:                  return 0xFF // 154, 154, 148
+            case .grayConcretePowder:                       return 0xFF // 75, 79, 82
+            case .blackConcretePowder:                      return 0xFF // 22, 24, 29
+            case .brownConcretePowder:                      return 0xFF // 120, 81, 50
+            case .redConcretePowder:                        return 0xFF // 180, 58, 55
+            case .orangeConcretePowder:                     return 0xFF // 230, 128, 20
+            case .yellowConcretePowder:                     return 0xFF // 235, 209, 64
+            case .limeConcretePowder:                       return 0xFF // 138, 197, 45
+            case .greenConcretePowder:                      return 0xFF // 103, 126, 37
+            case .cyanConcretePowder:                       return 0xFF // 37, 154, 160
+            case .lightBlueConcretePowder:                  return 0xFF // 91, 194, 216
+            case .blueConcretePowder:                       return 0xFF // 72, 75, 175
+            case .purpleConcretePowder:                     return 0xFF // 138, 58, 186
+            case .magentaConcretePowder:                    return 0xFF // 200, 93, 193
+            case .pinkConcretePowder:                       return 0xFF // 236, 172, 195
 
-            case .concrete:                                 return nil
-            case .whiteConcrete:                            return nil
-            case .lightGrayConcrete:                        return nil
-            case .grayConcrete:                             return nil
-            case .blackConcrete:                            return nil
-            case .brownConcrete:                            return nil
-            case .redConcrete:                              return nil
-            case .orangeConcrete:                           return nil
-            case .yellowConcrete:                           return nil
-            case .limeConcrete:                             return nil
-            case .greenConcrete:                            return nil
-            case .cyanConcrete:                             return nil
-            case .lightBlueConcrete:                        return nil
-            case .blueConcrete:                             return nil
-            case .purpleConcrete:                           return nil
-            case .magentaConcrete:                          return nil
-            case .pinkConcrete:                             return nil
+            case .concrete:                                 return 0xFF // 
+            case .whiteConcrete:                            return 0xFF // 204, 209, 210
+            case .lightGrayConcrete:                        return 0xFF // 125, 125, 115
+            case .grayConcrete:                             return 0xFF // 53, 57, 61
+            case .blackConcrete:                            return 0xFF // 8, 10, 15
+            case .brownConcrete:                            return 0xFF // 95, 58, 31
+            case .redConcrete:                              return 0xFF // 138, 32, 32
+            case .orangeConcrete:                           return 0xFF // 222, 97, 0
+            case .yellowConcrete:                           return 0xFF // 239, 175, 22
+            case .limeConcrete:                             return 0xFF // 93, 167, 24
+            case .greenConcrete:                            return 0xFF // 72, 90, 35
+            case .cyanConcrete:                             return 0xFF // 21, 118, 134
+            case .lightBlueConcrete:                        return 0xFF // 37, 136, 198
+            case .blueConcrete:                             return 0xFF // 44, 46, 142
+            case .purpleConcrete:                           return 0xFF // 99, 32, 154
+            case .magentaConcrete:                          return 0xFF // 168, 49, 158
+            case .pinkConcrete:                             return 0xFF // 210, 100, 141
 
             case .clay:                                     return 0xFFA2A6B6    // (162, 166, 182)
             case .hardenedClay:                             return 0xFFA2A6B6    // (162, 166, 182)
-            case .whiteStainedHardenedClay:                 return nil
-            case .lightGrayStainedHardenedClay:             return nil
-            case .grayStainedHardenedClay:                  return nil
-            case .blackStainedHardenedClay:                 return nil
-            case .brownStainedHardenedClay:                 return nil
-            case .redStainedHardenedClay:                   return nil
-            case .orangeStainedHardenedClay:                return nil
-            case .yellowStainedHardenedClay:                return nil
-            case .limeStainedHardenedClay:                  return nil
-            case .greenStainedHardenedClay:                 return nil
-            case .cyanStainedHardenedClay:                  return nil
-            case .lightBlueStainedHardenedClay:             return nil
-            case .blueStainedHardenedClay:                  return nil
-            case .purpleStainedHardenedClay:                return nil
-            case .magentaStainedHardenedClay:               return nil
-            case .pinkStainedHardenedClay:                  return nil
+            case .whiteStainedHardenedClay:                 return 0xFF // 
+            case .lightGrayStainedHardenedClay:             return 0xFF // 
+            case .grayStainedHardenedClay:                  return 0xFF // 
+            case .blackStainedHardenedClay:                 return 0xFF // 
+            case .brownStainedHardenedClay:                 return 0xFF // 
+            case .redStainedHardenedClay:                   return 0xFF // 
+            case .orangeStainedHardenedClay:                return 0xFF // 
+            case .yellowStainedHardenedClay:                return 0xFF // 
+            case .limeStainedHardenedClay:                  return 0xFF // 
+            case .greenStainedHardenedClay:                 return 0xFF // 
+            case .cyanStainedHardenedClay:                  return 0xFF // 
+            case .lightBlueStainedHardenedClay:             return 0xFF // 
+            case .blueStainedHardenedClay:                  return 0xFF // 
+            case .purpleStainedHardenedClay:                return 0xFF // 
+            case .magentaStainedHardenedClay:               return 0xFF // 
+            case .pinkStainedHardenedClay:                  return 0xFF // 
 
             case .whiteGlazedTerracotta:                    return 0xFFF6FCFB    // (246, 252, 251)
             case .silverGlazedTerracotta:                   return 0xFFC7CBCF    // (199, 203, 207)
@@ -1032,60 +1034,60 @@ extension MCBlockType {
             case .magentaGlazedTerracotta:                  return 0xFFC957C0    // (201, 087, 192)
             case .pinkGlazedTerracotta:                     return 0xFFF1B3C9    // (241, 179, 201)
 
-            case .tubeCoralBlock:                           return nil
-            case .brainCoralBlock:                          return nil
-            case .bubbleCoralBlock:                         return nil
-            case .fireCoralBlock:                           return nil
-            case .hornCoralBlock:                           return nil
-            case .deadTubeCoralBlock:                       return nil
-            case .deadBrainCoralBlock:                      return nil
-            case .deadBubbleCoralBlock:                     return nil
-            case .deadFireCoralBlock:                       return nil
-            case .deadHornCoralBlock:                       return nil
+            case .tubeCoralBlock:                           return 0xFF // 48, 78, 218
+            case .brainCoralBlock:                          return 0xFF // 225, 125, 183
+            case .bubbleCoralBlock:                         return 0xFF // 198, 25, 184
+            case .fireCoralBlock:                           return 0xFF // 196, 42, 54
+            case .hornCoralBlock:                           return 0xFF // 234, 233, 76
+            case .deadTubeCoralBlock:                       return Self.DefaultColor.deadCoral.argb
+            case .deadBrainCoralBlock:                      return Self.DefaultColor.deadCoral.argb
+            case .deadBubbleCoralBlock:                     return Self.DefaultColor.deadCoral.argb
+            case .deadFireCoralBlock:                       return Self.DefaultColor.deadCoral.argb
+            case .deadHornCoralBlock:                       return Self.DefaultColor.deadCoral.argb
 
-            case .fireCoral:                                return nil
-            case .brainCoral:                               return nil
-            case .bubbleCoral:                              return nil
-            case .tubeCoral:                                return nil
-            case .hornCoral:                                return nil
-            case .deadFireCoral:                            return nil
-            case .deadBrainCoral:                           return nil
-            case .deadBubbleCoral:                          return nil
-            case .deadTubeCoral:                            return nil
-            case .deadHornCoral:                            return nil
+            case .fireCoral:                                return 0xFF // 48, 78, 218
+            case .brainCoral:                               return 0xFF // 225, 125, 183
+            case .bubbleCoral:                              return 0xFF // 198, 25, 184
+            case .tubeCoral:                                return 0xFF // 196, 42, 54
+            case .hornCoral:                                return 0xFF // 234, 233, 76
+            case .deadFireCoral:                            return Self.DefaultColor.deadCoral.argb
+            case .deadBrainCoral:                           return Self.DefaultColor.deadCoral.argb
+            case .deadBubbleCoral:                          return Self.DefaultColor.deadCoral.argb
+            case .deadTubeCoral:                            return Self.DefaultColor.deadCoral.argb
+            case .deadHornCoral:                            return Self.DefaultColor.deadCoral.argb
 
-            case .tubeCoralFan:                             return nil
-            case .brainCoralFan:                            return nil
-            case .bubbleCoralFan:                           return nil
-            case .fireCoralFan:                             return nil
-            case .hornCoralFan:                             return nil
+            case .tubeCoralFan:                             return 0xFF // 48, 78, 218
+            case .brainCoralFan:                            return 0xFF // 225, 125, 183
+            case .bubbleCoralFan:                           return 0xFF // 198, 25, 184
+            case .fireCoralFan:                             return 0xFF // 196, 42, 54
+            case .hornCoralFan:                             return 0xFF // 234, 233, 76
 
-            case .deadTubeCoralFan:                         return nil
-            case .deadBrainCoralFan:                        return nil
-            case .deadBubbleCoralFan:                       return nil
-            case .deadFireCoralFan:                         return nil
-            case .deadHornCoralFan:                         return nil
+            case .deadTubeCoralFan:                         return Self.DefaultColor.deadCoral.argb
+            case .deadBrainCoralFan:                        return Self.DefaultColor.deadCoral.argb
+            case .deadBubbleCoralFan:                       return Self.DefaultColor.deadCoral.argb
+            case .deadFireCoralFan:                         return Self.DefaultColor.deadCoral.argb
+            case .deadHornCoralFan:                         return Self.DefaultColor.deadCoral.argb
 
-            case .tubeCoralHang:                            return nil
-            case .brainCoralHang:                           return nil
-            case .deadTubeCoralHang:                        return nil
-            case .deadBrainCoralHang:                       return nil
-            case .bubbleCoralHang:                          return nil
-            case .fireCoralHang:                            return nil
-            case .deadBubbleCoralHang:                      return nil
-            case .deadFireCoralHang:                        return nil
-            case .hornCoralHang:                            return nil
-            case .deadHornCoralHang:                        return nil
+            case .tubeCoralHang:                            return 0xFF // 48, 78, 218
+            case .brainCoralHang:                           return 0xFF // 225, 125, 183
+            case .deadTubeCoralHang:                        return Self.DefaultColor.deadCoral.argb
+            case .deadBrainCoralHang:                       return Self.DefaultColor.deadCoral.argb
+            case .bubbleCoralHang:                          return 0xFF // 198, 25, 184
+            case .fireCoralHang:                            return 0xFF // 196, 42, 54
+            case .deadBubbleCoralHang:                      return Self.DefaultColor.deadCoral.argb
+            case .deadFireCoralHang:                        return Self.DefaultColor.deadCoral.argb
+            case .hornCoralHang:                            return 0xFF // 234, 233, 76
+            case .deadHornCoralHang:                        return Self.DefaultColor.deadCoral.argb
 
             /* ---------- ---------- ---------- Other ---------- ---------- ---------- */
-            case .clientRequestPlaceholderBlock:            return nil
-            case .invisibleBedrock:                         return nil
-            case .reserved6:                                return nil
+            case .clientRequestPlaceholderBlock:            return 0xFF // 
+            case .invisibleBedrock:                         return 0xFF // 
+            case .reserved6:                                return 0xFF // 
             case .netherreactor:                            return 0xFF211114    // (033, 017, 020)
-            case .glowingobsidian:                          return nil
+            case .glowingobsidian:                          return 0xFF // 
             case .stonecutter:                              return Self.DefaultColor.furnace.argb
-            case .infoUpdate:                               return nil
-            case .infoUpdate2:                              return nil
+            case .infoUpdate:                               return 0xFF // 
+            case .infoUpdate2:                              return 0xFF // 
         }
     }
 }
