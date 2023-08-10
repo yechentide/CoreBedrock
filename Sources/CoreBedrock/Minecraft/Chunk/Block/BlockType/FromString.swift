@@ -1314,7 +1314,6 @@ extension MCBlockType: ExpressibleByStringLiteral {
 
             case "minecraft:concrete_powder":                        self = .whiteConcretePowder
 
-            case "minecraft:concrete":                               self = .concrete
             case "minecraft:white_concrete":                         self = .whiteConcrete
             case "minecraft:light_gray_concrete":                    self = .lightGrayConcrete
             case "minecraft:gray_concrete":                          self = .grayConcrete
