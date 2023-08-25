@@ -14,8 +14,6 @@ public struct MCDir {
     }
 
     public static func isMCWorldDir(dirURL: URL) throws -> Bool {
-        guard FileManager.default.dirExists(at: dirURL) else { return false }
-
         var (hasDB, hasLevelDat) = (false, false)
         let keys : [URLResourceKey] = [.nameKey, .isDirectoryKey]
         let contents = try FileManager.default.contentsOfDirectory(at: dirURL, includingPropertiesForKeys: keys)
