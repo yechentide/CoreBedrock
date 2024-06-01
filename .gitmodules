@@ -1,0 +1,3 @@
+[submodule "Scripts/utils"]
+	path = Scripts/utils
+	url = https://github.com/PNSnippets/shell-utils.git
