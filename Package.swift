@@ -5,19 +5,56 @@ import PackageDescription
 
 let package = Package(
     name: "CoreBedrock",
+    platforms: [
+        .iOS(.v12),
+        .macOS(.v11),
+    ],
     products: [
+        .library(
+            name: "LvDBWrapper",
+            targets: ["LvDBWrapper"]
+        ),
         .library(
             name: "CoreBedrock",
             targets: ["CoreBedrock"]
         ),
     ],
     targets: [
+        .binaryTarget(
+            name: "libz",
+            path: "Dependencies/libz.xcframework"
+        ),
+        .binaryTarget(
+            name: "libleveldb",
+            path: "Dependencies/libleveldb.xcframework"
+        ),
+
         .target(
-            name: "CoreBedrock"
+            name: "LvDBWrapper",
+            dependencies: ["libz", "libleveldb"],
+            cxxSettings: [
+                .unsafeFlags([
+                    "-DDLLX=",
+                ])
+            ]
+        ),
+        .testTarget(
+            name: "LvDBWrapperTests",
+            dependencies: ["LvDBWrapper"],
+            resources: [
+                .copy("./world"),
+            ]
+        ),
+
+        .target(
+            name: "CoreBedrock",
+            dependencies: ["LvDBWrapper"]
         ),
         .testTarget(
             name: "CoreBedrockTests",
             dependencies: ["CoreBedrock"]
         ),
-    ]
+    ],
+    cLanguageStandard: .c11,
+    cxxLanguageStandard: .cxx11
 )
