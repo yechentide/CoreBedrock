@@ -95,7 +95,10 @@ public final class CompoundTag: NBT {
             return _tags[index]
         }
         set {
-            precondition(newValue != nil)
+            if newValue == nil {
+                _ = remove(forKey: tagName)
+                return
+            }
             precondition(newValue!.name == tagName, "Given tag name must match the tag's actual name.")
             precondition(newValue!.parent == nil, "A tag may only be added to one compound/list at a time.")
             precondition(newValue !== self || newValue !== parent!, "A compound tag may not be added to itself or to its child tag.")
@@ -117,7 +120,37 @@ public final class CompoundTag: NBT {
             }
         }
     }
-    
+
+    /// Inserts an item to this `CompoundTag` at the specified index.
+    /// - Parameters:
+    ///   - newTag: The tag to insert into this `Compound`.
+    ///   - index: The zero-based index at which newTag should be inserted.
+    /// - Throws: An `CBError.argumentError` if `newTag` already has a parent tag, is the same as this tag or has a name used in this Compound tag; an `CBError.argumentOutOfRange` error if the given `index` is not a valid index in this `CompoundTag`.
+    public func insert(_ newTag: NBT, at index: Int) throws {
+        if newTag as? CompoundTag === self {
+            throw CBStreamError.argumentError("Cannot add tag to itself")
+        }
+        if newTag.parent != nil {
+            throw CBStreamError.argumentError("A tag may only be added to one compound/list at a time.")
+        }
+        if newTag.name == nil {
+            throw CBStreamError.argumentError("Only named tags are allowed in Compound tags.")
+        }
+        if contains(newTag.name!) {
+            throw CBStreamError.argumentError("A tag with the same name has already been added.")
+        }
+        if index < 0 || index > _tags.count {
+            throw CBStreamError.argumentOutOfRange("index", "The given value is not a valid index in the Compound tag.")
+        }
+
+        _tags.insert(newTag, at: index)
+        newTag.parent = self
+        _keys.removeAll()
+        for (index, tag) in _tags.enumerated() {
+            _keys[tag.name!] = index
+        }
+    }
+
     /// Adds a tag to the end of this `CompoundTag`.
     /// - Parameter newTag: The object to add to this CompoundTag.
     /// - Throws: An `CBError.argumentError`  if the given tag is unnamed or
@@ -135,15 +168,12 @@ public final class CompoundTag: NBT {
         if contains(newTag.name!) {
             throw CBStreamError.argumentError("A tag with the same name has already been added.")
         }
-        
-        // Add to the _tags array
+
         _tags.append(newTag)
-        // Get the index just added
-        let index = _tags.endIndex - 1
-        // Add to _keys
-        _keys[newTag.name!] = index
-        
         newTag.parent = self
+
+        let index = _tags.endIndex - 1
+        _keys[newTag.name!] = index
     }
     
     /// Adds all tags from the specified collection to this `CompoundTag`.
@@ -207,7 +237,7 @@ public final class CompoundTag: NBT {
         }
         return true // because *A* tag was found
     }
-    
+
     /// Removes the first occurrence of a specific `NBT` from the CompoundTag.
     /// Looks for exact object matches, not name matches.
     /// - Parameter tag: The tag to remove from the CompoundTag.
@@ -222,13 +252,15 @@ public final class CompoundTag: NBT {
         
         // Compare instances
         guard _tags[index] === tag else { return false }
-        
-        // Remove from collections
+
         _tags.remove(at: index)
-        _keys.removeValue(forKey: tag.name!)
-        // Set parent to nil
         tag.parent = nil
-        
+
+        _keys.removeAll()
+        for (index, tag) in _tags.enumerated() {
+            _keys[tag.name!] = index
+        }
+
         return true
     }
     
@@ -238,13 +270,15 @@ public final class CompoundTag: NBT {
     /// This method returns `false` if name is not found in the `CompoundTag`.
     public func remove(forKey tagName: String) -> Bool {
         guard let index = _keys[tagName] else { return false }
-        
-        // Remove from collections
+
         let tag = _tags.remove(at: index)
-        _keys.removeValue(forKey:tagName)
-        // Set parent to nil
         tag.parent = nil
-        
+
+        _keys.removeAll()
+        for (index, tag) in _tags.enumerated() {
+            _keys[tag.name!] = index
+        }
+
         return true
     }
     
