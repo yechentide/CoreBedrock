@@ -58,7 +58,10 @@ let package = Package(
         ),
         .testTarget(
             name: "CoreBedrockTests",
-            dependencies: ["CoreBedrock"]
+            dependencies: ["CoreBedrock"],
+            resources: [
+                .process("TestData/nbt"),
+            ]
         ),
     ],
     cLanguageStandard: .c11,
