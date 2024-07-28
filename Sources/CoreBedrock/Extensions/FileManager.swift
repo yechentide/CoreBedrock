@@ -5,11 +5,18 @@
 import Foundation
 
 extension FileManager {
-    public func createDirectoryIfMissing(url: URL) throws {
+    public func createDirectoryIfMissing(at url: URL) throws {
         guard !fileExists(atPath: url.absoluteString) else {
             return
         }
         try createDirectory(at: url, withIntermediateDirectories: true)
+    }
+
+    public func deleteFileIfExists(at url: URL) throws {
+        guard fileExists(atPath: url.absoluteString) else {
+            return
+        }
+        try removeItem(at: url)
     }
 
     public func dirExists(at url: URL) -> Bool {
