@@ -1,3 +1,5 @@
+import CoreGraphics
+
 public enum MCDimension: Int32, CustomStringConvertible {
     case overworld = 0
     case theNether = 1
@@ -11,6 +13,17 @@ public enum MCDimension: Int32, CustomStringConvertible {
                 return "theNether"
             case .theEnd:
                 return "theEnd"
+        }
+    }
+
+    public var color: CGColor {
+        switch self {
+            case .overworld:
+                return .init(red: 52/255, green: 199/255, blue: 90/255, alpha: 1)
+            case .theNether:
+                return .init(red: 189/255, green: 48/255, blue: 48/255, alpha: 1)
+            case .theEnd:
+                return .init(red: 235/255, green: 237/255, blue: 150/255, alpha: 1)
         }
     }
 }

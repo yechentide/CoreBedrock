@@ -14,12 +14,33 @@ extension FileManager {
 
     func dirExists(at url: URL) -> Bool {
         var isDir: ObjCBool = false
-        var path = if #available(iOS 16.0, macOS 13.0, *) {
+        let path = if #available(iOS 16.0, macOS 13.0, *) {
             url.path(percentEncoded: false)
         } else {
             url.path
         }
         let fileExists = FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
         return fileExists && isDir.boolValue
+    }
+
+    func isMCWorldDir(at dirURL: URL) throws -> Bool {
+        var (hasDBDir, hasLevelDat) = (false, false)
+        let keys : [URLResourceKey] = [.nameKey, .isDirectoryKey]
+        let contents = try FileManager.default.contentsOfDirectory(
+            at: dirURL,
+            includingPropertiesForKeys: keys
+        )
+
+        for fileURL in contents {
+            let attributes = try fileURL.resourceValues(forKeys: Set(keys))
+            if attributes.name == "db" && attributes.isDirectory == true {
+                hasDBDir = true
+            } else if attributes.name == "level.dat" && attributes.isDirectory! == false {
+                hasLevelDat = true
+            }
+        }
+
+        if hasDBDir && hasLevelDat { return true }
+        return false
     }
 }

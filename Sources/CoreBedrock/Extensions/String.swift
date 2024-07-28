@@ -28,4 +28,21 @@ extension String {
         }
         return Data(byteArray)
     }
+
+    public func removeMinecraftColorCodes() -> String {
+        let pattern = "§[0-9a-gk-or]"
+        do {
+            let regex = try NSRegularExpression(pattern: pattern, options: [])
+            let range = NSRange(location: 0, length: self.utf16.count)
+            let modifiedString = regex.stringByReplacingMatches(
+                in: self,
+                options: [],
+                range: range,
+                withTemplate: ""
+            )
+            return modifiedString
+        } catch {
+            return self
+        }
+    }
 }
