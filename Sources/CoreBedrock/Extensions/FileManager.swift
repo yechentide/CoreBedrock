@@ -5,14 +5,14 @@
 import Foundation
 
 extension FileManager {
-    func createDirectoryIfMissing(url: URL) throws {
+    public func createDirectoryIfMissing(url: URL) throws {
         guard !fileExists(atPath: url.absoluteString) else {
             return
         }
         try createDirectory(at: url, withIntermediateDirectories: true)
     }
 
-    func dirExists(at url: URL) -> Bool {
+    public func dirExists(at url: URL) -> Bool {
         var isDir: ObjCBool = false
         let path = if #available(iOS 16.0, macOS 13.0, *) {
             url.path(percentEncoded: false)
@@ -23,7 +23,7 @@ extension FileManager {
         return fileExists && isDir.boolValue
     }
 
-    func isMCWorldDir(at dirURL: URL) throws -> Bool {
+    public func isMCWorldDir(at dirURL: URL) throws -> Bool {
         var (hasDBDir, hasLevelDat) = (false, false)
         let keys : [URLResourceKey] = [.nameKey, .isDirectoryKey]
         let contents = try FileManager.default.contentsOfDirectory(
