@@ -5,20 +5,65 @@ import PackageDescription
 
 let package = Package(
     name: "CoreBedrock",
+    platforms: [
+        .iOS(.v14),
+        .macOS(.v11),
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
+        .library(
+            name: "LvDBWrapper",
+            targets: ["LvDBWrapper"]
+        ),
         .library(
             name: "CoreBedrock",
-            targets: ["CoreBedrock"]),
-    ],
-    targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "CoreBedrock"),
-        .testTarget(
-            name: "CoreBedrockTests",
-            dependencies: ["CoreBedrock"]
+            targets: ["CoreBedrock"]
         ),
-    ]
+    ],
+//    dependencies: [
+//        .package(url: "https://github.com/mw99/DataCompression", exact: "3.8.0"),
+//    ],
+    targets: [
+        .binaryTarget(
+            name: "libz",
+            path: "Libraries/libz.xcframework"
+        ),
+        .binaryTarget(
+            name: "libleveldb",
+            path: "Libraries/libleveldb.xcframework"
+        ),
+
+        .target(
+            name: "LvDBWrapper",
+            dependencies: ["libz", "libleveldb"],
+            cxxSettings: [
+                .unsafeFlags([
+                    "-DDLLX=",
+                ])
+            ]
+        ),
+//        .testTarget(
+//            name: "LvDBWrapperTests",
+//            dependencies: ["LvDBWrapper"],
+//            resources: [
+//                .copy("./world"),
+//            ]
+//        ),
+
+        .target(
+            name: "CoreBedrock",
+            dependencies: [
+                "LvDBWrapper",
+//                "DataCompression",
+            ]
+        ),
+//        .testTarget(
+//            name: "CoreBedrockTests",
+//            dependencies: ["CoreBedrock"],
+//            resources: [
+//                .process("TestData/nbt"),
+//            ]
+//        ),
+    ],
+    cLanguageStandard: .c11,
+    cxxLanguageStandard: .cxx11
 )
