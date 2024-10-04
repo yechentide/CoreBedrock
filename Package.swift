@@ -19,9 +19,9 @@ let package = Package(
             targets: ["CoreBedrock"]
         ),
     ],
-//    dependencies: [
-//        .package(url: "https://github.com/mw99/DataCompression", exact: "3.8.0"),
-//    ],
+    dependencies: [
+        .package(url: "https://github.com/mw99/DataCompression", exact: "3.8.0"),
+    ],
     targets: [
         .binaryTarget(
             name: "libz",
@@ -53,7 +53,7 @@ let package = Package(
             name: "CoreBedrock",
             dependencies: [
                 "LvDBWrapper",
-//                "DataCompression",
+                "DataCompression",
             ]
         ),
 //        .testTarget(

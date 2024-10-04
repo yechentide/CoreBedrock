@@ -1,0 +1,91 @@
+//
+// Created by yechentide on 2024/06/02
+//
+
+import Foundation
+
+/// Represents a tag containing a UTF-8-encoded string.
+public final class StringTag: NBT {
+    // Override to return the .string type
+    override public var tagType: TagType {
+        return .string
+    }
+
+    /// The value/payload of this tag (a single string). May not be null.
+    public var value: String
+
+    /// Creates an unnamed `StringTag` tag with the default value (empty string).
+    override public init() {
+        value = ""
+        super.init()
+    }
+
+    /// Creates an unnamed `StringTag` tag with the given value.
+    /// - Parameter value: The `String` value to assign to this tag.
+    convenience public init(_ value: String) {
+        self.init(name: nil, value)
+    }
+
+    /// Creates an `StringTag` tag with the given name and value.
+    /// - Parameters:
+    ///   - name: The name to assign to this tag.
+    ///   - value: The `String` value to assign to this tag.
+    public init(name: String?, _ value: String) {
+        self.value = value
+        super.init()
+        self.name = name
+    }
+
+    /// Creates a copy of given `StringTag` tag.
+    /// - Parameter other: The tag to copy.
+    public init(from other: StringTag) {
+        self.value = other.value
+        super.init()
+        self.name = other.name
+    }
+
+    override func readTag(_ readStream: CBBinaryReader, _ skip: (NBT) -> Bool) throws -> Bool {
+        // Check if the tag needs to be skipped
+        if skip(self) {
+            try skipTag(readStream)
+            return false
+        }
+        value = try readStream.readString()
+        return true
+    }
+
+    override func skipTag(_ readStream: CBBinaryReader) throws {
+        try readStream.skipString()
+    }
+
+    override func writeTag(_ writeStream: CBBinaryWriter) throws {
+        try writeStream.write(TagType.string)
+        guard let name = name else { throw CBStreamError.invalidFormat("Name is null") }
+        try writeStream.write(name)
+        try writeData(writeStream)
+    }
+
+    override func writeData(_ writeStream: CBBinaryWriter) throws {
+        try writeStream.write(value)
+    }
+
+    public override func clone() -> NBT {
+        return StringTag(from: self)
+    }
+
+    override func toString(indentString: String, indentLevel: Int) -> String {
+        var formattedStr = ""
+        for _ in 0..<indentLevel {
+            formattedStr.append(indentString)
+        }
+        formattedStr.append("TAG_String")
+        if name != nil && name!.count > 0 {
+            formattedStr.append("(\"\(name!)\")")
+        }
+        formattedStr.append(": \"")
+        formattedStr.append(value)
+        formattedStr.append("\"")
+
+        return formattedStr
+    }
+}
