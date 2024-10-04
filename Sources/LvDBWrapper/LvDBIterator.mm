@@ -9,9 +9,9 @@
 #import <memory>
 #import "leveldb/db.h"
 
-@implementation LvDBIterator
-
-std::unique_ptr<leveldb::Iterator> iterator;
+@implementation LvDBIterator {
+    std::unique_ptr<leveldb::Iterator> iterator;
+}
 
 - (id)initFromIterator:(void *)dbIterator {
     if (self = [super init]) {

@@ -15,12 +15,12 @@
 #import "leveldb/zlib_compressor.h"
 #import "leveldb/decompress_allocator.h"
 
-@implementation LvDB
-
-std::unique_ptr<leveldb::DB> db;
-leveldb::Options options;
-leveldb::ReadOptions readOptions;
-leveldb::WriteOptions writeOptions;
+@implementation LvDB {
+    std::unique_ptr<leveldb::DB> db;
+    leveldb::Options options;
+    leveldb::ReadOptions readOptions;
+    leveldb::WriteOptions writeOptions;
+}
 
 - (id)initWithDBPath:(NSString *)path {
     if (self = [super init]) {
