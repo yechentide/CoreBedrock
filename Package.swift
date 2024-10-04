@@ -41,13 +41,13 @@ let package = Package(
                 ])
             ]
         ),
-//        .testTarget(
-//            name: "LvDBWrapperTests",
-//            dependencies: ["LvDBWrapper"],
-//            resources: [
-//                .copy("./world"),
-//            ]
-//        ),
+        .testTarget(
+            name: "LvDBWrapperTests",
+            dependencies: ["LvDBWrapper"],
+            resources: [
+                .copy("./world"),
+            ]
+        ),
 
         .target(
             name: "CoreBedrock",
