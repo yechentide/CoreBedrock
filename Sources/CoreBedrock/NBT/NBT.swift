@@ -268,4 +268,3 @@ extension NBT: Equatable {
         return lhs === rhs
     }
 }
-

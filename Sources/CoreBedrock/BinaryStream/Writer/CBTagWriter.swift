@@ -144,7 +144,6 @@ public final class CBTagWriter {
         goUp()
     }
 
-
     /// Writes an unnamed byte tag.
     /// - Parameter value: The unsigned byte to write.
     /// - Throws: An `CBStreamError.invalidFormat` error if no more tags can
@@ -305,7 +304,6 @@ public final class CBTagWriter {
         try _writer.write(tagName)
         try _writer.write(value)
     }
-
 
     /// Writes an unnamed byte array tag, copying data from an array.
     /// - Parameters:
@@ -599,7 +597,6 @@ public final class CBTagWriter {
             throw CBStreamError.invalidFormat("Cannot finish: not all tags have been closed yet.")
         }
     }
-
 
     private func goDown(thisType: TagType) {
         let newNode = CBTagWriterNode(

@@ -61,4 +61,3 @@ public struct MCDir {
         return Date.formatDate(date)
     }
 }
-
