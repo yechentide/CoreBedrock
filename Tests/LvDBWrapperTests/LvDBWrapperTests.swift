@@ -7,7 +7,7 @@ import Foundation
 import LvDBWrapper
 
 struct LvDBWrapperTests {
-    private let testDataPath = Bundle.module.path(forResource: "world/db", ofType: nil)!
+    private let testDataPath = Bundle.module.path(forResource: "TestData/db", ofType: nil)!
 
     private func prepareTemporaryDB() -> String {
         let tempDBDirName = "db_\(UUID().uuidString)"
@@ -24,7 +24,7 @@ struct LvDBWrapperTests {
         do {
             try? FileManager.default.removeItem(at: tempDBURL)
             try FileManager.default.copyItem(at: originalURL, to: tempDBURL)
-            print("Created test db at \(tempDBURL).")
+            print("Created test db at \(tempDBURL.path()).")
         } catch {
             Issue.record("Failed to copy the database from bundle.")
         }

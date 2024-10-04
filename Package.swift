@@ -45,7 +45,7 @@ let package = Package(
             name: "LvDBWrapperTests",
             dependencies: ["LvDBWrapper"],
             resources: [
-                .copy("./world"),
+                .copy("./TestData"),
             ]
         ),
 
