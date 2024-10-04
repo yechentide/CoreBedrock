@@ -15,19 +15,19 @@
 
 - (id)initFromIterator:(void *)dbIterator {
     if (self = [super init]) {
-        std::cout << "[LvDBWrapper] Iterator generated." << std::endl;
         leveldb::Iterator* it = static_cast<leveldb::Iterator*>(dbIterator);
         iterator.reset(it);
+        std::cout << "[LvDBWrapper] LvDBIterator generated." << std::endl;
     }
     return self;
 }
 
 - (void)dealloc {
-    std::cout << "[LvDBWrapper] Iterator deallocated." << std::endl;
+    std::cout << "[LvDBWrapper] LvDBIterator deallocated." << std::endl;
 }
 
 - (void)destroy {
-    std::cout << "[LvDBWrapper] Iterator destroyed." << std::endl;
+    std::cout << "[LvDBWrapper] leveldb::Iterator destroyed." << std::endl;
     iterator.reset();
 }
 

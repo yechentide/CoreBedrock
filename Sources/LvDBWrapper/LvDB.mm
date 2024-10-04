@@ -42,14 +42,15 @@
             std::cout << "[LvDBWrapper] Failed to open the db: " << dbPath << std::endl;
             return nil;
         }
+        std::cout << "[LvDBWrapper] leveldb::DB opened: " << dbPath << std::endl;
         db.reset(tmp);
-        std::cout << "[LvDBWrapper] LevelDB opened: " << dbPath << std::endl;
+        std::cout << "[LvDBWrapper] LvDB generated: " << dbPath << std::endl;
     }
     return self;
 }
 
 - (void)dealloc {
-    std::cout << "[LvDBWrapper] LevelDB deallocated." << std::endl;
+    std::cout << "[LvDBWrapper] LvDB deallocated." << std::endl;
 }
 
 - (void)close {
@@ -59,13 +60,14 @@
     delete options.compressors[0];
     delete options.compressors[1];
     delete readOptions.decompress_allocator;
-    std::cout << "[LvDBWrapper] LevelDB closed." << std::endl;
+    std::cout << "[LvDBWrapper] leveldb::DB closed." << std::endl;
 }
 
 /* ---------- ---------- ---------- ---------- ---------- ---------- */
 
 - (LvDBIterator *)makeIterator {
     auto dbIterator = db->NewIterator(readOptions);
+    std::cout << "[LvDBWrapper] leveldb::Iterator generated." << std::endl;
     return [[LvDBIterator alloc] initFromIterator:dbIterator];
 }
 
