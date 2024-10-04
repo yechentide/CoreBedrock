@@ -56,13 +56,13 @@ let package = Package(
                 "DataCompression",
             ]
         ),
-//        .testTarget(
-//            name: "CoreBedrockTests",
-//            dependencies: ["CoreBedrock"],
-//            resources: [
-//                .process("TestData/nbt"),
-//            ]
-//        ),
+        .testTarget(
+            name: "CoreBedrockTests",
+            dependencies: ["CoreBedrock"],
+            resources: [
+                .copy("./TestData"),
+            ]
+        ),
     ],
     cLanguageStandard: .c11,
     cxxLanguageStandard: .cxx11
