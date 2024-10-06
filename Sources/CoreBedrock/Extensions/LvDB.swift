@@ -4,7 +4,7 @@
 
 import LvDBWrapper
 
-// MARK: Functions to extract leveldb keys
+// MARK: - Functions to extract leveldb keys
 extension LvDB {
     public func getStringKey(type: MCStringKeyType) -> Data? {
         let keyData = type.rawValue.data(using: .utf8)!
@@ -105,6 +105,7 @@ extension LvDB {
     }
 }
 
+// MARK: - Functions to delete leveldb keys
 extension LvDB {
     public func removeChunkKeys(keyPrefix: Data, completion: ((Data, Bool) -> Void)? = nil) {
         (Int8(-4)...Int8(20)).forEach { yIndex in
