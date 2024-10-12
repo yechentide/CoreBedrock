@@ -58,6 +58,6 @@ public struct MCDir {
         guard let date = self.lastOpenedDate else {
             return "???"
         }
-        return Date.formatDate(date)
+        return date.format("yyyy-MM-dd")
     }
 }

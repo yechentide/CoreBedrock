@@ -85,7 +85,7 @@ public struct MCWorldMeta {
             return nil
         }
         let lastPlayedDate = Date(timeIntervalSince1970: TimeInterval(lastPlayed))
-        return Date.formatDate(lastPlayedDate)
+        return lastPlayedDate.format("yyyy-MM-dd")
     }
 
     public var lastOpenedVersion: String? {

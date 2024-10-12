@@ -13,13 +13,8 @@ extension Date {
     }
     public static let defaultFormatter = makeDefaultFormatter()
 
-    public static func formatDate(_ date: Date) -> String {
-        defaultFormatter.dateFormat = "yyyy/MM/dd"
-        return defaultFormatter.string(from: date)
-    }
-
-    public static func formatDateTime(_ date: Date) -> String {
-        defaultFormatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
-        return defaultFormatter.string(from: date)
+    public func format(_ format: String) -> String {
+        Self.defaultFormatter.dateFormat = format
+        return Self.defaultFormatter.string(from: self)
     }
 }
