@@ -60,4 +60,8 @@ public struct MCDir {
         }
         return date.format("yyyy-MM-dd")
     }
+
+     public func parse() throws -> MCWorld {
+         return try MCWorld(from: dirURL)
+     }
 }
