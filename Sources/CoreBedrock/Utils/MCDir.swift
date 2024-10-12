@@ -61,7 +61,15 @@ public struct MCDir {
         return date.format("yyyy-MM-dd")
     }
 
-     public func parse() throws -> MCWorld {
-         return try MCWorld(from: dirURL)
-     }
+    public mutating func changeWorldName(to newName: String) throws {
+        let levelDatURL = dirURL.appendingPathComponent(MCWorldMeta.levelDatFile, isDirectory: false)
+        var worldMeta = try MCWorldMeta(from: levelDatURL)
+        worldMeta.worldName = newName
+        try worldMeta.updateFiles(dirURL: dirURL)
+        worldName = newName
+    }
+
+    public func parse() throws -> MCWorld {
+        return try MCWorld(from: dirURL)
+    }
 }

@@ -12,14 +12,6 @@ public class MCWorld {
     public var worldName = "???"
     public var meta: MCWorldMeta
 
-    public var levelDatURL: URL {
-        dirURL.appendingPathComponent("level.dat", isDirectory: false)
-    }
-
-    public var nameFileURL: URL {
-        dirURL.appendingPathComponent("levelname.txt", isDirectory: false)
-    }
-
     public init(from dirURL: URL, meta: MCWorldMeta? = nil) throws {
         let dbPath = dirURL.appendingPathComponent("db", isDirectory: true).path
         guard let db = LvDB(dbPath: dbPath) else {
@@ -45,26 +37,7 @@ public class MCWorld {
     }
 
     public func reloadMetaFile() throws {
+        let levelDatURL = dirURL.appendingPathComponent(MCWorldMeta.levelDatFile, isDirectory: false)
         self.meta = try MCWorldMeta(from: levelDatURL)
-    }
-
-    public func updateMetaFile() throws {
-        let tagData = try meta.toData()
-        let metaRawData = meta.version.data + Int32(tagData.count).data + tagData
-        try metaRawData.write(to: levelDatURL)
-        try updateWorldNameFile()
-    }
-
-    public func updateMetaFile(with newTag: CompoundTag) throws {
-        meta.tag = newTag
-        try updateMetaFile()
-    }
-
-    public func updateWorldNameFile() throws {
-        guard let newWorldName = meta.worldName, newWorldName != worldName else {
-            return
-        }
-        self.worldName = newWorldName
-        try newWorldName.write(to: nameFileURL, atomically: true, encoding: .utf8)
     }
 }
