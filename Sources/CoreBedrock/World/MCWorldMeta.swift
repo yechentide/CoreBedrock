@@ -76,9 +76,8 @@ public struct MCWorldMeta {
             }
         }
         set {
-            if let newName = newValue {
-                let nameTag = StringTag(name: "LevelName", newName)
-                tag["LevelName"] = nameTag
+            if let newName = newValue, let nameTag = tag["LevelName"] as? StringTag {
+                nameTag.value = newName
             }
         }
     }

@@ -55,8 +55,6 @@ public final class CompoundTag: NBT {
     public init(from other: CompoundTag) throws {
         super.init()
         _name = other.name
-        // Copy keys
-        _keys = other._keys
         // Copy tags
         for tag in other._tags {
             try append(tag.clone())

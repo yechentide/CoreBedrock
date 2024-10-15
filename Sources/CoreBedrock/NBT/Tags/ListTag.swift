@@ -80,7 +80,7 @@ public final class ListTag: NBT {
         super.init()
         self._name = other._name
         self._listType = other._listType
-        for tag in _tags {
+        for tag in other._tags {
             try _tags.append(tag.clone())
         }
     }
