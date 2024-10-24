@@ -10,6 +10,7 @@
 
 @interface LvDB : NSObject
 
+- (id)initWithDBPath:(NSString *)path createIfMissing:(BOOL)createIfMissing;
 - (id)initWithDBPath:(NSString *)path;
 - (void)close;
 
