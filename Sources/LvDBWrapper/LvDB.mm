@@ -39,12 +39,12 @@
         leveldb::DB* tmp;
         leveldb::Status status = leveldb::DB::Open(options, dbPath, &tmp);
         if (!status.ok()) {
-            std::cout << "[LvDBWrapper] Failed to open the db: " << dbPath << std::endl;
+            NSLog(@"[LvDBWrapper] Failed to open the db: %s", dbPath);
             return nil;
         }
-        std::cout << "[LvDBWrapper] leveldb::DB opened: " << dbPath << std::endl;
+        NSLog(@"[LvDBWrapper] leveldb::DB opened: %s", dbPath);
         db.reset(tmp);
-        std::cout << "[LvDBWrapper] LvDB generated: " << dbPath << std::endl;
+        NSLog(@"[LvDBWrapper] LvDB generated: %s", dbPath);
     }
     return self;
 }
@@ -54,7 +54,7 @@
 }
 
 - (void)dealloc {
-    std::cout << "[LvDBWrapper] LvDB deallocated." << std::endl;
+    NSLog(@"[LvDBWrapper] LvDB deallocated.");
 }
 
 - (void)close {
@@ -64,14 +64,14 @@
     delete options.compressors[0];
     delete options.compressors[1];
     delete readOptions.decompress_allocator;
-    std::cout << "[LvDBWrapper] leveldb::DB closed." << std::endl;
+    NSLog(@"[LvDBWrapper] leveldb::DB closed.");
 }
 
 /* ---------- ---------- ---------- ---------- ---------- ---------- */
 
 - (LvDBIterator *)makeIterator {
     auto dbIterator = db->NewIterator(readOptions);
-    std::cout << "[LvDBWrapper] leveldb::Iterator generated." << std::endl;
+    NSLog(@"[LvDBWrapper] leveldb::Iterator generated.");
     return [[LvDBIterator alloc] initFromIterator:dbIterator];
 }
 

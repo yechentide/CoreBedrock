@@ -2,7 +2,6 @@
 // Created by yechentide on 2024/06/01
 //
 
-#import "LvDB.h"
 #import "LvDBIterator.h"
 
 #import <iostream>
@@ -17,17 +16,17 @@
     if (self = [super init]) {
         leveldb::Iterator* it = static_cast<leveldb::Iterator*>(dbIterator);
         iterator.reset(it);
-        std::cout << "[LvDBWrapper] LvDBIterator generated." << std::endl;
+        NSLog(@"[LvDBWrapper] LvDBIterator generated.");
     }
     return self;
 }
 
 - (void)dealloc {
-    std::cout << "[LvDBWrapper] LvDBIterator deallocated." << std::endl;
+    NSLog(@"[LvDBWrapper] LvDBIterator deallocated.");
 }
 
 - (void)destroy {
-    std::cout << "[LvDBWrapper] leveldb::Iterator destroyed." << std::endl;
+    NSLog(@"[LvDBWrapper] leveldb::Iterator destroyed.");
     iterator.reset();
 }
 

@@ -6,6 +6,7 @@
 #define LvDB_h
 
 #import <Foundation/Foundation.h>
+
 @class LvDBIterator;
 
 @interface LvDB : NSObject
