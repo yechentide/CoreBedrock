@@ -13,7 +13,7 @@ public class MCWorld {
     public var meta: MCWorldMeta
 
     public init(from dirURL: URL, meta: MCWorldMeta? = nil) throws {
-        let dbPath = dirURL.appendingPathComponent("db", isDirectory: true).path
+        let dbPath = MCDir.generatePath(for: .db, in: dirURL)
         guard let db = LvDB(dbPath: dbPath) else {
             throw CBError.failedOpenWorld(dirURL)
         }
@@ -24,7 +24,7 @@ public class MCWorld {
         if let metaArg = meta {
             self.meta = metaArg
         } else {
-            let levelDatURL = dirURL.appendingPathComponent("level.dat", isDirectory: false)
+            let levelDatURL = MCDir.generateURL(for: .levelDat, in: dirURL)
             self.meta = try MCWorldMeta(from: levelDatURL)
         }
         if let name = self.meta.worldName {
@@ -37,7 +37,7 @@ public class MCWorld {
     }
 
     public func reloadMetaFile() throws {
-        let levelDatURL = dirURL.appendingPathComponent(MCWorldMeta.levelDatFile, isDirectory: false)
+        let levelDatURL = MCDir.generateURL(for: .levelDat, in: dirURL)
         self.meta = try MCWorldMeta(from: levelDatURL)
     }
 }

@@ -5,9 +5,6 @@
 import Foundation
 
 public struct MCWorldMeta {
-    public static let levelDatFile = "level.dat"
-    public static let worldNameFile = "levelname.txt"
-
     public let version: Int32
     public var tag: CompoundTag
 
@@ -47,18 +44,14 @@ public struct MCWorldMeta {
     }
 
     public func updateFiles(dirURL: URL) throws {
-        let levelDatURL = dirURL.appendingPathComponent(Self.levelDatFile, isDirectory: false)
+        let levelDatURL = MCDir.generateURL(for: .levelDat, in: dirURL)
 
         let tagData = try toData()
         let metaRawData = version.data + Int32(tagData.count).data + tagData
         try metaRawData.write(to: levelDatURL)
 
-        let nameFileURL = dirURL.appendingPathComponent(Self.worldNameFile, isDirectory: false)
-        let nameFilePath = if #available(iOS 16.0, macOS 13.0, *) {
-            nameFileURL.path()
-        } else {
-            nameFileURL.path
-        }
+        let nameFileURL = MCDir.generateURL(for: .worldName, in: dirURL)
+        let nameFilePath = MCDir.generatePath(for: .worldName, in: dirURL)
         if FileManager.default.fileExists(atPath: nameFilePath) {
             if let worldName = worldName {
                 try worldName.write(to: nameFileURL, atomically: true, encoding: .utf8)

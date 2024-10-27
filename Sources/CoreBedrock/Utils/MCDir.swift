@@ -6,6 +6,36 @@ import Foundation
 import CoreGraphics
 
 public struct MCDir {
+    public enum MCFileType: String {
+        case db         = "db"
+        case levelDat   = "level.dat"
+        case worldName  = "levelname.txt"
+        case worldImage = "world_icon.jpeg"
+
+        public var isDirectory: Bool {
+            switch self {
+                case .db: return true
+                default: return false
+            }
+        }
+    }
+
+    public static func generateURL(for type: MCFileType, in worldDirectory: URL) -> URL {
+        return if #available(iOS 16.0, macOS 13.0, *) {
+            worldDirectory.appending(path: type.rawValue, directoryHint: type.isDirectory ? .isDirectory : .notDirectory)
+        } else {
+            worldDirectory.appendingPathComponent(type.rawValue, isDirectory: type.isDirectory)
+        }
+    }
+
+    public static func generatePath(for type: MCFileType, in worldDirectory: URL) -> String {
+        return if #available(iOS 16.0, macOS 13.0, *) {
+            generateURL(for: type, in: worldDirectory).path()
+        } else {
+            generateURL(for: type, in: worldDirectory).path
+        }
+    }
+
     public let dirURL: URL
 
     public var dirSize: String? = nil
@@ -41,12 +71,12 @@ public struct MCDir {
         self.dirSize = try dirURL.formattedDirectorySize()
         self.lastOpenedDate = try dirURL.resourceValues(forKeys: [.contentAccessDateKey]).contentAccessDate
 
-        let imageURL = dirURL.appendingPathComponent("world_icon.jpeg", isDirectory: false)
+        let imageURL = Self.generateURL(for: .worldImage, in: dirURL)
         if let jpgImage = CGImage.loadJPG(url: imageURL) {
             self.worldImage = jpgImage
         }
 
-        let levelDatURL = dirURL.appendingPathComponent("level.dat", isDirectory: false)
+        let levelDatURL = Self.generateURL(for: .levelDat, in: dirURL)
         let worldMeta = try MCWorldMeta(from: levelDatURL)
         self.worldName = worldMeta.worldName
         self.gameMode = worldMeta.gameMode
@@ -62,7 +92,7 @@ public struct MCDir {
     }
 
     public mutating func changeWorldName(to newName: String) throws {
-        let levelDatURL = dirURL.appendingPathComponent(MCWorldMeta.levelDatFile, isDirectory: false)
+        let levelDatURL = Self.generateURL(for: .levelDat, in: dirURL)
         var worldMeta = try MCWorldMeta(from: levelDatURL)
         worldMeta.worldName = newName
         try worldMeta.updateFiles(dirURL: dirURL)
