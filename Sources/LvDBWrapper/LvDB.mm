@@ -54,10 +54,14 @@
 }
 
 - (void)dealloc {
+    [self close];
     NSLog(@"[LvDBWrapper] LvDB deallocated.");
 }
 
 - (void)close {
+    if (db == nullptr) {
+        return;
+    }
     db.reset();
     delete options.filter_policy;
     delete options.block_cache;
@@ -65,6 +69,10 @@
     delete options.compressors[1];
     delete readOptions.decompress_allocator;
     NSLog(@"[LvDBWrapper] leveldb::DB closed.");
+}
+
+- (BOOL)isClosed {
+    return db == nullptr ? YES : NO;
 }
 
 /* ---------- ---------- ---------- ---------- ---------- ---------- */

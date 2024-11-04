@@ -71,7 +71,11 @@ struct LvDBWrapperTests {
             }
             seekAndCheckDataSize(iterator, key, expectedValueSize)
             iterator.destroy()
+            #expect(db.isClosed == false)
             db.close()
+            #expect(db.isClosed == true)
+            db.close()
+            #expect(db.isClosed == true)
         }
 
         openDBAndCheckDataSize("mobevents", 126)
@@ -131,6 +135,40 @@ struct LvDBWrapperTests {
         seekAndCheckDataSize(iterator02, "mobevents", 126)
         seekAndCheckDataSize(iterator01, "BiomeData", 436)
         seekAndCheckDataSize(iterator02, "BiomeData", 436)
+    }
+
+    @Test
+    func checkIteratorAvailability() async throws {
+        let dbPath = prepareTemporaryDB()
+        defer {
+            removeTemporaryDB(dbPath)
+        }
+        guard let db = LvDB(dbPath: dbPath),
+              let iterator = db.makeIterator()
+        else {
+            Issue.record()
+            return
+        }
+        defer {
+            iterator.destroy()
+            db.close()
+        }
+
+        #expect(iterator.isDestroyed == false)
+        #expect(iterator.valid() == false)
+
+        iterator.seekToFirst()
+        #expect(iterator.isDestroyed == false)
+        #expect(iterator.valid() == true)
+
+        iterator.destroy()
+        #expect(iterator.isDestroyed == true)
+        iterator.destroy()
+        #expect(iterator.isDestroyed == true)
+        db.close()
+        #expect(iterator.isDestroyed == true)
+        iterator.destroy()
+        #expect(iterator.isDestroyed == true)
     }
 
     @Test

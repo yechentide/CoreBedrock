@@ -9,6 +9,8 @@
 
 @interface LvDBIterator : NSObject
 
+@property (nonatomic,readonly) BOOL isDestroyed;
+
 - (id)initFromIterator:(void *)dbIterator;
 - (void)destroy;
 

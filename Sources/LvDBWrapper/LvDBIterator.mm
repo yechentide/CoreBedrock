@@ -22,12 +22,20 @@
 }
 
 - (void)dealloc {
+    [self destroy];
     NSLog(@"[LvDBWrapper] LvDBIterator deallocated.");
 }
 
 - (void)destroy {
-    NSLog(@"[LvDBWrapper] leveldb::Iterator destroyed.");
+    if (iterator == nullptr) {
+        return;
+    }
     iterator.reset();
+    NSLog(@"[LvDBWrapper] leveldb::Iterator destroyed.");
+}
+
+- (BOOL)isDestroyed {
+    return iterator == nullptr ? YES : NO;
 }
 
 - (void)seekToFirst {

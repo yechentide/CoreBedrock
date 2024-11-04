@@ -11,6 +11,8 @@
 
 @interface LvDB : NSObject
 
+@property (nonatomic,readonly) BOOL isClosed;
+
 - (id)initWithDBPath:(NSString *)path createIfMissing:(BOOL)createIfMissing;
 - (id)initWithDBPath:(NSString *)path;
 - (void)close;
