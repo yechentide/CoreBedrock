@@ -41,7 +41,7 @@ struct MCWorldTests {
     }
 
     @Test
-    func openWorld() throws {
+    func openWorld() async {
         let worldDirURL = prepareTemporaryWorld(using: "world")
         do {
             let world = try MCWorld(from: worldDirURL)
@@ -54,7 +54,7 @@ struct MCWorldTests {
     }
 
     @Test
-    func openWorldThatPathContainsSpace() throws {
+    func openWorldThatPathContainsSpace() async {
         let worldDirURL = prepareTemporaryWorld(using: "world space")
         do {
             let world = try MCWorld(from: worldDirURL)
@@ -68,7 +68,7 @@ struct MCWorldTests {
     }
 
     @Test
-    func openWorldThatPathContainsFullWidthCharacters() throws {
+    func openWorldThatPathContainsFullWidthCharacters() async {
         let worldDirURL = prepareTemporaryWorld(using: "世界あ")
         do {
             let world = try MCWorld(from: worldDirURL)
