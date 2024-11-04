@@ -30,7 +30,7 @@ public struct MCDir {
 
     public static func generatePath(for type: MCFileType, in worldDirectory: URL) -> String {
         return if #available(iOS 16.0, macOS 13.0, *) {
-            generateURL(for: type, in: worldDirectory).path()
+            generateURL(for: type, in: worldDirectory).path(percentEncoded: false)
         } else {
             generateURL(for: type, in: worldDirectory).path
         }
