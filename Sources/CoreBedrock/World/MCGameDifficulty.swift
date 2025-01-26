@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/07/14
 //
 
-public enum MCGameDifficulty: Int32, CustomStringConvertible {
+public enum MCGameDifficulty: Int32, Sendable, CustomStringConvertible {
     case unknown    = -1
     case peaceful   = 0
     case easy       = 1

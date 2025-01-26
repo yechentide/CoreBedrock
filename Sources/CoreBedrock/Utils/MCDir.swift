@@ -5,7 +5,7 @@
 import Foundation
 import CoreGraphics
 
-public struct MCDir {
+public struct MCDir: Sendable {
     public enum MCFileType: String {
         case db         = "db"
         case levelDat   = "level.dat"

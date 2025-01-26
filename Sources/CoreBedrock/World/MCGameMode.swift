@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/07/14
 //
 
-public enum MCGameMode: Int32, CustomStringConvertible {
+public enum MCGameMode: Int32, Sendable, CustomStringConvertible {
     case unknown    = -1
     case survival   = 0
     case creative   = 1
