@@ -4,6 +4,24 @@
 
 import Foundation
 
+extension URL {
+    public func safePath(percentEncoded: Bool) -> String {
+        return if #available(iOS 16.0, macOS 13.0, *) {
+            self.path(percentEncoded: percentEncoded)
+        } else {
+            self.path
+        }
+    }
+
+    public func appendingSafePath(_ name: String, isDirectory: Bool) -> URL {
+        return if #available(iOS 16.0, macOS 13.0, *) {
+            self.appending(path: name, directoryHint: isDirectory ? .isDirectory : .notDirectory)
+        } else {
+            self.appendingPathComponent(name, isDirectory: isDirectory)
+        }
+    }
+}
+
 // https://stackoverflow.com/questions/32814535/how-to-get-directory-size-with-swift-on-os-x
 extension URL {
     public func isDirectoryAndReachable() throws -> Bool {

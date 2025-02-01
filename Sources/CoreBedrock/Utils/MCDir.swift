@@ -21,19 +21,11 @@ public struct MCDir: Sendable {
     }
 
     public static func generateURL(for type: MCFileType, in worldDirectory: URL) -> URL {
-        return if #available(iOS 16.0, macOS 13.0, *) {
-            worldDirectory.appending(path: type.rawValue, directoryHint: type.isDirectory ? .isDirectory : .notDirectory)
-        } else {
-            worldDirectory.appendingPathComponent(type.rawValue, isDirectory: type.isDirectory)
-        }
+        return worldDirectory.appendingSafePath(type.rawValue, isDirectory: type.isDirectory)
     }
 
     public static func generatePath(for type: MCFileType, in worldDirectory: URL) -> String {
-        return if #available(iOS 16.0, macOS 13.0, *) {
-            generateURL(for: type, in: worldDirectory).path(percentEncoded: false)
-        } else {
-            generateURL(for: type, in: worldDirectory).path
-        }
+        return generateURL(for: type, in: worldDirectory).safePath(percentEncoded: false)
     }
 
     public let dirURL: URL

@@ -21,11 +21,7 @@ extension FileManager {
 
     public func dirExists(at url: URL) -> Bool {
         var isDir: ObjCBool = false
-        let path = if #available(iOS 16.0, macOS 13.0, *) {
-            url.path(percentEncoded: false)
-        } else {
-            url.path
-        }
+        let path = url.safePath(percentEncoded: false)
         let fileExists = FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
         return fileExists && isDir.boolValue
     }
