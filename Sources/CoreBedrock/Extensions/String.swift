@@ -7,7 +7,7 @@ import Foundation
 extension String {
     /// Convert hex string to binary data with little-endian
     public var hexData: Data? {
-        var str = self
+        var str = self.lowercased()
         if str.hasPrefix("0x") {
             let i = str.index(str.startIndex, offsetBy: 2)
             str = String(str[i...])
