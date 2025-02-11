@@ -51,6 +51,10 @@ public struct LvDBKey: Identifiable, Sendable {
         guard let chunkType = MCChunkKeyType(rawValue: data[index]) else {
             return LvDBKey(data: data, type: .unknown)
         }
+        if chunkType == .subChunkPrefix, [9, 13].contains(data.count) {
+            // NOTE: Missing subchunk index. Data size should be either 10 or 14 bytes.
+            return LvDBKey(data: data, type: .unknown)
+        }
         return LvDBKey(data: data, type: .subChunk(dimension, chunkType))
     }
 
