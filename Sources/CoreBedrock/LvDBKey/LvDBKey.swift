@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct LvDBKey: Identifiable {
+public struct LvDBKey: Identifiable, Sendable {
     public let id = UUID()
     public let data: Data
     public let type: LvDBKeyType

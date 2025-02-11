@@ -5,7 +5,7 @@
 import CoreGraphics
 import SwiftUI
 
-public enum MCDimension: Int32, CustomStringConvertible {
+public enum MCDimension: Int32, Sendable, CustomStringConvertible {
     case overworld = 0
     case theNether = 1
     case theEnd    = 2

@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/10/04
 //
 
-public enum LvDBKeyType: Equatable {
+public enum LvDBKeyType: Equatable, Sendable {
     case subChunk(MCDimension, MCChunkKeyType)
     case string(MCStringKeyType)
     case player

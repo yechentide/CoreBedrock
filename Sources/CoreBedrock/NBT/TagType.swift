@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/06/02
 //
 
-public enum TagType: UInt8, CaseIterable {
+public enum TagType: UInt8, CaseIterable, Sendable {
     /// Placeholder TagType used to indicate unknown/undefined tag type in ListTag.
     case unknown = 0xff
 

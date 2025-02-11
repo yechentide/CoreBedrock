@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum MCStringKeyType: String, CaseIterable {
+public enum MCStringKeyType: String, CaseIterable, Sendable {
     case autonomousEntities             = "AutonomousEntities"
     case biomeData                      = "BiomeData"
     case dimension0                     = "dimension0"
