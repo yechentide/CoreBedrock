@@ -78,6 +78,10 @@
 /* ---------- ---------- ---------- ---------- ---------- ---------- */
 
 - (LvDBIterator *)makeIterator {
+    if (db == nullptr) {
+        NSLog(@"[LvDBWrapper] Error: Attempted to create iterator on closed DB.");
+        return nil;
+    }
     auto dbIterator = db->NewIterator(readOptions);
     NSLog(@"[LvDBWrapper] leveldb::Iterator generated.");
     return [[LvDBIterator alloc] initFromIterator:dbIterator];

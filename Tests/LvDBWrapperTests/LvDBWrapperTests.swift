@@ -270,4 +270,29 @@ struct LvDBWrapperTests {
 
         #expect(count03 == count01 - 3)
     }
+
+    @Test
+    func createIteratorOnClosedDB() async throws {
+        let dbPath = prepareTemporaryDB()
+        defer {
+            removeTemporaryDB(dbPath)
+        }
+        guard let db = LvDB(dbPath: dbPath) else {
+            Issue.record()
+            return
+        }
+
+        guard let iterator01 = db.makeIterator() else {
+            Issue.record()
+            return
+        }
+        #expect(iterator01.isDestroyed == false)
+        iterator01.destroy()
+        #expect(iterator01.isDestroyed == true)
+
+        db.close()
+
+        let iterator02 = db.makeIterator()
+        #expect(iterator02 == nil)
+    }
 }
