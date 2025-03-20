@@ -26,7 +26,7 @@
     if (self = [super init]) {
         options.create_if_missing = createIfMissing;
         options.filter_policy = leveldb::NewBloomFilterPolicy(10);              //create a bloom filter to quickly tell if a key is in the database or not
-        options.block_cache = leveldb::NewLRUCache(40 * 1024 * 1024);           //create a 40 mb cache (we use this on ~1gb devices)
+        // options.block_cache = leveldb::NewLRUCache(40 * 1024 * 1024);        //create a 40 mb cache (we use this on ~1gb devices)
         options.write_buffer_size = 4 * 1024 * 1024;                            //create a 4mb write buffer, to improve compression and touch the disk less
         options.compressors[0] = new leveldb::ZlibCompressorRaw(-1);            //use the new raw-zip compressor to write (and read)
         options.compressors[1] = new leveldb::ZlibCompressor();                 //also setup the old, slower compressor for backwards compatibility. This will only be used to read old compressed blocks.
