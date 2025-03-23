@@ -7,7 +7,7 @@ import Foundation
 import CoreBedrock
 
 struct MCWorldTests {
-    private let testDataPath = Bundle.module.path(forResource: "TestData/world", ofType: nil)!
+    private let testDataPath = Bundle.module.path(forResource: "TestData/all-blocks-test-world", ofType: nil)!
 
     private func prepareTemporaryWorld(using newName: String) -> URL {
         let originalURL: URL
@@ -45,7 +45,7 @@ struct MCWorldTests {
         let worldDirURL = prepareTemporaryWorld(using: "world")
         do {
             let world = try MCWorld(from: worldDirURL)
-            #expect(world.worldName == "FlatTest")
+            #expect(world.worldName == "§cAll Blocks Test World")
             world.db.close()
         } catch {
             Issue.record("Failed to open the world.\n")
@@ -58,7 +58,7 @@ struct MCWorldTests {
         let worldDirURL = prepareTemporaryWorld(using: "world space")
         do {
             let world = try MCWorld(from: worldDirURL)
-            #expect(world.worldName == "FlatTest")
+            #expect(world.worldName == "§cAll Blocks Test World")
             world.db.close()
         } catch {
             print(error)
@@ -72,7 +72,7 @@ struct MCWorldTests {
         let worldDirURL = prepareTemporaryWorld(using: "世界あ")
         do {
             let world = try MCWorld(from: worldDirURL)
-            #expect(world.worldName == "FlatTest")
+            #expect(world.worldName == "§cAll Blocks Test World")
             world.db.close()
         } catch {
             print(error)
