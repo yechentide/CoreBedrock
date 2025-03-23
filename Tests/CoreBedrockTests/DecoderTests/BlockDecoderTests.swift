@@ -9,7 +9,7 @@ import CoreBedrock
 struct BlockDecoderTests {
     @Test
     func parseSubChunkWithFormatV9() async throws {
-        let url = Bundle.module.url(forResource: "TestData/subChunkData", withExtension: nil)
+        let url = Bundle.module.url(forResource: "TestData/subChunkDataV9", withExtension: nil)
         precondition(url != nil)
         let subChunkData = try Data(contentsOf: url!)
         precondition(subChunkData.count > 4)
