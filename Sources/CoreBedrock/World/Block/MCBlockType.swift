@@ -210,6 +210,9 @@ public enum MCBlockType: String, CaseIterable, Sendable {
     case largeFern                          = "minecraft:large_fern"
     case tallGrass                          = "minecraft:tall_grass"
     case shortGrass                         = "minecraft:short_grass"
+    case bush                               = "minecraft:bush"
+    case shortDryGrass                      = "minecraft:short_dry_grass"
+    case tallDryGrass                       = "minecraft:tall_dry_grass"
     case netherSprouts                      = "minecraft:nether_sprouts"
 
     // Nature Tab Line6
@@ -257,8 +260,10 @@ public enum MCBlockType: String, CaseIterable, Sendable {
     case peony                              = "minecraft:peony"
     case pitcherPlant                       = "minecraft:pitcher_plant"
     case pinkPetals                         = "minecraft:pink_petals"
+    case wildflowers                        = "minecraft:wildflowers"
     case witherRose                         = "minecraft:wither_rose"
     case torchflower                        = "minecraft:torchflower"
+    case cactusFlower                       = "minecraft:cactus_flower"
     case closedEyeblossom                   = "minecraft:closed_eyeblossom"
     case openEyeblossom                     = "minecraft:open_eyeblossom"
 
@@ -287,31 +292,33 @@ public enum MCBlockType: String, CaseIterable, Sendable {
     // Nature Tab Line9
     case pointedDripstone                   = "minecraft:pointed_dripstone"
     case dripstoneBlock                     = "minecraft:dripstone_block"
+    case leafLitter                         = "minecraft:leaf_litter"
     case mossCarpet                         = "minecraft:moss_carpet"
     case mossBlock                          = "minecraft:moss_block"
     case paleMossCarpet                     = "minecraft:pale_moss_carpet"
     case paleMossBlock                      = "minecraft:pale_moss_block"
-    case paleHangingMoss                    = "minecraft:pale_hanging_moss"
 
     // Nature Tab Line10
+    case paleHangingMoss                    = "minecraft:pale_hanging_moss"
     case hangingRoots                       = "minecraft:hanging_roots"
     case mangroveRoots                      = "minecraft:mangrove_roots"
     case muddyMangroveRoots                 = "minecraft:muddy_mangrove_roots"
     case bigDripleaf                        = "minecraft:big_dripleaf"
     case smallDripleafBlock                 = "minecraft:small_dripleaf_block"
     case sporeBlossom                       = "minecraft:spore_blossom"
-    case azalea                             = "minecraft:azalea"
 
     // Nature Tab Line11
+    case fireflyBush                        = "minecraft:firefly_bush"
+    case azalea                             = "minecraft:azalea"
     case floweringAzalea                    = "minecraft:flowering_azalea"
     case glowLichen                         = "minecraft:glow_lichen"
     case amethystBlock                      = "minecraft:amethyst_block"
     case buddingAmethyst                    = "minecraft:budding_amethyst"
     case amethystCluster                    = "minecraft:amethyst_cluster"
-    case largeAmethystBud                   = "minecraft:large_amethyst_bud"
-    case mediumAmethystBud                  = "minecraft:medium_amethyst_bud"
 
     // Nature Tab Line12
+    case largeAmethystBud                   = "minecraft:large_amethyst_bud"
+    case mediumAmethystBud                  = "minecraft:medium_amethyst_bud"
     case smallAmethystBud                   = "minecraft:small_amethyst_bud"
     case calcite                            = "minecraft:calcite"
     case brownMushroom                      = "minecraft:brown_mushroom"
@@ -321,15 +328,15 @@ public enum MCBlockType: String, CaseIterable, Sendable {
     case brownMushroomBlock                 = "minecraft:brown_mushroom_block"
     case redMushroomBlock                   = "minecraft:red_mushroom_block"
     case mushroomStem                       = "minecraft:mushroom_stem"
-    case reeds                              = "minecraft:reeds" // Sugar Cane
 
     // Nature Tab Line13
+    case reeds                              = "minecraft:reeds" // Sugar Cane
     case web                                = "minecraft:web"
+
+    // Nature Tab Line14
     case mobSpawner                         = "minecraft:mob_spawner"
     case trialSpawner                       = "minecraft:trial_spawner"
     case vault                              = "minecraft:vault"
-
-    // Nature Tab Line14
     case creakingHeart                      = "minecraft:creaking_heart"
     case endPortalFrame                     = "minecraft:end_portal_frame"
 
@@ -341,31 +348,32 @@ public enum MCBlockType: String, CaseIterable, Sendable {
     case infestedChiseledStoneBricks        = "minecraft:infested_chiseled_stone_bricks"
     case infestedDeepslate                  = "minecraft:infested_deepslate"
 
+    // Nature Tab Line15
     case dragonEgg                          = "minecraft:dragon_egg"
     case turtleEgg                          = "minecraft:turtle_egg"
     case snifferEgg                         = "minecraft:sniffer_egg"
     case frogSpawn                          = "minecraft:frog_spawn"
 
-    // Nature Tab Line15
     case pearlescentFroglight               = "minecraft:pearlescent_froglight"
     case verdantFroglight                   = "minecraft:verdant_froglight"
     case ochreFroglight                     = "minecraft:ochre_froglight"
+
+    // Nature Tab Line16
     case obsidian                           = "minecraft:obsidian"
     case cryingObsidian                     = "minecraft:crying_obsidian"
     case bedrock                            = "minecraft:bedrock"
-
-    // Nature Tab Line16
     case soulSand                           = "minecraft:soul_sand"
     case magma                              = "minecraft:magma"
     case netherWart                         = "minecraft:nether_wart"
+
+    // Nature Tab Line17
     case endStone                           = "minecraft:end_stone"
     case chorusFlower                       = "minecraft:chorus_flower"
     case chorusPlant                        = "minecraft:chorus_plant"
-
-    // Nature Tab Line17
     case sponge                             = "minecraft:sponge"
     case wetSponge                          = "minecraft:wet_sponge"
 
+    // Nature Tab Line18
     case tubeCoralBlock                     = "minecraft:tube_coral_block"
     case brainCoralBlock                    = "minecraft:brain_coral_block"
     case bubbleCoralBlock                   = "minecraft:bubble_coral_block"
