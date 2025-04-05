@@ -734,8 +734,8 @@ public enum MCBlockType: String, CaseIterable, Sendable {
     case crimsonFenceGate                   = "minecraft:crimson_fence_gate"
     case warpedFenceGate                    = "minecraft:warped_fence_gate"
 
-    case normalStoneStairs                  = "minecraft:normal_stone_stairs"
-    case stoneStairs                        = "minecraft:stone_stairs"
+    case stoneStairs                        = "minecraft:normal_stone_stairs"
+    case cobblestoneStoneStairs             = "minecraft:stone_stairs"
     case mossyCobblestoneStairs             = "minecraft:mossy_cobblestone_stairs"
     case oakStairs                          = "minecraft:oak_stairs"
     case spruceStairs                       = "minecraft:spruce_stairs"
