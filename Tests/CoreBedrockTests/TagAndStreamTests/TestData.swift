@@ -217,7 +217,6 @@ class TestData {
 
         #expect(root["intArrayTest"] is IntArrayTag)
         let intArrayTag = root.get("intArrayTest") as! IntArrayTag
-        #expect(intArrayTag != nil)
         let intArrayValues: [Int32] = [2058486330, 689588807, 591140869, 1039519385, 1050801872, 1120424277, 436948408, 1022844073, 1164321124, 1667817685]
         #expect(intArrayValues.count == intArrayTag.value.count)
         for i in 0..<intArrayValues.count {
@@ -226,7 +225,6 @@ class TestData {
 
         #expect(root["longArrayTest"] is LongArrayTag)
         let longArrayTag = root.get("longArrayTest") as! LongArrayTag
-        #expect(longArrayTag != nil)
         let longArrayValues: [Int64] = [-6866598452151144177, -1461874943718568068, 5217825863610607223, 1860859988227119473, -5776759366968858117, -7740952930289281811, -6188853534200571741, 4318246429499846831, -47296042280759594, -3674987599896452234, -7226131946019043057, -4289962655585463703, -995980216626770396, -3604406255970428456, 5689530171199932158, 2743453607135376494, 9105486958483704041, -8207372937485762308, 5515722376825306945, -1410484250696471474]
         #expect(longArrayValues.count == longArrayTag.value.count)
         for i in 0..<longArrayValues.count {
