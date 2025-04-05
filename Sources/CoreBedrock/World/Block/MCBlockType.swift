@@ -486,7 +486,7 @@ public enum MCBlockType: String, CaseIterable, Sendable {
     case seaLantern                         = "minecraft:sea_lantern"
 
     // Items Tab Line7
-    case standingSign                       = "minecraft:standing_sign"
+    case oakStandingSign                    = "minecraft:standing_sign"
     case spruceStandingSign                 = "minecraft:spruce_standing_sign"
     case birchStandingSign                  = "minecraft:birch_standing_sign"
     case acaciaStandingSign                 = "minecraft:acacia_standing_sign"
@@ -499,7 +499,7 @@ public enum MCBlockType: String, CaseIterable, Sendable {
     case crimsonStandingSign                = "minecraft:crimson_standing_sign"
     case warpedStandingSign                 = "minecraft:warped_standing_sign"
 
-    case wallSign                           = "minecraft:wall_sign"
+    case oakWallSign                        = "minecraft:wall_sign"
     case spruceWallSign                     = "minecraft:spruce_wall_sign"
     case birchWallSign                      = "minecraft:birch_wall_sign"
     case acaciaWallSign                     = "minecraft:acacia_wall_sign"
@@ -581,7 +581,7 @@ public enum MCBlockType: String, CaseIterable, Sendable {
     case unlitRedstoneTorch                 = "minecraft:unlit_redstone_torch"
     case lever                              = "minecraft:lever"
 
-    case woodenButton                       = "minecraft:wooden_button"
+    case oakButton                          = "minecraft:wooden_button"
     case spruceButton                       = "minecraft:spruce_button"
     case birchButton                        = "minecraft:birch_button"
     case jungleButton                       = "minecraft:jungle_button"
@@ -598,7 +598,7 @@ public enum MCBlockType: String, CaseIterable, Sendable {
 
     case tripwireHook                       = "minecraft:tripwire_hook"
 
-    case woodenPressurePlate                = "minecraft:wooden_pressure_plate"
+    case oakPressurePlate                   = "minecraft:wooden_pressure_plate"
     case sprucePressurePlate                = "minecraft:spruce_pressure_plate"
     case birchPressurePlate                 = "minecraft:birch_pressure_plate"
     case junglePressurePlate                = "minecraft:jungle_pressure_plate"
@@ -721,7 +721,7 @@ public enum MCBlockType: String, CaseIterable, Sendable {
     case crimsonFence                       = "minecraft:crimson_fence"
     case warpedFence                        = "minecraft:warped_fence"
 
-    case fenceGate                          = "minecraft:fence_gate"
+    case oakFenceGate                       = "minecraft:fence_gate"
     case spruceFenceGate                    = "minecraft:spruce_fence_gate"
     case birchFenceGate                     = "minecraft:birch_fence_gate"
     case jungleFenceGate                    = "minecraft:jungle_fence_gate"
@@ -793,7 +793,7 @@ public enum MCBlockType: String, CaseIterable, Sendable {
     case waxedOxidizedCutCopperStairs       = "minecraft:waxed_oxidized_cut_copper_stairs"
     case resinBrickStairs                   = "minecraft:resin_brick_stairs"
     
-    case woodenDoor                         = "minecraft:wooden_door"
+    case oakDoor                            = "minecraft:wooden_door"
     case spruceDoor                         = "minecraft:spruce_door"
     case birchDoor                          = "minecraft:birch_door"
     case jungleDoor                         = "minecraft:jungle_door"
@@ -815,7 +815,7 @@ public enum MCBlockType: String, CaseIterable, Sendable {
     case waxedWeatheredCopperDoor           = "minecraft:waxed_weathered_copper_door"
     case waxedOxidizedCopperDoor            = "minecraft:waxed_oxidized_copper_door"
 
-    case trapdoor                           = "minecraft:trapdoor"
+    case oakTrapdoor                        = "minecraft:trapdoor"
     case spruceTrapdoor                     = "minecraft:spruce_trapdoor"
     case birchTrapdoor                      = "minecraft:birch_trapdoor"
     case jungleTrapdoor                     = "minecraft:jungle_trapdoor"
