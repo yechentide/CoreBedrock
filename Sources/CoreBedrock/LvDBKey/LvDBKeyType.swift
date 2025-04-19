@@ -3,8 +3,8 @@
 //
 
 public enum LvDBKeyType: Equatable, Sendable {
-    case subChunk(MCDimension, MCChunkKeyType)
-    case string(MCStringKeyType)
+    case subChunk(MCDimension, LvDBChunkKeyType)
+    case string(LvDBStringKeyType)
     case player
     case map
     case village

@@ -7,7 +7,7 @@
 ///  [Chunk key format](https://minecraft.fandom.com/wiki/Bedrock_Edition_level_format)
 ///
 ///  [Non-Actor Data Chunk Key IDs](https://docs.microsoft.com/en-us/minecraft/creator/documents/actorstorage)
-public enum MCChunkKeyType: UInt8, CaseIterable, Sendable {
+public enum LvDBChunkKeyType: UInt8, CaseIterable, Sendable {
     public static let keyTypeStartWith: UInt8 = 0x2B
 
     case data3D                 = 0x2B

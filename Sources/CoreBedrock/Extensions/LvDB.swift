@@ -6,7 +6,7 @@ import LvDBWrapper
 
 // MARK: - Functions to extract leveldb keys
 extension LvDB {
-    public func getStringKey(type: MCStringKeyType) -> Data? {
+    public func getStringKey(type: LvDBStringKeyType) -> Data? {
         let keyData = type.rawValue.data(using: .utf8)!
         guard contains(keyData) else {
             return nil
@@ -14,11 +14,11 @@ extension LvDB {
         return keyData
     }
 
-    public func getAllStringKeys(exclude: [MCStringKeyType] = []) -> [Data] {
+    public func getAllStringKeys(exclude: [LvDBStringKeyType] = []) -> [Data] {
         var keys = [Data]()
         let excludeTypes = Set(exclude)
 
-        for strKeyType in MCStringKeyType.allCases {
+        for strKeyType in LvDBStringKeyType.allCases {
             guard !excludeTypes.contains(strKeyType),
                   let keyData = strKeyType.rawValue.data(using: .utf8),
                   contains(keyData)
@@ -59,13 +59,13 @@ extension LvDB {
         var keys = [Data]()
 
         (Int8(-4)...Int8(20)).forEach { yIndex in
-            let key = keyPrefix + MCChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
+            let key = keyPrefix + LvDBChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
             if contains(key) {
                 keys.append(key)
             }
         }
 
-        MCChunkKeyType.allCases.forEach { type in
+        LvDBChunkKeyType.allCases.forEach { type in
             guard type != .subChunkPrefix else {
                 return
             }
@@ -109,14 +109,14 @@ extension LvDB {
 extension LvDB {
     public func removeChunkKeys(keyPrefix: Data, completion: ((Data, Bool) -> Void)? = nil) {
         (Int8(-4)...Int8(20)).forEach { yIndex in
-            let key = keyPrefix + MCChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
+            let key = keyPrefix + LvDBChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
             guard contains(key) else {
                 return
             }
             let result = remove(key)
             completion?(key, result)
         }
-        MCChunkKeyType.allCases.forEach { chunkKeyType in
+        LvDBChunkKeyType.allCases.forEach { chunkKeyType in
             guard chunkKeyType != .subChunkPrefix else {
                 return
             }

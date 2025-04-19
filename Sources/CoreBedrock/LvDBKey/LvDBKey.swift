@@ -15,7 +15,7 @@ public struct LvDBKey: Identifiable, Sendable {
     }
 
     public static func parse(data: Data) -> LvDBKey {
-        if let type = MCStringKeyType.parse(data: data) {
+        if let type = LvDBStringKeyType.parse(data: data) {
             return LvDBKey(data: data, type: .string(type))
         }
 
@@ -48,7 +48,7 @@ public struct LvDBKey: Identifiable, Sendable {
             }
         }
 
-        guard let chunkType = MCChunkKeyType(rawValue: data[index]) else {
+        guard let chunkType = LvDBChunkKeyType(rawValue: data[index]) else {
             return LvDBKey(data: data, type: .unknown)
         }
         if chunkType == .subChunkPrefix, [9, 13].contains(data.count) {
@@ -67,7 +67,7 @@ public struct LvDBKey: Identifiable, Sendable {
     }
 
     public static func makeChunkKey(
-        x: Int32, z: Int32, dimension: MCDimension, type: MCChunkKeyType, yIndex: Int8? = nil
+        x: Int32, z: Int32, dimension: MCDimension, type: LvDBChunkKeyType, yIndex: Int8? = nil
     ) -> Data {
         var data = makeChunkKeyPrefix(x: x, z: z, dimension: dimension)
         data += type.rawValue.data

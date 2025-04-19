@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/10/04
 //
 
-public struct MCPlayerKeyGroup: Equatable, Hashable, Sendable {
+public struct LvDBPlayerKeyGroup: Equatable, Hashable, Sendable {
     public let msaID: String            // player_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
     public let selfSignedID: String     // player_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
     public let serverID: String         // player_server_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
@@ -13,7 +13,7 @@ public struct MCPlayerKeyGroup: Equatable, Hashable, Sendable {
         self.serverID = serverID
     }
 
-    public static func == (lhs: MCPlayerKeyGroup, rhs: MCPlayerKeyGroup) -> Bool {
+    public static func == (lhs: LvDBPlayerKeyGroup, rhs: LvDBPlayerKeyGroup) -> Bool {
         return lhs.msaID == rhs.msaID
     }
 
