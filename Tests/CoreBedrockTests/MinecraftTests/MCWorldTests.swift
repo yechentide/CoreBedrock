@@ -4,7 +4,7 @@
 
 import Testing
 import Foundation
-import CoreBedrock
+@testable import CoreBedrock
 
 struct MCWorldTests {
     private let testDataPath = Bundle.module.path(forResource: "TestData/all-blocks-test-world", ofType: nil)!
