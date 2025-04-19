@@ -10,4 +10,5 @@ public enum CBError: Error, LocalizedError {
     case failedParseLevelData(URL?)
     case failedExtractKeys(URL)
     case unhandledLevelDBKey(String)
+    case failedSaveImage(URL)
 }
