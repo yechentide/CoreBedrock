@@ -72,7 +72,7 @@ extension MCBlockType {
                  .crimsonFungus,
                  .warpedFungus,
                  .bigDripleaf,
-                 .reeds:
+                 .sugarCane:
                 true
             default:
                 false

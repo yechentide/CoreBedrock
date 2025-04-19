@@ -6,8 +6,7 @@ extension MCBlockType {
     var isTransparent: Bool {
         if self.isPlant { return true }
         return switch self {
-            case .unsupported,
-                 .unknown,
+            case .unknown,
                  .air,
                  .fire,
                  .soulFire,

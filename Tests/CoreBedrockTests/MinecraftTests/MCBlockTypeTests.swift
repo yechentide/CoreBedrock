@@ -27,9 +27,6 @@ struct MCBlockTypeTests {
                 if let _ = MCBlockType(rawValue: id) {
                     return
                 }
-                if let _ = MCOldBlockType(rawValue: id) {
-                    return
-                }
                 unrecordeNameSet.insert(id)
             })
         }
@@ -67,7 +64,6 @@ struct MCBlockTypeTests {
         for type in MCBlockType.allCases {
             unusedTypesInSwift.insert(type.rawValue)
         }
-        unusedTypesInSwift.remove(MCBlockType.unsupported.rawValue)
         unusedTypesInSwift.remove(MCBlockType.unknown.rawValue)
 
         for subChunkKey in subChunkKeys {
@@ -101,15 +97,11 @@ struct MCBlockTypeTests {
         #expect(layers != nil)
         for layer in layers! {
             layer.palettes.forEach { block in
-                if let type = MCBlockType(rawValue: block.type) {
-                    unusedTypesInSwift.remove(type.rawValue)
+                if block.type != .unknown {
+                    unusedTypesInSwift.remove(block.type.rawValue)
                     return
                 }
-                if let type = MCOldBlockType(rawValue: block.type) {
-                    unusedTypesInSwift.remove(type.rawValue)
-                    return
-                }
-                undefinedTypesInMC.insert(block.type)
+                undefinedTypesInMC.insert(block.type.rawValue)
             }
         }
     }
