@@ -19,15 +19,7 @@ public class NBT {
 
     /// Gets whether this tag has a value attached. All tags except Compound, List, and End have values.
     public var hasValue: Bool {
-        switch tagType {
-            case .compound,
-                    .end,
-                    .list,
-                    .unknown:
-                return false
-            default:
-                return true
-        }
+        tagType.hasValue
     }
 
     var _name: String?

@@ -56,6 +56,22 @@ extension TagType: Comparable {
     }
 }
 
+extension TagType {
+    public var hasValue: Bool {
+        switch self {
+            case .compound, .end, .list, .unknown: false
+            default: true
+        }
+    }
+
+    public var hasLength: Bool {
+        switch self {
+            case .list, .byteArray, .intArray, .longArray: true
+            default: false
+        }
+    }
+}
+
 extension TagType: CustomStringConvertible {
     public var description: String {
         switch self {
