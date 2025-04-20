@@ -5,14 +5,14 @@
 import Foundation
 
 public enum LvDBKeyType: Equatable, Sendable {
-    case subChunk(MCDimension, LvDBChunkKeyType)
+    case subChunk(Int32, Int32, MCDimension, LvDBChunkKeyType, Int8!)
     case string(LvDBStringKeyType)
     case player
     case map
     case village
     case structure
     case actorprefix
-    case digp
+    case digp(Int32, Int32, MCDimension)
     case unknown
 
     public static func parse(data: Data) -> Self {
@@ -27,8 +27,16 @@ public enum LvDBKeyType: Equatable, Sendable {
                 case "map": return Self.map
                 case "VIL": return Self.village
                 case "act": return Self.actorprefix
-                case "dig": return Self.digp
                 default:    break
+            }
+            if prefix == "dig" {
+                let chunkX = data[4..<8].int32!
+                let chunkZ = data[8..<12].int32!
+                var dimension = MCDimension.overworld
+                if data.count == 16, let d = MCDimension(rawValue: data[12..<16].int32!) {
+                    dimension = d
+                }
+                return .digp(chunkX, chunkZ, dimension)
             }
         }
 
@@ -36,8 +44,8 @@ public enum LvDBKeyType: Equatable, Sendable {
             return Self.unknown
         }
 
-        //        let x = data[0..<4].int32!
-        //        let z = data[4..<8].int32!
+        let chunkX = data[0..<4].int32!
+        let chunkZ = data[4..<8].int32!
         var index = 8
         var dimension = MCDimension.overworld
         if data.count > 10 {
@@ -52,16 +60,19 @@ public enum LvDBKeyType: Equatable, Sendable {
         guard let chunkType = LvDBChunkKeyType(rawValue: data[index]) else {
             return Self.unknown
         }
-        if chunkType == .subChunkPrefix, [9, 13].contains(data.count) {
-            // NOTE: Missing subchunk index. Data size should be either 10 or 14 bytes.
+        if chunkType != .subChunkPrefix {
+            return Self.subChunk(chunkX, chunkZ, dimension, chunkType, nil)
+        }
+        guard [10, 14].contains(data.count) else {
             return Self.unknown
         }
-        return Self.subChunk(dimension, chunkType)
+        let chunkY = dimension == .overworld ? Int8(bitPattern: data[9]) : Int8(bitPattern: data[13])
+        return Self.subChunk(chunkX, chunkZ, dimension, chunkType, chunkY)
     }
 
     public var isNBTKey: Bool {
         switch self {
-            case .subChunk(_, let subChunkType):
+            case .subChunk(_, _, _, let subChunkType, _):
                 switch subChunkType {
                     case .blockEntity, .pendingTicks, .randomTicks, .biomeState:
                         return true
