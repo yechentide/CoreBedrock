@@ -25,8 +25,8 @@ public struct MCWorldMeta {
 
         self.version = rawData[0..<4].int32!
 
-        let reader = CBTagReader(CBBuffer(rawData[8...]))
-        guard let tag = try reader.readAsTag() as? CompoundTag else {
+        let reader = CBTagReader(data: rawData[8...])
+        guard let tag = try reader.readNext() as? CompoundTag else {
             throw CBError.failedParseLevelData(levelDatURL)
         }
         self.tag = tag
@@ -34,13 +34,9 @@ public struct MCWorldMeta {
 
     public func toData() throws -> Data {
         let buffer = CBBuffer()
-        let writter = try CBTagWriter(stream: buffer, rootTagName: "", useLittleEndian: true)
-        for childTag in tag {
-            try writter.writeTag(tag: childTag)
-        }
-        try writter.endCompound()
-        try writter.finish()
-        return Data(buffer.toArray())
+        let writter = CBTagWriter(buffer: buffer)
+        try writter.write(tag: tag)
+        return writter.toData()
     }
 
     public func updateFiles(dirURL: URL) throws {

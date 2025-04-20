@@ -61,23 +61,6 @@ public class NBT {
         }
     }
 
-    // There is no way to force a subclass to override a function without using
-    // protocols and the functionality needed for NBT means it has to be a
-    // class. Therefore, since functions cannot use "required", use a fatal
-    // error call.
-    func readTag(_ readStream: CBBinaryReader, _ skip: (NBT) -> Bool) throws -> Bool {
-        fatalError("Cannot call this function from NBT; subclasses need to override and add functionality.")
-    }
-    func skipTag(_ readStream: CBBinaryReader) throws {
-        fatalError("Cannot call this function from NBT; subclasses need to override and add functionality.")
-    }
-    func writeTag(_ writeStream: CBBinaryWriter) throws {
-        fatalError("Cannot call this function from NBT; subclasses need to override and add functionality.")
-    }
-    func writeData(_ writeStream: CBBinaryWriter) throws {
-        fatalError("Cannot call this function from NBT; subclasses need to override and add functionality.")
-    }
-
     /// Creates a deep copy of this tag.
     public func clone() throws -> NBT {
         fatalError("Cannot call this function from NBT; subclasses need to override and add functionality.")

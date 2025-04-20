@@ -44,31 +44,6 @@ public final class StringTag: NBT {
         self.name = other.name
     }
 
-    override func readTag(_ readStream: CBBinaryReader, _ skip: (NBT) -> Bool) throws -> Bool {
-        // Check if the tag needs to be skipped
-        if skip(self) {
-            try skipTag(readStream)
-            return false
-        }
-        value = try readStream.readString()
-        return true
-    }
-
-    override func skipTag(_ readStream: CBBinaryReader) throws {
-        try readStream.skipString()
-    }
-
-    override func writeTag(_ writeStream: CBBinaryWriter) throws {
-        try writeStream.write(TagType.string)
-        guard let name = name else { throw CBStreamError.invalidFormat("Name is null") }
-        try writeStream.write(name)
-        try writeData(writeStream)
-    }
-
-    override func writeData(_ writeStream: CBBinaryWriter) throws {
-        try writeStream.write(value)
-    }
-
     public override func clone() -> NBT {
         return StringTag(from: self)
     }

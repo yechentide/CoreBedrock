@@ -50,32 +50,6 @@ public final class ByteTag: NBT {
         self.name = other.name
     }
 
-    override func readTag(_ readStream: CBBinaryReader, _ skip: (NBT) -> Bool) throws -> Bool {
-        // Check if the tag needs to be skipped
-        if skip(self) {
-            try skipTag(readStream)
-            return false
-        }
-
-        value = try readStream.readByte()
-        return true
-    }
-
-    override func skipTag(_ readStream: CBBinaryReader) throws {
-        try readStream.skip(MemoryLayout<UInt8>.size)
-    }
-
-    override func writeTag(_ writeStream: CBBinaryWriter) throws {
-        try writeStream.write(TagType.byte)
-        guard let name = name else { throw CBStreamError.invalidFormat("Name is null") }
-        try writeStream.write(name)
-        try writeData(writeStream)
-    }
-
-    override func writeData(_ writeStream: CBBinaryWriter) throws {
-        try writeStream.write(value)
-    }
-
     override public func clone() -> NBT {
         return ByteTag(from: self)
     }
