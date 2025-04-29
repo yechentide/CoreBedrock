@@ -5,12 +5,58 @@
 import Foundation
 
 public class MCSubChunk {
+    public static let sideLength = 16
     public static let totalBlockCount = 4096 // 16 * 16 * 16
-    public static let localPosRange = 0 ..< MCChunk.length
-    public static func offset(_ localX: Int, _ localY: Int, _ localZ: Int) -> Int? {
+    public static let localPosRange = 0 ..< MCSubChunk.sideLength
+    public static func linearIndex(_ localX: Int, _ localY: Int, _ localZ: Int) -> Int? {
         guard localPosRange ~= localX, localPosRange ~= localY, localPosRange ~= localZ else {
             return nil
         }
-        return (localX * MCChunk.length + localZ) * MCChunk.length + localY
+        return (localX * MCSubChunk.sideLength + localZ) * MCSubChunk.sideLength + localY
+    }
+
+    public let chunkY: Int8
+    public let chunkVersion: UInt8
+    private(set) var blockPalette: [MCBlock] = []
+    private(set) var blockIndices: [UInt16] = []
+    private(set) var waterPalette: [MCBlock] = []
+    private(set) var waterIndices: [UInt16] = []
+
+    public init(chunkY: Int8, chunkVersion: UInt8) {
+        self.chunkY = chunkY
+        self.chunkVersion = chunkVersion
+    }
+
+    public init(chunkY: Int8, chunkVersion: UInt8, blockPalette: [MCBlock], blockIndices: [UInt16], waterPalette: [MCBlock], waterIndices: [UInt16]) {
+        self.chunkY = chunkY
+        self.chunkVersion = chunkVersion
+        self.blockPalette = blockPalette
+        self.blockIndices = blockIndices
+        self.waterPalette = waterPalette
+        self.waterIndices = waterIndices
+    }
+
+    public func setBlockLayer(palette: [MCBlock], indices: [UInt16]) {
+        self.blockPalette = palette
+        self.blockIndices = indices
+    }
+
+    public func setWaterLayer(palette: [MCBlock], indices: [UInt16]) {
+        self.waterPalette = palette
+        self.waterIndices = indices
+    }
+
+    public func block(atLocalX localX: Int, localY: Int, localZ: Int) -> MCBlock? {
+        guard let index = Self.linearIndex(localX, localY, localZ),
+              0..<blockIndices.count ~= index
+        else {
+            return nil
+        }
+        let paletteIndex = Int(blockIndices[index])
+        guard paletteIndex < blockPalette.count
+        else {
+            return nil
+        }
+        return blockPalette[paletteIndex]
     }
 }
