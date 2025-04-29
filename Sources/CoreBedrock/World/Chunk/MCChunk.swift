@@ -11,37 +11,37 @@ public struct MCChunk {
         return Int(chunkIndex)*MCSubChunk.sideLength ... Int(chunkIndex+1)*MCSubChunk.sideLength-1
     }
 
-    let loadOption: MCChunkReadOptions
+    public let loadOption: MCChunkReadOptions
 
-    let chunkX: Int32
-    let chunkZ: Int32
-    var minChunkY: Int32
+    public let chunkX: Int32
+    public let chunkZ: Int32
+    public private(set) var minChunkY: Int32
 
-    let version: UInt8
-    var currentTikc: Int32 = 0
+    public let version: UInt8
+    public private(set) var currentTikc: Int32 = 0
 
-    var subChunks: [MCSubChunk]
-    var blockEntities: [Pos3Di32: CompoundTag]
-    var entities: [CompoundTag]
-    var pendingTicks: [MCPendingTick]
-    var biomes: MCBiomeColumn
+    public private(set) var subChunks: [MCSubChunk]
+    public private(set) var blockEntities: [Pos3Di32: CompoundTag]
+    public private(set) var entities: [CompoundTag]
+    public private(set) var pendingTicks: [MCPendingTick]
+    public private(set) var biomes: MCBiomeColumn
 
-    var minBlockX: Int {
+    public var minBlockX: Int {
         Int(chunkX) * 16
     }
-    var maxBlockX: Int {
+    public var maxBlockX: Int {
         Int(chunkX) * 16 + 15
     }
-    var minBlockZ: Int {
+    public var minBlockZ: Int {
         Int(chunkZ) * 16
     }
-    var maxBlockZ: Int {
+    public var maxBlockZ: Int {
         Int(chunkZ) * 16 + 15
     }
-    var minBlockY: Int {
+    public var minBlockY: Int {
         Int(minChunkY) * 16
     }
-    var maxBlockY: Int {
+    public var maxBlockY: Int {
         minChunkY < 0 ? 319 : 255
     }
 }

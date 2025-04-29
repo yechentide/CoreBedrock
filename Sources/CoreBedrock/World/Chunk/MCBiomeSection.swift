@@ -3,8 +3,8 @@
 //
 
 public final class MCBiomeSection {
-    private(set) var palette: [MCBiomeType]
-    private(set) var indices: [UInt16]
+    public private(set) var palette: [MCBiomeType]
+    public private(set) var indices: [UInt16]
 
     public init() {
         self.palette = []

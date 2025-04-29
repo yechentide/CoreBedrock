@@ -17,10 +17,10 @@ public class MCSubChunk {
 
     public let chunkY: Int8
     public let chunkVersion: UInt8
-    private(set) var blockPalette: [MCBlock] = []
-    private(set) var blockIndices: [UInt16] = []
-    private(set) var waterPalette: [MCBlock] = []
-    private(set) var waterIndices: [UInt16] = []
+    public private(set) var blockPalette: [MCBlock] = []
+    public private(set) var blockIndices: [UInt16] = []
+    public private(set) var waterPalette: [MCBlock] = []
+    public private(set) var waterIndices: [UInt16] = []
 
     public init(chunkY: Int8, chunkVersion: UInt8) {
         self.chunkY = chunkY

@@ -3,11 +3,11 @@
 //
 
 public struct MCPendingTick {
-    var x: Int32
-    var y: Int32
-    var z: Int32
-    var time: Int64
-    let block: MCBlock
+    public let x: Int32
+    public let y: Int32
+    public let z: Int32
+    public let time: Int64
+    public let block: MCBlock
 
     public static func parse(rootTag: CompoundTag) -> MCPendingTick? {
         guard let blockStateTag = rootTag["blockState"] as? CompoundTag,
