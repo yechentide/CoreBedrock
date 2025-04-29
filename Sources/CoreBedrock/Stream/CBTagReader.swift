@@ -11,6 +11,10 @@ public struct CBTagReader: CustomDebugStringConvertible {
         self.reader = CBBinaryReader(data: data, littleEndian: littleEndian)
     }
 
+    public init(reader: CBBinaryReader) {
+        self.reader = reader
+    }
+
     public var remainingByteCount: Int {
         reader.remainingByteCount
     }
