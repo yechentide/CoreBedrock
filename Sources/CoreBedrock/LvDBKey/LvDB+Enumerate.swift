@@ -7,8 +7,8 @@ import LvDBWrapper
 extension LvDB {
     public func enumerateActorKeys(
         digpData: Data,
-        handler: @escaping (Int, Data) async throws -> Void
-    ) async throws -> Bool {
+        handler: @escaping (Int, Data) -> Void
+    ) -> Bool {
         guard digpData.count % 8 == 0 else {
             return false
         }
@@ -22,7 +22,7 @@ extension LvDB {
             let startIndex = digpData.startIndex + i * 8
             let endIndex = startIndex + 8
             let key = digpData.subdata(in: startIndex..<endIndex)
-            try await handler(i, key)
+            handler(i, key)
         }
         return true
     }
