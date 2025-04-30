@@ -4,7 +4,7 @@
 
 public final class MCBiomeColumn {
     public let minChunkY: Int
-    private var sections: [MCBiomeSection]
+    public private(set) var sections: [MCBiomeSection]
 
     public init(minChunkY: Int, sections: [MCBiomeSection]) {
         self.minChunkY = minChunkY

@@ -44,4 +44,57 @@ public struct MCChunk {
     public var maxBlockY: Int {
         minChunkY < 0 ? 319 : 255
     }
+
+    private func getSubChunk(fromBlockY blockY: Int) -> MCSubChunk? {
+        let chunkY = convertPos(from: blockY, .blockToChunk)
+        let index = chunkY - Int(minChunkY)
+        guard 0..<subChunks.count ~= index else { return nil }
+        return subChunks[index]
+    }
+
+    public func block(x blockX: Int, y blockY: Int, z blockZ: Int) -> MCBlock? {
+        let chunkX = convertPos(from: blockX, .blockToChunk)
+        let chunkZ = convertPos(from: blockZ, .blockToChunk)
+        guard chunkX == self.chunkX,
+              chunkZ == self.chunkZ,
+              let subChunk = getSubChunk(fromBlockY: blockY)
+        else {
+            return nil
+        }
+        let localX = blockX - chunkX * MCSubChunk.sideLength
+        let localZ = blockZ - chunkZ * MCSubChunk.sideLength
+        let localY = blockY - convertPos(from: blockY, .blockToChunk) * MCSubChunk.sideLength
+        return subChunk.block(atLocalX: localX, localY: localY, localZ: localZ)
+    }
+
+    public func block(pos: Pos3Di32) -> MCBlock? {
+        return block(x: Int(pos.x), y: Int(pos.y), z: Int(pos.z))
+    }
+
+    public func biome(x blockX: Int, y blockY: Int, z blockZ: Int) -> MCBiomeType? {
+        guard !self.biomes.sections.isEmpty else {
+            return nil
+        }
+        let chunkX = convertPos(from: blockX, .blockToChunk)
+        let chunkZ = convertPos(from: blockZ, .blockToChunk)
+        guard chunkX == self.chunkX, chunkZ == self.chunkZ else {
+            return nil
+        }
+        let localX = blockX - chunkX * MCSubChunk.sideLength
+        let localZ = blockZ - chunkZ * MCSubChunk.sideLength
+        return self.biomes.biome(atLocalX: localX, blockY: blockY, localZ: localZ)
+    }
+
+    public func blockEntity(x blockX: Int, y blockY: Int, z blockZ: Int) -> CompoundTag? {
+        let key = Pos3Di32(
+            x: Int32(truncatingIfNeeded: blockX),
+            y: Int32(truncatingIfNeeded: blockY),
+            z: Int32(truncatingIfNeeded: blockZ)
+        )
+        return self.blockEntities[key]
+    }
+
+    public func blockEntity(pos: Pos3Di32) -> CompoundTag? {
+        return self.blockEntities[pos]
+    }
 }
