@@ -36,4 +36,5 @@ public enum LvDBChunkKeyType: UInt8, CaseIterable, Sendable {
     case generatedPreCavesAndCliffsBlending = 0x3D  // not used, DON'T REMOVE
     case blendingBiomeHeight    = 0x3E              // not used, DON'T REMOVE
     case legacyChunkVersion     = 0x76
+    case unknown0x77            = 0x77
 }

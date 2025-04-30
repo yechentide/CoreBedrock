@@ -13,6 +13,7 @@ public enum LvDBKeyType: Equatable, Sendable {
     case structure(Data)                 // "structuretemplate_mystructure:\(name)"
     case actorprefix(Data)               // "actorprefix\(id)"
     case digp(Int32, Int32, MCDimension) // "digp\(x)\(z)\(dimension)"
+    case realmsStoriesData(Data)         // "RealmsStoriesData_\(id)"
     case unknown(Data)
 
     public static func parse(data: Data) -> Self {
@@ -44,6 +45,9 @@ public enum LvDBKeyType: Equatable, Sendable {
                     dimension = d
                 }
                 return .digp(chunkX, chunkZ, dimension)
+            }
+            if prefix == "Real" && data.count > 18 { // RealmsStoriesData_
+                return Self.realmsStoriesData(data[18...])
             }
         }
 
