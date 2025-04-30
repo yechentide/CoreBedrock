@@ -122,7 +122,7 @@ public enum ChunkBuilder {
             return entities
         }
         let _ = db.enumerateActorKeys(digpData: digpData) { index, keyData in
-            let lvdbKey = LvDBKeyFactory.makeActorKey(keyData: keyData)
+            let lvdbKey = LvDBKeyFactory.makeActorKey(id: keyData)
             guard let entityData = db.get(lvdbKey) else {
                 return
             }

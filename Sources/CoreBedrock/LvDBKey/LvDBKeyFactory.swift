@@ -33,8 +33,8 @@ public enum LvDBKeyFactory {
         return data
     }
 
-    public static func makeActorKey(keyData: Data) -> Data {
-        return "actorprefix".data(using: .utf8)! + keyData
+    public static func makeActorKey(id: Data) -> Data {
+        return "actorprefix".data(using: .utf8)! + id
     }
 
     public static func makeMapKey(id: Int64) -> Data {

@@ -14,15 +14,15 @@ extension LvDB {
         }
 
         let num = digpData.count / 8
-        for i in 0..<num {
+        for index in 0..<num {
             if Task.isCancelled {
                 return false
             }
 
-            let startIndex = digpData.startIndex + i * 8
+            let startIndex = digpData.startIndex + index * 8
             let endIndex = startIndex + 8
-            let key = digpData.subdata(in: startIndex..<endIndex)
-            handler(i, key)
+            let id = digpData.subdata(in: startIndex..<endIndex)
+            handler(index, id)
         }
         return true
     }
