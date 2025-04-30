@@ -21,6 +21,7 @@ public enum LvDBStringKeyType: String, CaseIterable, Sendable {
     // legacy key types
     case flatworldlayers                = "game_flatworldlayers"        // Info about the flat world before 1.5, it has been moved to level.dat
     case mVillages                      = "mVillages"                   // Info about old villages before 1.11
+    case legacyVillages                 = "villages"
 
     public static func parse(data: Data) -> Self? {
         guard let str = String(data: data, encoding: .utf8), let key = Self(rawValue: str) else { return nil }
