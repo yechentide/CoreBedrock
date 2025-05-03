@@ -32,17 +32,10 @@ public struct MCWorldMeta {
         self.tag = tag
     }
 
-    public func toData() throws -> Data {
-        let buffer = CBBuffer()
-        let writter = CBTagWriter(buffer: buffer)
-        try writter.write(tag: tag)
-        return writter.toData()
-    }
-
     public func updateFiles(dirURL: URL) throws {
         let levelDatURL = MCDir.generateURL(for: .levelDat, in: dirURL)
 
-        let tagData = try toData()
+        let tagData = try tag.toData()
         let metaRawData = version.data + Int32(tagData.count).data + tagData
         try metaRawData.write(to: levelDatURL)
 

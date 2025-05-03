@@ -13,6 +13,12 @@ public final class CBBinaryWriter: CustomDebugStringConvertible {
 
     // MARK: - Initializers
 
+    public init(littleEndian: Bool = true) {
+        self.buffer = CBBuffer()
+        let isLittleEndian = CFByteOrderGetCurrent() == CFByteOrder(CFByteOrderLittleEndian.rawValue)
+        self.swapNeeded = isLittleEndian != littleEndian
+    }
+
     public init(buffer: CBBuffer, littleEndian: Bool = true) {
         self.buffer = buffer
         let isLittleEndian = CFByteOrderGetCurrent() == CFByteOrder(CFByteOrderLittleEndian.rawValue)

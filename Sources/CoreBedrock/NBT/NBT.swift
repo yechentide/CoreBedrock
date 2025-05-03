@@ -243,3 +243,11 @@ extension NBT: Equatable {
         return lhs === rhs
     }
 }
+
+extension NBT {
+    public func toData() throws -> Data {
+        let writer = CBTagWriter()
+        try writer.write(tag: self)
+        return writer.toData()
+    }
+}

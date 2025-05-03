@@ -7,6 +7,10 @@ import Foundation
 public struct CBTagWriter: CustomDebugStringConvertible {
     private let writer: CBBinaryWriter
 
+    public init(littleEndian: Bool = true) {
+        self.writer = CBBinaryWriter(littleEndian: littleEndian)
+    }
+
     public init(buffer: CBBuffer, littleEndian: Bool = true) {
         self.writer = CBBinaryWriter(buffer: buffer, littleEndian: littleEndian)
     }
