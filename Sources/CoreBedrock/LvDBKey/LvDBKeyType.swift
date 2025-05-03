@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum LvDBKeyType: Equatable, Sendable {
+public enum LvDBKeyType: Equatable, Hashable, Sendable {
     case subChunk(Int32, Int32, MCDimension, LvDBChunkKeyType, Int8!)
     case string(LvDBStringKeyType)       // "\(key string)"
     case player(Data)                    // "\(key string)"
@@ -103,6 +103,58 @@ public enum LvDBKeyType: Equatable, Sendable {
                 return true
             default:
                 return false
+        }
+    }
+
+    public var isCompoundListKey: Bool {
+        if case .subChunk(_, _, _, let subChunkType, _) = self {
+            switch subChunkType {
+                case .entity, .blockEntity: return true
+                default: return false
+            }
+        }
+        return false
+    }
+
+    public var keyData: Data {
+        switch self {
+            case .subChunk(let x, let z, let d, let t, let y):
+                var keyData = x.data + z.data
+                if d != .overworld {
+                    keyData += d.rawValue.data
+                }
+                keyData += t.rawValue.data
+                if case .subChunkPrefix = t, let y {
+                    keyData += y.data
+                }
+                return keyData
+            case .string(let t):
+                return t.rawValue.data(using: .utf8)!
+            case .player(let data):
+                return data
+            case .map(let data):
+                let keyData = "map_".data(using: .utf8)! + data
+                return keyData
+            case .village(let data):
+                let keyData = "VILLAGE_".data(using: .utf8)! + data
+                return keyData
+            case .structure(let data):
+                let keyData = "structuretemplate_mystructure:".data(using: .utf8)! + data
+                return keyData
+            case .actorprefix(let data):
+                let keyData = "actorprefix".data(using: .utf8)! + data
+                return keyData
+            case .digp(let x, let z, let d):
+                var keyData = "digp".data(using: .utf8)! + x.data + z.data
+                if d != .overworld {
+                    keyData += d.rawValue.data
+                }
+                return keyData
+            case .realmsStoriesData(let data):
+                let keyData = "RealmsStoriesData_".data(using: .utf8)! + data
+                return keyData
+            case .unknown(let data):
+                return data
         }
     }
 }
