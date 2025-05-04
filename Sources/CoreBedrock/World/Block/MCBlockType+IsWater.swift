@@ -3,7 +3,7 @@
 //
 
 extension MCBlockType {
-    var isWater: Bool {
+    public var isWater: Bool {
         return false
     }
 }

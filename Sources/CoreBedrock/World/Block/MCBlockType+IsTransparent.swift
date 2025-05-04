@@ -3,7 +3,7 @@
 //
 
 extension MCBlockType {
-    var isTransparent: Bool {
+    public var isTransparent: Bool {
         if self.isPlant { return true }
         return switch self {
             case .unknown,

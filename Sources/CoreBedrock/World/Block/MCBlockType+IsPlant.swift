@@ -3,7 +3,7 @@
 //
 
 extension MCBlockType {
-    var isFlower: Bool {
+    public var isFlower: Bool {
         switch self {
             case .crimsonRoots,
                  .warpedRoots,
@@ -35,7 +35,7 @@ extension MCBlockType {
         }
     }
 
-    var isPlant: Bool {
+    public var isPlant: Bool {
         if self.isFlower { return true }
         return switch self {
             case .oakSapling,
