@@ -7,12 +7,17 @@ import Foundation
 public struct CBTagReader: CustomDebugStringConvertible {
     private var reader: CBBinaryReader
 
+    public init(reader: CBBinaryReader) {
+        self.reader = reader
+    }
+
     public init(data: Data, littleEndian: Bool = true) {
         self.reader = CBBinaryReader(data: data, littleEndian: littleEndian)
     }
 
-    public init(reader: CBBinaryReader) {
-        self.reader = reader
+    public init(data: Data, offset: Int = 0, littleEndian: Bool = true) throws {
+        self.reader = CBBinaryReader(data: data, littleEndian: littleEndian)
+        try self.reader.skip(offset)
     }
 
     public var remainingByteCount: Int {

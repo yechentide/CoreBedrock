@@ -25,7 +25,7 @@ public struct MCWorldMeta {
 
         self.version = rawData[0..<4].int32!
 
-        let reader = CBTagReader(data: rawData[8...])
+        let reader = try CBTagReader(data: rawData, offset: 8)
         guard let tag = try reader.readNext() as? CompoundTag else {
             throw CBError.failedParseLevelData(levelDatURL)
         }
