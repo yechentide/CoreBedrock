@@ -18,6 +18,22 @@ extension CGColor {
         return Self.from(red: red, green: green, blue: blue, alpha: 1.0)
     }
 
+    public static func parseAsARGB(_ argb: UInt32) -> CGColor {
+        let a = CGFloat((argb >> 24) & 0xFF) / 255.0
+        let r = CGFloat((argb >> 16) & 0xFF) / 255.0
+        let g = CGFloat((argb >> 8) & 0xFF) / 255.0
+        let b = CGFloat(argb & 0xFF) / 255.0
+        return CGColor(red: r, green: g, blue: b, alpha: a)
+    }
+
+    public static func parseAsRGBA(_ rgba: UInt32) -> CGColor {
+        let r = CGFloat((rgba >> 24) & 0xFF) / 255.0
+        let g = CGFloat((rgba >> 16) & 0xFF) / 255.0
+        let b = CGFloat((rgba >> 8) & 0xFF) / 255.0
+        let a = CGFloat(rgba & 0xFF) / 255.0
+        return CGColor(red: r, green: g, blue: b, alpha: a)
+    }
+
     fileprivate var rgbaComponents: (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat)? {
         guard let components = self.components,
               let colorSpace = self.colorSpace?.model
