@@ -16,7 +16,7 @@ extension CGImage {
         flipHorizontally: Bool = false
     ) -> CGImage? {
         guard colors.count == width * height else {
-            OSLog.cbLogger.warning("The number of colors does not match the image dimensions.")
+            CBLogger.warning("The number of colors does not match the image dimensions.")
             return nil
         }
 
@@ -37,7 +37,7 @@ extension CGImage {
         )
 
         guard let context else {
-            OSLog.cbLogger.warning("Failed to create CGContext.")
+            CBLogger.warning("Failed to create CGContext.")
             return nil
         }
 
@@ -58,12 +58,12 @@ extension CGImage {
         let data = NSMutableData()
         let uti = type.identifier as CFString
         guard let destination = CGImageDestinationCreateWithData(data as CFMutableData, uti, 1, nil) else {
-            OSLog.cbLogger.error("Failed to create CGImageDestination for UTI: \(uti)")
+            CBLogger.error("Failed to create CGImageDestination for UTI: \(uti)")
             return nil
         }
         CGImageDestinationAddImage(destination, self, nil)
         guard CGImageDestinationFinalize(destination) else {
-            OSLog.cbLogger.error("Failed to finalize image encoding for UTI: \(uti)")
+            CBLogger.error("Failed to finalize image encoding for UTI: \(uti)")
             return nil
         }
         return data as Data
@@ -77,7 +77,7 @@ extension CGImage {
         guard let source = CGImageSourceCreateWithData(data as CFData, options as CFDictionary),
               let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil)
         else {
-            OSLog.cbLogger.error("Failed to decode CGImage from data. Type hint: \(type?.identifier ?? "none")")
+            CBLogger.error("Failed to decode CGImage from data. Type hint: \(type?.identifier ?? "none")")
             return nil
         }
         return cgImage
@@ -87,14 +87,14 @@ extension CGImage {
         let uti = type.identifier as CFString
 
         guard let destination = CGImageDestinationCreateWithURL(url as CFURL, uti, 1, nil) else {
-            OSLog.cbLogger.error("Failed to create CGImageDestination for \(uti)")
+            CBLogger.error("Failed to create CGImageDestination for \(uti)")
             throw CBError.failedSaveImage(url)
         }
 
         CGImageDestinationAddImage(destination, self, properties as CFDictionary?)
 
         guard CGImageDestinationFinalize(destination) else {
-            OSLog.cbLogger.error("Failed to finalize image write to \(url.absoluteString)")
+            CBLogger.error("Failed to finalize image write to \(url.absoluteString)")
             throw CBError.failedSaveImage(url)
         }
     }

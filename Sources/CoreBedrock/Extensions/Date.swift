@@ -5,13 +5,12 @@
 import Foundation
 
 extension Date {
-    private static func makeDefaultFormatter() -> DateFormatter {
+    public static let defaultFormatter = {
         let defaultFormatter = DateFormatter()
         defaultFormatter.dateStyle = .medium
         defaultFormatter.timeStyle = .medium
         return defaultFormatter
-    }
-    public static let defaultFormatter = makeDefaultFormatter()
+    }()
 
     public func format(_ format: String) -> String {
         Self.defaultFormatter.dateFormat = format

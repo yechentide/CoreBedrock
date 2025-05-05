@@ -4,6 +4,7 @@
 
 #import "LvDB.h"
 #import "LvDBIterator.h"
+#import "DebugLog.h"
 
 #import <iostream>
 #import <memory>
@@ -36,15 +37,15 @@
         // writeOptions = leveldb::WriteOptions();
 
         auto dbPath = [path UTF8String];
-        leveldb::DB* tmp;
-        leveldb::Status status = leveldb::DB::Open(options, dbPath, &tmp);
+        leveldb::DB* lvdb;
+        leveldb::Status status = leveldb::DB::Open(options, dbPath, &lvdb);
         if (!status.ok()) {
-            NSLog(@"[LvDBWrapper] Failed to open the db: %s", dbPath);
+            DebugLog(@"Failed to open the db: %s", dbPath);
             return nil;
         }
-        NSLog(@"[LvDBWrapper] leveldb::DB opened: %s", dbPath);
-        db.reset(tmp);
-        NSLog(@"[LvDBWrapper] LvDB generated: %s", dbPath);
+        DebugLog(@"leveldb::DB opened: %s", dbPath);
+        db.reset(lvdb);
+        DebugLog(@"LvDB generated: %s", dbPath);
     }
     return self;
 }
@@ -55,7 +56,7 @@
 
 - (void)dealloc {
     [self close];
-    NSLog(@"[LvDBWrapper] LvDB deallocated.");
+    DebugLog(@"LvDB deallocated.");
 }
 
 - (void)close {
@@ -68,7 +69,7 @@
     delete options.compressors[0];
     delete options.compressors[1];
     delete readOptions.decompress_allocator;
-    NSLog(@"[LvDBWrapper] leveldb::DB closed.");
+    DebugLog(@"leveldb::DB closed.");
 }
 
 - (BOOL)isClosed {
@@ -79,11 +80,11 @@
 
 - (LvDBIterator *)makeIterator {
     if (db == nullptr) {
-        NSLog(@"[LvDBWrapper] Error: Attempted to create iterator on closed DB.");
+        DebugLog(@"Error: Attempted to create iterator on closed DB.");
         return nil;
     }
     auto dbIterator = db->NewIterator(readOptions);
-    NSLog(@"[LvDBWrapper] leveldb::Iterator generated.");
+    DebugLog(@"leveldb::Iterator generated.");
     return [[LvDBIterator alloc] initFromIterator:dbIterator];
 }
 

@@ -3,6 +3,7 @@
 //
 
 #import "LvDBIterator.h"
+#import "DebugLog.h"
 
 #import <iostream>
 #import <memory>
@@ -16,14 +17,14 @@
     if (self = [super init]) {
         leveldb::Iterator* it = static_cast<leveldb::Iterator*>(dbIterator);
         iterator.reset(it);
-        NSLog(@"[LvDBWrapper] LvDBIterator generated.");
+        DebugLog(@"LvDBIterator generated.");
     }
     return self;
 }
 
 - (void)dealloc {
     [self destroy];
-    NSLog(@"[LvDBWrapper] LvDBIterator deallocated.");
+    DebugLog(@"LvDBIterator deallocated.");
 }
 
 - (void)destroy {
@@ -31,7 +32,7 @@
         return;
     }
     iterator.reset();
-    NSLog(@"[LvDBWrapper] leveldb::Iterator destroyed.");
+    DebugLog(@"leveldb::Iterator destroyed.");
 }
 
 - (BOOL)isDestroyed {
