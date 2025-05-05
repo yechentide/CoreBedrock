@@ -8,7 +8,13 @@ import UniformTypeIdentifiers
 import OSLog
 
 extension CGImage {
-    public static func from(colors: [CGColor], width: Int, height: Int) -> CGImage? {
+    public static func from(
+        colors: [CGColor],
+        width: Int,
+        height: Int,
+        flipVertically: Bool = false,
+        flipHorizontally: Bool = false
+    ) -> CGImage? {
         guard colors.count == width * height else {
             OSLog.cbLogger.warning("The number of colors does not match the image dimensions.")
             return nil
@@ -38,20 +44,57 @@ extension CGImage {
         for y in 0..<height {
             for x in 0..<width {
                 let index = y * width + x
-                context.setFillColor(colors[index])
-                context.fill(CGRect(x: x, y: height - 1 - y, width: 1, height: 1))
+                let color = colors[index]
+                let drawX = flipHorizontally ? (width - 1 - x) : x
+                let drawY = flipVertically ? (height - 1 - y) : y
+                context.setFillColor(color)
+                context.fill(CGRect(x: drawX, y: drawY, width: 1, height: 1))
             }
         }
         return context.makeImage()
     }
 
-    public func saveAsPNG(to url: URL) throws {
-        let pngUTType = UTType.png.identifier as CFString
-        guard let destination = CGImageDestinationCreateWithURL(url as CFURL, pngUTType, 1, nil) else {
-            throw CBError.failedSaveImage(url)
+    public func encode(as type: UTType = .png) -> Data? {
+        let data = NSMutableData()
+        let uti = type.identifier as CFString
+        guard let destination = CGImageDestinationCreateWithData(data as CFMutableData, uti, 1, nil) else {
+            OSLog.cbLogger.error("Failed to create CGImageDestination for UTI: \(uti)")
+            return nil
         }
         CGImageDestinationAddImage(destination, self, nil)
-        if !CGImageDestinationFinalize(destination) {
+        guard CGImageDestinationFinalize(destination) else {
+            OSLog.cbLogger.error("Failed to finalize image encoding for UTI: \(uti)")
+            return nil
+        }
+        return data as Data
+    }
+
+    public static func decode(from data: Data, as type: UTType? = nil) -> CGImage? {
+        var options: [CFString: Any] = [:]
+        if let type {
+            options[kCGImageSourceTypeIdentifierHint] = type.identifier as CFString
+        }
+        guard let source = CGImageSourceCreateWithData(data as CFData, options as CFDictionary),
+              let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil)
+        else {
+            OSLog.cbLogger.error("Failed to decode CGImage from data. Type hint: \(type?.identifier ?? "none")")
+            return nil
+        }
+        return cgImage
+    }
+
+    public func save(to url: URL, as type: UTType = .png, properties: [CFString: Any]? = nil) throws {
+        let uti = type.identifier as CFString
+
+        guard let destination = CGImageDestinationCreateWithURL(url as CFURL, uti, 1, nil) else {
+            OSLog.cbLogger.error("Failed to create CGImageDestination for \(uti)")
+            throw CBError.failedSaveImage(url)
+        }
+
+        CGImageDestinationAddImage(destination, self, properties as CFDictionary?)
+
+        guard CGImageDestinationFinalize(destination) else {
+            OSLog.cbLogger.error("Failed to finalize image write to \(url.absoluteString)")
             throw CBError.failedSaveImage(url)
         }
     }
