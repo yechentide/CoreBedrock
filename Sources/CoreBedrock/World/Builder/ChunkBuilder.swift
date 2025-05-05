@@ -6,28 +6,40 @@ import LvDBWrapper
 
 public enum ChunkBuilder {
     public static func build(db: LvDB, chunkX: Int32, chunkZ: Int32, dimension: MCDimension, options: MCChunkReadOptions) -> MCChunk? {
-        guard let chunkVersion = loadChunkVersion(db: db, chunkX: chunkX, chunkZ: chunkZ, dimension: dimension) else {
+        guard let iter = db.makeIterator() else {
+            return nil
+        }
+        defer {
+            iter.destroy()
+        }
+
+        let baseKey = LvDBKeyFactory.makeBaseChunkKey(x: chunkX, z: chunkZ, dimension: dimension)
+        iter.seek(baseKey)
+
+        guard let chunkVersion = loadChunkVersion(iter: iter, baseKey: baseKey) else {
             return nil
         }
 
         var minChunkY = 0
-        let subChunks = loadSubChunks(db: db, chunkX: chunkX, chunkZ: chunkZ, dimension: dimension, minChunkY: &minChunkY)
+        let subChunks: [MCSubChunk] = options.contains(.block)
+            ? loadSubChunks(iter: iter, baseKey: baseKey, dimension: dimension, minChunkY: &minChunkY)
+            : []
 
         let blockEntities: [Pos3Di32: CompoundTag] = options.contains(.biome)
-        ? loadBlockEntities(db: db, chunkX: chunkX, chunkZ: chunkZ, dimension: dimension)
-        : [:]
+            ? loadBlockEntities(iter: iter, baseKey: baseKey)
+            : [:]
 
         let entities: [CompoundTag] = options.contains(.entities)
-        ? loadEntities(db: db, chunkX: chunkX, chunkZ: chunkZ, dimension: dimension)
-        : []
+            ? loadEntities(db: db, iter: iter, baseKey: baseKey)
+            : []
 
         var currentTick: Int32 = 0
         let pendingTicks: [MCPendingTick] = options.contains(.pendingTicks)
-        ? loadPendingTicks(db: db, chunkX: chunkX, chunkZ: chunkZ, dimension: dimension, currentTick: &currentTick)
-        : []
+            ? loadPendingTicks(iter: iter, baseKey: baseKey, currentTick: &currentTick)
+            : []
 
         let biomes: MCBiomeColumn
-        if options.contains(.biome), let result = loadBiomes(db: db, chunkX: chunkX, chunkY: 0, chunkZ: chunkZ, dimension: dimension) {
+        if options.contains(.biome), let result = loadBiomes(iter: iter, baseKey: baseKey, chunkY: 0) {
             biomes = result
         } else {
             biomes = MCBiomeColumn(minChunkY: minChunkY, sections: [])
@@ -47,15 +59,17 @@ public enum ChunkBuilder {
         )
     }
 
-    private static func loadBiomes(db: LvDB, chunkX: Int32, chunkY: Int, chunkZ: Int32, dimension: MCDimension) -> MCBiomeColumn? {
-        let data3DKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .data3D)
-        if let data3DData = db.get(data3DKey) {
+    private static func loadBiomes(iter: LvDBIterator, baseKey: Data, chunkY: Int) -> MCBiomeColumn? {
+        let data3DKey = LvDBKeyFactory.makeChunkKey(base: baseKey, type: .data3D)
+        iter.seek(data3DKey)
+        if let data3DData = iter.value() {
             let parser = BiomeDataParser(data: data3DData)
             return try? parser.parse(minChunkY: chunkY)
         }
 
-        let data2DKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .data2D)
-        guard let data2DData = db.get(data2DKey), data2DData.count >= 768 else {
+        let data2DKey = LvDBKeyFactory.makeChunkKey(base: baseKey, type: .data2D)
+        iter.seek(data2DKey)
+        guard let data2DData = iter.value(), data2DData.count >= 768 else {
             return nil
         }
         let biomeColumn = MCBiomeColumn(minChunkY: 0, maxChunkY: 15)
@@ -74,9 +88,10 @@ public enum ChunkBuilder {
         return biomeColumn
     }
 
-    private static func loadPendingTicks(db: LvDB, chunkX: Int32, chunkZ: Int32, dimension: MCDimension, currentTick: inout Int32) -> [MCPendingTick] {
-        let lvdbKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .pendingTicks)
-        guard let lvdbData = db.get(lvdbKey) else {
+    private static func loadPendingTicks(iter: LvDBIterator, baseKey: Data, currentTick: inout Int32) -> [MCPendingTick] {
+        let lvdbKey = LvDBKeyFactory.makeChunkKey(base: baseKey, type: .pendingTicks)
+        iter.seek(lvdbKey)
+        guard let lvdbData = iter.value() else {
             return []
         }
 
@@ -103,11 +118,12 @@ public enum ChunkBuilder {
         return pendingTicks
     }
 
-    private static func loadEntities(db: LvDB, chunkX: Int32, chunkZ: Int32, dimension: MCDimension) -> [CompoundTag] {
+    private static func loadEntities(db: LvDB, iter: LvDBIterator, baseKey: Data) -> [CompoundTag] {
         var entities: [CompoundTag] = []
 
-        let entityKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .entity)
-        if let entityData = db.get(entityKey) {
+        let entityKey = LvDBKeyFactory.makeChunkKey(base: baseKey, type: .entity)
+        iter.seek(entityKey)
+        if let entityData = iter.value() {
             let reader = CBTagReader(data: entityData)
             try? reader.readAll().forEach { tag in
                 guard let rootTag = tag as? CompoundTag else {
@@ -117,13 +133,15 @@ public enum ChunkBuilder {
             }
         }
 
-        let digpKey = LvDBKeyFactory.makeDigpKey(x: chunkX, z: chunkZ, dimension: dimension)
-        guard let digpData = db.get(digpKey) else {
+        let digpKey = LvDBKeyFactory.makeDigpKey(base: baseKey)
+        iter.seek(digpKey)
+        guard let digpData = iter.value() else {
             return entities
         }
         let _ = db.enumerateActorKeys(digpData: digpData) { index, keyData in
-            let lvdbKey = LvDBKeyFactory.makeActorKey(id: keyData)
-            guard let entityData = db.get(lvdbKey) else {
+            let actorKey = LvDBKeyFactory.makeActorKey(id: keyData)
+            iter.seek(actorKey)
+            guard let entityData = iter.value() else {
                 return
             }
             let reader = CBTagReader(data: entityData)
@@ -136,11 +154,12 @@ public enum ChunkBuilder {
         return entities
     }
 
-    private static func loadBlockEntities(db: LvDB, chunkX: Int32, chunkZ: Int32, dimension: MCDimension) -> [Pos3Di32: CompoundTag] {
+    private static func loadBlockEntities(iter: LvDBIterator, baseKey: Data) -> [Pos3Di32: CompoundTag] {
         var blockEntities: [Pos3Di32: CompoundTag] = [:]
 
-        let lvdbKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .blockEntity)
-        guard let lvdbValue = db.get(lvdbKey) else {
+        let lvdbKey = LvDBKeyFactory.makeChunkKey(base: baseKey, type: .blockEntity)
+        iter.seek(lvdbKey)
+        guard let lvdbValue = iter.value() else {
             return blockEntities
         }
 
@@ -160,17 +179,20 @@ public enum ChunkBuilder {
         return blockEntities
     }
 
-    private static func loadSubChunks(db: LvDB, chunkX: Int32, chunkZ: Int32, dimension: MCDimension, minChunkY: inout Int) -> [MCSubChunk] {
+    private static func loadSubChunks(iter: LvDBIterator, baseKey: Data, dimension: MCDimension, minChunkY: inout Int) -> [MCSubChunk] {
         var subChunks = [MCSubChunk]()
-        let possibleMinChunkY: Int8 = dimension == .overworld ? -4 : 0
-        let possibleMaxChunkY: Int8 = dimension == .overworld ? 19 : 15
         var actualMinChunkY: Int8 = 0
-
-        for chunkY in possibleMinChunkY...possibleMaxChunkY {
-            let subChunkKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .subChunkPrefix, yIndex: chunkY)
-            guard let subChunkData = db.get(subChunkKey) else {
-                continue
+        let expectKeyLength = dimension == .overworld ? 10 : 14
+        let firstKey = LvDBKeyFactory.makeChunkKey(base: baseKey, type: .subChunkPrefix, yIndex: 0)
+        iter.seek(firstKey)
+        while iter.valid() {
+            defer {
+                iter.next()
             }
+            guard let key = iter.key(), key.count == expectKeyLength, let subChunkData = iter.value() else {
+                break
+            }
+            let chunkY = key[key.count-1].data.int8
             let parser = BlockDataParser(data: subChunkData, chunkY: chunkY)
             guard let subChunk = try? parser.parse() else {
                 continue
@@ -187,20 +209,22 @@ public enum ChunkBuilder {
         return subChunks
     }
 
-    private static func loadChunkVersion(db: LvDB, chunkX: Int32, chunkZ: Int32, dimension: MCDimension) -> UInt8? {
-        let versionKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .chunkVersion)
-        if let versionData = db.get(versionKey) {
-            guard versionData.count == 1 else {
+    private static func loadChunkVersion(iter: LvDBIterator, baseKey: Data) -> UInt8? {
+        let versionKey = LvDBKeyFactory.makeChunkKey(base: baseKey, type: .chunkVersion)
+        iter.seek(versionKey)
+        if iter.valid() {
+            guard let versionData = iter.value(), versionData.count == 1 else {
                 return nil
             }
             return versionData.uint8
         }
-        let legacyVersionKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .legacyChunkVersion)
-        if let legacyVersionData = db.get(legacyVersionKey) {
-            guard legacyVersionData.count == 1 else {
+        let legacyVersionKey = LvDBKeyFactory.makeChunkKey(base: baseKey, type: .legacyChunkVersion)
+        iter.seek(legacyVersionKey)
+        if iter.valid() {
+            guard let versionData = iter.value(), versionData.count == 1 else {
                 return nil
             }
-            return legacyVersionData.uint8
+            return versionData.uint8
         }
         return nil
     }

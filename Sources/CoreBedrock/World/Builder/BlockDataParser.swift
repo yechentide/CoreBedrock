@@ -139,7 +139,7 @@ public struct BlockDataParser {
         }
 
         guard 1...Self.wordBitSize ~= bitsPerBlock,
-              let indices = try readBlockIndices(bitsPerBlock: bitsPerBlock)
+              let indices = try readBlockIndicesUnsafe(bitsPerBlock: bitsPerBlock)
         else {
             return nil
         }
@@ -170,6 +170,44 @@ public struct BlockDataParser {
         return palette
     }
 
+    private func readBlockIndicesUnsafe(bitsPerBlock: Int) throws -> [UInt16]? {
+        let blocksPerWord = Self.wordBitSize / bitsPerBlock
+        let totalWords = Int(ceil(Double(MCSubChunk.totalBlockCount) / Double(blocksPerWord)))
+        let totalBytes = totalWords * 4
+        guard binaryReader.remainingByteCount >= totalBytes else {
+            return nil
+        }
+
+        let rawData = try binaryReader.readBytes(totalBytes)
+        var result = [UInt16](repeating: 0, count: MCSubChunk.totalBlockCount)
+        let mask: UInt32 = (1 << bitsPerBlock) - 1
+
+        rawData.withUnsafeBytes { (rawBuffer: UnsafeRawBufferPointer) in
+            let wordPointer = rawBuffer.bindMemory(to: UInt32.self)
+            let wordCount = wordPointer.count
+
+            result.withUnsafeMutableBufferPointer { resultBuffer in
+                var outputPtr = resultBuffer.baseAddress!
+                var remaining = MCSubChunk.totalBlockCount
+
+                for w in 0..<wordCount {
+                    let word = UInt32(littleEndian: wordPointer[w])
+                    for i in 0..<blocksPerWord {
+                        guard remaining > 0 else { break }
+                        let shift = i * bitsPerBlock
+                        let value = (word >> shift) & mask
+                        outputPtr.pointee = UInt16(truncatingIfNeeded: value)
+                        outputPtr += 1
+                        remaining -= 1
+                    }
+                }
+            }
+        }
+
+        return result
+    }
+
+    @available(*, deprecated, message: "Legacy scalar implementation. Use readBlockIndicesUnsafe version for better performance.")
     private func readBlockIndices(bitsPerBlock: Int) throws -> [UInt16]? {
         let blocksPerWord = Self.wordBitSize / bitsPerBlock
         let totalWords = Int(ceil(   Double(MCSubChunk.totalBlockCount) / Double(blocksPerWord)   ))

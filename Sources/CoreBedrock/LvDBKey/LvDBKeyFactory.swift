@@ -13,24 +13,29 @@ public enum LvDBKeyFactory {
         return data
     }
 
-    public static func makeChunkKey(
-        x: Int32, z: Int32, dimension: MCDimension, type: LvDBChunkKeyType, yIndex: Int8? = nil
-    ) -> Data {
-        var data = makeBaseChunkKey(x: x, z: z, dimension: dimension)
-        data += type.rawValue.data
+    public static func makeChunkKey(base: Data, type: LvDBChunkKeyType, yIndex: Int8? = nil) -> Data {
+        var data = base + type.rawValue.data
         if type == .subChunkPrefix, let yIndex = yIndex {
             data += yIndex.data
         }
         return data
     }
 
+    public static func makeChunkKey(
+        x: Int32, z: Int32, dimension: MCDimension, type: LvDBChunkKeyType, yIndex: Int8? = nil
+    ) -> Data {
+        let baseKey = makeBaseChunkKey(x: x, z: z, dimension: dimension)
+        return makeChunkKey(base: baseKey, type: type, yIndex: yIndex)
+    }
+
+    public static func makeDigpKey(base: Data) -> Data {
+        let data = "digp".data(using: .utf8)!
+        return data + base
+    }
+
     public static func makeDigpKey(x: Int32, z: Int32, dimension: MCDimension) -> Data {
-        var data = "digp".data(using: .utf8)!
-        data += x.data + z.data
-        if dimension != .overworld {
-            data += dimension.rawValue.data
-        }
-        return data
+        let base = makeBaseChunkKey(x: x, z: z, dimension: dimension)
+        return makeDigpKey(base: base)
     }
 
     public static func makeActorKey(id: Data) -> Data {

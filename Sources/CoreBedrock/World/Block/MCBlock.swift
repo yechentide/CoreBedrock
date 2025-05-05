@@ -20,7 +20,7 @@ public class MCBlock {
         else {
             return nil
         }
-        let type = MCBlockType(rawValue: nameTag.value) ?? .unknown
+        let type = MCBlockType.lookup[nameTag.value] ?? .unknown
         return MCBlock(
             type: type, states: statesTag, version: versionTag.value
         )
