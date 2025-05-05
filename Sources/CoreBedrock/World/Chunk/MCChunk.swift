@@ -26,6 +26,25 @@ public struct MCChunk {
     public private(set) var pendingTicks: [MCPendingTick]
     public private(set) var biomes: MCBiomeColumn
 
+    public init(
+        loadOption: MCChunkReadOptions, chunkX: Int32, chunkZ: Int32, minChunkY: Int32,
+        version: UInt8, currentTikc: Int32, subChunks: [MCSubChunk],
+        blockEntities: [Pos3Di32 : CompoundTag], entities: [CompoundTag],
+        pendingTicks: [MCPendingTick], biomes: MCBiomeColumn
+    ) {
+        self.loadOption = loadOption
+        self.chunkX = chunkX
+        self.chunkZ = chunkZ
+        self.minChunkY = minChunkY
+        self.version = version
+        self.currentTikc = currentTikc
+        self.subChunks = subChunks
+        self.blockEntities = blockEntities
+        self.entities = entities
+        self.pendingTicks = pendingTicks
+        self.biomes = biomes
+    }
+
     public var minBlockX: Int {
         Int(chunkX) * 16
     }

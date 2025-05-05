@@ -51,6 +51,7 @@ public enum ChunkBuilder {
             chunkZ: chunkZ,
             minChunkY: Int32(truncatingIfNeeded: minChunkY),
             version: chunkVersion,
+            currentTikc: currentTick,
             subChunks: subChunks,
             blockEntities: blockEntities,
             entities: entities,
