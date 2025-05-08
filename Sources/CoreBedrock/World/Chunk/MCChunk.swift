@@ -38,7 +38,7 @@ public struct MCChunk {
         self.minChunkY = minChunkY
         self.version = version
         self.currentTikc = currentTikc
-        self.subChunks = subChunks
+        self.subChunks = subChunks.sorted { $0.chunkY < $1.chunkY }
         self.blockEntities = blockEntities
         self.entities = entities
         self.pendingTicks = pendingTicks
@@ -46,19 +46,19 @@ public struct MCChunk {
     }
 
     public var minBlockX: Int {
-        Int(chunkX) * 16
+        Int(chunkX) * MCSubChunk.sideLength
     }
     public var maxBlockX: Int {
-        Int(chunkX) * 16 + 15
+        Int(chunkX) *  MCSubChunk.sideLength +  MCSubChunk.sideLength - 1
     }
     public var minBlockZ: Int {
-        Int(chunkZ) * 16
+        Int(chunkZ) *  MCSubChunk.sideLength
     }
     public var maxBlockZ: Int {
-        Int(chunkZ) * 16 + 15
+        Int(chunkZ) *  MCSubChunk.sideLength +  MCSubChunk.sideLength - 1
     }
     public var minBlockY: Int {
-        Int(minChunkY) * 16
+        Int(minChunkY) *  MCSubChunk.sideLength
     }
     public var maxBlockY: Int {
         minChunkY < 0 ? 319 : 255
@@ -66,9 +66,7 @@ public struct MCChunk {
 
     private func getSubChunk(fromBlockY blockY: Int) -> MCSubChunk? {
         let chunkY = convertPos(from: blockY, .blockToChunk)
-        let index = chunkY - Int(minChunkY)
-        guard 0..<subChunks.count ~= index else { return nil }
-        return subChunks[index]
+        return subChunks.first(where: { $0.chunkY == chunkY })
     }
 
     public func block(x blockX: Int, y blockY: Int, z blockZ: Int) -> MCBlock? {

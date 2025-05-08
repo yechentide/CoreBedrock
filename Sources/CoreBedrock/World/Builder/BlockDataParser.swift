@@ -37,49 +37,70 @@ public struct BlockDataParser {
     }
 
     private func parseVersion9() throws -> MCSubChunk? {
-        let subChunk = MCSubChunk(chunkY: self.chunkY, chunkVersion: 9)
-
         let layerCount = try binaryReader.readUInt8()
         let chunkY = try binaryReader.readInt8()
-        guard chunkY == self.chunkY,
-              layerCount > 0,
-              let blockLayer = try readBlockLayer()
-        else {
+        guard chunkY == self.chunkY, layerCount > 0 else {
             return nil
         }
-        subChunk.setBlockLayer(palette: blockLayer.palette, indices: blockLayer.indices)
 
+        let (blockIndicesData, blockBitsPerBlock, blockBlocksPerWord, _) = try binaryReader.readIndicesData()
+        let blockPalette = try binaryReader.readBlockPalette()
+        guard !blockPalette.isEmpty, !blockIndicesData.isEmpty else {
+            return nil
+        }
+
+        var waterBitsPerBlock: Int = 1
+        var waterBlocksPerWord: Int = CBBinaryReader.wordBitSize
+        var waterPalette: [MCBlock] = []
+        var waterIndicesData: [UInt8] = []
         if layerCount > 1 {
-            if let waterLayer = try readBlockLayer() {
-                subChunk.setWaterLayer(palette: waterLayer.palette, indices: waterLayer.indices)
-            } else {
+            (waterIndicesData, waterBitsPerBlock, waterBlocksPerWord, _) = try binaryReader.readIndicesData()
+            waterPalette = try binaryReader.readBlockPalette()
+            guard !waterPalette.isEmpty, !waterIndicesData.isEmpty else {
                 return nil
             }
         }
-        return subChunk
+
+        return MCSubChunk(
+            chunkY: self.chunkY, chunkVersion: 9,
+            blockBitsPerBlock: blockBitsPerBlock, blockBlocksPerWord: blockBlocksPerWord,
+            blockPalette: blockPalette, blockIndicesData: blockIndicesData,
+            waterBitsPerBlock: waterBitsPerBlock, waterBlocksPerWord: waterBlocksPerWord,
+            waterPalette: waterPalette, waterIndicesData: waterIndicesData
+        )
     }
 
     private func parseVersion8() throws -> MCSubChunk? {
-        let subChunk = MCSubChunk(chunkY: self.chunkY, chunkVersion: 8)
-
         let layerCount = try binaryReader.readUInt8()
-        guard layerCount > 0,
-              let blockLayer = try readBlockLayer(),
-              !blockLayer.palette.isEmpty,
-              blockLayer.indices.count == MCSubChunk.totalBlockCount
-        else {
+        guard layerCount > 0 else {
             return nil
         }
-        subChunk.setBlockLayer(palette: blockLayer.palette, indices: blockLayer.indices)
 
+        let (blockIndicesData, blockBitsPerBlock, blockBlocksPerWord, _) = try binaryReader.readIndicesData()
+        let blockPalette = try binaryReader.readBlockPalette()
+        guard !blockPalette.isEmpty, !blockIndicesData.isEmpty else {
+            return nil
+        }
+
+        var waterBitsPerBlock: Int = 1
+        var waterBlocksPerWord: Int = CBBinaryReader.wordBitSize
+        var waterPalette: [MCBlock] = []
+        var waterIndicesData: [UInt8] = []
         if layerCount > 1 {
-            if let waterLayer = try readBlockLayer() {
-                subChunk.setWaterLayer(palette: waterLayer.palette, indices: waterLayer.indices)
-            } else {
+            (waterIndicesData, waterBitsPerBlock, waterBlocksPerWord, _) = try binaryReader.readIndicesData()
+            waterPalette = try binaryReader.readBlockPalette()
+            guard !waterPalette.isEmpty, !waterIndicesData.isEmpty else {
                 return nil
             }
         }
-        return subChunk
+
+        return MCSubChunk(
+            chunkY: self.chunkY, chunkVersion: 9,
+            blockBitsPerBlock: blockBitsPerBlock, blockBlocksPerWord: blockBlocksPerWord,
+            blockPalette: blockPalette, blockIndicesData: blockIndicesData,
+            waterBitsPerBlock: waterBitsPerBlock, waterBlocksPerWord: waterBlocksPerWord,
+            waterPalette: waterPalette, waterIndicesData: waterIndicesData
+        )
     }
 
     private func decodeClassic() throws -> MCSubChunk? {
@@ -99,135 +120,75 @@ public struct BlockDataParser {
             blockDataList.append(secondBlockData)
         }
 
-        // key = specified block (id + state data)
-        // value = index of the blockPalette
-        var paletteIndexMap = [String: UInt16]()
         var blockPalette = [MCBlock]()
-        var blockIndices = [UInt16]()
-
+        var blockIndicesData = [UInt8]()
         for i in 0..<MCSubChunk.totalBlockCount {
-            let blockID = blockIDList[i]
-            let blockData = blockDataList[i]
-            let key = "\(blockID),\(blockData)"
-            if let index = paletteIndexMap[key] {
-                blockIndices.append(index)
-                continue
-            }
-            let index = UInt16(exactly: blockPalette.count) ?? 0
             // TODO: create MCBlock from block ID and block data
+            // let blockID = blockIDList[i]
+            // let blockData = blockDataList[i]
             let block = MCBlock(type: .unknown, states: CompoundTag(), version: 0)
-            paletteIndexMap[key] = index
             blockPalette.append(block)
-            blockIndices.append(index)
+
+            let word = UInt32(truncatingIfNeeded: i)
+            let bytes: [UInt8] = withUnsafeBytes(of: word) { Array($0) }
+            blockIndicesData.append(contentsOf: bytes)
         }
 
-        let subChunk = MCSubChunk(chunkY: self.chunkY, chunkVersion: 0)
-        subChunk.setBlockLayer(palette: blockPalette, indices: blockIndices)
-        return subChunk
+        return MCSubChunk(
+            chunkY: self.chunkY, chunkVersion: 9,
+            blockBitsPerBlock: CBBinaryReader.wordBitSize, blockBlocksPerWord: 1,
+            blockPalette: blockPalette, blockIndicesData: blockIndicesData,
+            waterBitsPerBlock: 1, waterBlocksPerWord: CBBinaryReader.wordBitSize,
+            waterPalette: [], waterIndicesData: []
+        )
     }
 
-    private func readBlockLayer() throws -> (palette: [MCBlock], indices: [UInt16])? {
-        let type = try binaryReader.readUInt8()
-        guard type > 0 else {
-            return nil
-        }
+    // MARK: - Skip indices parsing for better performance
+    // private func parseBlockIndicesUnsafe(from rawData: [UInt8], bitsPerBlock: Int, blocksPerWord: Int) throws -> [UInt16]? {
+    //     var result = [UInt16](repeating: 0, count: MCSubChunk.totalBlockCount)
+    //     let mask: UInt32 = (1 << bitsPerBlock) - 1
+    //     rawData.withUnsafeBytes { (rawBuffer: UnsafeRawBufferPointer) in
+    //         let wordPointer = rawBuffer.bindMemory(to: UInt32.self)
+    //         let wordCount = wordPointer.count
+    //         result.withUnsafeMutableBufferPointer { resultBuffer in
+    //             var outputPtr = resultBuffer.baseAddress!
+    //             var remaining = MCSubChunk.totalBlockCount
+    //             for w in 0..<wordCount {
+    //                 let word = UInt32(littleEndian: wordPointer[w])
+    //                 for i in 0..<blocksPerWord {
+    //                     guard remaining > 0 else { break }
+    //                     let shift = i * bitsPerBlock
+    //                     let value = (word >> shift) & mask
+    //                     outputPtr.pointee = UInt16(truncatingIfNeeded: value)
+    //                     outputPtr += 1
+    //                     remaining -= 1
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return result
+    // }
 
-        // let serializedType = type & 0x01
-        let bitsPerBlock = Int(type >> 1)
-        if bitsPerBlock == 0 {
-            return ([], [])
-        }
+    // private func readBlockIndices(bitsPerBlock: Int) throws -> [UInt16]? {
+    //     let blocksPerWord = Self.wordBitSize / bitsPerBlock
+    //     let totalWords = Int(ceil(   Double(MCSubChunk.totalBlockCount) / Double(blocksPerWord)   ))
+    //     let totalBytes = totalWords * 4
+    //     guard binaryReader.remainingByteCount >= totalBytes else {
+    //         return nil
+    //     }
 
-        guard 1...Self.wordBitSize ~= bitsPerBlock,
-              let indices = try readBlockIndicesUnsafe(bitsPerBlock: bitsPerBlock)
-        else {
-            return nil
-        }
+    //     let mask: UInt32 = ~(UInt32(0xFFFF) << bitsPerBlock)
+    //     var elements = [UInt16]()
 
-        let paletteCount = try binaryReader.readUInt32()
-        guard let maxIndex = indices.max(),
-              maxIndex < paletteCount,
-              paletteCount <= MCSubChunk.totalBlockCount,
-              let palette = try readBlockPalette(count: paletteCount)
-        else {
-            return nil
-        }
+    //     for _ in 0 ..< totalWords {
+    //         let word = try binaryReader.readUInt32()
+    //         for i in 0 ..< blocksPerWord {
+    //             guard elements.count < MCSubChunk.totalBlockCount else { break }
+    //             let element: UInt32 = mask & (word >> (i * bitsPerBlock))
+    //             elements.append(UInt16(truncatingIfNeeded: element))
+    //         }
+    //     }
 
-        return (palette, indices)
-    }
-
-    private func readBlockPalette(count: UInt32) throws -> [MCBlock]? {
-        var palette = [MCBlock]()
-        let tagReader = CBTagReader(reader: binaryReader)
-        for _ in 0..<count {
-            guard let paletteTag = try? tagReader.readNext() as? CompoundTag,
-                  let block = MCBlock.decode(paletteTag)
-            else {
-                return nil
-            }
-            palette.append(block)
-        }
-        return palette
-    }
-
-    private func readBlockIndicesUnsafe(bitsPerBlock: Int) throws -> [UInt16]? {
-        let blocksPerWord = Self.wordBitSize / bitsPerBlock
-        let totalWords = Int(ceil(Double(MCSubChunk.totalBlockCount) / Double(blocksPerWord)))
-        let totalBytes = totalWords * 4
-        guard binaryReader.remainingByteCount >= totalBytes else {
-            return nil
-        }
-
-        let rawData = try binaryReader.readBytes(totalBytes)
-        var result = [UInt16](repeating: 0, count: MCSubChunk.totalBlockCount)
-        let mask: UInt32 = (1 << bitsPerBlock) - 1
-
-        rawData.withUnsafeBytes { (rawBuffer: UnsafeRawBufferPointer) in
-            let wordPointer = rawBuffer.bindMemory(to: UInt32.self)
-            let wordCount = wordPointer.count
-
-            result.withUnsafeMutableBufferPointer { resultBuffer in
-                var outputPtr = resultBuffer.baseAddress!
-                var remaining = MCSubChunk.totalBlockCount
-
-                for w in 0..<wordCount {
-                    let word = UInt32(littleEndian: wordPointer[w])
-                    for i in 0..<blocksPerWord {
-                        guard remaining > 0 else { break }
-                        let shift = i * bitsPerBlock
-                        let value = (word >> shift) & mask
-                        outputPtr.pointee = UInt16(truncatingIfNeeded: value)
-                        outputPtr += 1
-                        remaining -= 1
-                    }
-                }
-            }
-        }
-
-        return result
-    }
-
-    @available(*, deprecated, message: "Legacy scalar implementation. Use readBlockIndicesUnsafe version for better performance.")
-    private func readBlockIndices(bitsPerBlock: Int) throws -> [UInt16]? {
-        let blocksPerWord = Self.wordBitSize / bitsPerBlock
-        let totalWords = Int(ceil(   Double(MCSubChunk.totalBlockCount) / Double(blocksPerWord)   ))
-        let totalBytes = totalWords * 4
-        guard binaryReader.remainingByteCount >= totalBytes else {
-            return nil
-        }
-
-        let mask: UInt32 = ~(UInt32(0xFFFF) << bitsPerBlock)
-        var elements = [UInt16]()
-
-        for _ in 0 ..< totalWords {
-            let word = try binaryReader.readUInt32()
-            for i in 0 ..< blocksPerWord {
-                guard elements.count < MCSubChunk.totalBlockCount else { break }
-                let element: UInt32 = mask & (word >> (i * bitsPerBlock))
-                elements.append(UInt16(truncatingIfNeeded: element))
-            }
-        }
-
-        return elements.count == MCSubChunk.totalBlockCount ? elements : nil
-    }
+    //     return elements.count == MCSubChunk.totalBlockCount ? elements : nil
+    // }
 }

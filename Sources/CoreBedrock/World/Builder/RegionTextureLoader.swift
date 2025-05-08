@@ -4,39 +4,17 @@
 
 import CoreGraphics
 import LvDBWrapper
-import CoreBedrock
-
-func measureExecutionTime(for processName: String = #function, _ showMessage: Bool = true, _ processing: @escaping () throws -> Void) throws {
-    let startTime = CFAbsoluteTimeGetCurrent()
-    defer {
-        if showMessage {
-            let elapsedTime = CFAbsoluteTimeGetCurrent() - startTime
-
-            if elapsedTime >= 1.0 {
-                print("[\(processName)] Execution Time: \(String(format: "%.3f", elapsedTime)) seconds")
-            } else {
-                let milliseconds = elapsedTime * 1000
-                print("[\(processName)] Execution Time: \(String(format: "%.3f", milliseconds)) milliseconds")
-            }
-        }
-    }
-    do {
-        try processing()
-    } catch {
-        throw error
-    }
-}
 
 // MARK: RegionToTexture
 enum RegionTextureLoader {
-    struct Result {
-        let worldDirURL: URL
-        let dimension: MCDimension
-        let region: MCRegion
-        var pixels: [CGColor] = []
-    }
+//    struct Result {
+//        let worldDirURL: URL
+//        let dimension: MCDimension
+//        let region: MCRegion
+//        var pixels: [CGColor] = []
+//    }
 
-    public static func load(db: LvDB, worldDirURL: URL, dimension: MCDimension, region: MCRegion, lastPlayed: Int64?, useCache: Bool) throws -> CGImage? {
+    public static func load(db: LvDB, worldDirURL: URL, dimension: MCDimension, region: MCRegion, lastPlayed: Int64?, useCache: Bool) async throws -> CGImage? {
         //        let cacheFileURL = try RegionTextureCacheStore.makeCacheFileURL(worldDirURL: worldDirURL, dimension: dimension, region: region)
         //        let cacheFileExists = FileManager.default.fileExists(atPath: cacheFileURL.safePath(percentEncoded: false))
         //        if useCache && cacheFileExists {
@@ -47,11 +25,11 @@ enum RegionTextureLoader {
         //            }
         //        }
 
-        let pixels = generatePixelsFromDB(db: db, dimension: dimension, region: region)
+        let pixels = await generatePixelsFromDB(db: db, dimension: dimension, region: region)
         // TODO: Abort task if needed
         //        let timestamp: Int64 = lastPlayed ?? Int64(Date().timeIntervalSince1970)
         //        try RegionTextureCacheStore.save(cacheFileURL: cacheFileURL, pixels: pixels, timestamp: timestamp)
-        return CGImage.from(colors: pixels, width: MCRegion.sideLength, height: MCRegion.sideLength, flipVertically: false)
+        return CGImage.from(colors: pixels, width: MCRegion.sideLength, height: MCRegion.sideLength, flipVertically: true)
     }
 
     fileprivate struct WorldMapPixelData {
@@ -72,7 +50,7 @@ enum RegionTextureLoader {
         }
     }
 
-    private static func generatePixelsFromDB(db: LvDB, dimension: MCDimension, region: MCRegion) -> [CGColor] {
+    private static func generatePixelsFromDB(db: LvDB, dimension: MCDimension, region: MCRegion) async -> [CGColor] {
         let width = 512
         let height = 512
         let x0 = Int(region.x) * 512
@@ -81,52 +59,58 @@ enum RegionTextureLoader {
         var pixelDataList: [WorldMapPixelData] = .init(repeating: .init(), count: width * height)
         var biomeList: [MCBiomeType] = .init(repeating: .unknown, count: width * height)
 
+        await ExecutionTimer.shared.start("Task - Extract ALL blocks data")
         for chunkZ in (region.z*32)..<(region.z*32+32) {
             for chunkX in (region.x*32)..<(region.x*32+32) {
                 // TODO: Abort task if needed
                 let chunkZ = Int32(truncatingIfNeeded: chunkZ)
                 let chunkX = Int32(truncatingIfNeeded: chunkX)
+                await ExecutionTimer.shared.start("Task - Extract blocks data")
                 guard let chunk = ChunkBuilder.build(db: db, chunkX: chunkX, chunkZ: chunkZ, dimension: dimension, options: [.blockAndBiome]) else {
                     continue
                 }
+                await ExecutionTimer.shared.stop()
 
+                await ExecutionTimer.shared.start("Task - Prepare data")
                 for blockZ in chunk.minBlockZ...chunk.maxBlockZ {
                     for blockX in chunk.minBlockX...chunk.maxBlockX {
                         guard let biome = chunk.biome(x: blockX, y: 0, z: blockZ) else {
                             continue
                         }
                         // TODO: convert biome
-                        let index = (blockZ - z0) * width + (blockX - x0)
-                        biomeList[index] = biome
+                        let biomeIndex = (blockZ - z0) * width + (blockX - x0)
+                        biomeList[biomeIndex] = biome
                     }
                     // TODO: Abort task if needed
                 }
                 for blockZ in chunk.minBlockZ...chunk.maxBlockZ {
                     for blockX in chunk.minBlockX...chunk.maxBlockX {
-                        let index = (blockZ - z0) * width + (blockX - x0)
-                        guard 0..<(width * height) ~= index else {
+                        let blockIndex = (blockZ - z0) * width + (blockX - x0)
+                        guard 0..<(width * height) ~= blockIndex else {
                             continue
                         }
                         // TODO: Abort task if needed
                         if let pixelData = pillarPixelInfo(dimension: dimension, chunk: chunk, blockX: blockX, blockZ: blockZ) {
-                            pixelDataList[index] = pixelData
+                            pixelDataList[blockIndex] = pixelData
                         }
                     }
+                    // TODO: Abort task if needed
                 }
+                await ExecutionTimer.shared.stop()
             }
         }
+        await ExecutionTimer.shared.stop("Task - Extract ALL blocks data")
 
-        var pixels: [CGColor] = []
-        print()
-        try? measureExecutionTime(for: "convertPixelData()") { // 8.790 seconds
-            pixels = convertPixelData(
-                pixelDataList: pixelDataList,
-                biomes: biomeList,
-                width: width,
-                height: height
-            )
-        }
-        return pixels
+        await ExecutionTimer.shared.start("Task - Convert blocks data to colors")
+        let retult = convertPixelData(
+            pixelDataList: pixelDataList,
+            biomes: biomeList,
+            width: width,
+            height: height
+        )
+        await ExecutionTimer.shared.stop()
+
+        return retult
     }
 
     private static func pillarPixelInfo(dimension: MCDimension, chunk: MCChunk, blockX: Int, blockZ: Int) -> WorldMapPixelData? {
@@ -204,7 +188,7 @@ enum RegionTextureLoader {
                 //                } else {
                 //                    biomeRadius = 0
                 //                }
-                pixels[pixelIndex] = computeColor(
+                pixels[pixelIndex] = packPixelInfomation(
                     height: UInt32(truncatingIfNeeded: pixelData.height),
                     waterDepth: UInt8(truncatingIfNeeded: pixelData.waterdepth),
                     biomeType: biomeType,
@@ -218,7 +202,7 @@ enum RegionTextureLoader {
     }
 
     // TODO: PackPixelInfoToARGB
-    private static func computeColor(height: UInt32, waterDepth: UInt8, biomeType: MCBiomeType, blockType: MCBlockType, biomeRadius: UInt8) -> CGColor {
+    private static func packPixelInfomation(height: UInt32, waterDepth: UInt8, biomeType: MCBiomeType, blockType: MCBlockType, biomeRadius: UInt8) -> CGColor {
         return blockType.cgColor
     }
 }
