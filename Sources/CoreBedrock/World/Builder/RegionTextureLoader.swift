@@ -14,7 +14,7 @@ enum RegionTextureLoader {
 //        var pixels: [CGColor] = []
 //    }
 
-    public static func load(db: LvDB, worldDirURL: URL, dimension: MCDimension, region: MCRegion, lastPlayed: Int64?, useCache: Bool) async throws -> CGImage? {
+    public static func load(db: LvDB, worldDirURL: URL, dimension: MCDimension, region: MCRegion, lastPlayed: Int64?, useCache: Bool) throws -> CGImage? {
         //        let cacheFileURL = try RegionTextureCacheStore.makeCacheFileURL(worldDirURL: worldDirURL, dimension: dimension, region: region)
         //        let cacheFileExists = FileManager.default.fileExists(atPath: cacheFileURL.safePath(percentEncoded: false))
         //        if useCache && cacheFileExists {
@@ -25,7 +25,7 @@ enum RegionTextureLoader {
         //            }
         //        }
 
-        let pixels = await generatePixelsFromDB(db: db, dimension: dimension, region: region)
+        let pixels = generatePixelsFromDB(db: db, dimension: dimension, region: region)
         // TODO: Abort task if needed
         //        let timestamp: Int64 = lastPlayed ?? Int64(Date().timeIntervalSince1970)
         //        try RegionTextureCacheStore.save(cacheFileURL: cacheFileURL, pixels: pixels, timestamp: timestamp)
@@ -50,7 +50,7 @@ enum RegionTextureLoader {
         }
     }
 
-    private static func generatePixelsFromDB(db: LvDB, dimension: MCDimension, region: MCRegion) async -> [CGColor] {
+    private static func generatePixelsFromDB(db: LvDB, dimension: MCDimension, region: MCRegion) -> [CGColor] {
         let width = 512
         let height = 512
         let x0 = Int(region.x) * 512
@@ -59,19 +59,18 @@ enum RegionTextureLoader {
         var pixelDataList: [WorldMapPixelData] = .init(repeating: .init(), count: width * height)
         var biomeList: [MCBiomeType] = .init(repeating: .unknown, count: width * height)
 
-        await ExecutionTimer.shared.start("Task - Extract ALL blocks data")
+//        await ExecutionTimer.shared.start("Task - Extract ALL blocks data")
         for chunkZ in (region.z*32)..<(region.z*32+32) {
             for chunkX in (region.x*32)..<(region.x*32+32) {
                 // TODO: Abort task if needed
                 let chunkZ = Int32(truncatingIfNeeded: chunkZ)
                 let chunkX = Int32(truncatingIfNeeded: chunkX)
-                await ExecutionTimer.shared.start("Task - Extract blocks data")
+//                await ExecutionTimer.shared.start("Task - Extract blocks data")
                 guard let chunk = ChunkBuilder.build(db: db, chunkX: chunkX, chunkZ: chunkZ, dimension: dimension, options: [.blockAndBiome]) else {
                     continue
                 }
-                await ExecutionTimer.shared.stop()
+//                await ExecutionTimer.shared.stop()
 
-                await ExecutionTimer.shared.start("Task - Prepare data")
                 for blockZ in chunk.minBlockZ...chunk.maxBlockZ {
                     for blockX in chunk.minBlockX...chunk.maxBlockX {
                         guard let biome = chunk.biome(x: blockX, y: 0, z: blockZ) else {
@@ -83,6 +82,7 @@ enum RegionTextureLoader {
                     }
                     // TODO: Abort task if needed
                 }
+//                await ExecutionTimer.shared.start("Task - Prepare block data")
                 for blockZ in chunk.minBlockZ...chunk.maxBlockZ {
                     for blockX in chunk.minBlockX...chunk.maxBlockX {
                         let blockIndex = (blockZ - z0) * width + (blockX - x0)
@@ -96,54 +96,53 @@ enum RegionTextureLoader {
                     }
                     // TODO: Abort task if needed
                 }
-                await ExecutionTimer.shared.stop()
+                print()
+//                await ExecutionTimer.shared.stop("Task - Prepare block data")
             }
         }
-        await ExecutionTimer.shared.stop("Task - Extract ALL blocks data")
+//        await ExecutionTimer.shared.stop("Task - Extract ALL blocks data")
 
-        await ExecutionTimer.shared.start("Task - Convert blocks data to colors")
         let retult = convertPixelData(
             pixelDataList: pixelDataList,
             biomes: biomeList,
             width: width,
             height: height
         )
-        await ExecutionTimer.shared.stop()
 
         return retult
     }
 
     private static func pillarPixelInfo(dimension: MCDimension, chunk: MCChunk, blockX: Int, blockZ: Int) -> WorldMapPixelData? {
         var waterDepth: UInt8 = 0
-        var yMax: Int = 319
-        var yMin: Int = -64
-        var yInit: Int = yMax
+        var yMin: Int = max(-64, chunk.minBlockY)
+        var yMax: Int = min(319, chunk.maxBlockY)
 
         if dimension == .theNether {
-            yMax = 127
-            yMin = 0
-            yInit = yMax
+            yMin = max(0, yMin)
+            yMax = min(127, yMax)
+            // FIXME: duplicated loop
             for blockY in stride(from: yMax, through: yMin, by: -1) {
                 guard let block = chunk.block(x: blockX, y: blockY, z: blockZ) else {
                     continue
                 }
                 if block.type == .air {
-                    yInit = blockY
+                    yMax = blockY
                     break
                 }
             }
         } else if dimension == .theEnd {
-            yMax = 255
-            yMin = 0
-            yInit = yMax
+            yMin = max(0, yMin)
+            yMax = min(255, yMax)
         }
-        yInit = min(yInit, chunk.maxBlockY)
 
         var allTransparent = true
-        for blockY in stride(from: yInit, through: yMin, by: -1) {
+        for blockY in stride(from: yMax, through: yMin, by: -1) {
+//            await ExecutionTimer.shared.start("Task - - - chunk.block()")
             guard let block = chunk.block(x: blockX, y: blockY, z: blockZ) else {
+//                await ExecutionTimer.shared.stop("Task - - - chunk.block()", showMessage: false)
                 continue
             }
+//            await ExecutionTimer.shared.stop("Task - - - chunk.block()", showMessage: true)
             if block.type.isWater {
                 waterDepth += 1
                 allTransparent = false

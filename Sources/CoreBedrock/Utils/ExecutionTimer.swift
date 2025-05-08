@@ -5,7 +5,7 @@
 import Foundation
 
 public final actor ExecutionTimer {
-    private struct TimerEntry {
+    public struct TimerEntry {
         var startTime: CFAbsoluteTime?
         var totalElapsed: CFAbsoluteTime = 0
     }
@@ -13,6 +13,14 @@ public final actor ExecutionTimer {
 
     private var timers: [String: TimerEntry] = [:]
     private var lastProcessName: String?
+
+    public func showTimers() {
+        print("========== ========== ==========")
+        for (name, entry) in timers {
+            let formattedTotal = format(entry.totalElapsed)
+            print("[\(name)] Total: \(formattedTotal)")
+        }
+    }
 
     public func start(_ processName: String = #function) {
         var entry = timers[processName] ?? TimerEntry()

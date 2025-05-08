@@ -20,6 +20,7 @@ public class MCSubChunk {
 
     private let blockBitsPerBlock: Int
     private let blockBlocksPerWord: Int
+    private let blockMask: UInt32
     private let blockPalette: [MCBlock]
     private let blockIndicesData: [UInt8]
 
@@ -37,34 +38,35 @@ public class MCSubChunk {
     ) {
         self.chunkY = chunkY
         self.chunkVersion = chunkVersion
+
         self.blockBitsPerBlock = blockBitsPerBlock
         self.blockBlocksPerWord = blockBlocksPerWord
+        self.blockMask = ~(UInt32.max << self.blockBitsPerBlock)
         self.blockPalette = blockPalette
         self.blockIndicesData = blockIndicesData
+
         self.waterBitsPerBlock = waterBitsPerBlock
         self.waterBlocksPerWord = waterBlocksPerWord
         self.waterPalette = waterPalette
         self.waterIndicesData = waterIndicesData
     }
 
+    @inline(__always)
     public func block(atLocalX localX: Int, localY: Int, localZ: Int) -> MCBlock? {
         guard let index = Self.linearIndex(localX, localY, localZ) else {
             return nil
         }
 
-        let wordIndex = Int(floor(Double(index) / Double(blockBlocksPerWord)))
-        let wordBytesCount = CBBinaryReader.wordBitSize / 8
-        guard (wordIndex+1) * wordBytesCount <= blockIndicesData.count else {
-            return nil
-        }
+        let wordIndex: Int = index / blockBlocksPerWord
+        let offset = wordIndex * 4
+        guard offset + 4 <= blockIndicesData.count else { return nil }
 
-        let wordBytes = blockIndicesData[wordIndex*wordBytesCount..<(wordIndex+1)*wordBytesCount]
-        guard let word = Data(wordBytes).uint32 else {
-            return nil
-        }
-        let mask: UInt32 = ~(UInt32.max << self.blockBitsPerBlock)
+        let word = UInt32(blockIndicesData[offset])
+            | (UInt32(blockIndicesData[offset + 1]) << 8)
+            | (UInt32(blockIndicesData[offset + 2]) << 16)
+            | (UInt32(blockIndicesData[offset + 3]) << 24)
         let indexInWord = index % blockBlocksPerWord
-        let paletteIndex: UInt32 = mask & (word >> (indexInWord * blockBitsPerBlock))
+        let paletteIndex: UInt32 = self.blockMask & (word >> (indexInWord * blockBitsPerBlock))
 
         guard paletteIndex < blockPalette.count else {
             return nil
