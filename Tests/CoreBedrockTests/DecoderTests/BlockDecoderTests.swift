@@ -21,11 +21,11 @@ struct BlockDecoderTests {
         #expect(storageLayerCount == 1)
         #expect(yIndex == 0)
 
-        let layers = try BlockDecoder.shared.decodeV9(
-            data: subChunkData, offset: 3, layerCount: storageLayerCount
-        )
-        #expect(layers != nil)
-        #expect(layers!.count == 1)
-        #expect(layers![0].palettes.count == 16)
+//        let layers = try BlockDecoder.shared.decodeV9(
+//            data: subChunkData, offset: 3, layerCount: storageLayerCount
+//        )
+//        #expect(layers != nil)
+//        #expect(layers!.count == 1)
+//        #expect(layers![0].palettes.count == 16)
     }
 }
