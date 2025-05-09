@@ -51,7 +51,6 @@ public class MCSubChunk {
         self.waterIndicesData = waterIndicesData
     }
 
-    @inline(__always)
     public func block(atLocalX localX: Int, localY: Int, localZ: Int) -> MCBlock? {
         guard let index = Self.linearIndex(localX, localY, localZ) else {
             return nil
@@ -72,5 +71,13 @@ public class MCSubChunk {
             return nil
         }
         return blockPalette[Int(paletteIndex)]
+    }
+
+    public func blocks(atLocalX localX: Int, localZ: Int) -> [MCBlock]? {
+        guard let index = Self.linearIndex(localX, 0, localZ) else {
+            return nil
+        }
+
+        return nil
     }
 }

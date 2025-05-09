@@ -83,10 +83,11 @@ enum RegionTextureLoader {
                     // TODO: Abort task if needed
                 }
 //                await ExecutionTimer.shared.start("Task - Prepare block data")
+                let blockIndexRange = 0..<(width * height)
                 for blockZ in chunk.minBlockZ...chunk.maxBlockZ {
                     for blockX in chunk.minBlockX...chunk.maxBlockX {
                         let blockIndex = (blockZ - z0) * width + (blockX - x0)
-                        guard 0..<(width * height) ~= blockIndex else {
+                        guard blockIndexRange ~= blockIndex else {
                             continue
                         }
                         // TODO: Abort task if needed
