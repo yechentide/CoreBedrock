@@ -42,4 +42,26 @@ public enum MCDimension: Int32, Sendable, CustomStringConvertible {
                 return .init(red: 235/255, green: 237/255, blue: 150/255, opacity: 1)
         }
     }
+
+    public var blockYRange: ClosedRange<Int> {
+        switch self {
+            case .overworld:
+                return -64...319
+            case .theNether:
+                return 0...127
+            case .theEnd:
+                return 0...255
+        }
+    }
+
+    public var chunkYRange: ClosedRange<Int8> {
+        switch self {
+            case .overworld:
+                return -4...19
+            case .theNether:
+                return 0...7
+            case .theEnd:
+                return 0...15
+        }
+    }
 }
