@@ -25,19 +25,21 @@ extension MCBlockType {
                  .peony,
                  .pitcherPlant,
                  .pinkPetals,
+                 .wildflowers,
                  .witherRose,
                  .torchflower,
+                 .cactusFlower,
                  .closedEyeblossom,
                  .openEyeblossom:
-                 true
+                return true
             default:
-                false
+                return false
         }
     }
 
     public var isPlant: Bool {
         if self.isFlower { return true }
-        return switch self {
+        switch self {
             case .oakSapling,
                  .spruceSapling,
                  .birchSapling,
@@ -56,26 +58,38 @@ extension MCBlockType {
                  .potatoes,
                  .carrots,
                  .sweetBerryBush,
+                 .caveVines,
+                 .caveVinesHeadWithBerries,
+                 .caveVinesBodyWithBerries,
                  .fern,
                  .largeFern,
-                 .shortGrass,
                  .tallGrass,
+                 .shortGrass,
+                 .bush,
+                 .shortDryGrass,
+                 .tallDryGrass,
                  .netherSprouts,
+                 .vine,
+                 .weepingVines,
+                 .twistingVines,
                  .waterlily,
                  .seagrass,
                  .kelp,
                  .deadbush,
                  .bambooSapling,
-                 .bamboo,
-                 .brownMushroom,
-                 .redMushroom,
-                 .crimsonFungus,
-                 .warpedFungus,
+                 .leafLitter,
                  .bigDripleaf,
-                 .sugarCane:
-                true
+                 .smallDripleafBlock,
+                 .sporeBlossom,
+                 .fireflyBush,
+                 .glowLichen,
+                 .sugarCane,
+                 .netherWart,
+                 .chorusFlower,
+                 .chorusPlant:
+                return true
             default:
-                false
+                return false
         }
     }
 }
