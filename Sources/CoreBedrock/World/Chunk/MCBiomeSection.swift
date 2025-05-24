@@ -3,20 +3,24 @@
 //
 
 public final class MCBiomeSection {
+    public let chunkY: Int8
     public private(set) var palette: [MCBiomeType]
     public private(set) var indices: [UInt16]
 
-    public init() {
+    public init(chunkY: Int8) {
+        self.chunkY = chunkY
         self.palette = []
         self.indices = []
     }
 
-    public init(palette: [MCBiomeType], indices: [UInt16]) {
+    public init(chunkY: Int8, palette: [MCBiomeType], indices: [UInt16]) {
+        self.chunkY = chunkY
         self.palette = palette
         self.indices = indices
     }
 
-    public init(uniform type: MCBiomeType) {
+    public init(chunkY: Int8, uniform type: MCBiomeType) {
+        self.chunkY = chunkY
         self.palette = [type]
         self.indices = Array(repeating: 0, count: MCSubChunk.totalBlockCount)
     }

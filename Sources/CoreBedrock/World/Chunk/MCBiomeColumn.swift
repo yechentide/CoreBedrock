@@ -3,19 +3,16 @@
 //
 
 public final class MCBiomeColumn {
-    public let minChunkY: Int
     public private(set) var sections: [MCBiomeSection]
 
-    public init(minChunkY: Int, sections: [MCBiomeSection]) {
-        self.minChunkY = minChunkY
+    public init(sections: [MCBiomeSection]) {
         self.sections = sections
     }
 
-    public init(minChunkY: Int, maxChunkY: Int) {
-        self.minChunkY = minChunkY
+    public init(minChunkY: Int8, maxChunkY: Int8) {
         self.sections = []
-        for _ in minChunkY...maxChunkY {
-            self.sections.append(MCBiomeSection())
+        for chunkY in minChunkY...maxChunkY {
+            self.sections.append(MCBiomeSection(chunkY: chunkY))
         }
     }
 
@@ -50,10 +47,6 @@ public final class MCBiomeColumn {
 
     private func section(forBlockY blockY: Int) -> MCBiomeSection? {
         let chunkY = convertPos(from: blockY, .blockToChunk)
-        let index = chunkY - self.minChunkY
-        guard 0..<self.sections.count ~= index else {
-            return nil
-        }
-        return self.sections[index]
+        return self.sections.first(where: { $0.chunkY == chunkY })
     }
 }
