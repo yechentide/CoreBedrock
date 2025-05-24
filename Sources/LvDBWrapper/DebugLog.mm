@@ -5,7 +5,7 @@
 #import "DebugLog.h"
 
 void DebugLog(NSString *format, ...) {
-#if DEBUG
+#if DEBUG && LVDB_DEBUG_LOG_ENABLED
     static NSDateFormatter *formatter;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
