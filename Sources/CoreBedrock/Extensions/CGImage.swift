@@ -7,51 +7,67 @@ import ImageIO
 import UniformTypeIdentifiers
 import OSLog
 
+public typealias RGBA = (red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8)
+
 extension CGImage {
     public static func from(
-        colors: [CGColor],
+        colors: [RGBA],
         width: Int,
         height: Int,
         flipVertically: Bool = false,
         flipHorizontally: Bool = false
     ) -> CGImage? {
         guard colors.count == width * height else {
-            CBLogger.warning("The number of colors does not match the image dimensions.")
             return nil
         }
 
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let bitsPerComponent = 8
-        let bytesPerPixel = 4
-        let bytesPerRow = width * bytesPerPixel
-        let alphaInfo = CGImageAlphaInfo.premultipliedLast
-        let bitmapInfo = CGBitmapInfo.byteOrder32Big.union(CGBitmapInfo(rawValue: alphaInfo.rawValue))
-        let context = CGContext(
-            data: nil,
-            width: width,
-            height: height,
-            bitsPerComponent: bitsPerComponent,
-            bytesPerRow: bytesPerRow,
-            space: colorSpace,
-            bitmapInfo: bitmapInfo.rawValue
-        )
-
-        guard let context else {
-            CBLogger.warning("Failed to create CGContext.")
-            return nil
-        }
+        var pixelData = [UInt8](repeating: 0, count: colors.count * 4)
 
         for y in 0..<height {
             for x in 0..<width {
-                let index = y * width + x
-                let color = colors[index]
-                let drawX = flipHorizontally ? (width - 1 - x) : x
-                let drawY = flipVertically ? (height - 1 - y) : y
-                context.setFillColor(color)
-                context.fill(CGRect(x: drawX, y: drawY, width: 1, height: 1))
+                var srcX = x
+                var srcY = y
+                if flipHorizontally {
+                    srcX = width - 1 - x
+                }
+                if flipVertically {
+                    srcY = height - 1 - y
+                }
+
+                let srcIndex = srcY * width + srcX
+                let destIndex = (y * width + x) * 4
+                let color = colors[srcIndex]
+                pixelData[destIndex + 0] = color.red
+                pixelData[destIndex + 1] = color.green
+                pixelData[destIndex + 2] = color.blue
+                pixelData[destIndex + 3] = color.alpha
             }
         }
-        return context.makeImage()
+
+        let bytesPerPixel = 4
+        let bytesPerRow = bytesPerPixel * width
+        let bitsPerComponent = 8
+
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        guard let providerRef = CGDataProvider(data: NSData(bytes: pixelData, length: pixelData.count)) else {
+            return nil
+        }
+
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
+
+        return CGImage(
+            width: width,
+            height: height,
+            bitsPerComponent: bitsPerComponent,
+            bitsPerPixel: bitsPerComponent * bytesPerPixel,
+            bytesPerRow: bytesPerRow,
+            space: colorSpace,
+            bitmapInfo: bitmapInfo,
+            provider: providerRef,
+            decode: nil,
+            shouldInterpolate: false,
+            intent: .defaultIntent
+        )
     }
 
     public func encode(as type: UTType = .png) -> Data? {
