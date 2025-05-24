@@ -7,6 +7,8 @@ import Foundation
 public struct CBBinaryReader: CustomDebugStringConvertible {
     // MARK: - Properties
 
+    public static let wordBitSize = 32
+
     private let buffer: CBBuffer
     private let swapNeeded: Bool
 
@@ -151,5 +153,48 @@ extension CBBinaryReader {
         let length = try readInt16()
         guard length >= 0 else { throw CBStreamError.invalidFormat("Negative string length given!") }
         try skip(Int(length))
+    }
+}
+
+extension CBBinaryReader {
+    // Mark: - SubChunk Reads
+
+    public func readIndicesData() throws -> (rawData: [UInt8], bitsPerBlock: Int, blocksPerWord: Int, totalWords: Int) {
+        let type = try readUInt8()
+        guard type > 0 else {
+            throw CBStreamError.invalidFormat("Invalid block indices data type: \(type)")
+        }
+        // let serializedType = type & 0x01
+        let bitsPerBlock = Int(type >> 1)
+        guard 1...Self.wordBitSize ~= bitsPerBlock else {
+            throw CBStreamError.invalidFormat("Invalid block bit size: \(bitsPerBlock)")
+        }
+
+        let blocksPerWord = Self.wordBitSize / bitsPerBlock
+        let totalWords = Int(ceil(Double(MCSubChunk.totalBlockCount) / Double(blocksPerWord)))
+        let totalBytes = totalWords * 4
+        guard remainingByteCount >= totalBytes else {
+            throw CBStreamError.endOfStream
+        }
+        let rawData = try readBytes(totalBytes)
+        return (rawData, bitsPerBlock, blocksPerWord, totalWords)
+    }
+
+    public func readBlockPalette() throws -> [MCBlock] {
+        let paletteCount = try readUInt32()
+        guard paletteCount <= MCSubChunk.totalBlockCount else {
+            throw CBStreamError.argumentOutOfRange("paletteCount", "Palette count out of range: \(paletteCount)")
+        }
+        var palette = [MCBlock]()
+        let tagReader = CBTagReader(reader: self)
+        for _ in 0..<paletteCount {
+            guard let paletteTag = try? tagReader.readNext() as? CompoundTag,
+                  let block = MCBlock.decode(paletteTag)
+            else {
+                throw CBStreamError.invalidFormat("Invalid block tag found in palette")
+            }
+            palette.append(block)
+        }
+        return palette
     }
 }
