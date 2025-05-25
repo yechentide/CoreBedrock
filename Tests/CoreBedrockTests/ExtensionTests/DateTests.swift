@@ -7,7 +7,8 @@ import Foundation
 @testable import CoreBedrock
 
 struct DateTests {
-    @Test func testDateFormatting() {
+    @Test
+    func testDateFormatting() {
         let calendar = Calendar(identifier: .gregorian)
         var dateComponents = DateComponents()
         dateComponents.year = 2024

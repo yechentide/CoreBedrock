@@ -7,7 +7,8 @@ import CoreGraphics
 @testable import CoreBedrock
 
 struct CGColorTests {
-    @Test func testFromRGBA() {
+    @Test
+    func testFromRGBA() {
         // Minimum values
         var color = CGColor.from(red: 0, green: 0, blue: 0, alpha: 0.0)
         #expect(color.components?[0] == 0.0)
@@ -30,7 +31,8 @@ struct CGColorTests {
         #expect(color.components?[3] == 1.0)
     }
 
-    @Test func testFromRGB() {
+    @Test
+    func testFromRGB() {
         // Minimum values
         var color = CGColor.from(red: 0, green: 0, blue: 0)
         #expect(color.components?[0] == 0.0)
@@ -53,7 +55,8 @@ struct CGColorTests {
         #expect(color.components?[3] == 1.0)
     }
 
-    @Test func testParseAsARGB() {
+    @Test
+    func testParseAsARGB() {
         // Minimum values (00000000)
         var argb: UInt32 = 0x00000000
         var color = CGColor.parseAsARGB(argb)
@@ -79,7 +82,8 @@ struct CGColorTests {
         #expect(color.components?[3] == 1.0)
     }
 
-    @Test func testParseAsRGBA() {
+    @Test
+    func testParseAsRGBA() {
         // Minimum values (00000000)
         var rgba: UInt32 = 0x00000000
         var color = CGColor.parseAsRGBA(rgba)
@@ -105,7 +109,8 @@ struct CGColorTests {
         #expect(color.components?[3] == 1.0)
     }
 
-    @Test func testArgbColor() {
+    @Test
+    func testArgbColor() {
         // Minimum values
         var color = CGColor.from(red: 0, green: 0, blue: 0, alpha: 0.0)
         var expectedARGB: UInt32 = 0x00000000
@@ -134,7 +139,8 @@ struct CGColorTests {
         #expect(unsupportedColor.argbColor == nil)
     }
 
-    @Test func testArgbHexString() {
+    @Test
+    func testArgbHexString() {
         // Minimum values
         var color = CGColor.from(red: 0, green: 0, blue: 0, alpha: 0.0)
         var expectedHexString = "#00000000"
@@ -163,7 +169,8 @@ struct CGColorTests {
         #expect(unsupportedColor.argbHexString == nil)
     }
 
-    @Test func testRgbaColor() {
+    @Test
+    func testRgbaColor() {
         // Minimum values
         var color = CGColor.from(red: 0, green: 0, blue: 0, alpha: 0.0)
         var expectedRGBA: UInt32 = 0x00000000
@@ -192,7 +199,8 @@ struct CGColorTests {
         #expect(unsupportedColor.rgbaColor == nil)
     }
 
-    @Test func testRgbaHexString() {
+    @Test
+    func testRgbaHexString() {
         // Minimum values
         var color = CGColor.from(red: 0, green: 0, blue: 0, alpha: 0.0)
         var expectedHexString = "#00000000"
