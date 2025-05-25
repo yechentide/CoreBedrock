@@ -6,14 +6,14 @@ import Foundation
 
 extension FileManager {
     public func createDirectoryIfMissing(at url: URL) throws {
-        guard !fileExists(atPath: url.absoluteString) else {
+        guard !fileExists(atPath: url.path) else {
             return
         }
         try createDirectory(at: url, withIntermediateDirectories: true)
     }
 
     public func deleteFileIfExists(at url: URL) throws {
-        guard fileExists(atPath: url.absoluteString) else {
+        guard fileExists(atPath: url.path) else {
             return
         }
         try removeItem(at: url)

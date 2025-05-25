@@ -65,10 +65,10 @@ extension CGColor {
         guard let (r, g, b, a) = self.rgbaComponents else {
             return nil
         }
-        let A = UInt32(a * 255) << 24
-        let R = UInt32(r * 255) << 16
-        let G = UInt32(g * 255) << 8
-        let B = UInt32(b * 255)
+        let A = UInt32((a * 255).rounded()) << 24
+        let R = UInt32((r * 255).rounded()) << 16
+        let G = UInt32((g * 255).rounded()) << 8
+        let B = UInt32((b * 255).rounded())
         return A | R | G | B
     }
 
@@ -81,10 +81,10 @@ extension CGColor {
         guard let (r, g, b, a) = self.rgbaComponents else {
             return nil
         }
-        let R = UInt32(r * 255) << 24
-        let G = UInt32(g * 255) << 16
-        let B = UInt32(b * 255) << 8
-        let A = UInt32(a * 255)
+        let R = UInt32((r * 255).rounded()) << 24
+        let G = UInt32((g * 255).rounded()) << 16
+        let B = UInt32((b * 255).rounded()) << 8
+        let A = UInt32((a * 255).rounded())
         return R | G | B | A
     }
 

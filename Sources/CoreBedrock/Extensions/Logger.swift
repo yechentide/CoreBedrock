@@ -10,10 +10,6 @@ internal enum CBLogger {
         category: "library"
     )
 
-    private static var currentTime: String {
-        return Date().format("yyyy-MM-dd HH:mm:ss")
-    }
-
     private static func log(
         level: OSLogType,
         _ message: String,
@@ -22,7 +18,7 @@ internal enum CBLogger {
         line: Int
     ) {
         let fileName = (file as NSString).lastPathComponent
-        let prefix = "[CoreBedrock] [\(currentTime)] [\(fileName):L\(line) \(function)]"
+        let prefix = "[CoreBedrock] [\(Date().standardTimestamp)] [\(fileName):L\(line) \(function)]"
 
         switch level {
             case .debug:    logger.debug("\(prefix) \(message)")
@@ -42,7 +38,7 @@ internal enum CBLogger {
     }
 
     static func warning(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
-        log(level: .fault, message, file: file, function: function, line: line) // `fault` は重めの警告として代用
+        log(level: .fault, message, file: file, function: function, line: line)
     }
 
     static func error(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {

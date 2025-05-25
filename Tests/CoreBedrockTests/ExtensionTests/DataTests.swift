@@ -6,7 +6,7 @@ import Testing
 import Foundation
 @testable import CoreBedrock
 
-struct DataExtensionTests {
+struct DataTests {
     @Test
     func testHexString() async {
         let testCases: [Data:String] = [

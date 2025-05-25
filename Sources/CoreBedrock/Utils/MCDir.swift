@@ -80,7 +80,7 @@ public struct MCDir: Sendable {
         guard let date = self.lastOpenedDate else {
             return "???"
         }
-        return date.format("yyyy-MM-dd")
+        return date.dateString
     }
 
     public mutating func changeWorldName(to newName: String) throws {

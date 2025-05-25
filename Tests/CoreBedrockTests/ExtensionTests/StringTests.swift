@@ -6,7 +6,7 @@ import Testing
 import Foundation
 @testable import CoreBedrock
 
-struct StringExtensionTests {
+struct StringTests {
     let testCases: [String:Data?] = [
         "0xC"       : nil,
         "0Xc"       : nil,

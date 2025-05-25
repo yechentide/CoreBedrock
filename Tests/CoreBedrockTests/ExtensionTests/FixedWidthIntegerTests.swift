@@ -6,7 +6,7 @@ import Testing
 import Foundation
 @testable import CoreBedrock
 
-struct IntegerExtensionTests {
+struct FixedWidthIntegerTests {
     @Test
     func testData() async {
         // All data is little endian
