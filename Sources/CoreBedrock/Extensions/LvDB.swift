@@ -9,17 +9,11 @@ extension LvDB {
         let chunkX = Int32(truncatingIfNeeded: chunkX)
         let chunkZ = Int32(truncatingIfNeeded: chunkZ)
         let versionKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .chunkVersion)
-        if let versionData = self.get(versionKey) {
-            guard versionData.count == 1 else {
-                return false
-            }
+        if let versionData = self.get(versionKey), versionData.count == 1{
             return true
         }
         let legacyVersionKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .legacyChunkVersion)
-        if let legacyVersionData = self.get(legacyVersionKey) {
-            guard legacyVersionData.count == 1 else {
-                return false
-            }
+        if let legacyVersionData = self.get(legacyVersionKey), legacyVersionData.count == 1 {
             return true
         }
         return false
