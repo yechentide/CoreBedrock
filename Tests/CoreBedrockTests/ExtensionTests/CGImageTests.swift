@@ -7,7 +7,7 @@ import Foundation
 import CoreGraphics
 @testable import CoreBedrock
 
-struct ImageTests {
+struct CGImageTests {
     static let testDataURL = Bundle.module.url(forResource: "TestData", withExtension: nil)!
 
     @Test
