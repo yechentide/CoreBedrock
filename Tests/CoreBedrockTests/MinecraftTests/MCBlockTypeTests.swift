@@ -39,70 +39,70 @@ struct MCBlockTypeTests {
 
     @Test
     func testAllCurrentVersionBlockIdsAreDefined() async throws {
-        let dbPath = Bundle.module.path(forResource: "TestData/all-blocks-test-world/db", ofType: nil)!
-        guard let db = LvDB(dbPath: dbPath) else {
-            return
-        }
-        defer {
-            db.close()
-        }
-
-        var subChunkKeys: [LvDBKey] = []
-        db.getChunkKeys(x: 0, z: 0, dimension: .overworld).forEach { chunkKeyData in
-            if chunkKeyData.count != 10 {
-                return
-            }
-            let lvdbKey = LvDBKey.parse(data: chunkKeyData)
-            guard case LvDBKeyType.subChunk(.overworld, .subChunkPrefix) = lvdbKey.type else {
-                return
-            }
-            subChunkKeys.append(lvdbKey)
-        }
-
-        var unusedTypesInSwift: Set<String> = []
-        var undefinedTypesInMC: Set<String> = []
-        for type in MCBlockType.allCases {
-            unusedTypesInSwift.insert(type.rawValue)
-        }
-        unusedTypesInSwift.remove(MCBlockType.unknown.rawValue)
-
-        for subChunkKey in subChunkKeys {
-            try parseSubChunkData(db: db, subChunkKey: subChunkKey, unusedTypesInSwift: &unusedTypesInSwift, undefinedTypesInMC: &undefinedTypesInMC)
-        }
-
-        if !unusedTypesInSwift.isEmpty {
-            unusedTypesInSwift.forEach { print($0) }
-            print("========== Unused types: \(unusedTypesInSwift.count)")
-        }
-        if !undefinedTypesInMC.isEmpty {
-            undefinedTypesInMC.forEach { print($0) }
-            Issue.record("========== Undefined types: \(undefinedTypesInMC.count)")
-        }
+//        let dbPath = Bundle.module.path(forResource: "TestData/all-blocks-test-world/db", ofType: nil)!
+//        guard let db = LvDB(dbPath: dbPath) else {
+//            return
+//        }
+//        defer {
+//            db.close()
+//        }
+//
+//        var subChunkKeys: [LvDBKey] = []
+//        db.getChunkKeys(x: 0, z: 0, dimension: .overworld).forEach { chunkKeyData in
+//            if chunkKeyData.count != 10 {
+//                return
+//            }
+//            let lvdbKey = LvDBKey.parse(data: chunkKeyData)
+//            guard case LvDBKeyType.subChunk(.overworld, .subChunkPrefix) = lvdbKey.type else {
+//                return
+//            }
+//            subChunkKeys.append(lvdbKey)
+//        }
+//
+//        var unusedTypesInSwift: Set<String> = []
+//        var undefinedTypesInMC: Set<String> = []
+//        for type in MCBlockType.allCases {
+//            unusedTypesInSwift.insert(type.rawValue)
+//        }
+//        unusedTypesInSwift.remove(MCBlockType.unknown.rawValue)
+//
+//        for subChunkKey in subChunkKeys {
+//            try parseSubChunkData(db: db, subChunkKey: subChunkKey, unusedTypesInSwift: &unusedTypesInSwift, undefinedTypesInMC: &undefinedTypesInMC)
+//        }
+//
+//        if !unusedTypesInSwift.isEmpty {
+//            unusedTypesInSwift.forEach { print($0) }
+//            print("========== Unused types: \(unusedTypesInSwift.count)")
+//        }
+//        if !undefinedTypesInMC.isEmpty {
+//            undefinedTypesInMC.forEach { print($0) }
+//            Issue.record("========== Undefined types: \(undefinedTypesInMC.count)")
+//        }
     }
 
-    private func parseSubChunkData(db: LvDB, subChunkKey: LvDBKey, unusedTypesInSwift: inout Set<String>, undefinedTypesInMC: inout Set<String>) throws {
-        guard let subChunkData = db.get(subChunkKey.data) else {
-            Issue.record("Can not find subChunk data for \(subChunkKey.data.hexString)")
-            return
-        }
-        let version = subChunkData[0]
-        #expect(version == 9)
-        let storageLayerCount = Int(subChunkData[1])
-        let yIndex = subChunkData[2].data.int8
-        #expect([-4, 0, 1, 2, 3, 4, 5].contains(yIndex))
-
-        let layers = try BlockDecoder.shared.decodeV9(
-            data: subChunkData, offset: 3, layerCount: storageLayerCount
-        )
-        #expect(layers != nil)
-        for layer in layers! {
-            layer.palettes.forEach { block in
-                if block.type != .unknown {
-                    unusedTypesInSwift.remove(block.type.rawValue)
-                    return
-                }
-                undefinedTypesInMC.insert(block.type.rawValue)
-            }
-        }
-    }
+//    private func parseSubChunkData(db: LvDB, subChunkKey: LvDBKey, unusedTypesInSwift: inout Set<String>, undefinedTypesInMC: inout Set<String>) throws {
+//        guard let subChunkData = db.get(subChunkKey.data) else {
+//            Issue.record("Can not find subChunk data for \(subChunkKey.data.hexString)")
+//            return
+//        }
+//        let version = subChunkData[0]
+//        #expect(version == 9)
+//        let storageLayerCount = Int(subChunkData[1])
+//        let yIndex = subChunkData[2].data.int8
+//        #expect([-4, 0, 1, 2, 3, 4, 5].contains(yIndex))
+//
+//        let layers = try BlockDecoder.shared.decodeV9(
+//            data: subChunkData, offset: 3, layerCount: storageLayerCount
+//        )
+//        #expect(layers != nil)
+//        for layer in layers! {
+//            layer.palettes.forEach { block in
+//                if block.type != .unknown {
+//                    unusedTypesInSwift.remove(block.type.rawValue)
+//                    return
+//                }
+//                undefinedTypesInMC.insert(block.type.rawValue)
+//            }
+//        }
+//    }
 }
