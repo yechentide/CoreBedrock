@@ -4,6 +4,14 @@
 
 extension MCBlockType {
     public var isWater: Bool {
-        return false
+        switch self {
+            case .water,
+                 .bubbleColumn,
+                 .kelp,
+                 .seagrass:
+                return true
+            default:
+                return false
+        }
     }
 }
