@@ -12,7 +12,7 @@ public class MCSubChunk {
         guard localPosRange ~= localX, localPosRange ~= localY, localPosRange ~= localZ else {
             return nil
         }
-        return (localX * MCSubChunk.sideLength + localZ) * MCSubChunk.sideLength + localY
+        return ((localX << 4) | localZ) << 4 | localY
     }
 
     public let chunkY: Int8
@@ -22,12 +22,12 @@ public class MCSubChunk {
     private let blockBlocksPerWord: Int
     private let blockMask: UInt32
     private let blockPalette: [MCBlock]
-    private let blockIndicesData: [UInt8]
+    private let blockIndicesData: Data
 
     private let waterBitsPerBlock: Int
     private let waterBlocksPerWord: Int
     private let waterPalette: [MCBlock]
-    private let waterIndicesData: [UInt8]
+    private let waterIndicesData: Data
 
     public init(
         chunkY: Int8, chunkVersion: UInt8,
@@ -43,12 +43,12 @@ public class MCSubChunk {
         self.blockBlocksPerWord = blockBlocksPerWord
         self.blockMask = ~(UInt32.max << self.blockBitsPerBlock)
         self.blockPalette = blockPalette
-        self.blockIndicesData = blockIndicesData
+        self.blockIndicesData = Data(blockIndicesData)
 
         self.waterBitsPerBlock = waterBitsPerBlock
         self.waterBlocksPerWord = waterBlocksPerWord
         self.waterPalette = waterPalette
-        self.waterIndicesData = waterIndicesData
+        self.waterIndicesData = Data(waterIndicesData)
     }
 
     public func block(atLocalX localX: Int, localY: Int, localZ: Int) -> MCBlock? {
@@ -60,10 +60,9 @@ public class MCSubChunk {
         let offset = wordIndex * 4
         guard offset + 4 <= blockIndicesData.count else { return nil }
 
-        let word = UInt32(blockIndicesData[offset])
-            | (UInt32(blockIndicesData[offset + 1]) << 8)
-            | (UInt32(blockIndicesData[offset + 2]) << 16)
-            | (UInt32(blockIndicesData[offset + 3]) << 24)
+        let word = blockIndicesData.withUnsafeBytes {
+            $0.load(fromByteOffset: offset, as: UInt32.self)
+        }
         let indexInWord = index % blockBlocksPerWord
         let paletteIndex: UInt32 = self.blockMask & (word >> (indexInWord * blockBitsPerBlock))
 
@@ -73,7 +72,41 @@ public class MCSubChunk {
         return blockPalette[Int(paletteIndex)]
     }
 
-    public func blocksInYColumn(atLocalX localX: Int, localZ: Int) -> [MCBlock]? {
+    public func traverseYDescendingColumn(atLocalX localX: Int, localZ: Int, _ perform: (Int, MCBlock) -> Bool) {
+        guard let baseIndex = Self.linearIndex(localX, 0, localZ) else {
+            return
+        }
+
+        var currentWordIndex = baseIndex / blockBlocksPerWord
+        var currentWord: UInt32?
+
+        for localY in stride(from: Self.sideLength - 1, through: 0, by: -1) {
+            let index = baseIndex + localY
+            let wordIndex = index / blockBlocksPerWord
+
+            if currentWord == nil || wordIndex != currentWordIndex {
+                let offset = wordIndex * 4
+                guard offset + 4 <= blockIndicesData.count else { return }
+
+                currentWord = blockIndicesData.withUnsafeBytes {
+                    $0.load(fromByteOffset: offset, as: UInt32.self)
+                }
+                currentWordIndex = wordIndex
+            }
+
+            guard let word = currentWord else { return }
+            let indexInWord = index % blockBlocksPerWord
+            let paletteIndex = Int(self.blockMask & (word >> (indexInWord * blockBitsPerBlock)))
+
+            guard paletteIndex < blockPalette.count else { return }
+            let block = blockPalette[paletteIndex]
+            if perform(localY, block) {
+                return
+            }
+        }
+    }
+
+    public func collectVerticalBlockColumn(atLocalX localX: Int, localZ: Int) -> [MCBlock]? {
         guard let baseIndex = Self.linearIndex(localX, 0, localZ) else {
             return nil
         }
@@ -82,8 +115,8 @@ public class MCSubChunk {
         var currentWordIndex = baseIndex / blockBlocksPerWord
         var currentWord: UInt32?
 
-        for y in 0..<Self.sideLength {
-            let index = baseIndex + y
+        for localY in 0..<Self.sideLength {
+            let index = baseIndex + localY
             let wordIndex: Int = index / blockBlocksPerWord
 
             if currentWord == nil || wordIndex != currentWordIndex {
