@@ -14,6 +14,10 @@ public struct CBBinaryReader: CustomDebugStringConvertible {
 
     // MARK: - Initializers
 
+    public init(bytes: [UInt8], littleEndian: Bool = true) {
+        self.init(buffer: CBBuffer(data: Data(bytes)), littleEndian: littleEndian)
+    }
+
     public init(data: Data, littleEndian: Bool = true) {
         self.init(buffer: CBBuffer(data: data), littleEndian: littleEndian)
     }
@@ -38,8 +42,6 @@ public struct CBBinaryReader: CustomDebugStringConvertible {
         guard count >= 0 else {
             throw CBStreamError.argumentOutOfRange("count", "Non-negative number required.")
         }
-        if count == 0 { return }
-
         // advance the position using seek instead of allocating temporary buffer
         try buffer.seek(to: count, from: .current)
     }
@@ -48,11 +50,12 @@ public struct CBBinaryReader: CustomDebugStringConvertible {
         guard count >= 0 else {
             throw CBStreamError.argumentOutOfRange("count", "Non-negative number required.")
         }
-        var output = [UInt8](repeating: 0, count: count)
-        let readCount = try buffer.read(into: &output, count: count)
-        guard readCount == count else {
+        guard remainingByteCount >= count else {
             throw CBStreamError.endOfStream
         }
+        var output = [UInt8]()
+        output.reserveCapacity(count)
+        let _ = try buffer.read(into: &output, count: count)
         return output
     }
 
@@ -61,8 +64,8 @@ public struct CBBinaryReader: CustomDebugStringConvertible {
     }
 
     private func convert<T>(_ bytes: [UInt8]) -> T {
-        let data = swapNeeded ? Data(bytes.reversed()) : Data(bytes)
-        return data.withUnsafeBytes { $0.load(as: T.self) }
+        let mutable = swapNeeded ? bytes.reversed() : bytes
+        return mutable.withUnsafeBytes { $0.load(as: T.self) }
     }
 }
 

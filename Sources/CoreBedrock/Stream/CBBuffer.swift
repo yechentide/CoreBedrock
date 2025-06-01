@@ -26,6 +26,10 @@ public final class CBBuffer: CustomStringConvertible {
         self.buffer = data
     }
 
+    public init(bytes: [UInt8]) {
+        self.buffer = Data(bytes)
+    }
+
     // MARK: - Computed Properties
 
     public var count: Int {
@@ -47,7 +51,7 @@ public final class CBBuffer: CustomStringConvertible {
                 newPos = buffer.count + offset
         }
 
-        guard newPos >= 0 && newPos <= buffer.count else {
+        guard (0...buffer.count).contains(newPos) else {
             throw CBStreamError.outOfBounds
         }
         currentPosition = newPos
@@ -70,11 +74,20 @@ public final class CBBuffer: CustomStringConvertible {
 
     public func read(into output: inout [UInt8], count: Int) throws -> Int {
         let available = buffer.count - currentPosition
-        let bytesToRead = min(count, available)
-        guard bytesToRead > 0 else { return 0 }
+        guard available > 0 else { return 0 }
 
-        let range = currentPosition..<(currentPosition + bytesToRead)
-        buffer.copyBytes(to: &output, from: range)
+        let bytesToRead = min(count, available)
+        if output.count < bytesToRead {
+            output.append(contentsOf: repeatElement(0, count: bytesToRead - output.count))
+        } else if output.count > bytesToRead {
+            output.removeLast(output.count - bytesToRead)
+        }
+        output.withUnsafeMutableBytes { dstPtr in
+            buffer.copyBytes(
+                to: dstPtr.baseAddress!.assumingMemoryBound(to: UInt8.self),
+                from: currentPosition..<(currentPosition + bytesToRead)
+            )
+        }
         currentPosition += bytesToRead
         return bytesToRead
     }
@@ -96,9 +109,21 @@ extension CBBuffer {
     public func readInteger<T: FixedWidthInteger>() -> T? {
         let size = MemoryLayout<T>.size
         guard currentPosition + size <= buffer.count else { return nil }
-        let value = buffer[currentPosition..<currentPosition+size].withUnsafeBytes { $0.load(as: T.self) }
-        currentPosition += size
-        return value
+        return buffer.withUnsafeBytes { rawBuffer in
+            guard let baseAddress = rawBuffer.baseAddress?.advanced(by: currentPosition) else { return nil }
+
+            currentPosition += size
+            if Int(bitPattern: baseAddress) % MemoryLayout<T>.alignment == 0 {
+                // aligned: safe to load directly
+                let value = baseAddress.load(as: T.self)
+                return T(littleEndian: value)
+            } else {
+                // unaligned: copy to stack
+                var tmp: T = 0
+                memcpy(&tmp, baseAddress, size)
+                return T(littleEndian: tmp)
+            }
+        }
     }
 
     public func writeInteger<T: FixedWidthInteger>(_ value: T) throws {
