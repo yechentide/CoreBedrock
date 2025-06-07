@@ -9,6 +9,8 @@ public enum PositionConvertType {
     case chunkToRegion
     case regionToBlock
     case regionToChunk
+
+    case chunkToIndexInRegion
 }
 
 public func convertPos<T: SignedInteger>(from pos: T, _ type: PositionConvertType) -> T {
@@ -25,5 +27,7 @@ public func convertPos<T: SignedInteger>(from pos: T, _ type: PositionConvertTyp
             return pos << 9
         case .regionToChunk:
             return pos << 5
+        case .chunkToIndexInRegion:
+            return (pos % 32 + 32) % 32
     }
 }

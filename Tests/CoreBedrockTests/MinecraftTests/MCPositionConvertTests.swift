@@ -59,4 +59,21 @@ struct MCPositionConvertTests {
             #expect(actual == data.expected)
         }
     }
+
+    @Test
+    func testConvertChunkToIndexInRegion() async throws {
+        let list: [(pos: Int, expected: Int)] = [
+            (-33, 31),
+            (-32, 0),
+            (-1, 31),
+            (0, 0),
+            (31, 31),
+            (32, 0),
+            (63, 31),
+        ]
+        for data in list {
+            let actual = convertPos(from: data.pos, .chunkToIndexInRegion)
+            #expect(actual == data.expected)
+        }
+    }
 }

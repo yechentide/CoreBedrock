@@ -43,7 +43,7 @@ public enum RegionTextureLoader {
             if Task.isCancelled {
                 return
             }
-            image = CGImage.from(colors: pixels, width: MCRegion.sideLength, height: MCRegion.sideLength, flipVertically: false)
+            image = CGImage.from(colors: pixels, width: MCRegion.sideLength, height: MCRegion.sideLength, flipVertically: true)
         }
         return image
     }
@@ -87,8 +87,8 @@ public enum RegionTextureLoader {
         var noExistsSubChunks: Set<Int8> = []
         let unknownBlock = TexturePixelData(height: 0, waterdepth: 0, blockType: .unknown)
 
-        let localChunkXInRegion = Int(chunkX % 32)
-        let localChunkZInRegion = Int(chunkZ % 32)
+        let localChunkXInRegion = Int(convertPos(from: chunkX, .chunkToIndexInRegion))
+        let localChunkZInRegion = Int(convertPos(from: chunkZ, .chunkToIndexInRegion))
         let blockIndexOffset = localChunkZInRegion * MCSubChunk.sideLength * MCRegion.sideLength + localChunkXInRegion * MCSubChunk.sideLength
 
         for localBlockZInChunk in 0..<MCSubChunk.sideLength {
