@@ -2,13 +2,13 @@
 // Created by yechentide on 2025/05/13
 //
 
-internal enum MCBiomeGroup: UInt8, CaseIterable {
+public enum MCBiomeGroup: UInt8, CaseIterable {
     case other
     case swamp, mangroveSwamp
     case ocean, lukewarmOcean, warmOcean, coldOcean
     case badlands
 
-    internal static func from(_ biome: MCBiomeType) -> Self {
+    public static func from(_ biome: MCBiomeType) -> Self {
         switch biome {
             case .ocean, .deepOcean:
                     .ocean
@@ -37,7 +37,7 @@ internal enum MCBiomeGroup: UInt8, CaseIterable {
             case .lukewarmOcean:    ( 43, 122, 170, 255)
             case .warmOcean:        ( 56, 150, 177, 255)
             case .coldOcean:        ( 50,  66, 158, 255)
-            default:                (  0,   0,   0,   0)
+            default:                ( 51,  89, 162, 255)
         }
     }
 
