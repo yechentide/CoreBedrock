@@ -183,19 +183,22 @@ extension CBBinaryReader {
         return (rawData, bitsPerBlock, blocksPerWord, totalWords)
     }
 
-    public func readBlockPalette() throws -> [MCBlock] {
+    public func readBlockPalette() throws -> [BlockPalette] {
         let paletteCount = try readUInt32()
         guard paletteCount <= MCSubChunk.totalBlockCount else {
             throw CBStreamError.argumentOutOfRange("paletteCount", "Palette count out of range: \(paletteCount)")
         }
-        var palette = [MCBlock]()
+        var palette = [BlockPalette]()
         let tagReader = CBTagReader(reader: self)
         for _ in 0..<paletteCount {
             guard let paletteTag = try? tagReader.readNext() as? CompoundTag,
-                  let block = MCBlock.decode(paletteTag)
+                  let nameTag = paletteTag["name"] as? StringTag,
+                  let statesTag = paletteTag["states"] as? CompoundTag,
+                  let versionTag = paletteTag["version"] as? IntTag
             else {
                 throw CBStreamError.invalidFormat("Invalid block tag found in palette")
             }
+            let block = BlockPalette(name: nameTag.value, states: statesTag, version: versionTag.value)
             palette.append(block)
         }
         return palette
