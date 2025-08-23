@@ -4,6 +4,8 @@
 
 #import "LvDB.h"
 #import "LvDBIterator.h"
+#import "LvDBWriteBatch.h"
+#import "LvDBWriteBatch+Internal.h"
 #import "DebugLog.h"
 
 #import <iostream>
@@ -23,35 +25,38 @@
     leveldb::WriteOptions writeOptions;
 }
 
-- (id)initWithDBPath:(NSString *)path createIfMissing:(BOOL)createIfMissing {
+- (id)initWithDBPath:(NSString *)path createIfMissing:(BOOL)createIfMissing error:(NSError **)error {
     if (self = [super init]) {
         options.create_if_missing = createIfMissing;
-        options.filter_policy = leveldb::NewBloomFilterPolicy(10);              //create a bloom filter to quickly tell if a key is in the database or not
-        // options.block_cache = leveldb::NewLRUCache(40 * 1024 * 1024);        //create a 40 mb cache (we use this on ~1gb devices)
-        options.write_buffer_size = 4 * 1024 * 1024;                            //create a 4mb write buffer, to improve compression and touch the disk less
-        options.compressors[0] = new leveldb::ZlibCompressorRaw(-1);            //use the new raw-zip compressor to write (and read)
-        options.compressors[1] = new leveldb::ZlibCompressor();                 //also setup the old, slower compressor for backwards compatibility. This will only be used to read old compressed blocks.
+        options.write_buffer_size = 4 * 1024 * 1024;                            // Create a 4mb write buffer, to improve compression and touch the disk less
+        // options.block_cache = leveldb::NewLRUCache(40 * 1024 * 1024);        // Create a 40 mb cache (we use this on ~1gb devices)
         // options.block_size = 163840;
+        options.compressors[0] = new leveldb::ZlibCompressorRaw(-1);            // Use the new raw-zip compressor to write (and read)
+        options.compressors[1] = new leveldb::ZlibCompressor();                 // Also setup the old, slower compressor for backwards compatibility. This will only be used to read old compressed blocks.
+        options.filter_policy = leveldb::NewBloomFilterPolicy(10);              // Create a bloom filter to quickly tell if a key is in the database or not
 
         readOptions.decompress_allocator = new leveldb::DecompressAllocator();
-        // writeOptions = leveldb::WriteOptions();
+        writeOptions.sync = false;
 
         auto dbPath = [path UTF8String];
         leveldb::DB* lvdb;
         leveldb::Status status = leveldb::DB::Open(options, dbPath, &lvdb);
-        if (!status.ok()) {
-            DebugLog(@"Failed to open the db: %s", dbPath);
-            return nil;
+        if (status.ok()) {
+            DebugLog(@"leveldb::DB opened: %s", dbPath);
+            db.reset(lvdb);
+            DebugLog(@"LvDB initialized: %s", dbPath);
+        } else if (error) {
+            NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
+            *error = [NSError errorWithDomain:@"LvDBWrapper"
+                                         code:(NSInteger)status.code()
+                                     userInfo:@{NSLocalizedDescriptionKey: msg}];
         }
-        DebugLog(@"leveldb::DB opened: %s", dbPath);
-        db.reset(lvdb);
-        DebugLog(@"LvDB generated: %s", dbPath);
     }
     return self;
 }
 
-- (id)initWithDBPath:(NSString *)path {
-    return [self initWithDBPath:path createIfMissing:NO];
+- (id)initWithDBPath:(NSString *)path error:(NSError **)error {
+    return [self initWithDBPath:path createIfMissing:NO error:error];
 }
 
 - (void)dealloc {
@@ -64,10 +69,9 @@
         return;
     }
     db.reset();
-    delete options.filter_policy;
-    delete options.block_cache;
     delete options.compressors[0];
     delete options.compressors[1];
+    delete options.filter_policy;
     delete readOptions.decompress_allocator;
     DebugLog(@"leveldb::DB closed.");
 }
@@ -76,11 +80,34 @@
     return db == nullptr ? YES : NO;
 }
 
-/* ---------- ---------- ---------- ---------- ---------- ---------- */
+- (BOOL)contains:(NSData *)key {
+    if (db == nullptr || key == nil) {
+        return NO;
+    }
 
-- (LvDBIterator *)makeIterator {
+    leveldb::Slice dbKey((const char *)[key bytes], [key length]);
+    std::unique_ptr<leveldb::Iterator> it(db->NewIterator(readOptions));
+    it->Seek(dbKey);
+    if (it->Valid() && it->key() == dbKey) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+/* ---------- Iterator Methods ---------- */
+
+- (void)assignError:(NSError **)error code:(NSInteger)code message:(NSString *)message {
+    if (error) {
+        *error = [NSError errorWithDomain:@"LvDBWrapper"
+                                     code:code
+                                 userInfo:@{ NSLocalizedDescriptionKey : message }];
+    }
+}
+
+- (LvDBIterator *)makeIterator:(NSError **)error {
     if (db == nullptr) {
-        DebugLog(@"Error: Attempted to create iterator on closed DB.");
+        [self assignError:error code:-1 message:@"DB Closed"];
         return nil;
     }
     auto dbIterator = db->NewIterator(readOptions);
@@ -88,107 +115,105 @@
     return [[LvDBIterator alloc] initFromIterator:dbIterator];
 }
 
-/// Iterate through all keys and data that exist between the given keys.
-/// @param start The key to start at. Leave as nil to start at the first.
-/// @param end The key to end at. Leave as nil to end at the last.
-/// @return a array that odd indexes for keys, even indexes for values
-- (NSArray *)iterate:(NSData *)start :(NSData *)end {
-    leveldb::Iterator *it = db->NewIterator(readOptions);
-    NSMutableArray *array = [[NSMutableArray alloc] init];
+/* ---------- Key-Value Operations ---------- */
 
-    if (start) {
-        leveldb::Slice pos = leveldb::Slice((const char *)[start bytes], [start length]);
-        it->Seek(pos);
-    } else {
-        it->SeekToFirst();
+- (NSData *)get:(NSData *)key error:(NSError **)error {
+    if (db == nullptr) {
+        [self assignError:error code:-1 message:@"DB Closed"];
+        return nil;
     }
-
-    while (it->Valid()) {
-        auto k = it->key();
-        NSData *key = [[NSData alloc] initWithBytes:k.data() length:k.size()];
-        if (end != nil && key > end) { break; }
-        [array addObject:key];
-
-        auto v = it->value();
-        NSData *value = [[NSData alloc] initWithBytes:v.data() length:v.size()];
-        [array addObject:value];
-
-        it->Next();
-    }
-    delete it;
-    return (NSArray *)array;
-}
-
-/* ---------- ---------- ---------- ---------- ---------- ---------- */
-
-/// Get value with a specified key.
-/// @param key a leveldb key
-/// @return NSData, empty if the key does not exist
-- (NSData *)get:(NSData *)key {
-    leveldb::Slice dbKey = leveldb::Slice((const char *)[key bytes], [key length]);
+    leveldb::Slice dbKey((const char *)[key bytes], [key length]);
     std::string value;
-
     leveldb::Status status = db->Get(readOptions, dbKey, &value);
     if (status.ok()) {
-        return [NSData dataWithBytes:value.data() length:value.length()];
+        return [NSData dataWithBytes:value.data() length:value.size()];
     }
-    return [[NSData alloc] init];
+    NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
+    [self assignError:error code:(NSInteger)status.code() message:msg];
+    return nil;
 }
 
-/// Add or Update value with a specified key.
-/// @param key a leveldb key
-/// @param data new data
-/// @return BOOL
-- (BOOL)put:(NSData *)key :(NSData *)data {
-    leveldb::Slice dbKey = leveldb::Slice((const char *)[key bytes], [key length]);
-    leveldb::Slice newData = leveldb::Slice((const char *)[data bytes], [data length]);
+- (BOOL)put:(NSData *)key :(NSData *)data error:(NSError **)error {
+    if (db == nullptr) {
+        [self assignError:error code:-1 message:@"DB Closed"];
+        return NO;
+    }
+    leveldb::Slice dbKey((const char *)[key bytes], [key length]);
+    leveldb::Slice newData((const char *)[data bytes], [data length]);
 
     leveldb::Status status = db->Put(writeOptions, dbKey, newData);
-    return status.ok();
-}
-
-/// Add or Update value with specified keys using batch.
-/// @param dict a dictionary that contains keys and values
-/// @return BOOL
-- (BOOL)putBatch:(NSDictionary *)dict {
-    leveldb::WriteBatch batch;
-    for (id key in dict) {
-        leveldb::Slice dbKey = leveldb::Slice((const char *)[key bytes], [key length]);
-        NSData *data = [dict objectForKey:key];
-        leveldb::Slice newData = leveldb::Slice((const char *)[data bytes], [data length]);
-        batch.Put(dbKey, newData);
+    if (status.ok()) {
+        return YES;
     }
-    leveldb::Status status = db->Write(writeOptions, &batch);
-    return status.ok();
+    NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
+    [self assignError:error code:(NSInteger)status.code() message:msg];
+    return NO;
 }
 
-/// Delete a specified key.
-/// @param key a leveldb key
-/// @return BOOL
-- (BOOL)remove:(NSData *)key {
-    leveldb::Slice dbKey = leveldb::Slice((const char *)[key bytes], [key length]);
+- (BOOL)remove:(NSData *)key error:(NSError **)error {
+    if (db == nullptr) {
+        [self assignError:error code:-1 message:@"DB Closed"];
+        return NO;
+    }
+    leveldb::Slice dbKey((const char *)[key bytes], [key length]);
     leveldb::Status status = db->Delete(writeOptions, dbKey);
-    return status.ok();
-}
-
-/// Delete specified keys using batch.
-/// @param keys a leveldb key's array
-/// @return BOOL
-- (BOOL)removeBatch:(NSArray *)keys {
-    leveldb::WriteBatch batch;
-    for (id key in keys) {
-        leveldb::Slice dbKey = leveldb::Slice((const char *)[key bytes], [key length]);
-        batch.Delete(dbKey);
+    if (status.ok()) {
+        return YES;
     }
-    leveldb::Status status = db->Write(writeOptions, &batch);
-    return status.ok();
+    NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
+    [self assignError:error code:(NSInteger)status.code() message:msg];
+    return NO;
 }
 
-- (BOOL)contains:(NSData *)key {
-    leveldb::Slice dbKey = leveldb::Slice((const char *)[key bytes], [key length]);
-    std::string value;
-    leveldb::Status status = db->Get(readOptions, dbKey, &value);
-    return status.ok();
+/* ---------- Batch Operations ---------- */
+
+- (BOOL)writeBatch:(LvDBWriteBatch *)writeBatch error:(NSError **)error {
+    if (db == nullptr) {
+        [self assignError:error code:-1 message:@"DB Closed"];
+        return NO;
+    }
+    if (writeBatch == nil) {
+        return YES;
+    }
+
+    leveldb::WriteBatch* leveldbBatch = static_cast<leveldb::WriteBatch *>([writeBatch getWriteBatch]);
+    if (!leveldbBatch) {
+        return YES;
+    }
+
+    leveldb::Status status = db->Write(writeOptions, leveldbBatch);
+    if (status.ok()) {
+        return YES;
+    }
+
+    NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
+    [self assignError:error code:(NSInteger)status.code() message:msg];
+    return NO;
+}
+
+/* ---------- Database Maintenance ---------- */
+
+- (BOOL)compactRangeWithBegin:(NSData *)begin end:(NSData *)end error:(NSError **)error {
+    if (db == nullptr) {
+        [self assignError:error code:-1 message:@"DB Closed"];
+        return NO;
+    }
+    leveldb::Slice* beginSlice = nullptr;
+    leveldb::Slice* endSlice = nullptr;
+    if (begin) {
+        beginSlice = new leveldb::Slice((const char *)[begin bytes], [begin length]);
+    }
+    if (end) {
+        endSlice = new leveldb::Slice((const char *)[end bytes], [end length]);
+    }
+
+    DebugLog(@"Compacting range in database...");
+    db->CompactRange(beginSlice, endSlice);
+    DebugLog(@"Range compaction completed.");
+
+    delete beginSlice;
+    delete endSlice;
+    return YES;
 }
 
 @end

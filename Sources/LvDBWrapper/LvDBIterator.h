@@ -2,8 +2,8 @@
 // Created by yechentide on 2024/06/01
 //
 
-#ifndef Header_h
-#define Header_h
+#ifndef LvDBIterator_h
+#define LvDBIterator_h
 
 #import <Foundation/Foundation.h>
 
@@ -25,4 +25,4 @@
 
 @end
 
-#endif /* Header_h */
+#endif /* LvDBIterator_h */
