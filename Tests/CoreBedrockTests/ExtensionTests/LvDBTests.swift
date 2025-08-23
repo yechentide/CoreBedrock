@@ -24,12 +24,9 @@ struct LvDBTests {
     }
 
     @Test
-    func testChunkExists_withVersionKey() {
+    func testChunkExists_withVersionKey() throws {
         let dbPath = temporaryDBPath()
-        guard let db = LvDB(dbPath: dbPath, createIfMissing: true) else {
-            Issue.record("Failed to create database")
-            return
-        }
+        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -40,17 +37,14 @@ struct LvDBTests {
         let dimension: MCDimension = .overworld
         let versionKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .chunkVersion)
         let versionData = Data([0x03])
-        #expect(db.put(versionKey, versionData))
+        try db.put(versionKey, versionData)
         #expect(db.chunkExists(chunkX: Int(chunkX), chunkZ: Int(chunkZ), dimension: dimension))
     }
 
     @Test
-    func testChunkExists_withLegacyVersionKey() {
+    func testChunkExists_withLegacyVersionKey() throws {
         let dbPath = temporaryDBPath()
-        guard let db = LvDB(dbPath: dbPath, createIfMissing: true) else {
-            Issue.record("Failed to create database")
-            return
-        }
+        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -61,18 +55,15 @@ struct LvDBTests {
         let dimension: MCDimension = .overworld
         let legacyVersionKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .legacyChunkVersion)
         let versionData = Data([0x03])
-        #expect(db.put(legacyVersionKey, versionData))
+        try db.put(legacyVersionKey, versionData)
         let result = db.chunkExists(chunkX: Int(chunkX), chunkZ: Int(chunkZ), dimension: dimension)
         #expect(result == true)
     }
 
     @Test
-    func testChunkExists_whenDoesNotExist() {
+    func testChunkExists_whenDoesNotExist() throws {
         let dbPath = temporaryDBPath()
-        guard let db = LvDB(dbPath: dbPath, createIfMissing: true) else {
-            Issue.record("Failed to create database")
-            return
-        }
+        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -85,12 +76,9 @@ struct LvDBTests {
     }
 
     @Test
-    func testChunkExists_withInvalidData() {
+    func testChunkExists_withInvalidData() throws {
         let dbPath = temporaryDBPath()
-        guard let db = LvDB(dbPath: dbPath, createIfMissing: true) else {
-            Issue.record("Failed to create database")
-            return
-        }
+        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -101,17 +89,14 @@ struct LvDBTests {
         let dimension: MCDimension = .overworld
         let versionKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .chunkVersion)
         let invalidData = Data([0x01, 0x02])
-        #expect(db.put(versionKey, invalidData))
+        try db.put(versionKey, invalidData)
         #expect(!db.chunkExists(chunkX: Int(chunkX), chunkZ: Int(chunkZ), dimension: dimension))
     }
 
     @Test
-    func testChunkExists_inDifferentDimension() {
+    func testChunkExists_inDifferentDimension() throws {
         let dbPath = temporaryDBPath()
-        guard let db = LvDB(dbPath: dbPath, createIfMissing: true) else {
-            Issue.record("Failed to create database")
-            return
-        }
+        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -121,18 +106,15 @@ struct LvDBTests {
         let chunkZ: Int32 = 2
         let versionData = Data([0x03])
         let otherDimensionKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: .theNether, type: .chunkVersion)
-        #expect(db.put(otherDimensionKey, versionData))
+        try db.put(otherDimensionKey, versionData)
         #expect(!db.chunkExists(chunkX: Int(chunkX), chunkZ: Int(chunkZ), dimension: .overworld)) // Should not find it in overworld
         #expect(db.chunkExists(chunkX: Int(chunkX), chunkZ: Int(chunkZ), dimension: .theNether)) // Should find it in nether
     }
 
     @Test
-    func testScanExistingChunks_overworld() {
+    func testScanExistingChunks_overworld() throws {
         let dbPath = temporaryDBPath()
-        guard let db = LvDB(dbPath: dbPath, createIfMissing: true) else {
-            Issue.record("Failed to create database")
-            return
-        }
+        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -148,10 +130,10 @@ struct LvDBTests {
         let nonChunkVersionKey = LvDBKeyFactory.makeChunkKey(x: 3, z: 3, dimension: .overworld, type: .subChunkPrefix, yIndex: 0)
 
 
-        #expect(db.put(overworldChunk1Key, versionData))
-        #expect(db.put(overworldChunk2Key, versionData))
-        #expect(db.put(netherChunkKey, versionData))
-        #expect(db.put(nonChunkVersionKey, Data([0x01,0x02,0x03])))
+        try db.put(overworldChunk1Key, versionData)
+        try db.put(overworldChunk2Key, versionData)
+        try db.put(netherChunkKey, versionData)
+        try db.put(nonChunkVersionKey, Data([0x01,0x02,0x03]))
 
 
         var foundOverworldChunks = [(Int32, Int32)]()
@@ -166,12 +148,9 @@ struct LvDBTests {
     }
 
     @Test
-    func testScanExistingChunks_nether() {
+    func testScanExistingChunks_nether() throws {
         let dbPath = temporaryDBPath()
-        guard let db = LvDB(dbPath: dbPath, createIfMissing: true) else {
-            Issue.record("Failed to create database")
-            return
-        }
+        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -185,10 +164,10 @@ struct LvDBTests {
         let nonChunkVersionKey = LvDBKeyFactory.makeChunkKey(x: 3, z: 3, dimension: .theNether, type: .subChunkPrefix, yIndex: 0)
 
 
-        #expect(db.put(overworldChunkKey, versionData))
-        #expect(db.put(netherChunk1Key, versionData))
-        #expect(db.put(netherChunk2Key, versionData))
-        #expect(db.put(nonChunkVersionKey, Data([0x01,0x02,0x03])))
+        try db.put(overworldChunkKey, versionData)
+        try db.put(netherChunk1Key, versionData)
+        try db.put(netherChunk2Key, versionData)
+        try db.put(nonChunkVersionKey, Data([0x01,0x02,0x03]))
 
         var foundNetherChunks = [(Int32, Int32)]()
         let scanResult = db.scanExistingChunks(dimension: .theNether) { x, z in
@@ -202,12 +181,9 @@ struct LvDBTests {
     }
 
     @Test
-    func testScanExistingChunks_handlerStopsEarly() {
+    func testScanExistingChunks_handlerStopsEarly() throws {
         let dbPath = temporaryDBPath()
-        guard let db = LvDB(dbPath: dbPath, createIfMissing: true) else {
-            Issue.record("Failed to create database")
-            return
-        }
+        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -216,8 +192,8 @@ struct LvDBTests {
         // Add multiple chunks to ensure the handler can stop early
         let overworldChunk1Key = LvDBKeyFactory.makeChunkKey(x: 1, z: 1, dimension: .overworld, type: .chunkVersion)
         let overworldChunk2Key = LvDBKeyFactory.makeChunkKey(x: 1, z: 2, dimension: .overworld, type: .legacyChunkVersion)
-        #expect(db.put(overworldChunk1Key, versionData))
-        #expect(db.put(overworldChunk2Key, versionData))
+        try db.put(overworldChunk1Key, versionData)
+        try db.put(overworldChunk2Key, versionData)
 
         var processedCount = 0
         let scanResult = db.scanExistingChunks(dimension: .overworld) { x, z in
@@ -229,12 +205,9 @@ struct LvDBTests {
     }
 
     @Test
-    func testScanExistingChunks_emptyDimension() {
+    func testScanExistingChunks_emptyDimension() throws {
         let dbPath = temporaryDBPath()
-        guard let db = LvDB(dbPath: dbPath, createIfMissing: true) else {
-            Issue.record("Failed to create database")
-            return
-        }
+        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -242,7 +215,7 @@ struct LvDBTests {
         // Add a chunk to a different dimension to ensure it's not picked up
         let versionData = Data([0x03])
         let netherChunkKey = LvDBKeyFactory.makeChunkKey(x: 2, z: 1, dimension: .theNether, type: .chunkVersion)
-        #expect(db.put(netherChunkKey, versionData))
+        try db.put(netherChunkKey, versionData)
 
         var foundTheEndChunks = [(Int32, Int32)]()
         let scanResult = db.scanExistingChunks(dimension: .theEnd) { x, z in

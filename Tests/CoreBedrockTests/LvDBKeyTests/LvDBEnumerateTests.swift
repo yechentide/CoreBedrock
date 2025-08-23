@@ -13,10 +13,7 @@ struct EnumerateTests {
         let dbPath = FileManager.default.temporaryDirectory.appendingPathComponent("test_lvdb_\(UUID().uuidString)").path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
         
-        guard let lvdb = LvDB(dbPath: dbPath, createIfMissing: true) else {
-            Issue.record("Failed to create LevelDB instance")
-            return
-        }
+        let lvdb = try LvDB(dbPath: dbPath, createIfMissing: true)
         let data = Data([0x01, 0x02, 0x03])  // 3 bytes
         var called = false
         
@@ -33,10 +30,7 @@ struct EnumerateTests {
         let dbPath = FileManager.default.temporaryDirectory.appendingPathComponent("test_lvdb_\(UUID().uuidString)").path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
         
-        guard let lvdb = LvDB(dbPath: dbPath, createIfMissing: true) else {
-            Issue.record("Failed to create LevelDB instance")
-            return
-        }
+        let lvdb = try LvDB(dbPath: dbPath, createIfMissing: true)
         // Two actor IDs (16 bytes)
         let data = Data([
             0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
@@ -65,10 +59,7 @@ struct EnumerateTests {
         let dbPath = FileManager.default.temporaryDirectory.appendingPathComponent("test_lvdb_\(UUID().uuidString)").path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
         
-        guard let lvdb = LvDB(dbPath: dbPath, createIfMissing: true) else {
-            Issue.record("Failed to create LevelDB instance")
-            return
-        }
+        let lvdb = try LvDB(dbPath: dbPath, createIfMissing: true)
         let data = Data()
         var called = false
         
