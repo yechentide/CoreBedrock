@@ -9,18 +9,18 @@ extension LvDB {
         let chunkX = Int32(truncatingIfNeeded: chunkX)
         let chunkZ = Int32(truncatingIfNeeded: chunkZ)
         let versionKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .chunkVersion)
-        if let versionData = self.get(versionKey), versionData.count == 1{
+        if let versionData = try? self.get(versionKey), versionData.count == 1{
             return true
         }
         let legacyVersionKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .legacyChunkVersion)
-        if let legacyVersionData = self.get(legacyVersionKey), legacyVersionData.count == 1 {
+        if let legacyVersionData = try? self.get(legacyVersionKey), legacyVersionData.count == 1 {
             return true
         }
         return false
     }
 
     public func scanExistingChunks(dimension: MCDimension, handler: @escaping (Int32, Int32) -> Bool) -> Bool {
-        guard let iterator = self.makeIterator() else {
+        guard let iterator = try? self.makeIterator() else {
             return false
         }
         defer {

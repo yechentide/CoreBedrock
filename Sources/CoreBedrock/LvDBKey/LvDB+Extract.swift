@@ -35,7 +35,7 @@ extension LvDB {
 
         let digpKey = "digp".data(using: .utf8)! + keyPrefix
         guard contains(digpKey),
-              let digpData = get(digpKey),
+              let digpData = try? get(digpKey),
               digpData.count > 0,
               digpData.count % 8 == 0
         else {
@@ -77,11 +77,9 @@ extension LvDB {
         return keys
     }
 
-    public func getPrefixedKeys(with prefix: Data) -> [Data] {
+    public func getPrefixedKeys(with prefix: Data) throws -> [Data] {
         var keys = [Data]()
-        guard let iter = makeIterator() else {
-            return keys
-        }
+        let iter = try makeIterator()
         defer {
             iter.destroy()
         }

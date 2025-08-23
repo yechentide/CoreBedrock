@@ -5,51 +5,130 @@
 import LvDBWrapper
 
 extension LvDB {
-    public func removeChunkKeys(keyPrefix: Data, completion: ((Data, Bool) -> Void)? = nil) {
-        (Int8(-4)...Int8(20)).forEach { yIndex in
-            let key = keyPrefix + LvDBChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
-            guard contains(key) else {
-                return
+    public func deleteAllChunks(in dimension: MCDimension) throws {
+        let iter = try self.makeIterator()
+        let batch = LvDBWriteBatch()
+
+        iter.seekToFirst()
+        while iter.valid() {
+            defer {
+                iter.next()
             }
-            let result = remove(key)
-            completion?(key, result)
+            guard let key = iter.key() else {
+                break
+            }
+            let keyType = LvDBKeyType.parse(data: key)
+            if case LvDBKeyType.subChunk(_, _, let d, _, _) = keyType, d == dimension {
+                batch.remove(key)
+            }
+            if case LvDBKeyType.digp(_, _, let d) = keyType, d == dimension {
+                batch.remove(key)
+                if let digpData = iter.value(), digpData.count > 0, digpData.count % 8 == 0 {
+                    for i in 0..<digpData.count/8 {
+                        let actorprefixKey = "actorprefix".data(using: .utf8)! + digpData[i*8...i*8+7]
+                        batch.remove(actorprefixKey)
+                    }
+                }
+            }
+
+            if batch.approximateSize() > 20000 {
+                try self.writeBatch(batch)
+                batch.clear()
+            }
         }
-        LvDBChunkKeyType.allCases.forEach { chunkKeyType in
-            guard chunkKeyType != .subChunkPrefix else {
-                return
+
+        try self.compactRange(withBegin: nil, end: nil)
+    }
+
+    public func deleteChunksWithinRange(
+        in dimension: MCDimension,
+        fromX startX: Int32, fromZ startZ: Int32,
+        toX endX: Int32, toZ endZ: Int32
+    ) throws {
+        let xRange = min(startX, endX)...max(startX, endX)
+        let zRange = min(startZ, endZ)...max(startZ, endZ)
+        let iter = try self.makeIterator()
+        let batch = LvDBWriteBatch()
+
+        for x in xRange {
+            for z in zRange {
+                let prefix = LvDBKeyFactory.makeBaseChunkKey(x: x, z: z, dimension: dimension)
+                iter.seek(prefix)
+                while iter.valid() {
+                    defer {
+                        iter.next()
+                    }
+                    guard let key = iter.key() else {
+                        break
+                    }
+                    let keyType = LvDBKeyType.parse(data: key)
+                    if case LvDBKeyType.subChunk(let cx, let cz, let d, _, _) = keyType,
+                       d == dimension, cx == x, cz == z
+                    {
+                        batch.remove(key)
+                    }
+                }
+                let digpKey = LvDBKeyFactory.makeDigpKey(base: prefix)
+                batch.remove(digpKey)
+                iter.seek(digpKey)
+                if iter.key() == digpKey, let digpData = iter.value(), digpData.count > 0, digpData.count % 8 == 0 {
+                    for i in 0..<digpData.count/8 {
+                        let actorprefixKey = "actorprefix".data(using: .utf8)! + digpData[i*8...i*8+7]
+                        batch.remove(actorprefixKey)
+                    }
+                }
+                if batch.approximateSize() > 20000 {
+                    try self.writeBatch(batch)
+                    batch.clear()
+                }
             }
-            let key = keyPrefix + chunkKeyType.rawValue.data
-            guard contains(key) else {
-                return
-            }
-            let result = remove(key)
-            completion?(key, result)
+
+            try self.compactRange(withBegin: nil, end: nil)
         }
     }
 
-    public func removeActorAndDigpKeys(keyPrefix: Data, completion: ((Data, Bool) -> Void)? = nil) {
-        let digpKey = "digp".data(using: .utf8)! + keyPrefix
+    public func deleteChunksOutsideRange(
+        in dimension: MCDimension,
+        fromX startX: Int32, fromZ startZ: Int32,
+        toX endX: Int32, toZ endZ: Int32
+    ) throws {
+        let xRange = min(startX, endX)...max(startX, endX)
+        let zRange = min(startZ, endZ)...max(startZ, endZ)
+        let iter = try self.makeIterator()
+        let batch = LvDBWriteBatch()
 
-        guard let digpData = get(digpKey), digpData.count > 0, digpData.count % 8 == 0 else {
-            return
-        }
-        for i in 0..<digpData.count/8 {
-            let actorprefixKey = "actorprefix".data(using: .utf8)! + digpData[i*8...i*8+7]
-            let result = remove(actorprefixKey)
-            completion?(actorprefixKey, result)
-        }
-        let result = remove(digpKey)
-        completion?(digpKey, result)
-    }
+        iter.seekToFirst()
+        while iter.valid() {
+            defer {
+                iter.next()
+            }
+            guard let key = iter.key() else {
+                break
+            }
+            let keyType = LvDBKeyType.parse(data: key)
+            if case LvDBKeyType.subChunk(let cx, let cz, let d, _, _) = keyType,
+               d == dimension, (!xRange.contains(cx) || !zRange.contains(cz))
+            {
+                batch.remove(key)
+            }
+            if case LvDBKeyType.digp(let cx, let cz, let d) = keyType,
+               d == dimension, (!xRange.contains(cx) || !zRange.contains(cz))
+            {
+                batch.remove(key)
+                if let digpData = iter.value(), digpData.count > 0, digpData.count % 8 == 0 {
+                    for i in 0..<digpData.count/8 {
+                        let actorprefixKey = "actorprefix".data(using: .utf8)! + digpData[i*8...i*8+7]
+                        batch.remove(actorprefixKey)
+                    }
+                }
+            }
 
-    public func removeChunks(
-        posIndexs: [Pos2Di32], dimension: MCDimension, completion: ((Data, Bool) -> Void)? = nil
-    ) {
-        posIndexs.forEach {
-            let prefix = LvDBKeyFactory.makeBaseChunkKey(x: $0.x, z: $0.z, dimension: dimension)
-            removeChunkKeys(keyPrefix: prefix, completion: completion)
-            removeActorAndDigpKeys(keyPrefix: prefix, completion: completion)
-            completion?(Data(), true)
+            if batch.approximateSize() > 20000 {
+                try self.writeBatch(batch)
+                batch.clear()
+            }
         }
+
+        try self.compactRange(withBegin: nil, end: nil)
     }
 }

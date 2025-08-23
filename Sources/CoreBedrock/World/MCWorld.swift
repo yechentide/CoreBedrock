@@ -14,8 +14,11 @@ public class MCWorld {
 
     public init(from dirURL: URL, meta: MCWorldMeta? = nil) throws {
         let dbPath = MCDir.generatePath(for: .db, in: dirURL)
-        guard let db = LvDB(dbPath: dbPath) else {
-            throw CBError.failedOpenWorld(dirURL)
+        let db: LvDB
+        do {
+            db = try LvDB(dbPath: dbPath)
+        } catch let nsError as NSError {
+            throw LvDBError(nsError: nsError)
         }
 
         self.dirURL = dirURL

@@ -49,15 +49,14 @@ public enum RegionTextureLoader {
     }
 
     private static func generateRegionPixelsFromDB(db: LvDB, dimension: MCDimension, region: MCRegion) -> [RGBA] {
-        guard let iter = db.makeIterator() else {
-            return []
+        let width = Int(MCRegion.sideLength)
+        let height = Int(MCRegion.sideLength)
+        guard let iter = try? db.makeIterator() else {
+            return .init(repeating: (0,0,0,0), count: width * height)
         }
         defer {
             iter.destroy()
         }
-
-        let width = Int(MCRegion.sideLength)
-        let height = Int(MCRegion.sideLength)
 
         var pixelDataList: [TexturePixelData] = .init(repeating: .init(), count: width * height)
         var biomeList: [MCBiomeGroup] = .init(repeating: .other, count: width * height)
