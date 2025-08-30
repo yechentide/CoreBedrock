@@ -8,7 +8,7 @@ import Foundation
 
 struct LvDBIteratorTests {
     @Test(.withTemporaryDatabase)
-    func seekToFirstPositionsAtFirstKey() async throws {
+    func positionsAtFirstKeyWhenSeekToFirst() async throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
@@ -20,7 +20,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withTemporaryDatabase)
-    func seekToLastPositionsAtLastKey() async throws {
+    func positionsAtLastKeyWhenSeekToLast() async throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
@@ -32,7 +32,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withTemporaryDatabase)
-    func seekPositionsAtGivenKey() async throws {
+    func positionsAtGivenKeyWhenSeek() async throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
@@ -45,7 +45,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func seekToNonExistentKeyPositionsAtNextGreaterKey() async throws {
+    func positionsAtNextGreaterKeyWhenSeekingNonExistentKey() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -75,7 +75,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func nextMovesForward() async throws {
+    func movesForwardWithNext() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -96,7 +96,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func prevMovesBackward() async throws {
+    func movesBackwardWithPrev() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -117,7 +117,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func validReturnsFalseWhenIteratorIsExhausted() async throws {
+    func reportsInvalidWhenExhausted() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -135,7 +135,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func keyReturnsCurrentKey() async throws {
+    func returnsCurrentKey() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -150,7 +150,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func valueReturnsCurrentValue() async throws {
+    func returnsCurrentValue() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -166,7 +166,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func iterationOverAllKeys() async throws {
+    func iteratesOverAllKeys() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -187,7 +187,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withTemporaryDatabase)
-    func isDestroyedReturnsTrueAfterDestroy() async throws {
+    func reportsDestroyedAfterDestroy() async throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
@@ -199,7 +199,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withTemporaryDatabase)
-    func usingIteratorAfterDestroyFails() async throws {
+    func iteratorIsSafeAfterDestroy() async throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
@@ -216,7 +216,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func iteratorRemainsValidAfterDBCompaction() async throws {
+    func remainsValidAfterDbCompaction() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -240,7 +240,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func iteratorDoesNotSeeUpdatesAfterPut() async throws {
+    func doesNotSeeNewKeysAfterPut() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -257,7 +257,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func iteratorDoesNotSeeRemovalsAfterDelete() async throws {
+    func doesNotSeeRemovedKeysAfterDelete() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }

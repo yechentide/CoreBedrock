@@ -7,8 +7,30 @@ import Foundation
 @testable import LvDBWrapper
 
 struct LvDBTests {
+    @Test(.withEmptyDirectory)
+    func throwsWhenTryingToOpenNonDbDirectoryAndCreateIfMissingIsFalse() async throws {
+        let directoryPath = EmptyDirectoryTrait.Context.directoryPath
+        #expect {
+            let _ = try LvDB(dbPath: directoryPath, createIfMissing: false)
+        } throws: { error in
+            let nsError = error as NSError
+            return nsError.localizedDescription.hasPrefix("Invalid argument:")
+        }
+    }
+
+    @Test(.withEmptyDirectory)
+    func throwsWhenParentDirectoryDoesNotExist() async throws {
+        let directoryPath = EmptyDirectoryTrait.Context.directoryPath + "/NonExistentDir/db"
+        #expect {
+            let _ = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        } throws: { error in
+            let nsError = error as NSError
+            return nsError.localizedDescription.hasPrefix("NotFound:")
+        }
+    }
+
     @Test(.withTemporaryDatabase)
-    func initDBWithValidPath() async throws {
+    func succeedsWithValidPath() async throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         let db = try LvDB(dbPath: dbPath)
         #expect(db.isClosed == false)
@@ -16,7 +38,7 @@ struct LvDBTests {
     }
 
     @Test(.withTemporaryDatabase)
-    func initDBWithValidPathMultiTimes() async throws {
+    func succeedsWhenOpenedMultipleTimes() async throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         for _ in 0..<10 {
             let db = try LvDB(dbPath: dbPath)
@@ -26,15 +48,7 @@ struct LvDBTests {
     }
 
     @Test(.withEmptyDirectory)
-    func initWithNonExistentPathWithoutCreateIfMissingSucceeds() async throws {
-        let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: false)
-        #expect(db.isClosed == true)
-        db.close()
-    }
-
-    @Test(.withEmptyDirectory)
-    func initWithNonExistentPathWithCreateIfMissingSucceeds() async throws {
+    func opensDbWhenDbPathDoesNotExistAndCreateIfMissingIsTrue() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         #expect(db.isClosed == false)
@@ -42,7 +56,7 @@ struct LvDBTests {
     }
 
     @Test(.withEmptyDirectory)
-    func initWithNonExistentPathWithCreateIfMissingMultiTimes() async throws {
+    func canOpenDbMultipleTimesWithCreateIfMissing() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         #expect(db.isClosed == false)
@@ -55,7 +69,7 @@ struct LvDBTests {
     }
 
     @Test(.withTemporaryDatabase)
-    func isClosedReturnsTrueAfterClose() async throws {
+    func reportsClosedAfterClose() async throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         for _ in 0..<10 {
             let db = try LvDB(dbPath: dbPath)
@@ -66,9 +80,9 @@ struct LvDBTests {
     }
 
     @Test(.withEmptyDirectory)
-    func multipleCloseCallsAreSafe() async throws {
-        let dbPath = TemporaryDatabaseTrait.Context.dbPath
-        let db = try LvDB(dbPath: dbPath)
+    func allowsMultipleCloseCallsWithoutError() async throws {
+        let directoryPath = EmptyDirectoryTrait.Context.directoryPath
+        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         for _ in 0..<10 {
             db.close()
             #expect(db.isClosed == true)
@@ -76,7 +90,7 @@ struct LvDBTests {
     }
 
     @Test(.withEmptyDirectory)
-    func databaseOperationsThrowErrorAfterClose() async throws {
+    func throwsWhenOperationsAfterClose() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         let key = "key001".data(using: .utf8)!
@@ -91,7 +105,7 @@ struct LvDBTests {
                 try function()
             }
             if let nsError = e as? NSError {
-                #expect(nsError.code == -1 && nsError.localizedDescription == "DB Closed")
+                #expect(nsError.localizedDescription == "DB Closed")
             } else {
                 Issue.record()
             }
@@ -106,7 +120,7 @@ struct LvDBTests {
     }
 
     @Test(.withEmptyDirectory)
-    func putAndGetKeyValue() async throws {
+    func storesAndRetrievesKeyValue() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -119,7 +133,7 @@ struct LvDBTests {
     }
 
     @Test(.withEmptyDirectory)
-    func getNonExistentKeyReturnsNilOrEmptyData() async throws {
+    func throwsOrReturnsNilForNonExistentKey() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -133,7 +147,7 @@ struct LvDBTests {
     }
 
     @Test(.withEmptyDirectory)
-    func putUpdatesExistingKey() async throws {
+    func overwritesExistingKey() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -148,7 +162,7 @@ struct LvDBTests {
     }
 
     @Test(.withEmptyDirectory)
-    func containsReturnsTrueForExistingKey() async throws {
+    func containsReturnsTrueForStoredKey() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -161,7 +175,7 @@ struct LvDBTests {
     }
 
     @Test(.withEmptyDirectory)
-    func containsReturnsFalseForNonExistentKey() async throws {
+    func containsReturnsFalseForMissingKey() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -171,7 +185,7 @@ struct LvDBTests {
     }
 
     @Test(.withEmptyDirectory)
-    func removeDeletesKey() async throws {
+    func removesExistingKey() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -183,7 +197,7 @@ struct LvDBTests {
     }
 
     @Test(.withEmptyDirectory)
-    func removeNonExistentKeyDoesNotCrash() async throws {
+    func removingNonExistentKeyIsSafe() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -193,7 +207,7 @@ struct LvDBTests {
     }
 
     @Test(.withEmptyDirectory)
-    func writeBatchWithMultiplePuts() async throws {
+    func appliesBatchWithMultiplePuts() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -214,7 +228,7 @@ struct LvDBTests {
     }
 
     @Test(.withEmptyDirectory)
-    func writeBatchWithRemoveOperation() async throws {
+    func appliesBatchWithRemovals() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -235,7 +249,7 @@ struct LvDBTests {
     }
 
     @Test(.withEmptyDirectory)
-    func writeBatchClearResetsBatch() async throws {
+    func clearingBatchPreventsWrites() async throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
@@ -255,8 +269,8 @@ struct LvDBTests {
     }
 
 //    @Test(.withEmptyDirectory)
-//    func compactRangeWithNilRangeCompactsEntireDB() async throws {}
+//    func compactsEntireDbWhenRangeIsNil() async throws {}
 //
 //    @Test(.withEmptyDirectory)
-//    func compactRangeWithSpecificRange() async throws {}
+//    func compactsDbWithinSpecifiedRange() async throws {}
 }

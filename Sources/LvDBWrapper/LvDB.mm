@@ -50,6 +50,7 @@
             *error = [NSError errorWithDomain:@"LvDBWrapper"
                                          code:(NSInteger)status.code()
                                      userInfo:@{NSLocalizedDescriptionKey: msg}];
+            return nil;
         }
     }
     return self;
@@ -97,17 +98,17 @@
 
 /* ---------- Iterator Methods ---------- */
 
-- (void)assignError:(NSError **)error code:(NSInteger)code message:(NSString *)message {
+- (void)assignError:(NSError **)error message:(NSString *)message {
     if (error) {
         *error = [NSError errorWithDomain:@"LvDBWrapper"
-                                     code:code
+                                     code:-1
                                  userInfo:@{ NSLocalizedDescriptionKey : message }];
     }
 }
 
 - (LvDBIterator *)makeIterator:(NSError **)error {
     if (db == nullptr) {
-        [self assignError:error code:-1 message:@"DB Closed"];
+        [self assignError:error message:@"DB Closed"];
         return nil;
     }
     auto dbIterator = db->NewIterator(readOptions);
@@ -119,7 +120,7 @@
 
 - (NSData *)get:(NSData *)key error:(NSError **)error {
     if (db == nullptr) {
-        [self assignError:error code:-1 message:@"DB Closed"];
+        [self assignError:error message:@"DB Closed"];
         return nil;
     }
     leveldb::Slice dbKey((const char *)[key bytes], [key length]);
@@ -129,13 +130,13 @@
         return [NSData dataWithBytes:value.data() length:value.size()];
     }
     NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
-    [self assignError:error code:(NSInteger)status.code() message:msg];
+    [self assignError:error message:msg];
     return nil;
 }
 
 - (BOOL)put:(NSData *)key :(NSData *)data error:(NSError **)error {
     if (db == nullptr) {
-        [self assignError:error code:-1 message:@"DB Closed"];
+        [self assignError:error message:@"DB Closed"];
         return NO;
     }
     leveldb::Slice dbKey((const char *)[key bytes], [key length]);
@@ -146,13 +147,13 @@
         return YES;
     }
     NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
-    [self assignError:error code:(NSInteger)status.code() message:msg];
+    [self assignError:error message:msg];
     return NO;
 }
 
 - (BOOL)remove:(NSData *)key error:(NSError **)error {
     if (db == nullptr) {
-        [self assignError:error code:-1 message:@"DB Closed"];
+        [self assignError:error message:@"DB Closed"];
         return NO;
     }
     leveldb::Slice dbKey((const char *)[key bytes], [key length]);
@@ -161,7 +162,7 @@
         return YES;
     }
     NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
-    [self assignError:error code:(NSInteger)status.code() message:msg];
+    [self assignError:error message:msg];
     return NO;
 }
 
@@ -169,7 +170,7 @@
 
 - (BOOL)writeBatch:(LvDBWriteBatch *)writeBatch error:(NSError **)error {
     if (db == nullptr) {
-        [self assignError:error code:-1 message:@"DB Closed"];
+        [self assignError:error message:@"DB Closed"];
         return NO;
     }
     if (writeBatch == nil) {
@@ -187,7 +188,7 @@
     }
 
     NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
-    [self assignError:error code:(NSInteger)status.code() message:msg];
+    [self assignError:error message:msg];
     return NO;
 }
 
@@ -195,7 +196,7 @@
 
 - (BOOL)compactRangeWithBegin:(NSData *)begin end:(NSData *)end error:(NSError **)error {
     if (db == nullptr) {
-        [self assignError:error code:-1 message:@"DB Closed"];
+        [self assignError:error message:@"DB Closed"];
         return NO;
     }
     leveldb::Slice* beginSlice = nullptr;
