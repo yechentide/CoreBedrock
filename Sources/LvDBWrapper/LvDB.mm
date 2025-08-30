@@ -34,7 +34,7 @@
         options.filter_policy = leveldb::NewBloomFilterPolicy(10);              // Create a bloom filter to quickly tell if a key is in the database or not
 
         readOptions.decompress_allocator = new leveldb::DecompressAllocator();
-        writeOptions.sync = false;
+        writeOptions.sync = true;
 
         auto dbPath = [path UTF8String];
         leveldb::DB* lvdb;
