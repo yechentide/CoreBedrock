@@ -15,7 +15,6 @@
 #import "leveldb/write_batch.h"
 #import "leveldb/filter_policy.h"
 #import "leveldb/cache.h"
-#import "leveldb/zlib_compressor.h"
 #import "leveldb/decompress_allocator.h"
 
 @implementation LvDB {
@@ -31,8 +30,7 @@
         options.write_buffer_size = 4 * 1024 * 1024;                            // Create a 4mb write buffer, to improve compression and touch the disk less
         // options.block_cache = leveldb::NewLRUCache(40 * 1024 * 1024);        // Create a 40 mb cache (we use this on ~1gb devices)
         // options.block_size = 163840;
-        options.compressors[0] = new leveldb::ZlibCompressorRaw(-1);            // Use the new raw-zip compressor to write (and read)
-        options.compressors[1] = new leveldb::ZlibCompressor();                 // Also setup the old, slower compressor for backwards compatibility. This will only be used to read old compressed blocks.
+        options.compression = leveldb::kZlibRawCompression;
         options.filter_policy = leveldb::NewBloomFilterPolicy(10);              // Create a bloom filter to quickly tell if a key is in the database or not
 
         readOptions.decompress_allocator = new leveldb::DecompressAllocator();
@@ -48,7 +46,7 @@
         } else if (error) {
             NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
             *error = [NSError errorWithDomain:@"LvDBWrapper"
-                                         code:(NSInteger)status.code()
+                                         code:-1
                                      userInfo:@{NSLocalizedDescriptionKey: msg}];
             return nil;
         }
@@ -70,8 +68,6 @@
         return;
     }
     db.reset();
-    delete options.compressors[0];
-    delete options.compressors[1];
     delete options.filter_policy;
     delete readOptions.decompress_allocator;
     DebugLog(@"leveldb::DB closed.");

@@ -24,8 +24,20 @@ let package = Package(
     ],
     targets: [
         .binaryTarget(
+            name: "libcrc32c",
+            path: "Libraries/libcrc32c.xcframework"
+        ),
+        .binaryTarget(
+            name: "libsnappy",
+            path: "Libraries/libsnappy.xcframework"
+        ),
+        .binaryTarget(
             name: "libz",
             path: "Libraries/libz.xcframework"
+        ),
+        .binaryTarget(
+            name: "libzstd",
+            path: "Libraries/libzstd.xcframework"
         ),
         .binaryTarget(
             name: "libleveldb",
@@ -34,7 +46,7 @@ let package = Package(
 
         .target(
             name: "LvDBWrapper",
-            dependencies: ["libz", "libleveldb"],
+            dependencies: ["libcrc32c", "libsnappy", "libz", "libzstd", "libleveldb"],
             cxxSettings: [
                 .unsafeFlags([
                     "-DDLLX=",

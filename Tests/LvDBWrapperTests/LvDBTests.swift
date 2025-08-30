@@ -142,7 +142,7 @@ struct LvDBTests {
             let _ = try db.get(key)
         } throws: { error in
             let nsError = error as NSError
-            return nsError.code == 1 && nsError.localizedDescription.hasPrefix("NotFound")
+            return nsError.localizedDescription.hasPrefix("NotFound")
         }
     }
 
