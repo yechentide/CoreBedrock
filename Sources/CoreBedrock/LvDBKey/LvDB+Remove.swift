@@ -12,6 +12,9 @@ extension LvDB {
 
             iter.seekToFirst()
             while iter.valid() {
+                if Task.isCancelled {
+                    throw CancellationError()
+                }
                 defer {
                     iter.next()
                 }
@@ -34,6 +37,9 @@ extension LvDB {
                     }
                 }
 
+                if Task.isCancelled {
+                    throw CancellationError()
+                }
                 try autoreleasepool {
                     if batch.approximateSize() > 20000 {
                         try self.writeBatch(batch)
@@ -57,6 +63,9 @@ extension LvDB {
             let batch = LvDBWriteBatch()
 
             for x in xRange {
+                if Task.isCancelled {
+                    throw CancellationError()
+                }
                 try autoreleasepool {
                     for z in zRange {
                         autoreleasepool { [batch] in
@@ -65,9 +74,15 @@ extension LvDB {
                             removeActorAndDigpKeys(keyPrefix: prefix, batch: batch)
                         }
                         if batch.approximateSize() > 20000 {
+                            if Task.isCancelled {
+                                throw CancellationError()
+                            }
                             try self.writeBatch(batch)
                             batch.clear()
                         }
+                    }
+                    if Task.isCancelled {
+                        throw CancellationError()
                     }
                     try self.writeBatch(batch)
                     batch.clear()
@@ -89,6 +104,9 @@ extension LvDB {
 
             iter.seekToFirst()
             while iter.valid() {
+                if Task.isCancelled {
+                    throw CancellationError()
+                }
                 defer {
                     iter.next()
                 }
@@ -115,6 +133,9 @@ extension LvDB {
                     }
                 }
 
+                if Task.isCancelled {
+                    throw CancellationError()
+                }
                 try autoreleasepool {
                     if batch.approximateSize() > 20000 {
                         try self.writeBatch(batch)
