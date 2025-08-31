@@ -39,9 +39,11 @@ public struct MCDir: Sendable {
     public var difficulty: MCGameDifficulty? = nil
     public var lastPlayedDate: String? = nil
 
+    public var isNetEaseWorld = false
+
     public init(dirURL: URL, dirSize: String? = nil, lastOpened: Date? = nil, worldImage: CGImage? = nil,
                 worldName: String? = nil, gameMode: MCGameMode? = nil, difficulty: MCGameDifficulty? = nil,
-                lastPlayedDate: String? = nil
+                lastPlayedDate: String? = nil, isNetEaseWorld: Bool = false
     ) {
         self.dirURL = dirURL
         self.dirSize = dirSize
@@ -51,9 +53,10 @@ public struct MCDir: Sendable {
         self.gameMode = gameMode
         self.difficulty = difficulty
         self.lastPlayedDate = lastPlayedDate
+        self.isNetEaseWorld = isNetEaseWorld
     }
 
-    public init(dirURL: URL) throws {
+    public init(dirURL: URL, detectWorldType: Bool = false) throws {
         let isMCDir = try FileManager.default.isMCWorldDir(at: dirURL)
         if !isMCDir {
             throw CBError.invalidWorldDirectory(dirURL)
@@ -74,6 +77,13 @@ public struct MCDir: Sendable {
         self.gameMode = worldMeta.gameMode
         self.difficulty = worldMeta.difficulty
         self.lastPlayedDate = worldMeta.lastPlayedDate
+
+        if detectWorldType {
+            let dirPath = dirURL.safePath(percentEncoded: false)
+            if let isNetEaseWorld = try? NetEaseWorldTransform.isNetEaseWorld(at: dirPath) {
+                self.isNetEaseWorld = isNetEaseWorld
+            }
+        }
     }
 
     public var lastOpenedLocalDate: String {
