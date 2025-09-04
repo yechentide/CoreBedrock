@@ -8,8 +8,8 @@ import LvDBWrapper
 public enum NetEaseWorldTransform {
     private static func readCurrentFileData(in worldDirPath: String) throws -> Data {
         let worldDirURL = URL(fileURLWithPath: worldDirPath)
-        let dbDirURL = worldDirURL.appendingSafePath("db", isDirectory: true)
-        let currentFileURL = dbDirURL.appendingSafePath("CURRENT", isDirectory: false)
+        let dbDirURL = worldDirURL.appendingCompatiblePath("db", isDirectory: true)
+        let currentFileURL = dbDirURL.appendingCompatiblePath("CURRENT", isDirectory: false)
         guard let currentFileData = try? Data(contentsOf: currentFileURL) else {
             throw NetEaseError.currentFileNotFound
         }

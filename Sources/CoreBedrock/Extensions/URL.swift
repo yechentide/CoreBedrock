@@ -5,7 +5,7 @@
 import Foundation
 
 extension URL {
-    public func safePath(percentEncoded: Bool) -> String {
+    public func compatiblePath(percentEncoded: Bool) -> String {
         return if #available(iOS 16.0, macOS 13.0, *) {
             self.path(percentEncoded: percentEncoded)
         } else {
@@ -13,7 +13,7 @@ extension URL {
         }
     }
 
-    public func appendingSafePath(_ name: String, isDirectory: Bool) -> URL {
+    public func appendingCompatiblePath(_ name: String, isDirectory: Bool) -> URL {
         return if #available(iOS 16.0, macOS 13.0, *) {
             self.appending(path: name, directoryHint: isDirectory ? .isDirectory : .notDirectory)
         } else {

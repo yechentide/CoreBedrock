@@ -21,11 +21,11 @@ public struct MCDir: Sendable {
     }
 
     public static func generateURL(for type: MCFileType, in worldDirectory: URL) -> URL {
-        return worldDirectory.appendingSafePath(type.rawValue, isDirectory: type.isDirectory)
+        return worldDirectory.appendingCompatiblePath(type.rawValue, isDirectory: type.isDirectory)
     }
 
     public static func generatePath(for type: MCFileType, in worldDirectory: URL) -> String {
-        return generateURL(for: type, in: worldDirectory).safePath(percentEncoded: false)
+        return generateURL(for: type, in: worldDirectory).compatiblePath(percentEncoded: false)
     }
 
     public let dirURL: URL
@@ -79,7 +79,7 @@ public struct MCDir: Sendable {
         self.lastPlayedDate = worldMeta.lastPlayedDate
 
         if detectWorldType {
-            let dirPath = dirURL.safePath(percentEncoded: false)
+            let dirPath = dirURL.compatiblePath(percentEncoded: false)
             if let isNetEaseWorld = try? NetEaseWorldTransform.isNetEaseWorld(at: dirPath) {
                 self.isNetEaseWorld = isNetEaseWorld
             }

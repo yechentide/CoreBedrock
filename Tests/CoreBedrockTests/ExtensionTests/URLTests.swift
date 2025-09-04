@@ -12,20 +12,20 @@ struct URLTests {
 
     @Test
     func testSafePath() throws {
-        let path = testURL.safePath(percentEncoded: false)
+        let path = testURL.compatiblePath(percentEncoded: false)
         #expect(path == "/path/to/test")
 
-        let encodedPath = testURL.safePath(percentEncoded: true)
+        let encodedPath = testURL.compatiblePath(percentEncoded: true)
         #expect(encodedPath == "/path/to/test")
     }
 
     @Test
     func testAppendingSafePath() throws {
-        let fileURL = testURL.appendingSafePath("file.txt", isDirectory: false)
+        let fileURL = testURL.appendingCompatiblePath("file.txt", isDirectory: false)
         #expect(fileURL.lastPathComponent == "file.txt")
         #expect(fileURL.hasDirectoryPath == false)
 
-        let dirURL = testURL.appendingSafePath("folder", isDirectory: true)
+        let dirURL = testURL.appendingCompatiblePath("folder", isDirectory: true)
         #expect(dirURL.lastPathComponent == "folder")
         #expect(dirURL.hasDirectoryPath == true)
     }
@@ -35,7 +35,7 @@ struct URLTests {
         // Since this test depends on the actual file system,
         // it's recommended to use mocks or test directories
         let tempDir = FileManager.default.temporaryDirectory
-            .appendingSafePath("test_directory", isDirectory: true)
+            .appendingCompatiblePath("test_directory", isDirectory: true)
 
         try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
         defer {
@@ -46,7 +46,7 @@ struct URLTests {
         #expect(try tempDir.isDirectoryAndReachable())
 
         // Create a test file and check directory size
-        let testFile = tempDir.appendingSafePath("test.txt", isDirectory: false)
+        let testFile = tempDir.appendingCompatiblePath("test.txt", isDirectory: false)
         let testData = "test content".data(using: .utf8)!
         try testData.write(to: testFile)
 
