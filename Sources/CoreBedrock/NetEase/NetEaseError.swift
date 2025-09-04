@@ -4,12 +4,16 @@
 
 import Foundation
 
-public enum NetEaseError: Error, LocalizedError {
+public enum NetEaseError: Error, Equatable, LocalizedError {
     case dbNotFound(String)
+    case currentFileNotFound
+    case manifestFileNotFound
     case invalidHeader
-    case manifestNotFound
-    case readCurrentFailed
-    case invalidManifestLength(Int)
-    case invalidCurrentLength(Int)
+    case alreadyDecrypted
+    case alreadyEncrypted
+    case invalidKeyLength(Int)
+    case invalidCurrentFileData
+    case invalidManifestFileData
     case keyVerificationFailed
+    case fileEnumerationFailed(String)
 }
