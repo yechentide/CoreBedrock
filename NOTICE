@@ -1,0 +1,51 @@
+# Third-Party Notices
+
+This project (the “Project”) is licensed under the MIT License.
+See the file named `LICENSE` for the full text.
+
+The Project incorporates or is distributed with the following third-party components.
+Their original license texts are included verbatim under the `licenses/` directory.
+For convenience, upstream license links are also provided.
+
+---
+
+## Summary of Third-Party Components
+
+1) zlib — zlib License
+   - Upstream: [https://github.com/madler/zlib/blob/develop/LICENSE](https://github.com/madler/zlib/blob/develop/LICENSE)
+   - Local copy: licenses/zlib.LICENSE
+
+2) Zstandard (zstd) — BSD 3-Clause License
+   - Upstream: [https://github.com/facebook/zstd/blob/dev/LICENSE](https://github.com/facebook/zstd/blob/dev/LICENSE)
+   - Local copy: licenses/zstd.LICENSE
+
+3) Snappy — BSD 3-Clause License
+   - Upstream: [https://github.com/google/snappy/blob/main/COPYING](https://github.com/google/snappy/blob/main/COPYING)
+   - Local copy: licenses/snappy.LICENSE
+
+4) CRC32C — BSD 3-Clause License
+   - Upstream: [https://github.com/google/crc32c/blob/main/LICENSE](https://github.com/google/crc32c/blob/main/LICENSE)
+   - Local copy: licenses/crc32c.LICENSE
+
+5) LevelDB — BSD 3-Clause License
+   - Upstream: [https://github.com/Amulet-Team/leveldb/blob/main/LICENSE](https://github.com/Amulet-Team/leveldb/blob/main/LICENSE)
+   - Local copy: licenses/leveldb.LICENSE
+
+---
+
+## Notices and Required Attributions
+
+- You must retain the copyright notices, license terms, and warranty disclaimers of
+  the above third-party components in any redistribution of the Project, whether in
+  source or binary form.
+
+- No endorsement: You must not use the names of the original authors or organizations
+  (e.g., Google, Meta/Facebook, Jean-loup Gailly, Mark Adler, or other contributors)
+  to endorse or promote products derived from this software without specific prior
+  written permission.
+
+- “AS IS” warranty: The included third-party software is provided “as is”, without
+  warranty of any kind, as stated in their respective licenses.
+
+For the exact license texts, please refer to the files stored in the `licenses/`
+directory of this distribution.
