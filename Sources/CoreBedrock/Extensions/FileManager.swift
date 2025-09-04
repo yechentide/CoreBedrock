@@ -27,23 +27,18 @@ extension FileManager {
     }
 
     public func isMCWorldDir(at dirURL: URL) throws -> Bool {
-        var (hasDBDir, hasLevelDat) = (false, false)
-        let keys : [URLResourceKey] = [.nameKey, .isDirectoryKey]
-        let contents = try FileManager.default.contentsOfDirectory(
-            at: dirURL,
-            includingPropertiesForKeys: keys
-        )
+        var isDirForDB: ObjCBool = false
+        let dbDirPath = dirURL.appendingSafePath("db", isDirectory: true).safePath(percentEncoded: false)
+        let hasDBDir = FileManager.default.fileExists(
+            atPath: dbDirPath, isDirectory: &isDirForDB
+        ) && isDirForDB.boolValue
 
-        for fileURL in contents {
-            let attributes = try fileURL.resourceValues(forKeys: Set(keys))
-            if attributes.name == "db" && attributes.isDirectory == true {
-                hasDBDir = true
-            } else if attributes.name == "level.dat" && attributes.isDirectory! == false {
-                hasLevelDat = true
-            }
-        }
+        var isDirForLevelDat: ObjCBool = false
+        let levelDatPath = dirURL.appendingSafePath("level.dat", isDirectory: false).safePath(percentEncoded: false)
+        let hasLevelDat = FileManager.default.fileExists(
+            atPath: levelDatPath, isDirectory: &isDirForLevelDat
+        ) && !isDirForLevelDat.boolValue
 
-        if hasDBDir && hasLevelDat { return true }
-        return false
+        return hasDBDir && hasLevelDat
     }
 }
