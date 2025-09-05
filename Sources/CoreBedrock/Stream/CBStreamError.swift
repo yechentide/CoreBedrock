@@ -4,10 +4,9 @@
 
 import Foundation
 
-public enum CBStreamError: Error, Equatable {
+public enum CBStreamError: Error, Equatable, LocalizedError {
     case invalidFormat(_ message: String)
-    case argumentError(_ message: String)
-    case argumentError(_ message: String, _ paramName: String)
+    case argumentError(_ message: String, _ paramName: String? = nil)
     case argumentOutOfRange(_ paramName: String, _ message: String)
     case endOfStream
     case stringConversionError

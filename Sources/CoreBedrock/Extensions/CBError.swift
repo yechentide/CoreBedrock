@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum CBError: Error, LocalizedError {
+public enum CBError: Error, Equatable, LocalizedError {
     case invalidWorldDirectory(URL)
     case failedOpenWorld(URL)
     case failedParseLevelData(URL?)
