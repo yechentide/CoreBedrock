@@ -14,10 +14,17 @@ internal enum NetEasePlayerDataProcessor {
         let database = try LvDB(dbPath: dbDirPath)
         defer { database.close() }
 
-        let localPlayerKey = LvDBStringKeyType.localPlayer.rawValue.data(using: .utf8)!
-        let localPlayerData = try database.get(localPlayerKey)
-        if let fixedData = try transform(localPlayerData) {
-            try database.put(localPlayerKey, fixedData)
+        do {
+            let localPlayerKey = LvDBStringKeyType.localPlayer.rawValue.data(using: .utf8)!
+            let localPlayerData = try database.get(localPlayerKey)
+            if let fixedData = try transform(localPlayerData) {
+                try database.put(localPlayerKey, fixedData)
+            }
+        } catch {
+            let lvdbError = LvDBError(nsError: error as NSError)
+            guard case LvDBError.notFound(_) = lvdbError else {
+                throw error
+            }
         }
 
         let iter = try database.makeIterator()
