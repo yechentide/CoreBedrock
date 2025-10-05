@@ -1,0 +1,30 @@
+{
+  "version" : 1,
+  "description" : "",
+  "entries" : [
+    {
+      "id" : "other_blocks",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:water",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:lava",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:bubble_column",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:seagrass",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:kelp",
+      "defaultValue" : true
+    }
+  ]
+}

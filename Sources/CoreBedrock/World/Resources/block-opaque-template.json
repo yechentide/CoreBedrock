@@ -1,0 +1,1186 @@
+{
+  "version" : 1,
+  "description" : "",
+  "entries" : [
+    {
+      "id" : "other_blocks",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:unknown",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:air",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:moving_block",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:barrier",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:structure_void",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_0",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_1",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_2",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_3",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_4",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_5",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_6",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_7",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_8",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_9",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_10",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_11",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_12",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_13",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_14",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_block_15",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:oak_leaves",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:spruce_leaves",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:birch_leaves",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:jungle_leaves",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:acacia_leaves",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:dark_oak_leaves",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:mangrove_leaves",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cherry_leaves",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:pale_oak_leaves",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:azalea_leaves",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:azalea_leaves_flowered",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:oak_sapling",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:spruce_sapling",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:birch_sapling",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:jungle_sapling",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:acacia_sapling",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:dark_oak_sapling",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:mangrove_propagule",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cherry_sapling",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:pale_oak_sapling",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:wheat",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:pumpkin_stem",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:melon_stem",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:beetroot",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:torchflower_crop",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:pitcher_crop",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:potatoes",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:carrots",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:sweet_berry_bush",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cave_vines",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cave_vines_head_with_berries",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cave_vines_body_with_berries",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:fern",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:large_fern",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:tall_grass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:short_grass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:bush",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:short_dry_grass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:tall_dry_grass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:nether_sprouts",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:crimson_roots",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:warped_roots",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:dandelion",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:poppy",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:blue_orchid",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:allium",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:azure_bluet",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:red_tulip",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:orange_tulip",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:white_tulip",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:pink_tulip",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:oxeye_daisy",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cornflower",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:lily_of_the_valley",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:sunflower",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:lilac",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:rose_bush",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:peony",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:pitcher_plant",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:pink_petals",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:wildflowers",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:wither_rose",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:torchflower",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cactus_flower",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:closed_eyeblossom",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:open_eyeblossom",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:vine",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:weeping_vines",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:twisting_vines",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:waterlily",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:seagrass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:kelp",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:deadbush",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:bamboo_sapling",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:ice",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:frosted_ice",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:leaf_litter",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hanging_roots",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:big_dripleaf",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:small_dripleaf_block",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:spore_blossom",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:firefly_bush",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:glow_lichen",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:reeds",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:web",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:frog_spawn",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:nether_wart",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:chorus_flower",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:chorus_plant",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:sculk_vein",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:torch",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:soul_torch",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:white_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:orange_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:magenta_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_blue_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:yellow_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:lime_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:pink_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:gray_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_gray_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cyan_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:purple_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:blue_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:brown_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:green_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:red_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:black_candle",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:glowstone",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:flower_pot",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:water",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:flowing_water",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:lava",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:flowing_lava",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:player_head",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:zombie_head",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:creeper_head",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:dragon_head",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:skeleton_skull",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:wither_skeleton_skull",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:piglin_head",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:beacon",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:trip_wire",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:lightning_rod",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:rail",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:golden_rail",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:detector_rail",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:activator_rail",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:redstone_wire",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:redstone_torch",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:unlit_redstone_torch",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:lever",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:wooden_button",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:spruce_button",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:birch_button",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:jungle_button",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:acacia_button",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:dark_oak_button",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:mangrove_button",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cherry_button",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:pale_oak_button",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:bamboo_button",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:stone_button",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:crimson_button",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:warped_button",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:polished_blackstone_button",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:tripwire_hook",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:powered_repeater",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:unpowered_repeater",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:powered_comparator",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:unpowered_comparator",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:white_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:orange_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:magenta_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_blue_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:yellow_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:lime_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:pink_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:gray_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_gray_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cyan_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:purple_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:blue_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:brown_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:green_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:red_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:black_standing_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:white_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:orange_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:magenta_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_blue_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:yellow_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:lime_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:pink_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:gray_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_gray_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cyan_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:purple_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:blue_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:brown_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:green_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:red_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:black_wall_banner",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:white_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:orange_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:magenta_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_blue_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:yellow_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:lime_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:pink_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:gray_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_gray_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cyan_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:purple_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:blue_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:brown_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:green_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:red_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:black_candle_cake",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:iron_bars",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:white_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:orange_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:magenta_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_blue_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:yellow_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:lime_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:pink_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:gray_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_gray_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cyan_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:purple_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:blue_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:brown_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:green_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:red_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:black_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:tinted_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:white_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:orange_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:magenta_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_blue_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:yellow_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:lime_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:pink_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:gray_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:light_gray_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:cyan_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:purple_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:blue_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:brown_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:green_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:red_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:black_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:ladder",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_white_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_orange_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_magenta_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_light_blue_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_yellow_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_lime_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_pink_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_gray_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_light_gray_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_cyan_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_purple_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_blue_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_brown_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_green_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_red_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_black_stained_glass",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_white_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_orange_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_magenta_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_light_blue_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_yellow_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_lime_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_pink_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_gray_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_light_gray_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_cyan_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_purple_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_blue_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_brown_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_green_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_red_stained_glass_pane",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:hard_black_stained_glass_pane",
+      "defaultValue" : false
+    }
+  ]
+}

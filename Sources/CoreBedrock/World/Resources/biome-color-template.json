@@ -1,0 +1,637 @@
+{
+  "version" : 1,
+  "description" : "",
+  "palette" : {
+    "defaults" : {
+      "liquid" : "#3359A2",
+      "foliage" : "#385F1F"
+    },
+    "custom" : {
+      "custom-liquid-coldOcean" : "#32429E",
+      "custom-liquid-warmOcean" : "#3896B1",
+      "custom-liquid-lukewarmOcean" : "#2B7AAA",
+      "custom-liquid-mangroveSwamp" : "#295149",
+      "custom-liquid-swamp" : "#738578",
+      "custom-foliage-swamp" : "#6A7429",
+      "custom-foliage-badlands" : "#9E9E9D"
+    }
+  },
+  "entries" : [
+    {
+      "id" : 65535,
+      "name" : "minecraft:unknown",
+      "biomeColor" : "#000000",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 0,
+      "name" : "minecraft:ocean",
+      "biomeColor" : "#000070",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 1,
+      "name" : "minecraft:plains",
+      "biomeColor" : "#8DB360",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 2,
+      "name" : "minecraft:desert",
+      "biomeColor" : "#FA9418",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 3,
+      "name" : "minecraft:extreme_hills",
+      "biomeColor" : "#606060",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 4,
+      "name" : "minecraft:forest",
+      "biomeColor" : "#056621",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 5,
+      "name" : "minecraft:taiga",
+      "biomeColor" : "#0B6659",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 6,
+      "name" : "minecraft:swampland",
+      "biomeColor" : "#07F9B2",
+      "liquidColorRef" : "custom-liquid-swamp",
+      "foliageColorRef" : "custom-foliage-swamp"
+    },
+    {
+      "id" : 7,
+      "name" : "minecraft:river",
+      "biomeColor" : "#0000FF",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 8,
+      "name" : "minecraft:hell",
+      "biomeColor" : "#BF3B3B",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 9,
+      "name" : "minecraft:the_end",
+      "biomeColor" : "#8080FF",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 10,
+      "name" : "minecraft:legacy_frozen_ocean",
+      "biomeColor" : "#7070D6",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 11,
+      "name" : "minecraft:frozen_river",
+      "biomeColor" : "#A0A0FF",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 12,
+      "name" : "minecraft:ice_plains",
+      "biomeColor" : "#FFFFFF",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 13,
+      "name" : "minecraft:ice_mountains",
+      "biomeColor" : "#A0A0A0",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 14,
+      "name" : "minecraft:mushroom_island",
+      "biomeColor" : "#FF00FF",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 15,
+      "name" : "minecraft:mushroom_island_shore",
+      "biomeColor" : "#A000FF",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 16,
+      "name" : "minecraft:beach",
+      "biomeColor" : "#FADE55",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 17,
+      "name" : "minecraft:desert_hills",
+      "biomeColor" : "#D25F12",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 18,
+      "name" : "minecraft:forest_hills",
+      "biomeColor" : "#22551C",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 19,
+      "name" : "minecraft:taiga_hills",
+      "biomeColor" : "#163933",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 20,
+      "name" : "minecraft:extreme_hills_edge",
+      "biomeColor" : "#72789A",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 21,
+      "name" : "minecraft:jungle",
+      "biomeColor" : "#537B09",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 22,
+      "name" : "minecraft:jungle_hills",
+      "biomeColor" : "#2C4205",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 23,
+      "name" : "minecraft:jungle_edge",
+      "biomeColor" : "#628B17",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 24,
+      "name" : "minecraft:deep_ocean",
+      "biomeColor" : "#000030",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 25,
+      "name" : "minecraft:stone_beach",
+      "biomeColor" : "#A2A284",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 26,
+      "name" : "minecraft:cold_beach",
+      "biomeColor" : "#FAF0C0",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 27,
+      "name" : "minecraft:birch_forest",
+      "biomeColor" : "#307444",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 28,
+      "name" : "minecraft:birch_forest_hills",
+      "biomeColor" : "#1F5F32",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 29,
+      "name" : "minecraft:roofed_forest",
+      "biomeColor" : "#40511A",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 30,
+      "name" : "minecraft:cold_taiga",
+      "biomeColor" : "#31554A",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 31,
+      "name" : "minecraft:cold_taiga_hills",
+      "biomeColor" : "#243F36",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 32,
+      "name" : "minecraft:mega_taiga",
+      "biomeColor" : "#596651",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 33,
+      "name" : "minecraft:mega_taiga_hills",
+      "biomeColor" : "#454F3E",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 34,
+      "name" : "minecraft:extreme_hills_plus_trees",
+      "biomeColor" : "#507050",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 35,
+      "name" : "minecraft:savanna",
+      "biomeColor" : "#BDB25F",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 36,
+      "name" : "minecraft:savanna_plateau",
+      "biomeColor" : "#A79D64",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 37,
+      "name" : "minecraft:mesa",
+      "biomeColor" : "#D94515",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "custom-foliage-badlands"
+    },
+    {
+      "id" : 38,
+      "name" : "minecraft:mesa_plateau_stone",
+      "biomeColor" : "#B09765",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 39,
+      "name" : "minecraft:mesa_plateau",
+      "biomeColor" : "#CA8C65",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 40,
+      "name" : "minecraft:warm_ocean",
+      "biomeColor" : "#0000AC",
+      "liquidColorRef" : "custom-liquid-warmOcean",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 41,
+      "name" : "minecraft:deep_warm_ocean",
+      "biomeColor" : "#000050",
+      "liquidColorRef" : "custom-liquid-warmOcean",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 42,
+      "name" : "minecraft:lukewarm_ocean",
+      "biomeColor" : "#000090",
+      "liquidColorRef" : "custom-liquid-lukewarmOcean",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 43,
+      "name" : "minecraft:deep_lukewarm_ocean",
+      "biomeColor" : "#000040",
+      "liquidColorRef" : "custom-liquid-lukewarmOcean",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 44,
+      "name" : "minecraft:cold_ocean",
+      "biomeColor" : "#202070",
+      "liquidColorRef" : "custom-liquid-coldOcean",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 45,
+      "name" : "minecraft:deep_cold_ocean",
+      "biomeColor" : "#202038",
+      "liquidColorRef" : "custom-liquid-coldOcean",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 46,
+      "name" : "minecraft:frozen_ocean",
+      "biomeColor" : "#404090",
+      "liquidColorRef" : "custom-liquid-coldOcean",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 47,
+      "name" : "minecraft:deep_frozen_ocean",
+      "biomeColor" : "#404090",
+      "liquidColorRef" : "custom-liquid-coldOcean",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 48,
+      "name" : "minecraft:bamboo_jungle",
+      "biomeColor" : "#768E14",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 49,
+      "name" : "minecraft:bamboo_jungle_hills",
+      "biomeColor" : "#3B470A",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 129,
+      "name" : "minecraft:sunflower_plains",
+      "biomeColor" : "#B5DB88",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 130,
+      "name" : "minecraft:desert_mutated",
+      "biomeColor" : "#FFBC40",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 131,
+      "name" : "minecraft:extreme_hills_mutated",
+      "biomeColor" : "#888888",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 132,
+      "name" : "minecraft:flower_forest",
+      "biomeColor" : "#2D8E49",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 133,
+      "name" : "minecraft:taiga_mutated",
+      "biomeColor" : "#338E81",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 134,
+      "name" : "minecraft:swampland_mutated",
+      "biomeColor" : "#2FFFDA",
+      "liquidColorRef" : "custom-liquid-swamp",
+      "foliageColorRef" : "custom-foliage-swamp"
+    },
+    {
+      "id" : 140,
+      "name" : "minecraft:ice_plains_spikes",
+      "biomeColor" : "#B4DCDC",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 149,
+      "name" : "minecraft:jungle_mutated",
+      "biomeColor" : "#7BA331",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 151,
+      "name" : "minecraft:jungle_edge_mutated",
+      "biomeColor" : "#8AB33F",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 155,
+      "name" : "minecraft:birch_forest_mutated",
+      "biomeColor" : "#589C6C",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 156,
+      "name" : "minecraft:birch_forest_hills_mutated",
+      "biomeColor" : "#47875A",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 157,
+      "name" : "minecraft:roofed_forest_mutated",
+      "biomeColor" : "#687942",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 158,
+      "name" : "minecraft:cold_taiga_mutated",
+      "biomeColor" : "#597D72",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 160,
+      "name" : "minecraft:redwood_taiga_mutated",
+      "biomeColor" : "#818E79",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 161,
+      "name" : "minecraft:redwood_taiga_hills_mutated",
+      "biomeColor" : "#6D7766",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 162,
+      "name" : "minecraft:extreme_hills_plus_trees_mutated",
+      "biomeColor" : "#789878",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 163,
+      "name" : "minecraft:savanna_mutated",
+      "biomeColor" : "#E5DA87",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 164,
+      "name" : "minecraft:savanna_plateau_mutated",
+      "biomeColor" : "#CFC58C",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 165,
+      "name" : "minecraft:mesa_bryce",
+      "biomeColor" : "#FF6D3D",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 166,
+      "name" : "minecraft:mesa_plateau_stone_mutated",
+      "biomeColor" : "#D8BF8D",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 167,
+      "name" : "minecraft:mesa_plateau_mutated",
+      "biomeColor" : "#F2B48D",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 178,
+      "name" : "minecraft:soulsand_valley",
+      "biomeColor" : "#5E3830",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 179,
+      "name" : "minecraft:crimson_forest",
+      "biomeColor" : "#DD0808",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 180,
+      "name" : "minecraft:warped_forest",
+      "biomeColor" : "#49907B",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 181,
+      "name" : "minecraft:basalt_deltas",
+      "biomeColor" : "#403636",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 182,
+      "name" : "minecraft:jagged_peaks",
+      "biomeColor" : "#E3ECED",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 183,
+      "name" : "minecraft:frozen_peaks",
+      "biomeColor" : "#EAFBFB",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 184,
+      "name" : "minecraft:snowy_slopes",
+      "biomeColor" : "#DAF1F1",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 185,
+      "name" : "minecraft:grove",
+      "biomeColor" : "#DFECE5",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 186,
+      "name" : "minecraft:meadow",
+      "biomeColor" : "#8CA470",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 187,
+      "name" : "minecraft:lush_caves",
+      "biomeColor" : "#DF9634",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 188,
+      "name" : "minecraft:dripstone_caves",
+      "biomeColor" : "#C1A58F",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 189,
+      "name" : "minecraft:stony_peaks",
+      "biomeColor" : "#D1D1D1",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 190,
+      "name" : "minecraft:deep_dark",
+      "biomeColor" : "#000000",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 191,
+      "name" : "minecraft:mangrove_swamp",
+      "biomeColor" : "#24C48E",
+      "liquidColorRef" : "custom-liquid-mangroveSwamp",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 192,
+      "name" : "minecraft:cherry_grove",
+      "biomeColor" : "#F7B9DC",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    },
+    {
+      "id" : 193,
+      "name" : "minecraft:pale_garden",
+      "biomeColor" : "#6C6F96",
+      "liquidColorRef" : "default",
+      "foliageColorRef" : "default"
+    }
+  ]
+}

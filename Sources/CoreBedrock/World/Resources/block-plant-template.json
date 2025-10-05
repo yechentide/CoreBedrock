@@ -1,0 +1,302 @@
+{
+  "version" : 1,
+  "description" : "",
+  "entries" : [
+    {
+      "id" : "other_blocks",
+      "defaultValue" : false
+    },
+    {
+      "id" : "minecraft:oak_sapling",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:spruce_sapling",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:birch_sapling",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:jungle_sapling",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:acacia_sapling",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:dark_oak_sapling",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:mangrove_propagule",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:cherry_sapling",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:pale_oak_sapling",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:wheat",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:pumpkin_stem",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:melon_stem",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:beetroot",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:torchflower_crop",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:pitcher_crop",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:potatoes",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:carrots",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:sweet_berry_bush",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:cave_vines",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:cave_vines_head_with_berries",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:cave_vines_body_with_berries",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:fern",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:large_fern",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:tall_grass",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:short_grass",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:bush",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:short_dry_grass",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:tall_dry_grass",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:nether_sprouts",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:crimson_roots",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:warped_roots",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:dandelion",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:poppy",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:blue_orchid",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:allium",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:azure_bluet",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:red_tulip",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:orange_tulip",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:white_tulip",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:pink_tulip",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:oxeye_daisy",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:cornflower",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:lily_of_the_valley",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:sunflower",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:lilac",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:rose_bush",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:peony",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:pitcher_plant",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:pink_petals",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:wildflowers",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:wither_rose",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:torchflower",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:cactus_flower",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:closed_eyeblossom",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:open_eyeblossom",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:vine",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:weeping_vines",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:twisting_vines",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:waterlily",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:seagrass",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:kelp",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:deadbush",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:bamboo_sapling",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:leaf_litter",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:big_dripleaf",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:small_dripleaf_block",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:spore_blossom",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:firefly_bush",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:glow_lichen",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:reeds",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:nether_wart",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:chorus_flower",
+      "defaultValue" : true
+    },
+    {
+      "id" : "minecraft:chorus_plant",
+      "defaultValue" : true
+    }
+  ]
+}
