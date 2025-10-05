@@ -114,13 +114,13 @@ CoreBedrock consists of two main modules:
 
 ## Support
 
-|                             | iOS(arm64) | MacOS(arm64) | MacOS(x86) | iOS Simulator(x86) |
-| --------------------------- | :--------: | :----------: | :--------: | :----------------: |
-| libleveldb.xcframework      |     ✔︎      |      ✔︎       |     ✔︎      |         ✔︎          |
-| libz.xcframework            |     ✔︎      |      ✔︎       |     ✔︎      |         ✔︎          |
-| libsnappy.xcframework       |     ✔︎      |      ✔︎       |     ✔︎      |         ✔︎          |
-| libzstd.xcframework         |     ✔︎      |      ✔︎       |     ✔︎      |         ✔︎          |
-| libcrc32c.xcframework       |     ✔︎      |      ✔︎       |     ✔︎      |         ✔︎          |
+|                             | iOS(arm64) | MacOS(arm64) | MacOS(x86) | iOS Simulator(arm64) |
+| --------------------------- | :--------: | :----------: | :--------: | :------------------: |
+| libleveldb.xcframework      |     ✔︎      |      ✔︎       |     ✔︎      |          ✔︎           |
+| libz.xcframework            |     ✔︎      |      ✔︎       |     ✔︎      |          ✔︎           |
+| libsnappy.xcframework       |     ✔︎      |      ✔︎       |     ✔︎      |          ✔︎           |
+| libzstd.xcframework         |     ✔︎      |      ✔︎       |     ✔︎      |          ✔︎           |
+| libcrc32c.xcframework       |     ✔︎      |      ✔︎       |     ✔︎      |          ✔︎           |
 
 **Build XCFrameworks yourself:**
 Run the build script to compile all library dependencies from source:
