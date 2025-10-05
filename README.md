@@ -46,14 +46,14 @@ let dbPath = "/path/to/leveldb"
 let db = try LvDB(dbPath: dbPath)
 
 // Basic operations
-try db.put("myKey".data(using: .utf8)!, "myValue".data(using: .utf8)!)
-let value = try db.get("myKey".data(using: .utf8)!)
-try db.remove("myKey".data(using: .utf8)!)
+try db.put(Data("myKey".utf8), Data("myValue".utf8))
+let value = try db.get(Data("myKey".utf8))
+try db.remove(Data("myKey".utf8))
 
 // Batch operations
 let batch = LvDBWriteBatch()
-batch.put("key1".data(using: .utf8)!, value: "value1".data(using: .utf8)!)
-batch.remove("key2".data(using: .utf8)!)
+batch.put(Data("key1".utf8), value: Data("value1".utf8))
+batch.remove(Data("key2".utf8))
 try db.writeBatch(batch)
 ```
 
@@ -125,6 +125,8 @@ CoreBedrock consists of two main modules:
 **Build XCFrameworks yourself:**
 Run the build script to compile all library dependencies from source:
 ```bash
+cd CoreBedrock
+git submodule update --init
 ./Scripts/build.sh
 ```
 This will download and build LevelDB and compression libraries for all supported platforms.
