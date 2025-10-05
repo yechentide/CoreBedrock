@@ -2,8 +2,8 @@
 // Created by yechentide on 2025/09/04
 //
 
-import Testing
 import Foundation
+import Testing
 
 extension Trait where Self == TemporaryNetEaseWorldTrait {
     static var withTemporaryNetEaseWorld: Self {
@@ -13,16 +13,16 @@ extension Trait where Self == TemporaryNetEaseWorldTrait {
 
 struct TemporaryNetEaseWorldTrait: TestTrait, TestScoping {
     enum Context {
-        @TaskLocal static var worldDirPath: String = ""
+        @TaskLocal static var worldDirPath = ""
     }
 
     func provideScope(
-        for test: Test,
-        testCase: Test.Case?,
+        for _: Test,
+        testCase _: Test.Case?,
         performing function: @Sendable () async throws -> Void
     ) async throws {
         print()
-        let worldDirPath = createTemporaryWorld()
+        let worldDirPath = self.createTemporaryWorld()
         defer {
             deleteTemporaryWorld(worldDirPath)
         }
@@ -43,10 +43,14 @@ struct TemporaryNetEaseWorldTrait: TestTrait, TestScoping {
         let temporaryDirURL: URL
         if #available(iOS 16.0, macOS 13.0, *) {
             sourceDirURL = URL(filePath: testWorldPath, directoryHint: .isDirectory)
-            temporaryDirURL = FileManager.default.temporaryDirectory.appending(component: tempWorldDirName, directoryHint: .isDirectory)
+            temporaryDirURL = FileManager.default.temporaryDirectory.appending(
+                component: tempWorldDirName, directoryHint: .isDirectory
+            )
         } else {
             sourceDirURL = URL(fileURLWithPath: testWorldPath, isDirectory: true)
-            temporaryDirURL = FileManager.default.temporaryDirectory.appendingPathComponent(tempWorldDirName, isDirectory: true)
+            temporaryDirURL = FileManager.default.temporaryDirectory.appendingPathComponent(
+                tempWorldDirName, isDirectory: true
+            )
         }
 
         do {

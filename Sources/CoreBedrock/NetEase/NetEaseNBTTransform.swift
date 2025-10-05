@@ -4,7 +4,7 @@
 
 import Foundation
 
-internal enum NetEaseNBTTransform {
+enum NetEaseNBTTransform {
     private static func replacingSignatureByte(
         find signature: Data,
         in data: Data,
@@ -13,12 +13,13 @@ internal enum NetEaseNBTTransform {
         guard let range = data.range(of: signature) else {
             return nil
         }
+
         var patched = data
         patched[range.lowerBound] = newValue
         return patched
     }
 
-    public static func patchDecodedPlayerData(_ data: Data) throws -> Data? {
+    static func patchDecodedPlayerData(_ data: Data) throws -> Data? {
         let reader = CBTagReader(data: data)
         do {
             _ = try reader.readNext()
@@ -29,18 +30,20 @@ internal enum NetEaseNBTTransform {
             ) else {
                 throw error
             }
+
             return patched
         }
         return nil
     }
 
-    public static func patchEncodedPlayerData(_ data: Data) throws -> Data? {
+    static func patchEncodedPlayerData(_ data: Data) throws -> Data? {
         let signature = Data([NetEaseConstants.byteArrayTagByte]) + NetEaseConstants.scriptDataSignature
         guard let patched = replacingSignatureByte(
             find: signature, in: data, newValue: NetEaseConstants.stringTagByte
         ) else {
             return nil
         }
+
         return patched
     }
 }

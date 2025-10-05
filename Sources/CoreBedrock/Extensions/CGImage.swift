@@ -4,13 +4,18 @@
 
 import CoreGraphics
 import ImageIO
-import UniformTypeIdentifiers
 import OSLog
+import UniformTypeIdentifiers
 
-public typealias RGBA = (red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8)
+public struct RGBA: Sendable {
+    let red: UInt8
+    let green: UInt8
+    let blue: UInt8
+    let alpha: UInt8
+}
 
-extension CGImage {
-    public static func from(
+public extension CGImage {
+    static func from(
         colors: [RGBA],
         width: Int,
         height: Int,
@@ -70,22 +75,24 @@ extension CGImage {
         )
     }
 
-    public func encode(as type: UTType = .png) -> Data? {
+    func encode(as type: UTType = .png) -> Data? {
         let data = NSMutableData()
         let uti = type.identifier as CFString
         guard let destination = CGImageDestinationCreateWithData(data as CFMutableData, uti, 1, nil) else {
             CBLogger.error("Failed to create CGImageDestination for UTI: \(uti)")
             return nil
         }
+
         CGImageDestinationAddImage(destination, self, nil)
         guard CGImageDestinationFinalize(destination) else {
             CBLogger.error("Failed to finalize image encoding for UTI: \(uti)")
             return nil
         }
+
         return data as Data
     }
 
-    public static func decode(from data: Data, as type: UTType? = nil) -> CGImage? {
+    static func decode(from data: Data, as type: UTType? = nil) -> CGImage? {
         var options: [CFString: Any] = [:]
         if let type {
             options[kCGImageSourceTypeIdentifierHint] = type.identifier as CFString
@@ -96,10 +103,11 @@ extension CGImage {
             CBLogger.error("Failed to decode CGImage from data. Type hint: \(type?.identifier ?? "none")")
             return nil
         }
+
         return cgImage
     }
 
-    public func save(to url: URL, as type: UTType = .png, properties: [CFString: Any]? = nil) throws {
+    func save(to url: URL, as type: UTType = .png, properties: [CFString: Any]? = nil) throws {
         let uti = type.identifier as CFString
 
         guard let destination = CGImageDestinationCreateWithURL(url as CFURL, uti, 1, nil) else {
@@ -116,21 +124,37 @@ extension CGImage {
     }
 }
 
-extension CGImage {
+public extension CGImage {
+    // swiftlint:disable line_length
+
     /// Load image from a png file
     ///
     /// [ref](https://stackoverflow.com/questions/71160917/swift-the-simpliest-way-to-load-a-local-png-jpg-image-file-to-a-uint8-uint16-ar)
     /// - Parameter url: the url of a png file
     /// - Returns: CGImage
-    public static func loadPNG(url: URL) -> CGImage? {
+    static func loadPNG(url: URL) -> CGImage? {
         guard let data = try? Data(contentsOf: url) else { return nil }
         guard let cgProvider = CGDataProvider(data: data as CFData) else { return nil }
-        return CGImage(pngDataProviderSource: cgProvider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
+
+        return CGImage(
+            pngDataProviderSource: cgProvider,
+            decode: nil,
+            shouldInterpolate: false,
+            intent: .defaultIntent
+        )
     }
 
-    public static func loadJPG(url: URL) -> CGImage? {
+    // swiftlint:enable line_length
+
+    static func loadJPG(url: URL) -> CGImage? {
         guard let data = try? Data(contentsOf: url) else { return nil }
         guard let cgProvider = CGDataProvider(data: data as CFData) else { return nil }
-        return CGImage(jpegDataProviderSource: cgProvider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
+
+        return CGImage(
+            jpegDataProviderSource: cgProvider,
+            decode: nil,
+            shouldInterpolate: false,
+            intent: .defaultIntent
+        )
     }
 }

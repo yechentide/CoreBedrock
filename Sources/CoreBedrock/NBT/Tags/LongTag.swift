@@ -8,7 +8,7 @@ import Foundation
 public final class LongTag: NBT {
     // Override to return the .long type
     override public var tagType: TagType {
-        return .long
+        .long
     }
 
     /// Gets or sets the value/payload of this tag (a signed 64-bit integer).
@@ -16,19 +16,19 @@ public final class LongTag: NBT {
 
     /// Creates an unnamed `LongTag` tag with the default of value of 0.
     override public init() {
-        value = 0
+        self.value = 0
         super.init()
     }
 
     /// Creates an unnamed `LongTag` tag with the given value.
     /// - Parameter value: The value to assign to this tag.
-    convenience public init(_ value: Int64) {
+    public convenience init(_ value: Int64) {
         self.init(name: nil, value)
     }
 
     /// Creates an `LongTag` tag with the given name and the default value of 0.
     /// - Parameter name: The name to assign to this tag. May be `nil`.
-    convenience public init(name: String?) {
+    public convenience init(name: String?) {
         self.init(name: name, 0)
     }
 
@@ -51,7 +51,7 @@ public final class LongTag: NBT {
     }
 
     override public func clone() -> NBT {
-        return LongTag(from: self)
+        LongTag(from: self)
     }
 
     override func toString(indentString: String, indentLevel: Int) -> String {
@@ -60,13 +60,12 @@ public final class LongTag: NBT {
             formattedStr.append(indentString)
         }
         formattedStr.append("TAG_Double")
-        if name != nil && name!.count > 0 {
+        if name != nil, !name!.isEmpty {
             formattedStr.append("(\"\(name!)\")")
         }
         formattedStr.append(": ")
-        formattedStr.append(String(value))
+        formattedStr.append(String(self.value))
 
         return formattedStr
     }
-
 }

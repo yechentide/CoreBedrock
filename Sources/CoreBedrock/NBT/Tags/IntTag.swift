@@ -8,7 +8,7 @@ import Foundation
 public final class IntTag: NBT {
     // Override to return the .int type
     override public var tagType: TagType {
-        return .int
+        .int
     }
 
     /// Gets or sets the value/payload of this tag (a signed 32-bit integer).
@@ -16,19 +16,19 @@ public final class IntTag: NBT {
 
     /// Creates an unnamed `IntTag` tag with the default of value of 0.
     override public init() {
-        value = 0
+        self.value = 0
         super.init()
     }
 
     /// Creates an unnamed `IntTag` tag with the given value.
     /// - Parameter value: The value to assign to this tag.
-    convenience public init(_ value: Int32) {
+    public convenience init(_ value: Int32) {
         self.init(name: nil, value)
     }
 
     /// Creates an `IntTag` tag with the given name and the default value of 0.
     /// - Parameter name: The name to assign to this tag. May be `nil`.
-    convenience public init(name: String?) {
+    public convenience init(name: String?) {
         self.init(name: name, 0)
     }
 
@@ -51,7 +51,7 @@ public final class IntTag: NBT {
     }
 
     override public func clone() -> NBT {
-        return IntTag(from: self)
+        IntTag(from: self)
     }
 
     override func toString(indentString: String, indentLevel: Int) -> String {
@@ -60,11 +60,11 @@ public final class IntTag: NBT {
             formattedStr.append(indentString)
         }
         formattedStr.append("TAG_Int")
-        if name != nil && name!.count > 0 {
+        if name != nil, !name!.isEmpty {
             formattedStr.append("(\"\(name!)\")")
         }
         formattedStr.append(": ")
-        formattedStr.append(String(value))
+        formattedStr.append(String(self.value))
 
         return formattedStr
     }

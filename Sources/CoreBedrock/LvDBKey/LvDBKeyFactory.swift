@@ -15,7 +15,7 @@ public enum LvDBKeyFactory {
 
     public static func makeChunkKey(base: Data, type: LvDBChunkKeyType, yIndex: Int8? = nil) -> Data {
         var data = base + type.rawValue.data
-        if type == .subChunkPrefix, let yIndex = yIndex {
+        if type == .subChunkPrefix, let yIndex {
             data += yIndex.data
         }
         return data
@@ -24,27 +24,24 @@ public enum LvDBKeyFactory {
     public static func makeChunkKey(
         x: Int32, z: Int32, dimension: MCDimension, type: LvDBChunkKeyType, yIndex: Int8? = nil
     ) -> Data {
-        let baseKey = makeBaseChunkKey(x: x, z: z, dimension: dimension)
-        return makeChunkKey(base: baseKey, type: type, yIndex: yIndex)
+        let baseKey = self.makeBaseChunkKey(x: x, z: z, dimension: dimension)
+        return self.makeChunkKey(base: baseKey, type: type, yIndex: yIndex)
     }
 
     public static func makeDigpKey(base: Data) -> Data {
-        let data = "digp".data(using: .utf8)!
-        return data + base
+        Data("digp".utf8) + base
     }
 
     public static func makeDigpKey(x: Int32, z: Int32, dimension: MCDimension) -> Data {
-        let base = makeBaseChunkKey(x: x, z: z, dimension: dimension)
-        return makeDigpKey(base: base)
+        let base = self.makeBaseChunkKey(x: x, z: z, dimension: dimension)
+        return self.makeDigpKey(base: base)
     }
 
     public static func makeActorKey(id: Data) -> Data {
-        return "actorprefix".data(using: .utf8)! + id
+        Data("actorprefix".utf8) + id
     }
 
     public static func makeMapKey(id: Int64) -> Data {
-        var data = "map_".data(using: .utf8)!
-        data += id.data
-        return data
+        Data("map_".utf8) + id.data
     }
 }

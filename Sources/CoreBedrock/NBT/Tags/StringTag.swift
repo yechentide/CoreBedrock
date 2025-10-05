@@ -8,7 +8,7 @@ import Foundation
 public final class StringTag: NBT {
     // Override to return the .string type
     override public var tagType: TagType {
-        return .string
+        .string
     }
 
     /// The value/payload of this tag (a single string). May not be null.
@@ -16,13 +16,13 @@ public final class StringTag: NBT {
 
     /// Creates an unnamed `StringTag` tag with the default value (empty string).
     override public init() {
-        value = ""
+        self.value = ""
         super.init()
     }
 
     /// Creates an unnamed `StringTag` tag with the given value.
     /// - Parameter value: The `String` value to assign to this tag.
-    convenience public init(_ value: String) {
+    public convenience init(_ value: String) {
         self.init(name: nil, value)
     }
 
@@ -44,8 +44,8 @@ public final class StringTag: NBT {
         self.name = other.name
     }
 
-    public override func clone() -> NBT {
-        return StringTag(from: self)
+    override public func clone() -> NBT {
+        StringTag(from: self)
     }
 
     override func toString(indentString: String, indentLevel: Int) -> String {
@@ -54,11 +54,11 @@ public final class StringTag: NBT {
             formattedStr.append(indentString)
         }
         formattedStr.append("TAG_String")
-        if name != nil && name!.count > 0 {
+        if name != nil, !name!.isEmpty {
             formattedStr.append("(\"\(name!)\")")
         }
         formattedStr.append(": \"")
-        formattedStr.append(value)
+        formattedStr.append(self.value)
         formattedStr.append("\"")
 
         return formattedStr

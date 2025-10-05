@@ -2,20 +2,20 @@
 // Created by yechentide on 2025/05/31
 //
 
-import Testing
-import Foundation
 @testable import CoreBedrock
+import Foundation
+import Testing
 
 struct CBBufferTests {
     @Test
-    func testInitializationWithCapacity() throws {
+    func initializationWithCapacity() throws {
         let buffer = CBBuffer(capacity: 10)
         #expect(buffer.count == 10)
         #expect(buffer.currentPosition == 0)
     }
 
     @Test
-    func testInitializationWithData() throws {
+    func initializationWithData() throws {
         let data = Data([0x01, 0x02, 0x03])
         let buffer = CBBuffer(data: data)
         #expect(buffer.count == 3)
@@ -24,7 +24,7 @@ struct CBBufferTests {
     }
 
     @Test
-    func testInitializationWithBytes() throws {
+    func initializationWithBytes() throws {
         let bytes: [UInt8] = [0x01, 0x02, 0x03]
         let buffer = CBBuffer(bytes: bytes)
         #expect(buffer.count == 3)
@@ -33,12 +33,12 @@ struct CBBufferTests {
     }
 
     @Test
-    func testWriteAndReadBytes() throws {
+    func writeAndReadBytes() throws {
         let buffer = CBBuffer()
         let bytesToWrite: [UInt8] = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05]
 
         try buffer.write([])
-        #expect(buffer.count == 0)
+        #expect(buffer.isEmpty)
         #expect(buffer.currentPosition == 0)
 
         try buffer.write(bytesToWrite)
@@ -77,7 +77,7 @@ struct CBBufferTests {
     }
 
     @Test
-    func testSeek() async throws {
+    func testSeek() throws {
         let buffer = CBBuffer(data: Data([0x01, 0x02, 0x03, 0x04, 0x05]))
         #expect(buffer.currentPosition == 0)
 
@@ -139,7 +139,7 @@ struct CBBufferTests {
     }
 
     @Test
-    func testWriteReadIntegers() throws {
+    func writeReadIntegers() throws {
         let buffer = CBBuffer()
 
         let intValue: Int32 = 12345
@@ -152,7 +152,7 @@ struct CBBufferTests {
         #expect(readIntValue == intValue)
         #expect(buffer.currentPosition == MemoryLayout<Int32>.size)
 
-        let uintValue: UInt64 = 9876543210
+        let uintValue: UInt64 = 9_876_543_210
         try buffer.writeInteger(uintValue)
         #expect(buffer.count == MemoryLayout<Int32>.size + MemoryLayout<UInt64>.size)
         #expect(buffer.currentPosition == MemoryLayout<Int32>.size + MemoryLayout<UInt64>.size)
@@ -165,7 +165,7 @@ struct CBBufferTests {
         // Test reading past end
         let pastEndValue: Int16? = buffer.readInteger()
         #expect(pastEndValue == nil)
-        #expect(buffer.currentPosition == MemoryLayout<Int32>.size + MemoryLayout<UInt64>.size) // Position should not change
+        #expect(buffer.currentPosition == MemoryLayout<Int32>.size + MemoryLayout<UInt64>.size) // Position should not change // swiftlint:disable:this line_length
     }
 
     @Test
@@ -176,7 +176,7 @@ struct CBBufferTests {
     }
 
     @Test
-    func testWriteWithExistingData() throws {
+    func writeWithExistingData() throws {
         let initialData: [UInt8] = [0x01, 0x02, 0x03, 0x04, 0x05]
         let buffer = CBBuffer(data: Data(initialData))
         #expect(buffer.count == 5)
@@ -206,12 +206,12 @@ struct CBBufferTests {
         #expect(buffer.toArray() == [0xAA, 0xCC, 0xDD, 0xEE, 0x05, 0xFF, 0x11])
 
         // Write partially overwriting and appending
-        let buffer2 = CBBuffer(data: Data([1,2,3,4,5]))
+        let buffer2 = CBBuffer(data: Data([1, 2, 3, 4, 5]))
         try buffer2.seek(to: 3, from: .begin) // position at '4'
-        let newData4: [UInt8] = [10,11,12,13]
+        let newData4: [UInt8] = [10, 11, 12, 13]
         try buffer2.write(newData4)
         #expect(buffer2.count == 7) // 3 (original) + 4 (new)
         #expect(buffer2.currentPosition == 7)
-        #expect(buffer2.toArray() == [1,2,3,10,11,12,13])
+        #expect(buffer2.toArray() == [1, 2, 3, 10, 11, 12, 13])
     }
 }

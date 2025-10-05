@@ -13,6 +13,7 @@ public enum NetEaseWorldTransform {
         guard let currentFileData = try? Data(contentsOf: currentFileURL) else {
             throw NetEaseError.currentFileNotFound
         }
+
         return currentFileData
     }
 
@@ -20,6 +21,7 @@ public enum NetEaseWorldTransform {
         guard let currentFileData = try? readCurrentFileData(in: worldDirPath) else {
             return false
         }
+
         let type = NetEaseHeader.identifyHeader(in: currentFileData, isCurrentFile: true)
         return type == .neteaseEncrypted
     }
@@ -33,8 +35,8 @@ public enum NetEaseWorldTransform {
 
         try NetEaseFileProcessor.processFiles(
             in: dbDirPath,
-            shouldProcess: { (fileName, headerType) in
-                return headerType == .neteaseEncrypted && NetEaseFileProcessor.shouldProcessNetEaseFile(fileName)
+            shouldProcess: { fileName, headerType in
+                headerType == .neteaseEncrypted && NetEaseFileProcessor.shouldProcessNetEaseFile(fileName)
             },
             transform: { fileData in
                 try NetEaseCrypto.decryptFile(data: fileData, key: customKey)
@@ -53,8 +55,8 @@ public enum NetEaseWorldTransform {
         let dbDirPath = (worldDirPath as NSString).appendingPathComponent("db")
         try NetEaseFileProcessor.processFiles(
             in: dbDirPath,
-            shouldProcess: { (fileName, headerType) in
-                return headerType != .neteaseEncrypted && NetEaseFileProcessor.shouldProcessNetEaseFile(fileName)
+            shouldProcess: { fileName, headerType in
+                headerType != .neteaseEncrypted && NetEaseFileProcessor.shouldProcessNetEaseFile(fileName)
             },
             transform: { fileData in
                 try NetEaseCrypto.encryptFile(data: fileData, key: customKey)

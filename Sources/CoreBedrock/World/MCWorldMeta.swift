@@ -29,6 +29,7 @@ public struct MCWorldMeta {
         guard let tag = try reader.readNext() as? CompoundTag else {
             throw CBError.failedParseLevelData(levelDatURL)
         }
+
         self.tag = tag
     }
 
@@ -36,25 +37,26 @@ public struct MCWorldMeta {
         let levelDatURL = MCDir.generateURL(for: .levelDat, in: dirURL)
 
         let tagData = try tag.toData()
-        let metaRawData = version.data + Int32(tagData.count).data + tagData
+        let metaRawData = self.version.data + Int32(tagData.count).data + tagData
         try metaRawData.write(to: levelDatURL)
 
         let nameFileURL = MCDir.generateURL(for: .worldName, in: dirURL)
         let nameFilePath = MCDir.generatePath(for: .worldName, in: dirURL)
         if FileManager.default.fileExists(atPath: nameFilePath) {
-            if let worldName = worldName {
+            if let worldName {
                 try worldName.write(to: nameFileURL, atomically: true, encoding: .utf8)
             }
         }
     }
 
     // MARK: - getter / setter
+
     public var worldName: String? {
         get {
             if let name = tag["LevelName"]?.stringValue {
-                return name
+                name
             } else {
-                return nil
+                nil
             }
         }
         set {
@@ -65,12 +67,14 @@ public struct MCWorldMeta {
     }
 
     // MARK: - getters
+
     public var gameMode: MCGameMode {
         guard let modeRawValue = tag["GameType"]?.intValue,
               let mode = MCGameMode(rawValue: modeRawValue)
         else {
             return MCGameMode.unknown
         }
+
         return mode
     }
 
@@ -80,6 +84,7 @@ public struct MCWorldMeta {
         else {
             return MCGameDifficulty.unknown
         }
+
         return difficulty
     }
 
@@ -88,6 +93,7 @@ public struct MCWorldMeta {
         else {
             return nil
         }
+
         return inventoryVersion
     }
 
@@ -96,6 +102,7 @@ public struct MCWorldMeta {
         else {
             return nil
         }
+
         let lastPlayedDate = Date(timeIntervalSince1970: TimeInterval(lastPlayed))
         return lastPlayedDate.dateString
     }
@@ -106,8 +113,9 @@ public struct MCWorldMeta {
         else {
             return nil
         }
+
         return lastOpenedWithVertion.tags
-            .map {"\($0.intValue)"}
+            .map { "\($0.intValue)" }
             .joined(separator: ".")
     }
 
@@ -116,6 +124,7 @@ public struct MCWorldMeta {
         else {
             return nil
         }
+
         return seed
     }
 }

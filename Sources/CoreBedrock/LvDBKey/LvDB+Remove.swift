@@ -4,8 +4,8 @@
 
 import LvDBWrapper
 
-extension LvDB {
-    public func deleteAllChunks(in dimension: MCDimension) throws {
+public extension LvDB {
+    func deleteAllChunks(in dimension: MCDimension) throws {
         try autoreleasepool {
             let iter = try self.makeIterator()
             let batch = LvDBWriteBatch()
@@ -21,16 +21,17 @@ extension LvDB {
                 guard let key = iter.key() else {
                     break
                 }
+
                 autoreleasepool { [batch, iter] in
                     let keyType = LvDBKeyType.parse(data: key)
-                    if case LvDBKeyType.subChunk(_, _, let d, _, _) = keyType, d == dimension {
+                    if case let LvDBKeyType.subChunk(_, _, d, _, _) = keyType, d == dimension {
                         batch.remove(key)
                     }
-                    if case LvDBKeyType.digp(_, _, let d) = keyType, d == dimension {
+                    if case let LvDBKeyType.digp(_, _, d) = keyType, d == dimension {
                         batch.remove(key)
-                        if let digpData = iter.value(), digpData.count > 0, digpData.count % 8 == 0 {
-                            for i in 0..<digpData.count/8 {
-                                let actorprefixKey = "actorprefix".data(using: .utf8)! + digpData[i*8...i*8+7]
+                        if let digpData = iter.value(), !digpData.isEmpty, digpData.count % 8 == 0 {
+                            for i in 0..<digpData.count / 8 {
+                                let actorprefixKey = Data("actorprefix".utf8) + digpData[i * 8...i * 8 + 7]
                                 batch.remove(actorprefixKey)
                             }
                         }
@@ -52,7 +53,7 @@ extension LvDB {
         }
     }
 
-    public func deleteChunksWithinRange(
+    func deleteChunksWithinRange(
         in dimension: MCDimension,
         fromChunkX startX: Int32, fromChunkZ startZ: Int32,
         toChunkX endX: Int32, toChunkZ endZ: Int32
@@ -70,8 +71,8 @@ extension LvDB {
                     for z in zRange {
                         autoreleasepool { [batch] in
                             let prefix = LvDBKeyFactory.makeBaseChunkKey(x: x, z: z, dimension: dimension)
-                            removeChunkKeys(keyPrefix: prefix, batch: batch)
-                            removeActorAndDigpKeys(keyPrefix: prefix, batch: batch)
+                            self.removeChunkKeys(keyPrefix: prefix, batch: batch)
+                            self.removeActorAndDigpKeys(keyPrefix: prefix, batch: batch)
                         }
                         if batch.approximateSize() > 20000 {
                             if Task.isCancelled {
@@ -91,7 +92,7 @@ extension LvDB {
         }
     }
 
-    public func deleteChunksOutsideRange(
+    func deleteChunksOutsideRange(
         in dimension: MCDimension,
         fromChunkX startX: Int32, fromChunkZ startZ: Int32,
         toChunkX endX: Int32, toChunkZ endZ: Int32
@@ -113,20 +114,19 @@ extension LvDB {
                 guard let key = iter.key() else {
                     break
                 }
+
                 autoreleasepool { [batch, iter, key, dimension] in
                     let keyType = LvDBKeyType.parse(data: key)
-                    if case LvDBKeyType.subChunk(let cx, let cz, let d, _, _) = keyType,
-                       d == dimension, (!xRange.contains(cx) || !zRange.contains(cz))
-                    {
+                    if case let LvDBKeyType.subChunk(cx, cz, d, _, _) = keyType,
+                       d == dimension, !xRange.contains(cx) || !zRange.contains(cz) {
                         batch.remove(key)
                     }
-                    if case LvDBKeyType.digp(let cx, let cz, let d) = keyType,
-                       d == dimension, (!xRange.contains(cx) || !zRange.contains(cz))
-                    {
+                    if case let LvDBKeyType.digp(cx, cz, d) = keyType,
+                       d == dimension, !xRange.contains(cx) || !zRange.contains(cz) {
                         batch.remove(key)
-                        if let digpData = iter.value(), digpData.count > 0, digpData.count % 8 == 0 {
-                            for i in 0..<digpData.count/8 {
-                                let actorprefixKey = "actorprefix".data(using: .utf8)! + digpData[i*8...i*8+7]
+                        if let digpData = iter.value(), !digpData.isEmpty, digpData.count % 8 == 0 {
+                            for i in 0..<digpData.count / 8 {
+                                let actorprefixKey = Data("actorprefix".utf8) + digpData[i * 8...i * 8 + 7]
                                 batch.remove(actorprefixKey)
                             }
                         }
@@ -149,27 +149,29 @@ extension LvDB {
     }
 
     private func removeChunkKeys(keyPrefix: Data, batch: LvDBWriteBatch) {
-        (Int8(-4)...Int8(20)).forEach { yIndex in
+        for yIndex in Int8(-4)...Int8(20) {
             let key = keyPrefix + LvDBChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
             batch.remove(key)
         }
-        LvDBChunkKeyType.allCases.forEach { chunkKeyType in
+        for chunkKeyType in LvDBChunkKeyType.allCases {
             guard chunkKeyType != .subChunkPrefix else {
-                return
+                continue
             }
+
             let key = keyPrefix + chunkKeyType.rawValue.data
             batch.remove(key)
         }
     }
 
     private func removeActorAndDigpKeys(keyPrefix: Data, batch: LvDBWriteBatch) {
-        let digpKey = "digp".data(using: .utf8)! + keyPrefix
+        let digpKey = Data("digp".utf8) + keyPrefix
 
-        guard let digpData = try? get(digpKey), digpData.count > 0, digpData.count % 8 == 0 else {
+        guard let digpData = try? get(digpKey), !digpData.isEmpty, digpData.count % 8 == 0 else {
             return
         }
-        for i in 0..<digpData.count/8 {
-            let actorprefixKey = "actorprefix".data(using: .utf8)! + digpData[i*8...i*8+7]
+
+        for i in 0..<digpData.count / 8 {
+            let actorprefixKey = Data("actorprefix".utf8) + digpData[i * 8...i * 8 + 7]
             batch.remove(actorprefixKey)
         }
         batch.remove(digpKey)

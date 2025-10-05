@@ -8,7 +8,7 @@ import Foundation
 public final class ShortTag: NBT {
     // Override to return the .short type
     override public var tagType: TagType {
-        return .short
+        .short
     }
 
     /// Gets or sets the value/payload of this tag (a signed 16-bit integer).
@@ -16,19 +16,19 @@ public final class ShortTag: NBT {
 
     /// Creates an unnamed `ShortTag` tag with the default of value of 0.
     override public init() {
-        value = 0
+        self.value = 0
         super.init()
     }
 
     /// Creates an unnamed `ShortTag` tag with the given value.
     /// - Parameter value: The value to assign to this tag.
-    convenience public init(_ value: Int16) {
+    public convenience init(_ value: Int16) {
         self.init(name: nil, value)
     }
 
     /// Creates an `ShortTag` tag with the given name and the default value of 0.
     /// - Parameter name: The name to assign to this tag. May be `nil`.
-    convenience public init(name: String?) {
+    public convenience init(name: String?) {
         self.init(name: name, 0)
     }
 
@@ -51,7 +51,7 @@ public final class ShortTag: NBT {
     }
 
     override public func clone() -> NBT {
-        return ShortTag(from: self)
+        ShortTag(from: self)
     }
 
     override func toString(indentString: String, indentLevel: Int) -> String {
@@ -60,13 +60,12 @@ public final class ShortTag: NBT {
             formattedStr.append(indentString)
         }
         formattedStr.append("TAG_Short")
-        if name != nil && name!.count > 0 {
+        if name != nil, !name!.isEmpty {
             formattedStr.append("(\"\(name!)\")")
         }
         formattedStr.append(": ")
-        formattedStr.append(String(value))
+        formattedStr.append(String(self.value))
 
         return formattedStr
     }
-
 }

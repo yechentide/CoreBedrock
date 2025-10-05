@@ -2,10 +2,12 @@
 // Created by yechentide on 2025/05/31
 //
 
-import Testing
+@testable import CoreBedrock
 import Foundation
 import LvDBWrapper
-@testable import CoreBedrock
+import Testing
+
+// swiftlint:disable line_length
 
 struct LvDBTests {
     // Helper function to create a temporary path for LevelDB
@@ -24,8 +26,8 @@ struct LvDBTests {
     }
 
     @Test
-    func testChunkExists_withVersionKey() throws {
-        let dbPath = temporaryDBPath()
+    func chunkExists_withVersionKey() throws {
+        let dbPath = self.temporaryDBPath()
         let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
@@ -42,8 +44,8 @@ struct LvDBTests {
     }
 
     @Test
-    func testChunkExists_withLegacyVersionKey() throws {
-        let dbPath = temporaryDBPath()
+    func chunkExists_withLegacyVersionKey() throws {
+        let dbPath = self.temporaryDBPath()
         let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
@@ -61,8 +63,8 @@ struct LvDBTests {
     }
 
     @Test
-    func testChunkExists_whenDoesNotExist() throws {
-        let dbPath = temporaryDBPath()
+    func chunkExists_whenDoesNotExist() throws {
+        let dbPath = self.temporaryDBPath()
         let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
@@ -76,8 +78,8 @@ struct LvDBTests {
     }
 
     @Test
-    func testChunkExists_withInvalidData() throws {
-        let dbPath = temporaryDBPath()
+    func chunkExists_withInvalidData() throws {
+        let dbPath = self.temporaryDBPath()
         let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
@@ -94,8 +96,8 @@ struct LvDBTests {
     }
 
     @Test
-    func testChunkExists_inDifferentDimension() throws {
-        let dbPath = temporaryDBPath()
+    func chunkExists_inDifferentDimension() throws {
+        let dbPath = self.temporaryDBPath()
         let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
@@ -112,8 +114,8 @@ struct LvDBTests {
     }
 
     @Test
-    func testScanExistingChunks_overworld() throws {
-        let dbPath = temporaryDBPath()
+    func scanExistingChunks_overworld() throws {
+        let dbPath = self.temporaryDBPath()
         let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
@@ -129,12 +131,10 @@ struct LvDBTests {
         // This key should represent a type that scanExistingChunks is NOT looking for.
         let nonChunkVersionKey = LvDBKeyFactory.makeChunkKey(x: 3, z: 3, dimension: .overworld, type: .subChunkPrefix, yIndex: 0)
 
-
         try db.put(overworldChunk1Key, versionData)
         try db.put(overworldChunk2Key, versionData)
         try db.put(netherChunkKey, versionData)
-        try db.put(nonChunkVersionKey, Data([0x01,0x02,0x03]))
-
+        try db.put(nonChunkVersionKey, Data([0x01, 0x02, 0x03]))
 
         var foundOverworldChunks = [(Int32, Int32)]()
         let scanResult = db.scanExistingChunks(dimension: .overworld) { x, z in
@@ -148,8 +148,8 @@ struct LvDBTests {
     }
 
     @Test
-    func testScanExistingChunks_nether() throws {
-        let dbPath = temporaryDBPath()
+    func scanExistingChunks_nether() throws {
+        let dbPath = self.temporaryDBPath()
         let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
@@ -159,15 +159,14 @@ struct LvDBTests {
         let overworldChunkKey = LvDBKeyFactory.makeChunkKey(x: 1, z: 1, dimension: .overworld, type: .chunkVersion)
         let netherChunk1Key = LvDBKeyFactory.makeChunkKey(x: 2, z: 1, dimension: .theNether, type: .chunkVersion)
         let netherChunk2Key = LvDBKeyFactory.makeChunkKey(x: 2, z: 2, dimension: .theNether, type: .legacyChunkVersion)
-         // Add a non-chunk version key to ensure it's ignored
+        // Add a non-chunk version key to ensure it's ignored
         // This key should represent a type that scanExistingChunks is NOT looking for.
         let nonChunkVersionKey = LvDBKeyFactory.makeChunkKey(x: 3, z: 3, dimension: .theNether, type: .subChunkPrefix, yIndex: 0)
-
 
         try db.put(overworldChunkKey, versionData)
         try db.put(netherChunk1Key, versionData)
         try db.put(netherChunk2Key, versionData)
-        try db.put(nonChunkVersionKey, Data([0x01,0x02,0x03]))
+        try db.put(nonChunkVersionKey, Data([0x01, 0x02, 0x03]))
 
         var foundNetherChunks = [(Int32, Int32)]()
         let scanResult = db.scanExistingChunks(dimension: .theNether) { x, z in
@@ -181,8 +180,8 @@ struct LvDBTests {
     }
 
     @Test
-    func testScanExistingChunks_handlerStopsEarly() throws {
-        let dbPath = temporaryDBPath()
+    func scanExistingChunks_handlerStopsEarly() throws {
+        let dbPath = self.temporaryDBPath()
         let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
@@ -196,7 +195,7 @@ struct LvDBTests {
         try db.put(overworldChunk2Key, versionData)
 
         var processedCount = 0
-        let scanResult = db.scanExistingChunks(dimension: .overworld) { x, z in
+        let scanResult = db.scanExistingChunks(dimension: .overworld) { _, _ in
             processedCount += 1
             return false // Stop after the first one
         }
@@ -205,8 +204,8 @@ struct LvDBTests {
     }
 
     @Test
-    func testScanExistingChunks_emptyDimension() throws {
-        let dbPath = temporaryDBPath()
+    func scanExistingChunks_emptyDimension() throws {
+        let dbPath = self.temporaryDBPath()
         let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
@@ -226,3 +225,5 @@ struct LvDBTests {
         #expect(foundTheEndChunks.isEmpty)
     }
 }
+
+// swiftlint:enable line_length

@@ -4,7 +4,7 @@
 
 import Foundation
 
-internal enum NetEaseKeyDerivation {
+enum NetEaseKeyDerivation {
     static func deriveKey(dbDirPath: String, currentFileData: Data) throws -> Data {
         let currentBody = currentFileData.dropFirst(NetEaseConstants.headerSize)
         guard currentBody.count >= NetEaseConstants.expectedKeyLength else {
@@ -30,6 +30,7 @@ internal enum NetEaseKeyDerivation {
         guard first8 == last8 else {
             throw NetEaseError.keyVerificationFailed
         }
+
         return first8
     }
 }

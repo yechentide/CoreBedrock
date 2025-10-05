@@ -4,7 +4,7 @@
 
 import Foundation
 
-internal enum NetEaseHeader {
+enum NetEaseHeader {
     case neteaseEncrypted
     case bedrockCurrentFile
     case unknown
@@ -24,6 +24,7 @@ internal enum NetEaseHeader {
         guard data.count >= 4 else {
             return .unknown
         }
+
         let headerBytes = data[0..<4]
         if headerBytes == Self.neteaseEncrypted.data {
             return .neteaseEncrypted
@@ -38,10 +39,12 @@ internal enum NetEaseHeader {
         guard expectHeader != .unknown else {
             return
         }
+
         let actualHeader = Self.identifyHeader(in: currentFileData, isCurrentFile: true)
         guard actualHeader != .unknown else {
             throw NetEaseError.invalidHeader
         }
+
         if expectHeader == .bedrockCurrentFile {
             // Expecting Bedrock CURRENT file for encryption operation
             if actualHeader == .bedrockCurrentFile {

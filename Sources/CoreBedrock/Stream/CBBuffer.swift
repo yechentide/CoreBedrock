@@ -14,7 +14,7 @@ public final class CBBuffer: CustomStringConvertible {
     // MARK: - Properties
 
     private var buffer: Data
-    private(set) var currentPosition: Int = 0
+    private(set) var currentPosition = 0
 
     // MARK: - Initializers
 
@@ -32,48 +32,52 @@ public final class CBBuffer: CustomStringConvertible {
 
     // MARK: - Computed Properties
 
+    public var isEmpty: Bool {
+        self.buffer.isEmpty
+    }
+
     public var count: Int {
-        return buffer.count
+        self.buffer.count
     }
 
     public var description: String {
-        "CBBufferV2(position: \(currentPosition), count: \(count), buffer: \(buffer.hexString))"
+        "CBBufferV2(position: \(self.currentPosition), count: \(self.count), buffer: \(self.buffer.hexString))"
     }
 
     public func seek(to offset: Int, from origin: SeekOrigin) throws {
-        let newPos: Int
-        switch origin {
-            case .begin:
-                newPos = offset
-            case .current:
-                newPos = currentPosition + offset
-            case .end:
-                newPos = buffer.count + offset
+        let newPos: Int = switch origin {
+        case .begin:
+            offset
+        case .current:
+            self.currentPosition + offset
+        case .end:
+            self.buffer.count + offset
         }
 
-        guard (0...buffer.count).contains(newPos) else {
+        guard (0...self.buffer.count).contains(newPos) else {
             throw CBStreamError.outOfBounds
         }
-        currentPosition = newPos
+
+        self.currentPosition = newPos
     }
 
     public func toArray() -> [UInt8] {
-        return [UInt8](buffer)
+        [UInt8](self.buffer)
     }
 
     public func resize(to newSize: Int) {
-        if newSize < buffer.count {
-            buffer = buffer.prefix(newSize)
-        } else if newSize > buffer.count {
-            buffer.append(Data(count: newSize - buffer.count))
+        if newSize < self.buffer.count {
+            self.buffer = self.buffer.prefix(newSize)
+        } else if newSize > self.buffer.count {
+            self.buffer.append(Data(count: newSize - self.buffer.count))
         }
-        if currentPosition > newSize {
-            currentPosition = newSize
+        if self.currentPosition > newSize {
+            self.currentPosition = newSize
         }
     }
 
     public func read(into output: inout [UInt8], count: Int) throws -> Int {
-        let available = buffer.count - currentPosition
+        let available = self.buffer.count - self.currentPosition
         guard available > 0 else { return 0 }
 
         let bytesToRead = min(count, available)
@@ -83,36 +87,37 @@ public final class CBBuffer: CustomStringConvertible {
             output.removeLast(output.count - bytesToRead)
         }
         output.withUnsafeMutableBytes { dstPtr in
-            buffer.copyBytes(
+            self.buffer.copyBytes(
                 to: dstPtr.baseAddress!.assumingMemoryBound(to: UInt8.self),
-                from: currentPosition..<(currentPosition + bytesToRead)
+                from: self.currentPosition..<(self.currentPosition + bytesToRead)
             )
         }
-        currentPosition += bytesToRead
+        self.currentPosition += bytesToRead
         return bytesToRead
     }
 
     public func write(_ input: [UInt8]) throws {
-        if currentPosition == buffer.count {
-            buffer.append(contentsOf: input)
+        if self.currentPosition == self.buffer.count {
+            self.buffer.append(contentsOf: input)
         } else {
-            if currentPosition + input.count > buffer.count {
-                buffer.append(Data(count: currentPosition + input.count - buffer.count))
+            if self.currentPosition + input.count > self.buffer.count {
+                self.buffer.append(Data(count: self.currentPosition + input.count - self.buffer.count))
             }
-            buffer.replaceSubrange(currentPosition..<(currentPosition + input.count), with: input)
+            self.buffer.replaceSubrange(self.currentPosition..<(self.currentPosition + input.count), with: input)
         }
-        currentPosition += input.count
+        self.currentPosition += input.count
     }
 }
 
-extension CBBuffer {
-    public func readInteger<T: FixedWidthInteger>() -> T? {
+public extension CBBuffer {
+    func readInteger<T: FixedWidthInteger>() -> T? {
         let size = MemoryLayout<T>.size
-        guard currentPosition + size <= buffer.count else { return nil }
-        return buffer.withUnsafeBytes { rawBuffer in
+        guard self.currentPosition + size <= self.buffer.count else { return nil }
+
+        return self.buffer.withUnsafeBytes { rawBuffer in
             guard let baseAddress = rawBuffer.baseAddress?.advanced(by: currentPosition) else { return nil }
 
-            currentPosition += size
+            self.currentPosition += size
             if Int(bitPattern: baseAddress) % MemoryLayout<T>.alignment == 0 {
                 // aligned: safe to load directly
                 let value = baseAddress.load(as: T.self)
@@ -126,21 +131,21 @@ extension CBBuffer {
         }
     }
 
-    public func writeInteger<T: FixedWidthInteger>(_ value: T) throws {
+    func writeInteger(_ value: some FixedWidthInteger) throws {
         var val = value.littleEndian
         let data = withUnsafeBytes(of: &val) { Data($0) }
-        try write([UInt8](data))
+        try self.write([UInt8](data))
     }
 
-    public func asInputStream() -> InputStream {
-        return InputStream(data: buffer)
+    func asInputStream() -> InputStream {
+        InputStream(data: self.buffer)
     }
 
-    public func asOutputStream() -> OutputStream {
+    func asOutputStream() -> OutputStream {
         let stream = OutputStream.toMemory()
         stream.open()
-        _ = buffer.withUnsafeBytes {
-            stream.write($0.bindMemory(to: UInt8.self).baseAddress!, maxLength: buffer.count)
+        _ = self.buffer.withUnsafeBytes {
+            stream.write($0.bindMemory(to: UInt8.self).baseAddress!, maxLength: self.buffer.count)
         }
         return stream
     }

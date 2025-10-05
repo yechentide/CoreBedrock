@@ -5,7 +5,7 @@
 import Foundation
 import LvDBWrapper
 
-internal enum NetEasePlayerDataProcessor {
+enum NetEasePlayerDataProcessor {
     static func processPlayerData(
         worldDir: String,
         transform: (Data) throws -> Data?
@@ -22,7 +22,7 @@ internal enum NetEasePlayerDataProcessor {
             }
         } catch {
             let lvdbError = LvDBError(nsError: error as NSError)
-            guard case LvDBError.notFound(_) = lvdbError else {
+            guard case LvDBError.notFound = lvdbError else {
                 throw error
             }
         }

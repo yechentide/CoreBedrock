@@ -1,10 +1,10 @@
-import Testing
-import Foundation
 @testable import CoreBedrock
+import Foundation
+import Testing
 
 struct NetEaseCryptoTests {
     @Test
-    func testApplyXORWithEmptyKey() async {
+    func applyXORWithEmptyKey() {
         let data = Data([0x01, 0x02, 0x03, 0x04])
         let key = Data()
 
@@ -14,7 +14,7 @@ struct NetEaseCryptoTests {
     }
 
     @Test
-    func testApplyXORWithSingleByteKey() async {
+    func applyXORWithSingleByteKey() {
         let data = Data([0x01, 0x02, 0x03, 0x04])
         let key = Data([0xFF])
 
@@ -25,7 +25,7 @@ struct NetEaseCryptoTests {
     }
 
     @Test
-    func testApplyXORWithMultiByteKey() async {
+    func applyXORWithMultiByteKey() {
         let data = Data([0x01, 0x02, 0x03, 0x04, 0x05, 0x06])
         let key = Data([0xFF, 0x00])
 
@@ -36,7 +36,7 @@ struct NetEaseCryptoTests {
     }
 
     @Test
-    func testApplyXORIsReversible() async {
+    func applyXORIsReversible() {
         let originalData = Data([0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0])
         let key = Data([0xAB, 0xCD, 0xEF])
 
@@ -47,7 +47,7 @@ struct NetEaseCryptoTests {
     }
 
     @Test
-    func testApplyXORWithEmptyData() async {
+    func applyXORWithEmptyData() {
         let data = Data()
         let key = Data([0xFF, 0x00])
 
@@ -57,7 +57,7 @@ struct NetEaseCryptoTests {
     }
 
     @Test
-    func testDecryptFileSuccess() async throws {
+    func decryptFileSuccess() throws {
         let header = NetEaseHeader.neteaseEncrypted.data
         let encryptedBody = Data([0x12, 0x34, 0x56, 0x78])
         let fileData = header + encryptedBody
@@ -70,7 +70,7 @@ struct NetEaseCryptoTests {
     }
 
     @Test
-    func testDecryptFileWithMinimalData() async throws {
+    func decryptFileWithMinimalData() throws {
         let header = NetEaseHeader.neteaseEncrypted.data
         let fileData = header
         let key = Data([0xFF])
@@ -81,7 +81,7 @@ struct NetEaseCryptoTests {
     }
 
     @Test
-    func testDecryptFileWithShortData() async throws {
+    func decryptFileWithShortData() throws {
         let shortData = Data([0x01, 0x02])
         let key = Data([0xFF])
 
@@ -91,7 +91,7 @@ struct NetEaseCryptoTests {
     }
 
     @Test
-    func testEncryptFileSuccess() async throws {
+    func encryptFileSuccess() throws {
         let originalData = Data([0x12, 0x34, 0x56, 0x78])
         let key = Data([0xFF, 0x00])
 
@@ -105,7 +105,7 @@ struct NetEaseCryptoTests {
     }
 
     @Test
-    func testEncryptFileWithEmptyData() async throws {
+    func encryptFileWithEmptyData() throws {
         let originalData = Data()
         let key = Data([0xFF, 0x00])
 
@@ -116,7 +116,7 @@ struct NetEaseCryptoTests {
     }
 
     @Test
-    func testEncryptThenDecryptRoundTrip() async throws {
+    func encryptThenDecryptRoundTrip() throws {
         let originalData = Data([0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88])
         let key = Data([0xAA, 0xBB, 0xCC])
 
@@ -127,7 +127,7 @@ struct NetEaseCryptoTests {
     }
 
     @Test
-    func testEncryptPreservesHeaderFormat() async throws {
+    func encryptPreservesHeaderFormat() throws {
         let originalData = Data([0x01, 0x02, 0x03])
         let key = Data([0xFF])
 
@@ -140,7 +140,7 @@ struct NetEaseCryptoTests {
     }
 
     @Test
-    func testLargeDataEncryptionDecryption() async throws {
+    func largeDataEncryptionDecryption() throws {
         let largeData = Data((0..<1000).map { UInt8($0 % 256) })
         let key = Data([0x12, 0x34, 0x56, 0x78])
 

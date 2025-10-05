@@ -1,10 +1,10 @@
-import Testing
-import Foundation
 @testable import CoreBedrock
+import Foundation
+import Testing
 
 struct NetEaseFileProcessorTests {
     @Test(.withTemporaryNetEaseWorld)
-    func testFindManifestFileSuccess() async throws {
+    func findManifestFileSuccess() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 
@@ -16,7 +16,7 @@ struct NetEaseFileProcessorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func testFindManifestFileNotFoundError() async throws {
+    func findManifestFileNotFoundError() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         #expect(throws: NetEaseError.manifestFileNotFound) {
             try NetEaseFileProcessor.findManifestFile(in: directoryPath)
@@ -24,7 +24,7 @@ struct NetEaseFileProcessorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func testFindManifestFileDbNotFoundError() async throws {
+    func findManifestFileDbNotFoundError() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let nonExistentPath = "\(directoryPath)/does-not-exist"
         #expect(throws: NetEaseError.dbNotFound(nonExistentPath)) {
@@ -33,24 +33,24 @@ struct NetEaseFileProcessorTests {
     }
 
     @Test
-    func testShouldProcessNetEaseFileWithCurrentFile() async {
+    func shouldProcessNetEaseFileWithCurrentFile() {
         #expect(NetEaseFileProcessor.shouldProcessNetEaseFile("CURRENT"))
     }
 
     @Test
-    func testShouldProcessNetEaseFileWithManifestFile() async {
+    func shouldProcessNetEaseFileWithManifestFile() {
         #expect(NetEaseFileProcessor.shouldProcessNetEaseFile("MANIFEST-000048"))
         #expect(NetEaseFileProcessor.shouldProcessNetEaseFile("MANIFEST-123456"))
     }
 
     @Test
-    func testShouldProcessNetEaseFileWithLdbFile() async {
+    func shouldProcessNetEaseFileWithLdbFile() {
         #expect(NetEaseFileProcessor.shouldProcessNetEaseFile("000052.ldb"))
         #expect(NetEaseFileProcessor.shouldProcessNetEaseFile("test.ldb"))
     }
 
     @Test
-    func testShouldProcessNetEaseFileWithOtherFiles() async {
+    func shouldProcessNetEaseFileWithOtherFiles() {
         #expect(!NetEaseFileProcessor.shouldProcessNetEaseFile("000050.log"))
         #expect(!NetEaseFileProcessor.shouldProcessNetEaseFile("random.txt"))
         #expect(!NetEaseFileProcessor.shouldProcessNetEaseFile("data.db"))
@@ -58,7 +58,7 @@ struct NetEaseFileProcessorTests {
     }
 
     @Test(.withTemporaryNetEaseWorld)
-    func testProcessFilesSuccess() async throws {
+    func processFilesSuccess() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 
@@ -73,7 +73,7 @@ struct NetEaseFileProcessorTests {
                 return false // Don't actually transform files in this test
             },
             transform: { data in
-                return data // Identity transform
+                data // Identity transform
             }
         )
 
@@ -87,7 +87,7 @@ struct NetEaseFileProcessorTests {
     }
 
     @Test(.withTemporaryNetEaseWorld)
-    func testProcessFilesWithTransformation() async throws {
+    func processFilesWithTransformation() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 
@@ -104,7 +104,7 @@ struct NetEaseFileProcessorTests {
         try NetEaseFileProcessor.processFiles(
             in: dbDirPath,
             shouldProcess: { fileName, _ in
-                return fileName == "test_file.ldb"
+                fileName == "test_file.ldb"
             },
             transform: { _ in
                 transformCallCount += 1
@@ -119,7 +119,7 @@ struct NetEaseFileProcessorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func testProcessFilesDbNotFoundError() async throws {
+    func processFilesDbNotFoundError() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let nonExistentPath = "\(directoryPath)/does-not-exist"
 
@@ -133,7 +133,7 @@ struct NetEaseFileProcessorTests {
     }
 
     @Test(.withTemporaryNetEaseWorld)
-    func testProcessFilesWithSelectiveProcessing() async throws {
+    func processFilesWithSelectiveProcessing() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 
@@ -149,7 +149,7 @@ struct NetEaseFileProcessorTests {
                 return false // Don't actually transform
             },
             transform: { data in
-                return data
+                data
             }
         )
 
@@ -159,7 +159,7 @@ struct NetEaseFileProcessorTests {
     }
 
     @Test(.withTemporaryNetEaseWorld)
-    func testProcessFilesHeaderIdentification() async throws {
+    func processFilesHeaderIdentification() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 
@@ -195,7 +195,7 @@ struct NetEaseFileProcessorTests {
     }
 
     @Test(.withTemporaryNetEaseWorld)
-    func testProcessFilesTransformError() async throws {
+    func processFilesTransformError() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 
@@ -207,7 +207,7 @@ struct NetEaseFileProcessorTests {
             try NetEaseFileProcessor.processFiles(
                 in: dbDirPath,
                 shouldProcess: { fileName, _ in
-                    return fileName == "CURRENT"
+                    fileName == "CURRENT"
                 },
                 transform: { _ in
                     throw TestError.transformFailed

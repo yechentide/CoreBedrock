@@ -2,8 +2,8 @@
 // Created by yechentide on 2025/08/23
 //
 
-import Testing
 import Foundation
+import Testing
 
 extension Trait where Self == TemporaryDatabaseTrait {
     static var withTemporaryDatabase: Self {
@@ -13,16 +13,16 @@ extension Trait where Self == TemporaryDatabaseTrait {
 
 struct TemporaryDatabaseTrait: TestTrait, TestScoping {
     enum Context {
-        @TaskLocal static var dbPath: String = ""
+        @TaskLocal static var dbPath = ""
     }
 
     func provideScope(
-        for test: Test,
-        testCase: Test.Case?,
+        for _: Test,
+        testCase _: Test.Case?,
         performing function: @Sendable () async throws -> Void
     ) async throws {
         print()
-        let dbPath = createTemporaryDatabase()
+        let dbPath = self.createTemporaryDatabase()
         defer {
             deleteTemporaryDatabase(dbPath)
         }
@@ -43,10 +43,12 @@ struct TemporaryDatabaseTrait: TestTrait, TestScoping {
         let temporaryDBURL: URL
         if #available(iOS 16.0, macOS 13.0, *) {
             sourceDBURL = URL(filePath: testDataPath, directoryHint: .isDirectory)
-            temporaryDBURL = FileManager.default.temporaryDirectory.appending(component: tempDBDirName, directoryHint: .isDirectory)
+            temporaryDBURL = FileManager.default.temporaryDirectory
+                .appending(component: tempDBDirName, directoryHint: .isDirectory)
         } else {
             sourceDBURL = URL(fileURLWithPath: testDataPath, isDirectory: true)
-            temporaryDBURL = FileManager.default.temporaryDirectory.appendingPathComponent(tempDBDirName, isDirectory: true)
+            temporaryDBURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent(tempDBDirName, isDirectory: true)
         }
 
         do {

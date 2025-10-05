@@ -2,9 +2,12 @@
 // Created by yechentide on 2024/10/04
 //
 
-import Testing
-import Foundation
 @testable import CoreBedrock
+import Foundation
+import Testing
+
+// swiftlint:disable colon
+// swiftformat:disable consecutiveSpaces spaceAroundOperators
 
 struct StringTests {
     let testCases: [String:Data?] = [
@@ -23,9 +26,12 @@ struct StringTests {
     ]
 
     @Test
-    func testHexData() async {
-        for (key, value) in testCases {
+    func testHexData() {
+        for (key, value) in self.testCases {
             #expect(key.hexData ?? nil == value ?? nil)
         }
     }
 }
+
+// swiftformat:enable consecutiveSpaces spaceAroundOperators
+// swiftlint:enable colon

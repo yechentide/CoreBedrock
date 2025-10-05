@@ -1,10 +1,10 @@
-import Testing
-import Foundation
 @testable import CoreBedrock
+import Foundation
+import Testing
 
 struct NetEaseKeyDerivationTests {
     @Test(.withTemporaryNetEaseWorld)
-    func testDeriveKeySuccess() async throws {
+    func deriveKeySuccess() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 
@@ -34,7 +34,7 @@ struct NetEaseKeyDerivationTests {
     }
 
     @Test(.withTemporaryNetEaseWorld)
-    func testDeriveKeyWithInvalidCurrentFileData() async throws {
+    func deriveKeyWithInvalidCurrentFileData() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 
@@ -48,7 +48,7 @@ struct NetEaseKeyDerivationTests {
     }
 
     @Test(.withTemporaryNetEaseWorld)
-    func testDeriveKeyWithKeyVerificationFailure() async throws {
+    func deriveKeyWithKeyVerificationFailure() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 
@@ -57,7 +57,7 @@ struct NetEaseKeyDerivationTests {
         // Create current body that results in first8 != last8
         let manifestBytes = Data("MANIFEST-000048\n".utf8)
         let mismatchedKeyPattern = Data([0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88,
-                                       0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00])
+                                         0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00])
 
         var currentBody = Data(count: NetEaseConstants.expectedKeyLength)
         for index in 0..<NetEaseConstants.expectedKeyLength {
@@ -72,7 +72,7 @@ struct NetEaseKeyDerivationTests {
     }
 
     @Test(.withEmptyDirectory)
-    func testDeriveKeyWithNonexistentDbDir() async throws {
+    func deriveKeyWithNonexistentDbDir() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let nonExistentPath = "\(directoryPath)/does-not-exist"
         let header = NetEaseHeader.bedrockCurrentFile.data
@@ -85,7 +85,7 @@ struct NetEaseKeyDerivationTests {
     }
 
     @Test(.withEmptyDirectory)
-    func testDeriveKeyWithEmptyDbDir() async throws {
+    func deriveKeyWithEmptyDbDir() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
 
         let header = NetEaseHeader.bedrockCurrentFile.data
@@ -98,7 +98,7 @@ struct NetEaseKeyDerivationTests {
     }
 
     @Test(.withTemporaryNetEaseWorld)
-    func testDeriveKeyWithMinimalValidCurrentFile() async throws {
+    func deriveKeyWithMinimalValidCurrentFile() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 
@@ -123,7 +123,7 @@ struct NetEaseKeyDerivationTests {
     }
 
     @Test(.withTemporaryNetEaseWorld)
-    func testDeriveKeyWithExtraDataInCurrentFile() async throws {
+    func deriveKeyWithExtraDataInCurrentFile() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 
@@ -152,7 +152,7 @@ struct NetEaseKeyDerivationTests {
     }
 
     @Test(.withTemporaryNetEaseWorld)
-    func testDeriveKeyXOROperation() async throws {
+    func deriveKeyXOROperation() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 
@@ -184,12 +184,12 @@ struct NetEaseKeyDerivationTests {
             let manifestByte = manifestBytes[index]
             let derivedByte = derivedKey[index]
             #expect(currentByte ^ manifestByte == derivedByte,
-                   "XOR operation failed at index \(index): \(currentByte) ^ \(manifestByte) != \(derivedByte)")
+                    "XOR operation failed at index \(index): \(currentByte) ^ \(manifestByte) != \(derivedByte)")
         }
     }
 
     @Test(.withTemporaryNetEaseWorld)
-    func testDeriveKeyConsistency() async throws {
+    func deriveKeyConsistency() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 
@@ -216,7 +216,7 @@ struct NetEaseKeyDerivationTests {
     }
 
     @Test(.withTemporaryNetEaseWorld)
-    func testDeriveKeyEdgeCaseAllZeros() async throws {
+    func deriveKeyEdgeCaseAllZeros() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 
@@ -239,7 +239,7 @@ struct NetEaseKeyDerivationTests {
     }
 
     @Test(.withTemporaryNetEaseWorld)
-    func testDeriveKeyEdgeCaseAllOnes() async throws {
+    func deriveKeyEdgeCaseAllOnes() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
         let dbDirPath = "\(worldDirPath)/db"
 

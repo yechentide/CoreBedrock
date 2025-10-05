@@ -2,8 +2,8 @@
 // Created by yechentide on 2025/08/23
 //
 
-import Testing
 import Foundation
+import Testing
 
 extension Trait where Self == EmptyDirectoryTrait {
     static var withEmptyDirectory: Self {
@@ -13,12 +13,12 @@ extension Trait where Self == EmptyDirectoryTrait {
 
 struct EmptyDirectoryTrait: TestTrait, TestScoping {
     enum Context {
-        @TaskLocal static var directoryPath: String = ""
+        @TaskLocal static var directoryPath = ""
     }
 
     func provideScope(
-        for test: Test,
-        testCase: Test.Case?,
+        for _: Test,
+        testCase _: Test.Case?,
         performing function: @Sendable () async throws -> Void
     ) async throws {
         print()

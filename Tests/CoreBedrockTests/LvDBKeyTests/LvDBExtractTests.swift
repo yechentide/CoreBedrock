@@ -2,15 +2,17 @@
 // Created by yechentide on 2025/05/25
 //
 
-import Testing
+@testable import CoreBedrock
 import Foundation
 import LvDBWrapper
-@testable import CoreBedrock
+import Testing
 
 struct ExtractTests {
     @Test
-    func testGetStringKey() async throws {
-        let dbPath = FileManager.default.temporaryDirectory.appendingPathComponent("test_lvdb_\(UUID().uuidString)").path
+    func testGetStringKey() throws {
+        let dbPath = FileManager.default.temporaryDirectory
+            .appendingPathComponent("test_lvdb_\(UUID().uuidString)")
+            .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
         let db = try LvDB(dbPath: dbPath, createIfMissing: true)
@@ -28,8 +30,10 @@ struct ExtractTests {
     }
 
     @Test
-    func testGetAllStringKeys() async throws {
-        let dbPath = FileManager.default.temporaryDirectory.appendingPathComponent("test_lvdb_\(UUID().uuidString)").path
+    func testGetAllStringKeys() throws {
+        let dbPath = FileManager.default.temporaryDirectory
+            .appendingPathComponent("test_lvdb_\(UUID().uuidString)")
+            .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
         let db = try LvDB(dbPath: dbPath, createIfMissing: true)
@@ -39,11 +43,11 @@ struct ExtractTests {
         let testKeys = [
             LvDBStringKeyType.localPlayer,
             LvDBStringKeyType.overworld,
-            LvDBStringKeyType.scoreboard
+            LvDBStringKeyType.scoreboard,
         ]
 
         for key in testKeys {
-            try db.put(key.rawValue.data(using: .utf8)!, "test".data(using: .utf8)!)
+            try db.put(key.rawValue.data(using: .utf8)!, Data("test".utf8))
         }
 
         // Execute test
@@ -56,8 +60,10 @@ struct ExtractTests {
     }
 
     @Test
-    func testGetPointerAndActorKeys() async throws {
-        let dbPath = FileManager.default.temporaryDirectory.appendingPathComponent("test_lvdb_\(UUID().uuidString)").path
+    func testGetPointerAndActorKeys() throws {
+        let dbPath = FileManager.default.temporaryDirectory
+            .appendingPathComponent("test_lvdb_\(UUID().uuidString)")
+            .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
         let db = try LvDB(dbPath: dbPath, createIfMissing: true)
@@ -69,12 +75,12 @@ struct ExtractTests {
         let dimension = MCDimension.overworld
         let keyPrefix = LvDBKeyFactory.makeBaseChunkKey(x: x, z: z, dimension: dimension)
 
-        let digpKey = "digp".data(using: .utf8)! + keyPrefix
+        let digpKey = Data("digp".utf8) + keyPrefix
         let actorData = Data([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08])
         try db.put(digpKey, actorData)
 
-        let actorKey = "actorprefix".data(using: .utf8)! + actorData
-        try db.put(actorKey, "test".data(using: .utf8)!)
+        let actorKey = Data("actorprefix".utf8) + actorData
+        try db.put(actorKey, Data("test".utf8))
 
         // Execute test
         let keys = db.getPointerAndActorKeys(x: x, z: z, dimension: dimension)
@@ -84,8 +90,10 @@ struct ExtractTests {
     }
 
     @Test
-    func testGetChunkKeys() async throws {
-        let dbPath = FileManager.default.temporaryDirectory.appendingPathComponent("test_lvdb_\(UUID().uuidString)").path
+    func testGetChunkKeys() throws {
+        let dbPath = FileManager.default.temporaryDirectory
+            .appendingPathComponent("test_lvdb_\(UUID().uuidString)")
+            .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
         let db = try LvDB(dbPath: dbPath, createIfMissing: true)
@@ -100,11 +108,11 @@ struct ExtractTests {
         // Add sub-chunk data
         let yIndex: Int8 = 0
         let subChunkKey = keyPrefix + LvDBChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
-        try db.put(subChunkKey, "test".data(using: .utf8)!)
+        try db.put(subChunkKey, Data("test".utf8))
 
         // Add other chunk data
         let finalizedStateKey = keyPrefix + LvDBChunkKeyType.finalizedState.rawValue.data
-        try db.put(finalizedStateKey, "test".data(using: .utf8)!)
+        try db.put(finalizedStateKey, Data("test".utf8))
 
         // Execute test
         let keys = db.getChunkKeys(x: x, z: z, dimension: dimension)
@@ -114,22 +122,24 @@ struct ExtractTests {
     }
 
     @Test
-    func testGetPrefixedKeys() async throws {
-        let dbPath = FileManager.default.temporaryDirectory.appendingPathComponent("test_lvdb_\(UUID().uuidString)").path
+    func testGetPrefixedKeys() throws {
+        let dbPath = FileManager.default.temporaryDirectory
+            .appendingPathComponent("test_lvdb_\(UUID().uuidString)")
+            .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
         let db = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer { db.close() }
 
         // Prepare test data
-        let prefix = "test".data(using: .utf8)!
-        let key1 = prefix + "1".data(using: .utf8)!
-        let key2 = prefix + "2".data(using: .utf8)!
-        let otherKey = "other".data(using: .utf8)!
+        let prefix = Data("test".utf8)
+        let key1 = prefix + Data("1".utf8)
+        let key2 = prefix + Data("2".utf8)
+        let otherKey = Data("other".utf8)
 
-        try db.put(key1, "value1".data(using: .utf8)!)
-        try db.put(key2, "value2".data(using: .utf8)!)
-        try db.put(otherKey, "value3".data(using: .utf8)!)
+        try db.put(key1, Data("value1".utf8))
+        try db.put(key2, Data("value2".utf8))
+        try db.put(otherKey, Data("value3".utf8))
 
         // Execute test
         let keys = try db.getPrefixedKeys(with: prefix)

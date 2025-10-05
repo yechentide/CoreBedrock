@@ -1,10 +1,10 @@
-import Testing
-import Foundation
 @testable import CoreBedrock
+import Foundation
+import Testing
 
 struct NetEaseNBTTransformTests {
     @Test
-    func testPatchDecodedPlayerDataWithValidNBT() async throws {
+    func patchDecodedPlayerDataWithValidNBT() throws {
         // Create valid NBT data that can be read by CBTagReader
         let validNBTData = try CompoundTag(name: "test").toData()
 
@@ -15,14 +15,14 @@ struct NetEaseNBTTransformTests {
     }
 
     @Test
-    func testPatchDecodedPlayerDataWithInvalidNBTNeedsPatching() async throws {
+    func patchDecodedPlayerDataWithInvalidNBTNeedsPatching() throws {
         let bedrockData = Data([
             0x0A, 0x00, 0x00,
             0x07,
             0x0A, 0x00, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x44, 0x61, 0x74, 0x61,
             0x03, 0x00, 0x00, 0x00,
             0x11, 0x22, 0x33,
-            0x00
+            0x00,
         ])
 
         var neteaseData = Data(bedrockData)
@@ -35,26 +35,27 @@ struct NetEaseNBTTransformTests {
     }
 
     @Test
-    func testPatchDecodedPlayerDataWithInvalidNBTNoSignature() async throws {
+    func patchDecodedPlayerDataWithInvalidNBTNoSignature() throws {
         // Create invalid NBT data without the signature
         let invalidNBTData = Data([0xFF, 0xFE, 0xFD])
         #expect {
             try NetEaseNBTTransform.patchDecodedPlayerData(invalidNBTData)
         } throws: { error in
             guard error is CBStreamError else { return false }
+
             return true
         }
     }
 
     @Test
-    func testPatchEncodedPlayerDataSuccess() async throws {
+    func patchEncodedPlayerDataSuccess() throws {
         let bedrockData = Data([
             0x0A, 0x00, 0x00,
             0x07,
             0x0A, 0x00, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x44, 0x61, 0x74, 0x61,
             0x03, 0x00, 0x00, 0x00,
             0x11, 0x22, 0x33,
-            0x00
+            0x00,
         ])
 
         var neteaseData = Data(bedrockData)
@@ -67,7 +68,7 @@ struct NetEaseNBTTransformTests {
     }
 
     @Test
-    func testPatchEncodedPlayerDataNoSignature() async throws {
+    func patchEncodedPlayerDataNoSignature() throws {
         // Create data without the required signature
         let inputData = Data([0x01, 0x02, 0x03, 0x04])
 
@@ -77,7 +78,7 @@ struct NetEaseNBTTransformTests {
     }
 
     @Test
-    func testPatchEncodedPlayerDataEmptyData() async throws {
+    func patchEncodedPlayerDataEmptyData() throws {
         let inputData = Data()
 
         let result = try NetEaseNBTTransform.patchEncodedPlayerData(inputData)
@@ -86,11 +87,11 @@ struct NetEaseNBTTransformTests {
     }
 
     @Test
-    func testScriptDataSignatureConstants() async {
+    func scriptDataSignatureConstants() {
         let signature = NetEaseConstants.scriptDataSignature
         let expectedSignature = Data([
             0x0A, 0x00,
-            0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x44, 0x61, 0x74, 0x61
+            0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x44, 0x61, 0x74, 0x61,
         ])
 
         #expect(signature == expectedSignature, "ScriptData signature should match expected bytes")
@@ -103,13 +104,13 @@ struct NetEaseNBTTransformTests {
     }
 
     @Test
-    func testTagByteConstants() async {
+    func tagByteConstants() {
         #expect(NetEaseConstants.stringTagByte == 0x08, "String tag byte should be 0x08")
         #expect(NetEaseConstants.byteArrayTagByte == 0x07, "Byte array tag byte should be 0x07")
     }
 
     @Test
-    func testPartialSignatureMatch() async throws {
+    func partialSignatureMatch() throws {
         // Test with data that has partial signature match but not complete
         let partialSignature = Data([NetEaseConstants.stringTagByte, 0x0A, 0x00]) // Missing most of signature
         let testData = Data([0x01, 0x02]) + partialSignature + Data([0x03, 0x04])
@@ -119,12 +120,12 @@ struct NetEaseNBTTransformTests {
             try NetEaseNBTTransform.patchDecodedPlayerData(testData)
         } throws: { _ in
             // Should throw because neither valid NBT nor contains full signature
-            return true
+            true
         }
     }
 
     @Test
-    func testSignatureAtDataBoundary() async throws {
+    func signatureAtDataBoundary() throws {
         // Test with signature at the very beginning of data
         let signatureAtStart = Data([NetEaseConstants.stringTagByte]) + NetEaseConstants.scriptDataSignature
 

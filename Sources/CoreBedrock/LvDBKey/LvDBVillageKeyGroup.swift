@@ -2,6 +2,8 @@
 // Created by yechentide on 2025/03/18
 //
 
+// swiftformat:disable consecutiveSpaces spaceAroundOperators
+
 public struct LvDBVillageKeyGroup: Equatable, Hashable, Sendable {
     public let dwellers: String     // VILLAGE_Overworld_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx_DWELLERS
     public let info: String         // VILLAGE_Overworld_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx_INFO
@@ -15,11 +17,13 @@ public struct LvDBVillageKeyGroup: Equatable, Hashable, Sendable {
         self.poi = poi
     }
 
-    public static func == (lhs: LvDBVillageKeyGroup, rhs: LvDBVillageKeyGroup) -> Bool {
-        return lhs.info == rhs.info
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.info == rhs.info
     }
 
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(info)
+        hasher.combine(self.info)
     }
 }
+
+// swiftformat:enable consecutiveSpaces spaceAroundOperators

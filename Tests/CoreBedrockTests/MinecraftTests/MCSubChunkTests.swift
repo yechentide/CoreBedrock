@@ -2,12 +2,12 @@
 // Created by yechentide on 2024/11/05
 //
 
-import Testing
 @testable import CoreBedrock
+import Testing
 
 struct MCSubChunkTests {
     @Test
-    func testIndex() async {
+    func index() {
 //        let list: [(localX: Int, localY: Int, localZ: Int, expected: Int)] = [
 //            (0, 0, 0, 0),
 //            (0, 1, 0, 1),

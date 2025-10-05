@@ -2,13 +2,13 @@
 // Created by yechentide on 2025/08/23
 //
 
-import Testing
 import Foundation
 @testable import LvDBWrapper
+import Testing
 
 struct LvDBIteratorTests {
     @Test(.withTemporaryDatabase)
-    func positionsAtFirstKeyWhenSeekToFirst() async throws {
+    func positionsAtFirstKeyWhenSeekToFirst() throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
@@ -20,7 +20,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withTemporaryDatabase)
-    func positionsAtLastKeyWhenSeekToLast() async throws {
+    func positionsAtLastKeyWhenSeekToLast() throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
@@ -32,56 +32,58 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withTemporaryDatabase)
-    func positionsAtGivenKeyWhenSeek() async throws {
+    func positionsAtGivenKeyWhenSeek() throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
         let iter = try db.makeIterator()
 
         #expect(iter.valid() == false)
-        let key = "~local_player".data(using: .utf8)!
+        let key = Data("~local_player".utf8)
         iter.seek(key)
         #expect(iter.valid() == true)
     }
 
     @Test(.withEmptyDirectory)
-    func positionsAtNextGreaterKeyWhenSeekingNonExistentKey() async throws {
+    func positionsAtNextGreaterKeyWhenSeekingNonExistentKey() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
 
         let keys = ["apple", "banana", "cherry"]
         for key in keys {
-            try db.put(key.data(using: .utf8)!, Data())
+            try db.put(Data(key.utf8), Data())
         }
 
         let iter = try db.makeIterator()
 
         // Seek to an existing key
-        let bananaKey = "banana".data(using: .utf8)!
+        let bananaKey = Data("banana".utf8)
         iter.seek(bananaKey)
         #expect(iter.key() == bananaKey)
 
         // Seek to a non-existent key ("blueberry") → moves to next greater key ("cherry")
-        let blueberryKey = "blueberry".data(using: .utf8)!
-        let cherryKey = "cherry".data(using: .utf8)!
+        let blueberryKey = Data("blueberry".utf8)
+        let cherryKey = Data("cherry".utf8)
         iter.seek(blueberryKey)
         #expect(iter.key() == cherryKey)
 
         // Seek to a key beyond all existing keys → iterator becomes invalid
-        let zzzKey = "zzz".data(using: .utf8)!
+        let zzzKey = Data("zzz".utf8)
         iter.seek(zzzKey)
         #expect(iter.valid() == false)
     }
 
     @Test(.withEmptyDirectory)
-    func movesForwardWithNext() async throws {
+    func movesForwardWithNext() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
 
-        let keys = ["apple", "banana", "cherry"].map { $0.data(using: .utf8)! }
-        for key in keys { try db.put(key, Data()) }
+        let keys = ["apple", "banana", "cherry"].map { Data($0.utf8) }
+        for key in keys {
+            try db.put(key, Data())
+        }
 
         let iter = try db.makeIterator()
 
@@ -96,13 +98,15 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func movesBackwardWithPrev() async throws {
+    func movesBackwardWithPrev() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
 
-        let keys = ["apple", "banana", "cherry"].map { $0.data(using: .utf8)! }
-        for key in keys { try db.put(key, Data()) }
+        let keys = ["apple", "banana", "cherry"].map { Data($0.utf8) }
+        for key in keys {
+            try db.put(key, Data())
+        }
 
         let iter = try db.makeIterator()
 
@@ -117,13 +121,15 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func reportsInvalidWhenExhausted() async throws {
+    func reportsInvalidWhenExhausted() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
 
-        let keys = ["apple"].map { $0.data(using: .utf8)! }
-        for key in keys { try db.put(key, Data()) }
+        let keys = ["apple"].map { Data($0.utf8) }
+        for key in keys {
+            try db.put(key, Data())
+        }
 
         let iter = try db.makeIterator()
 
@@ -135,12 +141,12 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func returnsCurrentKey() async throws {
+    func returnsCurrentKey() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
 
-        let key = "apple".data(using: .utf8)!
+        let key = Data("apple".utf8)
         try db.put(key, Data())
 
         let iter = try db.makeIterator()
@@ -150,13 +156,13 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func returnsCurrentValue() async throws {
+    func returnsCurrentValue() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
 
-        let key = "apple".data(using: .utf8)!
-        let value = "fruit".data(using: .utf8)!
+        let key = Data("apple".utf8)
+        let value = Data("fruit".utf8)
         try db.put(key, value)
 
         let iter = try db.makeIterator()
@@ -166,13 +172,15 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func iteratesOverAllKeys() async throws {
+    func iteratesOverAllKeys() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
 
-        let keys = ["apple", "banana", "cherry"].map { $0.data(using: .utf8)! }
-        for key in keys { try db.put(key, Data()) }
+        let keys = ["apple", "banana", "cherry"].map { Data($0.utf8) }
+        for key in keys {
+            try db.put(key, Data())
+        }
 
         let iter = try db.makeIterator()
 
@@ -187,7 +195,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withTemporaryDatabase)
-    func reportsDestroyedAfterDestroy() async throws {
+    func reportsDestroyedAfterDestroy() throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
@@ -199,7 +207,7 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withTemporaryDatabase)
-    func iteratorIsSafeAfterDestroy() async throws {
+    func iteratorIsSafeAfterDestroy() throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
@@ -209,20 +217,22 @@ struct LvDBIteratorTests {
         #expect(iter.valid() == false)
         #expect(iter.key() == nil)
         #expect(iter.value() == nil)
-        iter.next()   // no crash
-        iter.prev()   // no crash
+        iter.next() // no crash
+        iter.prev() // no crash
         iter.seekToFirst() // no crash
-        iter.seekToLast()  // no crash
+        iter.seekToLast() // no crash
     }
 
     @Test(.withEmptyDirectory)
-    func remainsValidAfterDbCompaction() async throws {
+    func remainsValidAfterDbCompaction() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
 
-        let keys = ["apple", "banana", "cherry"].map { $0.data(using: .utf8)! }
-        for key in keys { try db.put(key, Data()) }
+        let keys = ["apple", "banana", "cherry"].map { Data($0.utf8) }
+        for key in keys {
+            try db.put(key, Data())
+        }
 
         let iter = try db.makeIterator()
 
@@ -240,15 +250,15 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func doesNotSeeNewKeysAfterPut() async throws {
+    func doesNotSeeNewKeysAfterPut() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
 
         let iter = try db.makeIterator()
 
-        let newKey = "newKey".data(using: .utf8)!
-        let newValue = "newValue".data(using: .utf8)!
+        let newKey = Data("newKey".utf8)
+        let newValue = Data("newValue".utf8)
         try db.put(newKey, newValue)
 
         iter.seek(newKey)
@@ -257,13 +267,13 @@ struct LvDBIteratorTests {
     }
 
     @Test(.withEmptyDirectory)
-    func doesNotSeeRemovedKeysAfterDelete() async throws {
+    func doesNotSeeRemovedKeysAfterDelete() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
 
-        let keyToRemove = "deleteMe".data(using: .utf8)!
-        let value = "value".data(using: .utf8)!
+        let keyToRemove = Data("deleteMe".utf8)
+        let value = Data("value".utf8)
         try db.put(keyToRemove, value)
 
         let iter = try db.makeIterator()

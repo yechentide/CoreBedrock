@@ -4,10 +4,10 @@
 
 import Foundation
 
-internal struct Data3DParser {
+struct Data3DParser {
     private let binaryReader: CBBinaryReader
 
-    public init(data: Data) {
+    init(data: Data) {
         self.binaryReader = CBBinaryReader(data: data)
     }
 
@@ -46,14 +46,14 @@ internal struct Data3DParser {
         )
     }
 
-    public func lightParse(dimension: MCDimension) throws -> MCBiomeStorage {
+    func lightParse(dimension: MCDimension) throws -> MCBiomeStorage {
         let chunkYRange = dimension.chunkYRange
         let minChunkY = chunkYRange.lowerBound
         let maxChunkY = chunkYRange.upperBound
 
         let heightBytesCount = MCChunk.viewSize * 2
-        guard binaryReader.remainingByteCount >= heightBytesCount + Int(maxChunkY - minChunkY) else {
-            throw CBError.invalidDataLength(binaryReader.remainingByteCount)
+        guard self.binaryReader.remainingByteCount >= heightBytesCount + Int(maxChunkY - minChunkY) else {
+            throw CBError.invalidDataLength(self.binaryReader.remainingByteCount)
         }
 
         let heightBytes = try binaryReader.readBytes(heightBytesCount)

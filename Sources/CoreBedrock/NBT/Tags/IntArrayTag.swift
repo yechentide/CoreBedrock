@@ -7,7 +7,7 @@ import Foundation
 public final class IntArrayTag: NBT {
     // Override to return the .intArray type
     override public var tagType: TagType {
-        return .intArray
+        .intArray
     }
 
     /// Gets or sets the value/payload of this tag (an array of signed 32-bit integers).
@@ -15,19 +15,19 @@ public final class IntArrayTag: NBT {
 
     /// Creates an unnamed `ByteTag` tag, containing an empty array of bytes.
     override public init() {
-        value = []
+        self.value = []
         super.init()
     }
 
     /// Creates an unnamed `IntArrayTag` tag, containing the given array.
     /// - Parameter value: The array to assign to this tag's `value`.
-    convenience public init(_ value: [Int32]) {
+    public convenience init(_ value: [Int32]) {
         self.init(name: nil, value)
     }
 
     /// Creates an `IntArrayTag` tag with the given name, containing an empty array.
     /// - Parameter name: The name to assign to this tag.
-    convenience public init(name: String?) {
+    public convenience init(name: String?) {
         self.init(name: name, [])
     }
 
@@ -51,12 +51,12 @@ public final class IntArrayTag: NBT {
 
     /// Gets or sets a byte at the given index.
     public subscript(_ index: Int) -> Int32 {
-        get { return value[index] }
-        set { value[index] = newValue }
+        get { self.value[index] }
+        set { self.value[index] = newValue }
     }
 
     override public func clone() -> NBT {
-        return IntArrayTag(from: self)
+        IntArrayTag(from: self)
     }
 
     override func toString(indentString: String, indentLevel: Int) -> String {
@@ -65,10 +65,10 @@ public final class IntArrayTag: NBT {
             formattedStr.append(indentString)
         }
         formattedStr.append("TAG_Int_Array")
-        if name != nil && name!.count > 0 {
+        if name != nil, !name!.isEmpty {
             formattedStr.append("(\"\(name!)\")")
         }
-        formattedStr.append(": [\(value.count) ints]")
+        formattedStr.append(": [\(self.value.count) ints]")
 
         return formattedStr
     }

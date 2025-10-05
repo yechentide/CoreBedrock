@@ -20,7 +20,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-//        .package(url: "https://github.com/mw99/DataCompression", exact: "3.8.0"),
+        // .package(url: "https://github.com/mw99/DataCompression", exact: "3.8.0"),
     ],
     targets: [
         .binaryTarget(
@@ -50,7 +50,7 @@ let package = Package(
             cxxSettings: [
                 .unsafeFlags([
                     "-DDLLX=",
-                ])
+                ]),
             ]
         ),
         .testTarget(
@@ -65,7 +65,7 @@ let package = Package(
             name: "CoreBedrock",
             dependencies: [
                 "LvDBWrapper",
-//                "DataCompression",
+                // "DataCompression",
             ]
         ),
         .testTarget(

@@ -8,7 +8,7 @@ import Foundation
 public final class ByteTag: NBT {
     // Override to return the .byte type
     override public var tagType: TagType {
-        return .byte
+        .byte
     }
 
     /// Gets or sets the value/payload of this tag (a single byte).
@@ -26,19 +26,19 @@ public final class ByteTag: NBT {
 
     /// Creates an unnamed `ByteTag` tag with the default of value of 0.
     override public init() {
-        value = 0
+        self.value = 0
         super.init()
     }
 
     /// Creates an unnamed `ByteTag` tag with the given value.
     /// - Parameter value: The byte value to assign to this tag.
-    convenience public init(_ value: UInt8) {
+    public convenience init(_ value: UInt8) {
         self.init(name: nil, value)
     }
 
     /// Creates an `ByteTag` tag with the given name and the default value of 0.
     /// - Parameter name: The name to assign to this tag. May be `nil`.
-    convenience public init(name: String?) {
+    public convenience init(name: String?) {
         self.init(name: name, 0)
     }
 
@@ -51,7 +51,7 @@ public final class ByteTag: NBT {
     }
 
     override public func clone() -> NBT {
-        return ByteTag(from: self)
+        ByteTag(from: self)
     }
 
     override func toString(indentString: String, indentLevel: Int) -> String {
@@ -60,11 +60,11 @@ public final class ByteTag: NBT {
             formattedStr.append(indentString)
         }
         formattedStr.append("TAG_Byte")
-        if name != nil && name!.count > 0 {
+        if name != nil, !name!.isEmpty {
             formattedStr.append("(\"\(name!)\")")
         }
         formattedStr.append(": ")
-        formattedStr.append(String(value))
+        formattedStr.append(String(self.value))
 
         return formattedStr
     }

@@ -19,78 +19,86 @@ public struct CBTagWriter: CustomDebugStringConvertible {
         self.writer = CBBinaryWriter(capacity: capacity, littleEndian: littleEndian)
     }
 
-    public var count: Int { return writer.count }
+    public var count: Int { self.writer.count }
 
     public var debugDescription: String {
-        "CBTagWriterV2(bufferCount: \(writer.count))"
+        "CBTagWriterV2(bufferCount: \(self.writer.count))"
     }
 
     public func toData() -> Data {
-        return writer.data
+        self.writer.data
     }
 
     public func write(tag: NBT) throws {
-        try writeTag(tag)
+        try self.writeTag(tag)
     }
 
     public func write(tags: [NBT]) throws {
         for tag in tags {
-            try writeTag(tag)
+            try self.writeTag(tag)
         }
     }
 
     private func writeTag(_ tag: NBT) throws {
-        try writer.write(tag.tagType.rawValue)
-        try writer.writeNBTString(tag.name ?? "")
-        try writeTagPayload(tag)
+        try self.writer.write(tag.tagType.rawValue)
+        try self.writer.writeNBTString(tag.name ?? "")
+        try self.writeTagPayload(tag)
     }
+
+    // swiftlint:disable cyclomatic_complexity
 
     private func writeTagPayload(_ tag: NBT) throws {
         switch tag {
-            case let t as ByteTag:
-                try writer.write(t.byteValue)
-            case let t as ShortTag:
-                try writer.write(t.shortValue)
-            case let t as IntTag:
-                try writer.write(t.intValue)
-            case let t as LongTag:
-                try writer.write(t.longValue)
-            case let t as FloatTag:
-                try writer.write(t.floatValue)
-            case let t as DoubleTag:
-                try writer.write(t.doubleValue)
-            case let t as StringTag:
-                try writer.writeNBTString(t.stringValue)
-            case let t as ByteArrayTag:
-                try writer.write(Int32(t.byteArrayValue.count))
-                try writer.write(t.byteArrayValue)
-            case let t as IntArrayTag:
-                try writer.write(Int32(t.intArrayValue.count))
-                for v in t.intArrayValue { try writer.write(v) }
-            case let t as LongArrayTag:
-                try writer.write(Int32(t.longArrayValue.count))
-                for v in t.longArrayValue { try writer.write(v) }
-            case let t as ListTag:
-                try writeListTag(t)
-            case let t as CompoundTag:
-                try writeCompoundTag(t)
-            default:
-                throw CBStreamError.invalidFormat("Unsupported tag type for writing: \(tag.tagType)")
+        case let tag as ByteTag:
+            try self.writer.write(tag.byteValue)
+        case let tag as ShortTag:
+            try self.writer.write(tag.shortValue)
+        case let tag as IntTag:
+            try self.writer.write(tag.intValue)
+        case let tag as LongTag:
+            try self.writer.write(tag.longValue)
+        case let tag as FloatTag:
+            try self.writer.write(tag.floatValue)
+        case let tag as DoubleTag:
+            try self.writer.write(tag.doubleValue)
+        case let tag as StringTag:
+            try self.writer.writeNBTString(tag.stringValue)
+        case let tag as ByteArrayTag:
+            try self.writer.write(Int32(tag.byteArrayValue.count))
+            try self.writer.write(tag.byteArrayValue)
+        case let tag as IntArrayTag:
+            try self.writer.write(Int32(tag.intArrayValue.count))
+            for value in tag.intArrayValue {
+                try self.writer.write(value)
+            }
+        case let tag as LongArrayTag:
+            try self.writer.write(Int32(tag.longArrayValue.count))
+            for value in tag.longArrayValue {
+                try self.writer.write(value)
+            }
+        case let tag as ListTag:
+            try self.writeListTag(tag)
+        case let tag as CompoundTag:
+            try self.writeCompoundTag(tag)
+        default:
+            throw CBStreamError.invalidFormat("Unsupported tag type for writing: \(tag.tagType)")
         }
     }
 
+    // swiftlint:enable cyclomatic_complexity
+
     private func writeListTag(_ tag: ListTag) throws {
-        try writer.write(tag.listType.rawValue)
-        try writer.write(Int32(tag.tags.count))
+        try self.writer.write(tag.listType.rawValue)
+        try self.writer.write(Int32(tag.tags.count))
         for item in tag.tags {
-            try writeTagPayload(item)
+            try self.writeTagPayload(item)
         }
     }
 
     private func writeCompoundTag(_ tag: CompoundTag) throws {
         for child in tag.tags {
-            try writeTag(child)
+            try self.writeTag(child)
         }
-        try writer.write(TagType.end.rawValue)
+        try self.writer.write(TagType.end.rawValue)
     }
 }
