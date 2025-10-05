@@ -31,112 +31,115 @@ public struct CBBinaryReader: CustomDebugStringConvertible {
     // MARK: - Computed Properties
 
     public var remainingByteCount: Int {
-        return buffer.count - buffer.currentPosition
+        self.buffer.count - self.buffer.currentPosition
     }
 
     public var debugDescription: String {
-        "CBBinaryReaderV2(position: \(buffer.currentPosition), remainingByteCount: \(remainingByteCount))"
+        "CBBinaryReaderV2(position: \(self.buffer.currentPosition), remainingByteCount: \(self.remainingByteCount))"
     }
 
     public func skip(_ count: Int) throws {
         guard count >= 0 else {
             throw CBStreamError.argumentOutOfRange("count", "Non-negative number required.")
         }
+
         // advance the position using seek instead of allocating temporary buffer
-        try buffer.seek(to: count, from: .current)
+        try self.buffer.seek(to: count, from: .current)
     }
 
     public func readBytes(_ count: Int) throws -> [UInt8] {
         guard count >= 0 else {
             throw CBStreamError.argumentOutOfRange("count", "Non-negative number required.")
         }
-        guard remainingByteCount >= count else {
+        guard self.remainingByteCount >= count else {
             throw CBStreamError.endOfStream
         }
+
         var output = [UInt8]()
         output.reserveCapacity(count)
-        let _ = try buffer.read(into: &output, count: count)
+        _ = try self.buffer.read(into: &output, count: count)
         return output
     }
 
     public func readAllBytes() throws -> [UInt8] {
-        return try readBytes(remainingByteCount)
+        try self.readBytes(self.remainingByteCount)
     }
 
     private func convert<T>(_ bytes: [UInt8]) -> T {
-        let mutable = swapNeeded ? bytes.reversed() : bytes
+        let mutable = self.swapNeeded ? bytes.reversed() : bytes
         return mutable.withUnsafeBytes { $0.load(as: T.self) }
     }
 }
 
-extension CBBinaryReader {
+public extension CBBinaryReader {
     // MARK: - Integer Reads
 
-    public func readUInt8() throws -> UInt8 {
+    func readUInt8() throws -> UInt8 {
         let bytes = try readBytes(1)
-        return convert(bytes)
+        return self.convert(bytes)
     }
 
-    public func readInt8() throws -> Int8 {
+    func readInt8() throws -> Int8 {
         let bytes = try readBytes(1)
-        return convert(bytes)
+        return self.convert(bytes)
     }
 
-    public func readUInt16() throws -> UInt16 {
+    func readUInt16() throws -> UInt16 {
         let bytes = try readBytes(2)
-        return convert(bytes)
+        return self.convert(bytes)
     }
 
-    public func readInt16() throws -> Int16 {
+    func readInt16() throws -> Int16 {
         let bytes = try readBytes(2)
-        return convert(bytes)
+        return self.convert(bytes)
     }
 
-    public func readUInt32() throws -> UInt32 {
+    func readUInt32() throws -> UInt32 {
         let bytes = try readBytes(4)
-        return convert(bytes)
+        return self.convert(bytes)
     }
 
-    public func readInt32() throws -> Int32 {
+    func readInt32() throws -> Int32 {
         let bytes = try readBytes(4)
-        return convert(bytes)
+        return self.convert(bytes)
     }
 
-    public func readUInt64() throws -> UInt64 {
+    func readUInt64() throws -> UInt64 {
         let bytes = try readBytes(8)
-        return convert(bytes)
+        return self.convert(bytes)
     }
 
-    public func readInt64() throws -> Int64 {
+    func readInt64() throws -> Int64 {
         let bytes = try readBytes(8)
-        return convert(bytes)
+        return self.convert(bytes)
     }
 
     // MARK: - Floating Point Reads
 
-    public func readFloat() throws -> Float {
+    func readFloat() throws -> Float {
         let bytes = try readBytes(4)
-        return convert(bytes)
+        return self.convert(bytes)
     }
 
-    public func readDouble() throws -> Double {
+    func readDouble() throws -> Double {
         let bytes = try readBytes(8)
-        return convert(bytes)
+        return self.convert(bytes)
     }
 }
 
-extension CBBinaryReader {
+public extension CBBinaryReader {
     // MARK: - NBT Reads
 
-    public func readTagType() throws -> TagType {
+    func readTagType() throws -> TagType {
         let raw = try readUInt8()
         guard let type = TagType(rawValue: raw), raw <= TagType.longArray.rawValue else {
             throw CBStreamError.invalidFormat("NBT tag type out of range: \(raw)")
         }
+
         return type
     }
 
-    public func readNBTString() throws -> String {
+    func readNBTString() throws -> String {
         let length = try readUInt16()
         guard length > 0 else {
             return ""
@@ -152,21 +155,24 @@ extension CBBinaryReader {
         throw CBStreamError.stringConversionError
     }
 
-    public func skipNBTString() throws {
+    func skipNBTString() throws {
         let length = try readInt16()
         guard length >= 0 else { throw CBStreamError.invalidFormat("Negative string length given!") }
-        try skip(Int(length))
+
+        try self.skip(Int(length))
     }
 }
 
-extension CBBinaryReader {
-    // Mark: - SubChunk Reads
+public extension CBBinaryReader {
+    // MARK: - SubChunk Reads
 
-    public func readIndicesData() throws -> (rawData: [UInt8], bitsPerBlock: Int, totalWords: Int) {
+    // swiftlint:disable:next large_tuple
+    func readIndicesData() throws -> (rawData: [UInt8], bitsPerBlock: Int, totalWords: Int) {
         let type = try readUInt8()
         guard type > 0 else {
             throw CBStreamError.invalidFormat("Invalid block indices data type: \(type)")
         }
+
         // let serializedType = type & 0x01
         let bitsPerBlock = Int(type >> 1)
         guard 1...Self.wordBitSize ~= bitsPerBlock else {
@@ -176,18 +182,20 @@ extension CBBinaryReader {
         let blocksPerWord = Self.wordBitSize / bitsPerBlock
         let totalWords = Int(ceil(Double(MCSubChunk.totalBlockCount) / Double(blocksPerWord)))
         let totalBytes = totalWords * 4
-        guard remainingByteCount >= totalBytes else {
+        guard self.remainingByteCount >= totalBytes else {
             throw CBStreamError.endOfStream
         }
+
         let rawData = try readBytes(totalBytes)
         return (rawData, bitsPerBlock, totalWords)
     }
 
-    public func readBlockPalette() throws -> [CompoundTag] {
+    func readBlockPalette() throws -> [CompoundTag] {
         let paletteCount = try readUInt32()
         guard paletteCount <= MCSubChunk.totalBlockCount else {
             throw CBStreamError.argumentOutOfRange("paletteCount", "Palette count out of range: \(paletteCount)")
         }
+
         var palette = [CompoundTag]()
         let tagReader = CBTagReader(reader: self)
         for _ in 0..<paletteCount {
@@ -198,6 +206,7 @@ extension CBBinaryReader {
             else {
                 throw CBStreamError.invalidFormat("Invalid block tag found in palette")
             }
+
             palette.append(blockTag)
         }
         return palette

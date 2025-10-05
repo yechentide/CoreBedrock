@@ -2,13 +2,16 @@
 // Created by yechentide on 2024/10/04
 //
 
-import Testing
-import Foundation
 @testable import CoreBedrock
+import Foundation
+import Testing
+
+// swiftlint:disable colon
+// swiftformat:disable consecutiveSpaces spaceAroundOperators
 
 struct DataTests {
     @Test
-    func testHexString() async {
+    func testHexString() {
         let testCases: [Data:String] = [
             Data([0x00])                : "00",
             Data([0x00, 0x1C])          : "00_1C",
@@ -21,7 +24,7 @@ struct DataTests {
     }
 
     @Test
-    func testUInt8() async {
+    func uInt8() {
         let testCases: [Data:UInt8] = [
             Data([0x00])                : UInt8.min,
             Data([0xFF])                : UInt8.max,
@@ -34,7 +37,7 @@ struct DataTests {
     }
 
     @Test
-    func testInt8() async {
+    func testInt8() {
         let testCases: [Data:Int8] = [
             Data([0x80])                : Int8.min,
             Data([0xFF])                : -1,
@@ -46,7 +49,7 @@ struct DataTests {
     }
 
     @Test
-    func testUInt32() async {
+    func uInt32() {
         let testCases: [Data:UInt32?] = [
             Data([0x00, 0x00, 0x00, 0x00])  : UInt32.min,
             Data([0xFF, 0xFF, 0xFF, 0xFF])  : UInt32.max,
@@ -58,7 +61,7 @@ struct DataTests {
     }
 
     @Test
-    func testInt32() async {
+    func testInt32() {
         let testCases: [Data:Int32?] = [
             Data([0x00, 0x00, 0x00, 0x80])  : Int32.min,
             Data([0xFF, 0xFF, 0xFF, 0xFF])  : -1,
@@ -70,3 +73,6 @@ struct DataTests {
         }
     }
 }
+
+// swiftformat:enable consecutiveSpaces spaceAroundOperators
+// swiftlint:enable colon

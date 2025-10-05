@@ -2,85 +2,87 @@
 // Created by yechentide on 2024/10/04
 //
 
-import Testing
-import Foundation
 @testable import CoreBedrock
+import Foundation
+import Testing
+
+// swiftlint:disable line_length
 
 struct FixedWidthIntegerTests {
     @Test
-    func testData() async {
+    func testData() {
         // All data is little endian
-        #expect(Int8.min.data           == Data([0x80]))
-        #expect(Int8(10).data           == Data([0x0A]))
-        #expect(Int8.max.data           == Data([0x7F]))
+        #expect(Int8.min.data == Data([0x80]))
+        #expect(Int8(10).data == Data([0x0A]))
+        #expect(Int8.max.data == Data([0x7F]))
 
-        #expect(UInt8.min.data          == Data([0x00]))
-        #expect(UInt8(10).data          == Data([0x0A]))
-        #expect(UInt8.max.data          == Data([0xFF]))
+        #expect(UInt8.min.data == Data([0x00]))
+        #expect(UInt8(10).data == Data([0x0A]))
+        #expect(UInt8.max.data == Data([0xFF]))
 
-        #expect(Int16.min.data          == Data([0x00, 0x80]))
-        #expect(Int16(16706).data       == Data([0x42, 0x41]))
-        #expect(Int16.max.data          == Data([0xFF, 0x7F]))
+        #expect(Int16.min.data == Data([0x00, 0x80]))
+        #expect(Int16(16706).data == Data([0x42, 0x41]))
+        #expect(Int16.max.data == Data([0xFF, 0x7F]))
 
-        #expect(UInt16.min.data         == Data([0x00, 0x00]))
-        #expect(UInt16(16706).data      == Data([0x42, 0x41]))
-        #expect(UInt16.max.data         == Data([0xFF, 0xFF]))
+        #expect(UInt16.min.data == Data([0x00, 0x00]))
+        #expect(UInt16(16706).data == Data([0x42, 0x41]))
+        #expect(UInt16.max.data == Data([0xFF, 0xFF]))
 
-        #expect(Int32.min.data          == Data([0x00, 0x00, 0x00, 0x80]))
-        #expect(Int32(2376002).data     == Data([0x42, 0x41, 0x24, 0x00]))
-        #expect(Int32.max.data          == Data([0xFF, 0xFF, 0xFF, 0x7F]))
+        #expect(Int32.min.data == Data([0x00, 0x00, 0x00, 0x80]))
+        #expect(Int32(2_376_002).data == Data([0x42, 0x41, 0x24, 0x00]))
+        #expect(Int32.max.data == Data([0xFF, 0xFF, 0xFF, 0x7F]))
 
-        #expect(UInt32.min.data         == Data([0x00, 0x00, 0x00, 0x00]))
-        #expect(UInt32(2376002).data    == Data([0x42, 0x41, 0x24, 0x00]))
-        #expect(UInt32.max.data         == Data([0xFF, 0xFF, 0xFF, 0xFF]))
+        #expect(UInt32.min.data == Data([0x00, 0x00, 0x00, 0x00]))
+        #expect(UInt32(2_376_002).data == Data([0x42, 0x41, 0x24, 0x00]))
+        #expect(UInt32.max.data == Data([0xFF, 0xFF, 0xFF, 0xFF]))
 
-        #expect(Int64.min.data          == Data([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80]))
-        #expect(Int64(1965310274).data  == Data([0x42, 0x41, 0x24, 0x75, 0x00, 0x00, 0x00, 0x00]))
-        #expect(Int64.max.data          == Data([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F]))
+        #expect(Int64.min.data == Data([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80]))
+        #expect(Int64(1_965_310_274).data == Data([0x42, 0x41, 0x24, 0x75, 0x00, 0x00, 0x00, 0x00]))
+        #expect(Int64.max.data == Data([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F]))
 
-        #expect(UInt64.min.data         == Data([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]))
-        #expect(UInt64(1965310274).data == Data([0x42, 0x41, 0x24, 0x75, 0x00, 0x00, 0x00, 0x00]))
-        #expect(UInt64.max.data         == Data([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]))
+        #expect(UInt64.min.data == Data([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]))
+        #expect(UInt64(1_965_310_274).data == Data([0x42, 0x41, 0x24, 0x75, 0x00, 0x00, 0x00, 0x00]))
+        #expect(UInt64.max.data == Data([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]))
     }
 
     @Test
-    func testBinaryString() async {
+    func testBinaryString() {
         // All data is little endian
-        #expect(Int8.min.binaryString           == "10000000")
-        #expect(Int8(10).binaryString           == "00001010")
-        #expect(Int8.max.binaryString           == "01111111")
+        #expect(Int8.min.binaryString == "10000000")
+        #expect(Int8(10).binaryString == "00001010")
+        #expect(Int8.max.binaryString == "01111111")
 
-        #expect(UInt8.min.binaryString          == "00000000")
-        #expect(UInt8(10).binaryString          == "00001010")
-        #expect(UInt8.max.binaryString          == "11111111")
+        #expect(UInt8.min.binaryString == "00000000")
+        #expect(UInt8(10).binaryString == "00001010")
+        #expect(UInt8.max.binaryString == "11111111")
 
-        #expect(Int16.min.binaryString          == "00000000_10000000")
-        #expect(Int16(16706).binaryString       == "01000010_01000001")
-        #expect(Int16.max.binaryString          == "11111111_01111111")
+        #expect(Int16.min.binaryString == "00000000_10000000")
+        #expect(Int16(16706).binaryString == "01000010_01000001")
+        #expect(Int16.max.binaryString == "11111111_01111111")
 
-        #expect(UInt16.min.binaryString         == "00000000_00000000")
-        #expect(UInt16(16706).binaryString      == "01000010_01000001")
-        #expect(UInt16.max.binaryString         == "11111111_11111111")
+        #expect(UInt16.min.binaryString == "00000000_00000000")
+        #expect(UInt16(16706).binaryString == "01000010_01000001")
+        #expect(UInt16.max.binaryString == "11111111_11111111")
 
-        #expect(Int32.min.binaryString          == "00000000_00000000_00000000_10000000")
-        #expect(Int32(2376002).binaryString     == "01000010_01000001_00100100_00000000")
-        #expect(Int32.max.binaryString          == "11111111_11111111_11111111_01111111")
+        #expect(Int32.min.binaryString == "00000000_00000000_00000000_10000000")
+        #expect(Int32(2_376_002).binaryString == "01000010_01000001_00100100_00000000")
+        #expect(Int32.max.binaryString == "11111111_11111111_11111111_01111111")
 
-        #expect(UInt32.min.binaryString         == "00000000_00000000_00000000_00000000")
-        #expect(UInt32(2376002).binaryString    == "01000010_01000001_00100100_00000000")
-        #expect(UInt32.max.binaryString         == "11111111_11111111_11111111_11111111")
+        #expect(UInt32.min.binaryString == "00000000_00000000_00000000_00000000")
+        #expect(UInt32(2_376_002).binaryString == "01000010_01000001_00100100_00000000")
+        #expect(UInt32.max.binaryString == "11111111_11111111_11111111_11111111")
 
-        #expect(Int64.min.binaryString          == "00000000_00000000_00000000_00000000_00000000_00000000_00000000_10000000")
-        #expect(Int64(1965310274).binaryString  == "01000010_01000001_00100100_01110101_00000000_00000000_00000000_00000000")
-        #expect(Int64.max.binaryString          == "11111111_11111111_11111111_11111111_11111111_11111111_11111111_01111111")
+        #expect(Int64.min.binaryString == "00000000_00000000_00000000_00000000_00000000_00000000_00000000_10000000")
+        #expect(Int64(1_965_310_274).binaryString == "01000010_01000001_00100100_01110101_00000000_00000000_00000000_00000000")
+        #expect(Int64.max.binaryString == "11111111_11111111_11111111_11111111_11111111_11111111_11111111_01111111")
 
-        #expect(UInt64.min.binaryString         == "00000000_00000000_00000000_00000000_00000000_00000000_00000000_00000000")
-        #expect(UInt64(1965310274).binaryString == "01000010_01000001_00100100_01110101_00000000_00000000_00000000_00000000")
-        #expect(UInt64.max.binaryString         == "11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111")
+        #expect(UInt64.min.binaryString == "00000000_00000000_00000000_00000000_00000000_00000000_00000000_00000000")
+        #expect(UInt64(1_965_310_274).binaryString == "01000010_01000001_00100100_01110101_00000000_00000000_00000000_00000000")
+        #expect(UInt64.max.binaryString == "11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111")
     }
 
     @Test
-    func testBitOnOff() async {
+    func bitOnOff() {
         // Little Endian: 0b01000010_01000001
         var num = Int16(16706)
 
@@ -122,7 +124,7 @@ struct FixedWidthIntegerTests {
     }
 
     @Test
-    func testIsBitOn() async {
+    func testIsBitOn() {
         // Little Endian: 0b01000010_01000001
         let num = Int16(16706)
         let ans = [0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0]
@@ -135,10 +137,12 @@ struct FixedWidthIntegerTests {
     }
 
     @Test
-    func testBitArray() async {
+    func testBitArray() {
         // Little Endian: 0b01000010_01000001
         let num = Int16(16706)
         let ans: [UInt8] = [0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0]
         #expect(num.bitArray == ans)
     }
 }
+
+// swiftlint:enable line_length

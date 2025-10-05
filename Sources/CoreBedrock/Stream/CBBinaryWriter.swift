@@ -9,7 +9,7 @@ public final class CBBinaryWriter: CustomDebugStringConvertible {
 
     private let buffer: CBBuffer
     private let swapNeeded: Bool
-    private var bytesWritten: Int = 0
+    private var bytesWritten = 0
 
     // MARK: - Initializers
 
@@ -32,52 +32,56 @@ public final class CBBinaryWriter: CustomDebugStringConvertible {
     // MARK: - Computed Properties
 
     public var currentPosition: Int {
-        return buffer.currentPosition
+        self.buffer.currentPosition
     }
 
     public var data: Data {
-        return Data(buffer.toArray())
+        Data(self.buffer.toArray())
+    }
+
+    public var isEmpty: Bool {
+        self.buffer.isEmpty
     }
 
     public var count: Int {
-        return buffer.count
+        self.buffer.count
     }
 
     public var debugDescription: String {
-        "CBBinaryWriterV2(bufferCount: \(buffer.count), bytesWritten: \(bytesWritten))"
+        "CBBinaryWriterV2(bufferCount: \(self.buffer.count), bytesWritten: \(self.bytesWritten))"
     }
 
     // MARK: - Primitive Writers
 
     public func write(_ value: UInt8) throws {
-        try buffer.write([value])
-        bytesWritten += 1
+        try self.buffer.write([value])
+        self.bytesWritten += 1
     }
 
     public func write(_ bytes: [UInt8]) throws {
-        try buffer.write(bytes)
-        bytesWritten += bytes.count
+        try self.buffer.write(bytes)
+        self.bytesWritten += bytes.count
     }
 
     public func write<T: FixedWidthInteger>(_ value: T) throws {
-        var val = swapNeeded ? value.byteSwapped : value
+        var val = self.swapNeeded ? value.byteSwapped : value
         let data = withUnsafeBytes(of: &val) { Data($0) }
-        try buffer.write([UInt8](data))
-        bytesWritten += MemoryLayout<T>.size
+        try self.buffer.write([UInt8](data))
+        self.bytesWritten += MemoryLayout<T>.size
     }
 
     public func write(_ value: Float) throws {
-        var val = swapNeeded ? value.bitPattern.byteSwapped : value.bitPattern
+        var val = self.swapNeeded ? value.bitPattern.byteSwapped : value.bitPattern
         let data = withUnsafeBytes(of: &val) { Data($0) }
-        try buffer.write([UInt8](data))
-        bytesWritten += MemoryLayout<Float>.size
+        try self.buffer.write([UInt8](data))
+        self.bytesWritten += MemoryLayout<Float>.size
     }
 
     public func write(_ value: Double) throws {
-        var val = swapNeeded ? value.bitPattern.byteSwapped : value.bitPattern
+        var val = self.swapNeeded ? value.bitPattern.byteSwapped : value.bitPattern
         let data = withUnsafeBytes(of: &val) { Data($0) }
-        try buffer.write([UInt8](data))
-        bytesWritten += MemoryLayout<Double>.size
+        try self.buffer.write([UInt8](data))
+        self.bytesWritten += MemoryLayout<Double>.size
     }
 
     // MARK: - String Writer
@@ -88,17 +92,18 @@ public final class CBBinaryWriter: CustomDebugStringConvertible {
         guard utf8Bytes.count <= UInt16.max else {
             throw CBStreamError.argumentOutOfRange("value", "String too long")
         }
-        try write(UInt16(utf8Bytes.count))
-        try write(utf8Bytes)
+
+        try self.write(UInt16(utf8Bytes.count))
+        try self.write(utf8Bytes)
     }
 
     // MARK: - Utility
 
     public func asOutputStream() -> OutputStream {
-        return buffer.asOutputStream()
+        self.buffer.asOutputStream()
     }
 
     public func toByteArray() -> [UInt8] {
-        return buffer.toArray()
+        self.buffer.toArray()
     }
 }

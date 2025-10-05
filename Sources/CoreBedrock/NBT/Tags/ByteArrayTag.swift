@@ -8,7 +8,7 @@ import Foundation
 public final class ByteArrayTag: NBT {
     // Override to return the .byteArray type
     override public var tagType: TagType {
-        return .byteArray
+        .byteArray
     }
 
     /// Gets or sets the value/payload of this tag (an array of bytes).
@@ -16,19 +16,19 @@ public final class ByteArrayTag: NBT {
 
     /// Creates an unnamed `ByteArrayTag` tag, containing an empty array of bytes.
     override public init() {
-        value = []
+        self.value = []
         super.init()
     }
 
     /// Creates an unnamed `ByteArrayTag` tag, containing the given array of bytes.
     /// - Parameter value: The byte array to assign to this tag's `value`.
-    convenience public init(_ value: [UInt8]) {
+    public convenience init(_ value: [UInt8]) {
         self.init(name: nil, value)
     }
 
     /// Creates an `ByteArrayTag` tag with the given name, containing an empty array of bytes.
     /// - Parameter name: The name to assign to this tag.
-    convenience public init(name: String?) {
+    public convenience init(name: String?) {
         self.init(name: name, [])
     }
 
@@ -52,12 +52,12 @@ public final class ByteArrayTag: NBT {
 
     /// Gets or sets a byte at the given index.
     public subscript(_ index: Int) -> UInt8 {
-        get { return value[index] }
-        set { value[index] = newValue }
+        get { self.value[index] }
+        set { self.value[index] = newValue }
     }
 
     override public func clone() -> NBT {
-        return ByteArrayTag(from: self)
+        ByteArrayTag(from: self)
     }
 
     override func toString(indentString: String, indentLevel: Int) -> String {
@@ -66,10 +66,10 @@ public final class ByteArrayTag: NBT {
             formattedStr.append(indentString)
         }
         formattedStr.append("TAG_Byte_Array")
-        if name != nil && name!.count > 0 {
+        if name != nil, !name!.isEmpty {
             formattedStr.append("(\"\(name!)\")")
         }
-        formattedStr.append(": [\(value.count) bytes]")
+        formattedStr.append(": [\(self.value.count) bytes]")
 
         return formattedStr
     }

@@ -2,14 +2,16 @@
 // Created by yechentide on 2025/03/23
 //
 
-import Testing
+@testable import CoreBedrock
 import Foundation
 import LvDBWrapper
-@testable import CoreBedrock
+import Testing
+
+// swiftlint:disable line_length
 
 struct MCBlockTypeTests {
     @Test
-    func testAllWikiBlockIdsAreDefined() async throws {
+    func allWikiBlockIdsAreDefined() throws {
 //        let idListFileUrls: [URL] = [
 //            Bundle.module.url(forResource: "TestData/block-ids/wiki-block-ids-en-20250323.txt", withExtension: nil)!,
 //            Bundle.module.url(forResource: "TestData/block-ids/wiki-block-ids-zh-20250323.txt", withExtension: nil)!,
@@ -38,7 +40,7 @@ struct MCBlockTypeTests {
     }
 
     @Test
-    func testAllCurrentVersionBlockIdsAreDefined() async throws {
+    func allCurrentVersionBlockIdsAreDefined() throws {
 //        let dbPath = Bundle.module.path(forResource: "TestData/all-blocks-test-world/db", ofType: nil)!
 //        guard let db = LvDB(dbPath: dbPath) else {
 //            return
@@ -106,3 +108,5 @@ struct MCBlockTypeTests {
 //        }
 //    }
 }
+
+// swiftlint:enable line_length

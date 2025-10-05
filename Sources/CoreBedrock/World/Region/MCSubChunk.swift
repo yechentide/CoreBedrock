@@ -4,11 +4,12 @@
 
 public class MCSubChunk {
     public static let totalBlockCount = 4096 // 16 * 16 * 16
-    public static let localPosRange = 0 ..< MCChunk.sideLength
+    public static let localPosRange = 0..<MCChunk.sideLength
     public static func linearIndex(_ localX: Int, _ localY: Int, _ localZ: Int) -> Int? {
-        guard localPosRange ~= localX, localPosRange ~= localY, localPosRange ~= localZ else {
+        guard self.localPosRange ~= localX, self.localPosRange ~= localY, self.localPosRange ~= localZ else {
             return nil
         }
+
         return ((localX << 4) | localZ) << 4 | localY
     }
 }

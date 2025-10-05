@@ -2,10 +2,10 @@
 // Created by yechentide on 2025/05/25
 //
 
-import Testing
-import Foundation
-import CoreGraphics
 @testable import CoreBedrock
+import CoreGraphics
+import Foundation
+import Testing
 
 struct CGImageTests {
     static let testDataURL = Bundle.module.url(forResource: "TestData", withExtension: nil)!
@@ -18,6 +18,7 @@ struct CGImageTests {
             Issue.record("Failed to load PNG image")
             return
         }
+
         #expect(image.width == 16)
         #expect(image.height == 16)
     }
@@ -30,19 +31,20 @@ struct CGImageTests {
             Issue.record("Failed to load JPG image")
             return
         }
+
         #expect(image.width == 16)
         #expect(image.height == 16)
     }
 
     @Test
-    func testLoadInvalidFile() throws {
+    func loadInvalidFile() throws {
         let invalidURL = Self.testDataURL.appendingPathComponent("nonexistent.png")
         let pngImage = CGImage.loadPNG(url: invalidURL)
         guard pngImage == nil else {
             Issue.record("PNG image should be nil for invalid file")
             return
         }
-        
+
         let jpgImage = CGImage.loadJPG(url: invalidURL)
         guard jpgImage == nil else {
             Issue.record("JPG image should be nil for invalid file")

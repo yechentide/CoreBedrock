@@ -36,11 +36,11 @@ public class MCWorld {
     }
 
     public func closeDB() {
-        db.close()
+        self.db.close()
     }
 
     public func reloadMetaFile() throws {
-        let levelDatURL = MCDir.generateURL(for: .levelDat, in: dirURL)
+        let levelDatURL = MCDir.generateURL(for: .levelDat, in: self.dirURL)
         self.meta = try MCWorldMeta(from: levelDatURL)
     }
 }

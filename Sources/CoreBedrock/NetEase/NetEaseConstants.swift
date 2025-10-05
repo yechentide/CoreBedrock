@@ -4,7 +4,7 @@
 
 import Foundation
 
-internal enum NetEaseConstants {
+enum NetEaseConstants {
     // File and Header Constants
     static let headerSize = 4
     static let manifestPrefix = "MANIFEST-"
@@ -20,7 +20,7 @@ internal enum NetEaseConstants {
     // NBT Transform Constants
     static let scriptDataSignature = Data([
         0x0A, 0x00,
-        0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x44, 0x61, 0x74, 0x61
+        0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x44, 0x61, 0x74, 0x61,
     ])
 
     // Signature bytes

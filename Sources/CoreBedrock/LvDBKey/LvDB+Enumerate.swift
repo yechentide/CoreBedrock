@@ -4,8 +4,8 @@
 
 import LvDBWrapper
 
-extension LvDB {
-    public func enumerateActorKeys(
+public extension LvDB {
+    func enumerateActorKeys(
         digpData: Data,
         handler: @escaping (Int, Data) -> Void
     ) -> Bool {

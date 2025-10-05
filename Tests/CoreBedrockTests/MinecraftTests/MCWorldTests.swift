@@ -2,9 +2,9 @@
 // Created by yechentide on 2024/11/04
 //
 
-import Testing
-import Foundation
 @testable import CoreBedrock
+import Foundation
+import Testing
 
 struct MCWorldTests {
     private let testDataPath = Bundle.module.path(forResource: "TestData/all-blocks-test-world", ofType: nil)!
@@ -14,10 +14,12 @@ struct MCWorldTests {
         let worldDirURL: URL
         if #available(iOS 16.0, macOS 13.0, *) {
             originalURL = URL(filePath: testDataPath, directoryHint: .isDirectory)
-            worldDirURL = FileManager.default.temporaryDirectory.appending(component: newName, directoryHint: .isDirectory)
+            worldDirURL = FileManager.default.temporaryDirectory
+                .appending(component: newName, directoryHint: .isDirectory)
         } else {
-            originalURL = URL(fileURLWithPath: testDataPath, isDirectory: true)
-            worldDirURL = FileManager.default.temporaryDirectory.appendingPathComponent(newName, isDirectory: true)
+            originalURL = URL(fileURLWithPath: self.testDataPath, isDirectory: true)
+            worldDirURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent(newName, isDirectory: true)
         }
 
         do {
@@ -41,8 +43,8 @@ struct MCWorldTests {
     }
 
     @Test
-    func openWorld() async {
-        let worldDirURL = prepareTemporaryWorld(using: "world")
+    func openWorld() {
+        let worldDirURL = self.prepareTemporaryWorld(using: "world")
         do {
             let world = try MCWorld(from: worldDirURL)
             #expect(world.worldName == "§cAll Blocks Test World")
@@ -50,12 +52,12 @@ struct MCWorldTests {
         } catch {
             Issue.record("Failed to open the world.\n")
         }
-        removeTemporaryWorld(worldDirURL)
+        self.removeTemporaryWorld(worldDirURL)
     }
 
     @Test
-    func openWorldThatPathContainsSpace() async {
-        let worldDirURL = prepareTemporaryWorld(using: "world space")
+    func openWorldThatPathContainsSpace() {
+        let worldDirURL = self.prepareTemporaryWorld(using: "world space")
         do {
             let world = try MCWorld(from: worldDirURL)
             #expect(world.worldName == "§cAll Blocks Test World")
@@ -64,12 +66,12 @@ struct MCWorldTests {
             print(error)
             Issue.record("Failed to open the world.\n")
         }
-        removeTemporaryWorld(worldDirURL)
+        self.removeTemporaryWorld(worldDirURL)
     }
 
     @Test
-    func openWorldThatPathContainsFullWidthCharacters() async {
-        let worldDirURL = prepareTemporaryWorld(using: "世界あ")
+    func openWorldThatPathContainsFullWidthCharacters() {
+        let worldDirURL = self.prepareTemporaryWorld(using: "世界あ")
         do {
             let world = try MCWorld(from: worldDirURL)
             #expect(world.worldName == "§cAll Blocks Test World")
@@ -78,6 +80,6 @@ struct MCWorldTests {
             print(error)
             Issue.record("Failed to open the world.\n")
         }
-        removeTemporaryWorld(worldDirURL)
+        self.removeTemporaryWorld(worldDirURL)
     }
 }

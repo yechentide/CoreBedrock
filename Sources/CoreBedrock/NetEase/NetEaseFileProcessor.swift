@@ -4,7 +4,7 @@
 
 import Foundation
 
-internal enum NetEaseFileProcessor {
+enum NetEaseFileProcessor {
     static func findManifestFile(in dbDirPath: String) throws -> Data {
         guard FileManager.default.fileExists(atPath: dbDirPath) else {
             throw NetEaseError.dbNotFound(dbDirPath)
@@ -22,10 +22,11 @@ internal enum NetEaseFileProcessor {
         for case let fileURL as URL in enumerator {
             let attributes = try fileURL.resourceValues(forKeys: Set(propertyKeys))
             guard attributes.isDirectory == false,
-                    let fileName = attributes.name,
+                  let fileName = attributes.name,
                   fileName.hasPrefix(NetEaseConstants.manifestPrefix) else {
                 continue
             }
+
             return Data(fileName.utf8)
         }
 
@@ -33,7 +34,7 @@ internal enum NetEaseFileProcessor {
     }
 
     static func shouldProcessNetEaseFile(_ fileName: String) -> Bool {
-        return fileName == "CURRENT"
+        fileName == "CURRENT"
             || fileName.hasPrefix(NetEaseConstants.manifestPrefix)
             || fileName.hasSuffix(".ldb")
     }
@@ -62,6 +63,7 @@ internal enum NetEaseFileProcessor {
             guard attributes.isDirectory == false, let fileName = attributes.name else {
                 continue
             }
+
             let fileData = try Data(contentsOf: fileURL)
             let isCurrentFile = fileName == "CURRENT"
             let headerType = NetEaseHeader.identifyHeader(in: fileData, isCurrentFile: isCurrentFile)

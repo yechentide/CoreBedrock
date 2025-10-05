@@ -8,7 +8,7 @@ import Foundation
 public final class FloatTag: NBT {
     // Override to return the .float type
     override public var tagType: TagType {
-        return .float
+        .float
     }
 
     /// Gets or sets the value/payload of this tag (a single-precision floating point number).
@@ -16,19 +16,19 @@ public final class FloatTag: NBT {
 
     /// Creates an unnamed `FloatTag` tag with the default of value of 0.
     override init() {
-        value = 0
+        self.value = 0
         super.init()
     }
 
     /// Creates an unnamed `FloatTag` tag with the given value.
     /// - Parameter value: The  value to assign to this tag.
-    convenience public init(_ value: Float) {
+    public convenience init(_ value: Float) {
         self.init(name: nil, value)
     }
 
     /// Creates an `FloatTag` tag with the given name and the default value of 0.
     /// - Parameter name: The name to assign to this tag. May be `nil`.
-    convenience public init(name: String?) {
+    public convenience init(name: String?) {
         self.init(name: name, 0)
     }
 
@@ -51,7 +51,7 @@ public final class FloatTag: NBT {
     }
 
     override public func clone() -> NBT {
-        return FloatTag(from: self)
+        FloatTag(from: self)
     }
 
     override func toString(indentString: String, indentLevel: Int) -> String {
@@ -60,11 +60,11 @@ public final class FloatTag: NBT {
             formattedStr.append(indentString)
         }
         formattedStr.append("TAG_Float")
-        if name != nil && name!.count > 0 {
+        if name != nil, !name!.isEmpty {
             formattedStr.append("(\"\(name!)\")")
         }
         formattedStr.append(": ")
-        formattedStr.append(String(value))
+        formattedStr.append(String(self.value))
 
         return formattedStr
     }

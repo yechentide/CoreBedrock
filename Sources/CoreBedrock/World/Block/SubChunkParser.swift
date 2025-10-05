@@ -4,11 +4,12 @@
 
 import Foundation
 
-//enum PaletteMetaType: UInt8 {
-//    case persistence = 0
-//    case runtime = 1
-//}
+// enum PaletteMetaType: UInt8 {
+//     case persistence = 0
+//     case runtime = 1
+// }
 
+// swiftlint:disable line_length
 /*
  Decode sub chunk data
 
@@ -16,21 +17,22 @@ import Foundation
  - [Block Protocol in Beta 1.2.13](https://gist.github.com/Tomcc/a96af509e275b1af483b25c543cfbf37)
  - [Bedrock Edition level format](https://minecraft.fandom.com/wiki/Bedrock_Edition_level_format/History#LevelDB_based_format)
  */
+// swiftlint:enable line_length
 
-internal struct SubChunkParser {
+struct SubChunkParser {
     private let binaryReader: CBBinaryReader
     private let chunkY: Int8
 
-    public init(data: Data, chunkY: Int8) {
+    init(data: Data, chunkY: Int8) {
         self.binaryReader = CBBinaryReader(data: data)
         self.chunkY = chunkY
     }
 
-    public func lightParse() throws -> MCSubChunkStorage? {
+    func lightParse() throws -> MCSubChunkStorage? {
         let storageVersion = try binaryReader.readUInt8()
         return switch storageVersion {
-        case 9: try parseV9Light()
-        case 8: try parseV8Light()
+        case 9: try self.parseV9Light()
+        case 8: try self.parseV8Light()
         default: nil
         }
     }
@@ -48,12 +50,12 @@ internal struct SubChunkParser {
             return nil
         }
 
-        var liquidBitWidth: Int = 1
+        var liquidBitWidth = 1
         var liquidPalette: [CompoundTag] = []
         var liquidIndicesData: [UInt8] = []
         if layerCount > 1 {
-            (liquidIndicesData, liquidBitWidth, _) = try binaryReader.readIndicesData()
-            liquidPalette = try binaryReader.readBlockPalette()
+            (liquidIndicesData, liquidBitWidth, _) = try self.binaryReader.readIndicesData()
+            liquidPalette = try self.binaryReader.readBlockPalette()
             guard !liquidPalette.isEmpty, !liquidIndicesData.isEmpty else {
                 return nil
             }
@@ -87,12 +89,12 @@ internal struct SubChunkParser {
             return nil
         }
 
-        var liquidBitWidth: Int = 1
+        var liquidBitWidth = 1
         var liquidPalette: [CompoundTag] = []
         var liquidIndicesData: [UInt8] = []
         if layerCount > 1 {
-            (liquidIndicesData, liquidBitWidth, _) = try binaryReader.readIndicesData()
-            liquidPalette = try binaryReader.readBlockPalette()
+            (liquidIndicesData, liquidBitWidth, _) = try self.binaryReader.readIndicesData()
+            liquidPalette = try self.binaryReader.readBlockPalette()
             guard !liquidPalette.isEmpty, !liquidIndicesData.isEmpty else {
                 return nil
             }
@@ -114,7 +116,7 @@ internal struct SubChunkParser {
         )
     }
 
-    // TODO: create MCBlock from block ID and block data
+    // TODO: create MCBlock from block ID and block data // swiftlint:disable:this todo
     private func parseClassicLight() throws -> MCSubChunkStorage? {
         var blockIDList = [UInt8]()
         var blockDataList = [UInt8]()
@@ -124,7 +126,7 @@ internal struct SubChunkParser {
             blockIDList.append(id)
         }
         // Each byte contains 2 blocks: 4 bits per block
-        for _ in 0..<(MCSubChunk.totalBlockCount/2) {
+        for _ in 0..<(MCSubChunk.totalBlockCount / 2) {
             let twoBlockData = try binaryReader.readUInt8()
             let firstBlockData = twoBlockData & 0x0F
             let secondBlockData = (twoBlockData >> 4) & 0x0F
@@ -134,8 +136,9 @@ internal struct SubChunkParser {
 
         var blockPalette = [CompoundTag]()
         var blockIndicesData = [UInt8]()
+        // swiftlint:disable:next identifier_name
         for i in 0..<MCSubChunk.totalBlockCount {
-            // TODO: create CompoundTag from block ID and block data
+            // TODO: create CompoundTag from block ID and block data // swiftlint:disable:this todo
             // let blockID = blockIDList[i]
             // let blockData = blockDataList[i]
             let block = CompoundTag()
@@ -162,7 +165,9 @@ internal struct SubChunkParser {
         )
     }
 
+    // swiftlint:disable line_length
     // MARK: - Skip indices parsing for better performance
+
 //    private func parseBlockIndicesUnsafe(from rawData: [UInt8], bitsPerBlock: Int, blocksPerWord: Int) throws -> [UInt16]? {
 //        var result = [UInt16](repeating: 0, count: MCSubChunk.totalBlockCount)
 //        let mask: UInt32 = (1 << bitsPerBlock) - 1
@@ -211,4 +216,5 @@ internal struct SubChunkParser {
 //
 //        return elements.count == MCSubChunk.totalBlockCount ? elements : nil
 //    }
+    // swiftlint:enable line_length
 }

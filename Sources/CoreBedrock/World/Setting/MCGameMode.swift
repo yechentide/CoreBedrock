@@ -2,6 +2,8 @@
 // Created by yechentide on 2024/07/14
 //
 
+// swiftformat:disable consecutiveSpaces spaceAroundOperators
+
 public enum MCGameMode: Int32, Sendable, CustomStringConvertible {
     case unknown    = -1
     case survival   = 0
@@ -11,11 +13,13 @@ public enum MCGameMode: Int32, Sendable, CustomStringConvertible {
 
     public var description: String {
         switch self {
-            case .survival:     return "Survival"
-            case .creative:     return "Creative"
-            case .adventure:    return "Adventure"
-            case .spectator:    return "Spectator"
-            case .unknown:      return "Unknown"
+        case .survival:     "Survival"
+        case .creative:     "Creative"
+        case .adventure:    "Adventure"
+        case .spectator:    "Spectator"
+        case .unknown:      "Unknown"
         }
     }
 }
+
+// swiftformat:enable consecutiveSpaces spaceAroundOperators

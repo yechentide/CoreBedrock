@@ -9,6 +9,7 @@ public final actor ExecutionTimer {
         var startTime: CFAbsoluteTime?
         var totalElapsed: CFAbsoluteTime = 0
     }
+
     public static let shared = ExecutionTimer()
 
     private var timers: [String: TimerEntry] = [:]
@@ -16,22 +17,22 @@ public final actor ExecutionTimer {
 
     public func showTimers() {
         print("========== ========== ==========")
-        for name in timers.keys.sorted() {
-            let entry = timers[name]!
-            let formattedTotal = format(entry.totalElapsed)
+        for name in self.timers.keys.sorted() {
+            let entry = self.timers[name]!
+            let formattedTotal = self.format(entry.totalElapsed)
             print("[\(name)] Total: \(formattedTotal)")
         }
     }
 
     public func start(_ processName: String = #function) {
-        var entry = timers[processName] ?? TimerEntry()
+        var entry = self.timers[processName] ?? TimerEntry()
         entry.startTime = CFAbsoluteTimeGetCurrent()
-        timers[processName] = entry
-        lastProcessName = processName
+        self.timers[processName] = entry
+        self.lastProcessName = processName
     }
 
     public func stop(_ processName: String? = nil, showMessage: Bool = true) {
-        let nameToUse = processName ?? lastProcessName
+        let nameToUse = processName ?? self.lastProcessName
 
         guard let name = nameToUse else {
             if showMessage {
@@ -39,7 +40,6 @@ public final actor ExecutionTimer {
             }
             return
         }
-
         guard var entry = timers[name], let start = entry.startTime else {
             if showMessage {
                 print("[\(name)] Timer was not started.")
@@ -50,29 +50,29 @@ public final actor ExecutionTimer {
         let elapsed = CFAbsoluteTimeGetCurrent() - start
         entry.totalElapsed += elapsed
         entry.startTime = nil
-        timers[name] = entry
+        self.timers[name] = entry
 
         if showMessage {
-            let formattedElapsed = format(elapsed)
-            let formattedTotal = format(entry.totalElapsed)
+            let formattedElapsed = self.format(elapsed)
+            let formattedTotal = self.format(entry.totalElapsed)
             print("[\(name)] Execution Time: \(formattedElapsed), Total: \(formattedTotal)")
         }
     }
 
     public func reset(_ processName: String) {
-        timers.removeValue(forKey: processName)
+        self.timers.removeValue(forKey: processName)
     }
 
     public func resetAll() {
-        timers.removeAll()
-        lastProcessName = nil
+        self.timers.removeAll()
+        self.lastProcessName = nil
     }
 
     private func format(_ time: CFAbsoluteTime) -> String {
         if time >= 1.0 {
-            return "\(String(format: "%.3f", time)) s"
+            "\(String(format: "%.3f", time)) s"
         } else {
-            return "\(String(format: "%.3f", time * 1000)) ms"
+            "\(String(format: "%.3f", time * 1000)) ms"
         }
     }
 }

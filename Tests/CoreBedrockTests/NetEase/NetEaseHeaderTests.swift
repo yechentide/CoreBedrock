@@ -1,10 +1,10 @@
-import Testing
-import Foundation
 @testable import CoreBedrock
+import Foundation
+import Testing
 
 struct NetEaseHeaderTests {
     @Test
-    func testNetEaseEncryptedData() async {
+    func netEaseEncryptedData() {
         let header = NetEaseHeader.neteaseEncrypted
         let expectedData = Data([0x80, 0x1D, 0x30, 0x01])
 
@@ -13,7 +13,7 @@ struct NetEaseHeaderTests {
     }
 
     @Test
-    func testBedrockCurrentFileData() async {
+    func bedrockCurrentFileData() {
         let header = NetEaseHeader.bedrockCurrentFile
         let expectedData = Data([0x4D, 0x41, 0x4E, 0x49]) // "MANI"
 
@@ -25,7 +25,7 @@ struct NetEaseHeaderTests {
     }
 
     @Test
-    func testUnknownData() async {
+    func testUnknownData() {
         let header = NetEaseHeader.unknown
         let expectedData = Data()
 
@@ -34,7 +34,7 @@ struct NetEaseHeaderTests {
     }
 
     @Test
-    func testIdentifyNetEaseEncryptedHeader() async {
+    func identifyNetEaseEncryptedHeader() {
         let data = Data([0x80, 0x1D, 0x30, 0x01, 0x12, 0x34])
 
         let resultAsCurrentFile = NetEaseHeader.identifyHeader(in: data, isCurrentFile: true)
@@ -45,7 +45,7 @@ struct NetEaseHeaderTests {
     }
 
     @Test
-    func testIdentifyBedrockCurrentFileHeader() async {
+    func identifyBedrockCurrentFileHeader() {
         let data = Data([0x4D, 0x41, 0x4E, 0x49, 0x56, 0x78])
 
         let resultAsCurrentFile = NetEaseHeader.identifyHeader(in: data, isCurrentFile: true)
@@ -56,7 +56,7 @@ struct NetEaseHeaderTests {
     }
 
     @Test
-    func testIdentifyHeaderWithShortData() async {
+    func identifyHeaderWithShortData() {
         let shortData = Data([0x80, 0x1D])
 
         let result = NetEaseHeader.identifyHeader(in: shortData, isCurrentFile: false)
@@ -65,7 +65,7 @@ struct NetEaseHeaderTests {
     }
 
     @Test
-    func testIdentifyHeaderWithEmptyData() async {
+    func identifyHeaderWithEmptyData() {
         let emptyData = Data()
 
         let result = NetEaseHeader.identifyHeader(in: emptyData, isCurrentFile: true)
@@ -74,7 +74,7 @@ struct NetEaseHeaderTests {
     }
 
     @Test
-    func testIdentifyHeaderWithUnknownPattern() async {
+    func identifyHeaderWithUnknownPattern() {
         let unknownData = Data([0x12, 0x34, 0x56, 0x78, 0x9A])
 
         let resultAsCurrentFile = NetEaseHeader.identifyHeader(in: unknownData, isCurrentFile: true)
@@ -85,21 +85,21 @@ struct NetEaseHeaderTests {
     }
 
     @Test
-    func testValidateWithUnknownExpectedHeader() async throws {
+    func validateWithUnknownExpectedHeader() throws {
         let anyData = Data([0x12, 0x34, 0x56, 0x78])
 
         try NetEaseHeader.validate(currentFileData: anyData, shouldHasHeader: .unknown)
     }
 
     @Test
-    func testValidateExpectingBedrockCurrentFileSuccess() async throws {
+    func validateExpectingBedrockCurrentFileSuccess() throws {
         let bedrockData = Data([0x4D, 0x41, 0x4E, 0x49, 0x56, 0x78])
 
         try NetEaseHeader.validate(currentFileData: bedrockData, shouldHasHeader: .bedrockCurrentFile)
     }
 
     @Test
-    func testValidateExpectingBedrockCurrentFileButAlreadyEncrypted() async throws {
+    func validateExpectingBedrockCurrentFileButAlreadyEncrypted() throws {
         let encryptedData = Data([0x80, 0x1D, 0x30, 0x01, 0x12, 0x34])
 
         #expect(throws: NetEaseError.alreadyEncrypted) {
@@ -108,14 +108,14 @@ struct NetEaseHeaderTests {
     }
 
     @Test
-    func testValidateExpectingNetEaseEncryptedSuccess() async throws {
+    func validateExpectingNetEaseEncryptedSuccess() throws {
         let encryptedData = Data([0x80, 0x1D, 0x30, 0x01, 0x12, 0x34])
 
         try NetEaseHeader.validate(currentFileData: encryptedData, shouldHasHeader: .neteaseEncrypted)
     }
 
     @Test
-    func testValidateExpectingNetEaseEncryptedButAlreadyDecrypted() async throws {
+    func validateExpectingNetEaseEncryptedButAlreadyDecrypted() throws {
         let bedrockData = Data([0x4D, 0x41, 0x4E, 0x49, 0x56, 0x78])
 
         #expect(throws: NetEaseError.alreadyDecrypted) {
@@ -124,7 +124,7 @@ struct NetEaseHeaderTests {
     }
 
     @Test
-    func testValidateWithInvalidHeader() async throws {
+    func validateWithInvalidHeader() throws {
         let invalidData = Data([0x12, 0x34, 0x56, 0x78])
 
         #expect(throws: NetEaseError.invalidHeader) {
@@ -137,7 +137,7 @@ struct NetEaseHeaderTests {
     }
 
     @Test
-    func testValidateWithShortData() async throws {
+    func validateWithShortData() throws {
         let shortData = Data([0x12, 0x34])
 
         #expect(throws: NetEaseError.invalidHeader) {
@@ -146,14 +146,14 @@ struct NetEaseHeaderTests {
     }
 
     @Test
-    func testAllHeaderTypesHaveConsistentDataProperty() async {
+    func allHeaderTypesHaveConsistentDataProperty() {
         let neteaseData = NetEaseHeader.neteaseEncrypted.data
         let bedrockData = NetEaseHeader.bedrockCurrentFile.data
         let unknownData = NetEaseHeader.unknown.data
 
         #expect(neteaseData.count == 4)
         #expect(bedrockData.count == 4)
-        #expect(unknownData.count == 0)
+        #expect(unknownData.isEmpty)
 
         #expect(neteaseData != bedrockData)
         #expect(neteaseData != unknownData)
@@ -161,7 +161,7 @@ struct NetEaseHeaderTests {
     }
 
     @Test
-    func testIdentifyHeaderConsistencyWithDataProperty() async {
+    func identifyHeaderConsistencyWithDataProperty() {
         let neteaseData = NetEaseHeader.neteaseEncrypted.data + Data([0x00, 0x00])
         let bedrockData = NetEaseHeader.bedrockCurrentFile.data + Data([0x00, 0x00])
 
@@ -176,7 +176,7 @@ struct NetEaseHeaderTests {
     }
 
     @Test
-    func testValidateWithComplexScenarios() async throws {
+    func validateWithComplexScenarios() throws {
         let bedrockData = NetEaseHeader.bedrockCurrentFile.data + Data([0x01, 0x02, 0x03])
         let encryptedData = NetEaseHeader.neteaseEncrypted.data + Data([0x04, 0x05, 0x06])
 

@@ -2,12 +2,12 @@
 // Created by yechentide on 2024/11/05
 //
 
-import Testing
 @testable import CoreBedrock
+import Testing
 
 struct MCPositionConvertTests {
     @Test
-    func testConvertBlockToChunk() async {
+    func convertBlockToChunk() {
         let list: [(pos: Int, expected: Int)] = [
             (-33, -3),
             (-32, -2),
@@ -29,7 +29,7 @@ struct MCPositionConvertTests {
     }
 
     @Test
-    func testConvertBlockToRegion() async {
+    func convertBlockToRegion() {
         let list: [(pos: Int, expected: Int)] = [
             (-513, -2),
             (-512, -1),
@@ -45,7 +45,7 @@ struct MCPositionConvertTests {
     }
 
     @Test
-    func testConvertChunkToRegion() async {
+    func convertChunkToRegion() {
         let list: [(pos: Int, expected: Int)] = [
             (-33, -2),
             (-32, -1),
@@ -61,7 +61,7 @@ struct MCPositionConvertTests {
     }
 
     @Test
-    func testConvertChunkToIndexInRegion() async throws {
+    func convertChunkToIndexInRegion() throws {
         let list: [(pos: Int, expected: Int)] = [
             (-33, 31),
             (-32, 0),

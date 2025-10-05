@@ -4,7 +4,7 @@
 
 public enum TagType: UInt8, CaseIterable, Sendable {
     /// Placeholder TagType used to indicate unknown/undefined tag type in ListTag.
-    case unknown = 0xff
+    case unknown = 0xFF
 
     /// TAG_End: Signifies the end of a Compound tag or List tag.
     case end = 0x00
@@ -37,37 +37,37 @@ public enum TagType: UInt8, CaseIterable, Sendable {
     case list = 0x09
 
     /// TAG_Compound: A set of uniquely named tags.
-    case compound = 0x0a
+    case compound = 0x0A
 
     /// TAG_Int_Array: A length-prefixed array of signed 32-bit integers.
-    case intArray = 0x0b
+    case intArray = 0x0B
 
     /// TAG_Long_Array: A length-prefixed array of signed 32-bit integers.
-    case longArray = 0x0c
+    case longArray = 0x0C
 }
 
 extension TagType: Comparable {
     public static func < (lhs: TagType, rhs: TagType) -> Bool {
-        return lhs.rawValue < rhs.rawValue
+        lhs.rawValue < rhs.rawValue
     }
 
-    public static func ==(lhs: TagType, rhs: TagType) -> Bool {
-        return lhs.rawValue == rhs.rawValue
+    public static func == (lhs: TagType, rhs: TagType) -> Bool {
+        lhs.rawValue == rhs.rawValue
     }
 }
 
-extension TagType {
-    public var hasValue: Bool {
+public extension TagType {
+    var hasValue: Bool {
         switch self {
-            case .compound, .end, .list, .unknown: false
-            default: true
+        case .compound, .end, .list, .unknown: false
+        default: true
         }
     }
 
-    public var hasLength: Bool {
+    var hasLength: Bool {
         switch self {
-            case .list, .byteArray, .intArray, .longArray: true
-            default: false
+        case .list, .byteArray, .intArray, .longArray: true
+        default: false
         }
     }
 }
@@ -75,34 +75,34 @@ extension TagType {
 extension TagType: CustomStringConvertible {
     public var description: String {
         switch self {
-            case .byte:
-                return "TAG_Byte"
-            case .byteArray:
-                return "TAG_Byte_Array"
-            case .compound:
-                return "TAG_Compound"
-            case .double:
-                return "TAG_Double"
-            case .end:
-                return "TAG_End"
-            case .float:
-                return "TAG_Float"
-            case .int:
-                return "TAG_Int"
-            case .intArray:
-                return "TAG_Int_Array"
-            case .list:
-                return "TAG_List"
-            case .long:
-                return "TAG_Long"
-            case .longArray:
-                return "TAG_Long_Array"
-            case .short:
-                return "TAG_Short"
-            case .string:
-                return "TAG_String"
-            default:
-                return "UNKNOWN";
+        case .byte:
+            "TAG_Byte"
+        case .byteArray:
+            "TAG_Byte_Array"
+        case .compound:
+            "TAG_Compound"
+        case .double:
+            "TAG_Double"
+        case .end:
+            "TAG_End"
+        case .float:
+            "TAG_Float"
+        case .int:
+            "TAG_Int"
+        case .intArray:
+            "TAG_Int_Array"
+        case .list:
+            "TAG_List"
+        case .long:
+            "TAG_Long"
+        case .longArray:
+            "TAG_Long_Array"
+        case .short:
+            "TAG_Short"
+        case .string:
+            "TAG_String"
+        default:
+            "UNKNOWN"
         }
     }
 }

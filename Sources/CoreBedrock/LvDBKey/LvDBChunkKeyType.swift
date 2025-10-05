@@ -2,6 +2,9 @@
 // Created by yechentide on 2024/10/04
 //
 
+// swiftlint:disable line_length
+// swiftformat:disable consecutiveSpaces spaceAroundOperators
+
 ///  Key types in leveldb.
 ///
 ///  [Chunk key format](https://minecraft.fandom.com/wiki/Bedrock_Edition_level_format)
@@ -38,3 +41,6 @@ public enum LvDBChunkKeyType: UInt8, CaseIterable, Sendable {
     case legacyChunkVersion     = 0x76
     case unknown0x77            = 0x77
 }
+
+// swiftformat:enable consecutiveSpaces spaceAroundOperators
+// swiftlint:enable line_length
