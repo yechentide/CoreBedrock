@@ -1,5 +1,5 @@
 //
-// Created by yechentide on 2025/05/10
+// Created by yechentide on 2025/09/18
 //
 
 import Foundation
@@ -10,13 +10,14 @@ import Foundation
 //}
 
 /*
-Decode sub chunk data
+ Decode sub chunk data
 
-ref.
-- [Block Protocol in Beta 1.2.13](https://gist.github.com/Tomcc/a96af509e275b1af483b25c543cfbf37)
-- [Bedrock Edition level format](https://minecraft.fandom.com/wiki/Bedrock_Edition_level_format/History#LevelDB_based_format)
-*/
-internal struct SubChunkBlockParser {
+ ref.
+ - [Block Protocol in Beta 1.2.13](https://gist.github.com/Tomcc/a96af509e275b1af483b25c543cfbf37)
+ - [Bedrock Edition level format](https://minecraft.fandom.com/wiki/Bedrock_Edition_level_format/History#LevelDB_based_format)
+ */
+
+internal struct SubChunkParser {
     private let binaryReader: CBBinaryReader
     private let chunkY: Int8
 
@@ -25,84 +26,96 @@ internal struct SubChunkBlockParser {
         self.chunkY = chunkY
     }
 
-    public func parse() throws -> MCSubChunk? {
+    public func lightParse() throws -> MCSubChunkStorage? {
         let storageVersion = try binaryReader.readUInt8()
         return switch storageVersion {
-            case 9: try parseVersion9()
-            case 8: try parseVersion8()
-            default: nil
+        case 9: try parseV9Light()
+        case 8: try parseV8Light()
+        default: nil
         }
     }
 
-    private func parseVersion9() throws -> MCSubChunk? {
+    private func parseV9Light() throws -> MCSubChunkStorage? {
         let layerCount = try binaryReader.readUInt8()
         let chunkY = try binaryReader.readInt8()
         guard chunkY == self.chunkY, layerCount > 0 else {
             return nil
         }
 
-        let (blockIndicesData, blockBitsPerBlock, blockBlocksPerWord, _) = try binaryReader.readIndicesData()
+        let (blockIndicesData, blockBitWidth, _) = try binaryReader.readIndicesData()
         let blockPalette = try binaryReader.readBlockPalette()
         guard !blockPalette.isEmpty, !blockIndicesData.isEmpty else {
             return nil
         }
 
-        var waterBitsPerBlock: Int = 1
-        var waterBlocksPerWord: Int = CBBinaryReader.wordBitSize
-        var waterPalette: [MCBlock] = []
-        var waterIndicesData: [UInt8] = []
+        var liquidBitWidth: Int = 1
+        var liquidPalette: [CompoundTag] = []
+        var liquidIndicesData: [UInt8] = []
         if layerCount > 1 {
-            (waterIndicesData, waterBitsPerBlock, waterBlocksPerWord, _) = try binaryReader.readIndicesData()
-            waterPalette = try binaryReader.readBlockPalette()
-            guard !waterPalette.isEmpty, !waterIndicesData.isEmpty else {
+            (liquidIndicesData, liquidBitWidth, _) = try binaryReader.readIndicesData()
+            liquidPalette = try binaryReader.readBlockPalette()
+            guard !liquidPalette.isEmpty, !liquidIndicesData.isEmpty else {
                 return nil
             }
         }
 
-        return MCSubChunk(
-            chunkY: self.chunkY, chunkVersion: 9,
-            blockBitsPerBlock: blockBitsPerBlock, blockBlocksPerWord: blockBlocksPerWord,
-            blockPalette: blockPalette, blockIndicesData: blockIndicesData,
-            waterBitsPerBlock: waterBitsPerBlock, waterBlocksPerWord: waterBlocksPerWord,
-            waterPalette: waterPalette, waterIndicesData: waterIndicesData
+        return MCSubChunkStorage(
+            version: 9,
+            chunkY: self.chunkY,
+            blockLayer: .init(
+                bitWidth: blockBitWidth,
+                palette: blockPalette,
+                indicesBytes: blockIndicesData
+            ),
+            liquidLayer: .init(
+                bitWidth: liquidBitWidth,
+                palette: liquidPalette,
+                indicesBytes: liquidIndicesData
+            )
         )
     }
 
-    private func parseVersion8() throws -> MCSubChunk? {
+    private func parseV8Light() throws -> MCSubChunkStorage? {
         let layerCount = try binaryReader.readUInt8()
         guard layerCount > 0 else {
             return nil
         }
 
-        let (blockIndicesData, blockBitsPerBlock, blockBlocksPerWord, _) = try binaryReader.readIndicesData()
+        let (blockIndicesData, blockBitWidth, _) = try binaryReader.readIndicesData()
         let blockPalette = try binaryReader.readBlockPalette()
         guard !blockPalette.isEmpty, !blockIndicesData.isEmpty else {
             return nil
         }
 
-        var waterBitsPerBlock: Int = 1
-        var waterBlocksPerWord: Int = CBBinaryReader.wordBitSize
-        var waterPalette: [MCBlock] = []
-        var waterIndicesData: [UInt8] = []
+        var liquidBitWidth: Int = 1
+        var liquidPalette: [CompoundTag] = []
+        var liquidIndicesData: [UInt8] = []
         if layerCount > 1 {
-            (waterIndicesData, waterBitsPerBlock, waterBlocksPerWord, _) = try binaryReader.readIndicesData()
-            waterPalette = try binaryReader.readBlockPalette()
-            guard !waterPalette.isEmpty, !waterIndicesData.isEmpty else {
+            (liquidIndicesData, liquidBitWidth, _) = try binaryReader.readIndicesData()
+            liquidPalette = try binaryReader.readBlockPalette()
+            guard !liquidPalette.isEmpty, !liquidIndicesData.isEmpty else {
                 return nil
             }
         }
 
-        return MCSubChunk(
-            chunkY: self.chunkY, chunkVersion: 9,
-            blockBitsPerBlock: blockBitsPerBlock, blockBlocksPerWord: blockBlocksPerWord,
-            blockPalette: blockPalette, blockIndicesData: blockIndicesData,
-            waterBitsPerBlock: waterBitsPerBlock, waterBlocksPerWord: waterBlocksPerWord,
-            waterPalette: waterPalette, waterIndicesData: waterIndicesData
+        return MCSubChunkStorage(
+            version: 9,
+            chunkY: self.chunkY,
+            blockLayer: .init(
+                bitWidth: blockBitWidth,
+                palette: blockPalette,
+                indicesBytes: blockIndicesData
+            ),
+            liquidLayer: .init(
+                bitWidth: liquidBitWidth,
+                palette: liquidPalette,
+                indicesBytes: liquidIndicesData
+            )
         )
     }
 
     // TODO: create MCBlock from block ID and block data
-    private func parseClassic() throws -> MCSubChunk? {
+    private func parseClassicLight() throws -> MCSubChunkStorage? {
         var blockIDList = [UInt8]()
         var blockDataList = [UInt8]()
         // 4096 bytes for block ids
@@ -119,13 +132,13 @@ internal struct SubChunkBlockParser {
             blockDataList.append(secondBlockData)
         }
 
-        var blockPalette = [MCBlock]()
+        var blockPalette = [CompoundTag]()
         var blockIndicesData = [UInt8]()
         for i in 0..<MCSubChunk.totalBlockCount {
-            // TODO: create MCBlock from block ID and block data
+            // TODO: create CompoundTag from block ID and block data
             // let blockID = blockIDList[i]
             // let blockData = blockDataList[i]
-            let block = MCBlock(type: .unknown, states: CompoundTag(), version: 0)
+            let block = CompoundTag()
             blockPalette.append(block)
 
             let word = UInt32(truncatingIfNeeded: i)
@@ -133,12 +146,19 @@ internal struct SubChunkBlockParser {
             blockIndicesData.append(contentsOf: bytes)
         }
 
-        return MCSubChunk(
-            chunkY: self.chunkY, chunkVersion: 9,
-            blockBitsPerBlock: CBBinaryReader.wordBitSize, blockBlocksPerWord: 1,
-            blockPalette: blockPalette, blockIndicesData: blockIndicesData,
-            waterBitsPerBlock: 1, waterBlocksPerWord: CBBinaryReader.wordBitSize,
-            waterPalette: [], waterIndicesData: []
+        return MCSubChunkStorage(
+            version: 9,
+            chunkY: self.chunkY,
+            blockLayer: .init(
+                bitWidth: CBBinaryReader.wordBitSize,
+                palette: blockPalette,
+                indicesBytes: blockIndicesData
+            ),
+            liquidLayer: .init(
+                bitWidth: 1,
+                palette: [],
+                indicesBytes: []
+            )
         )
     }
 
