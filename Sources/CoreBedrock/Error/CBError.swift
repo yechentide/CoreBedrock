@@ -11,4 +11,5 @@ public enum CBError: Error, Equatable, LocalizedError {
     case failedExtractKeys(URL)
     case unhandledLevelDBKey(String)
     case failedSaveImage(URL)
+    case invalidDataLength(Int)
 }

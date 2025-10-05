@@ -162,7 +162,7 @@ extension CBBinaryReader {
 extension CBBinaryReader {
     // Mark: - SubChunk Reads
 
-    public func readIndicesData() throws -> (rawData: [UInt8], bitsPerBlock: Int, blocksPerWord: Int, totalWords: Int) {
+    public func readIndicesData() throws -> (rawData: [UInt8], bitsPerBlock: Int, totalWords: Int) {
         let type = try readUInt8()
         guard type > 0 else {
             throw CBStreamError.invalidFormat("Invalid block indices data type: \(type)")
@@ -180,23 +180,25 @@ extension CBBinaryReader {
             throw CBStreamError.endOfStream
         }
         let rawData = try readBytes(totalBytes)
-        return (rawData, bitsPerBlock, blocksPerWord, totalWords)
+        return (rawData, bitsPerBlock, totalWords)
     }
 
-    public func readBlockPalette() throws -> [MCBlock] {
+    public func readBlockPalette() throws -> [CompoundTag] {
         let paletteCount = try readUInt32()
         guard paletteCount <= MCSubChunk.totalBlockCount else {
             throw CBStreamError.argumentOutOfRange("paletteCount", "Palette count out of range: \(paletteCount)")
         }
-        var palette = [MCBlock]()
+        var palette = [CompoundTag]()
         let tagReader = CBTagReader(reader: self)
         for _ in 0..<paletteCount {
-            guard let paletteTag = try? tagReader.readNext() as? CompoundTag,
-                  let block = MCBlock.decode(paletteTag)
+            guard let blockTag = try? tagReader.readNext() as? CompoundTag,
+                  blockTag["name"]?.tagType == .string,
+                  blockTag["states"]?.tagType == .compound,
+                  blockTag["version"]?.tagType == .int
             else {
                 throw CBStreamError.invalidFormat("Invalid block tag found in palette")
             }
-            palette.append(block)
+            palette.append(blockTag)
         }
         return palette
     }

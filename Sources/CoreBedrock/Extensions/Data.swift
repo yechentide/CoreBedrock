@@ -26,6 +26,18 @@ extension Data {
         })
     }
 
+    public var uint16: UInt16 {
+        UInt16(littleEndian: self[ self.startIndex+0...self.startIndex+1 ].withUnsafeBytes{
+            $0.load(as: UInt16.self)
+        })
+    }
+
+    public var int16: Int16 {
+        Int16(littleEndian: self[ self.startIndex+0...self.startIndex+1 ].withUnsafeBytes{
+            $0.load(as: Int16.self)
+        })
+    }
+
     public var uint32: UInt32? {
         guard self.count >= 4 else { return nil }
 

@@ -44,7 +44,7 @@ extension CGColor {
         var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 1
         switch colorSpace {
             case .monochrome:
-                // グレースケール + alpha
+                // Grayscale + alpha
                 r = components[0]
                 g = components[0]
                 b = components[0]
