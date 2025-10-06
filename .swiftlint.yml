@@ -1,0 +1,58 @@
+# List of rules
+# https://realm.github.io/SwiftLint/rule-directory.html
+
+# Disable rules from the default enabled set
+disabled_rules:
+  - identifier_name
+  - trailing_comma
+  - comment_spacing
+
+# Enable rules that are not part of the default set.
+# The special all identifier will enable all opt in linter rules,
+# except the ones listed in disabled_rules
+opt_in_rules:
+  - prefer_self_in_static_references
+  - empty_count
+
+# This is an entirely separate list of rules that are only run by the analyze command.
+# All analyzer rules are opt-in, so this is the only configurable rule list,
+# there are no equivalents for disabled_rules and only_rules.
+# The special all identifier can also be used here to enable all analyzer rules,
+# except the ones listed in disabled_rules
+analyzer_rules:
+  - unused_import
+  - unused_declaration
+  - explicit_self
+
+########## ########## ########## ########## ########## ##########
+
+# Case-sensitive paths to include during linting.
+# Directory paths supplied on the command line will be ignored.
+included: 
+  - Sources
+  - Tests
+
+# case-sensitive paths to ignore during linting. Takes precedence over `included`
+excluded:
+  - .git
+  - .github
+  - .build
+  - .swiftpm
+  - Libraries
+
+# If true, SwiftLint will not fail if no lintable files are found.
+allow_zero_lintable_files: true
+
+# If true, SwiftLint will treat all warnings as errors.
+strict: false
+
+# If true, SwiftLint will treat all errors as warnings.
+lenient: false
+
+# If true, SwiftLint will check for updates after linting or analyzing.
+check_for_updates: true
+
+########## ########## ########## ########## ########## ##########
+# configurable rules can be customized from this configuration file
+
+line_length: 120

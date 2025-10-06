@@ -1,0 +1,43 @@
+# List of rules
+# https://github.com/nicklockwood/SwiftFormat/blob/master/Rules.md
+
+--swift-version 6.0
+
+########## ########## ########## ########## ########## ##########
+# Files
+
+--exclude .git
+--exclude .github
+--exclude .build
+--exclude .swiftpm
+--exclude Libraries
+
+########## ########## ########## ########## ########## ##########
+# Rules
+
+--indent 4
+--indent-case false
+
+--allman false
+--ifdef no-indent
+--property-types inferred
+--nil-init remove
+--self insert
+--trailing-commas always
+--trim-whitespace always
+--ranges no-space
+
+--enable isEmpty
+--enable emptyExtensions
+--enable environmentEntry
+--enable redundantAsync
+--enable blankLinesAfterGuardStatements
+--enable privateStateVariables
+--enable redundantProperty
+--enable singlePropertyPerLine
+--enable swiftTestingTestCaseNames
+
+--disable wrapMultilineStatementBraces
+--disable docCommentsBeforeModifiers
+--disable redundantStaticSelf
+--disable genericExtensions
