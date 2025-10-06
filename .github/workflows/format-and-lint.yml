@@ -42,7 +42,7 @@ jobs:
           docker run --rm \
             -v "${{ github.workspace }}":/work -w /work \
             ghcr.io/realm/swiftlint:latest \
-            lint /work --strict --reporter github-actions-logging
+            lint /work --reporter github-actions-logging
 
       - name: Commit formatted changes if any
         if: success()

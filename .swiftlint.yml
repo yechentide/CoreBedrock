@@ -28,7 +28,7 @@ analyzer_rules:
 
 # Case-sensitive paths to include during linting.
 # Directory paths supplied on the command line will be ignored.
-included: 
+included:
   - Sources
   - Tests
 
@@ -44,7 +44,7 @@ excluded:
 allow_zero_lintable_files: true
 
 # If true, SwiftLint will treat all warnings as errors.
-strict: false
+strict: true
 
 # If true, SwiftLint will treat all errors as warnings.
 lenient: false
