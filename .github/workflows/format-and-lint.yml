@@ -1,0 +1,59 @@
+name: Format & Lint
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    types: [ closed ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  format_and_lint:
+    name: Run SwiftFormat and SwiftLint using Docker
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Pull SwiftFormat image
+        run: docker pull ghcr.io/nicklockwood/swiftformat:latest
+
+      - name: Pull SwiftLint image
+        run: docker pull ghcr.io/realm/swiftlint:latest
+
+      - name: Run SwiftFormat
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}":/work \
+            ghcr.io/nicklockwood/swiftformat:latest \
+            /work --reporter github-actions-log
+
+      - name: Run SwiftLint
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}":/work -w /work \
+            ghcr.io/realm/swiftlint:latest \
+            lint /work --strict --reporter github-actions-logging
+
+      - name: Commit formatted changes if any
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet; then
+            echo "Changes detected. Committing..."
+            git add .
+            git commit -m "chore: auto-format code [skip ci]"
+            git push
+          else
+            echo "No changes to commit."
+          fi
