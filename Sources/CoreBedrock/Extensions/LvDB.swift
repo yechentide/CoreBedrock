@@ -39,8 +39,8 @@ public extension LvDB {
                 continue
             }
 
-            let keyType = LvDBKeyType.parse(data: keyData)
-            guard case let .subChunk(chunkX, chunkZ, actualDimension, type, _) = keyType,
+            let key = LvDBKey.parse(data: keyData)
+            guard case let .subChunk(chunkX, chunkZ, actualDimension, type, _) = key,
                   actualDimension == dimension,
                   [.chunkVersion, .legacyChunkVersion].contains(type)
             else {

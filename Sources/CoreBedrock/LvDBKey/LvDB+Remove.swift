@@ -23,11 +23,11 @@ public extension LvDB {
                 }
 
                 autoreleasepool { [batch, iter] in
-                    let keyType = LvDBKeyType.parse(data: key)
-                    if case let LvDBKeyType.subChunk(_, _, d, _, _) = keyType, d == dimension {
+                    let lvdbKey = LvDBKey.parse(data: key)
+                    if case let LvDBKey.subChunk(_, _, d, _, _) = lvdbKey, d == dimension {
                         batch.remove(key)
                     }
-                    if case let LvDBKeyType.digp(_, _, d) = keyType, d == dimension {
+                    if case let LvDBKey.digp(_, _, d) = lvdbKey, d == dimension {
                         batch.remove(key)
                         if let digpData = iter.value(), !digpData.isEmpty, digpData.count % 8 == 0 {
                             for i in 0..<digpData.count / 8 {
@@ -116,12 +116,12 @@ public extension LvDB {
                 }
 
                 autoreleasepool { [batch, iter, key, dimension] in
-                    let keyType = LvDBKeyType.parse(data: key)
-                    if case let LvDBKeyType.subChunk(cx, cz, d, _, _) = keyType,
+                    let lvdbKey = LvDBKey.parse(data: key)
+                    if case let LvDBKey.subChunk(cx, cz, d, _, _) = lvdbKey,
                        d == dimension, !xRange.contains(cx) || !zRange.contains(cz) {
                         batch.remove(key)
                     }
-                    if case let LvDBKeyType.digp(cx, cz, d) = keyType,
+                    if case let LvDBKey.digp(cx, cz, d) = lvdbKey,
                        d == dimension, !xRange.contains(cx) || !zRange.contains(cz) {
                         batch.remove(key)
                         if let digpData = iter.value(), !digpData.isEmpty, digpData.count % 8 == 0 {
