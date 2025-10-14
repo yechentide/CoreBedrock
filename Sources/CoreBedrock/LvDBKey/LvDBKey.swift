@@ -6,7 +6,7 @@ import Foundation
 
 // swiftformat:disable consecutiveSpaces spaceAroundOperators
 
-public enum LvDBKeyType: Equatable, Hashable, Sendable {
+public enum LvDBKey: Equatable, Hashable, Sendable {
     case subChunk(Int32, Int32, MCDimension, LvDBChunkKeyType, Int8!)
     case string(LvDBStringKeyType)       // "\(key string)"
     case player(Data)                    // "\(key string)"
@@ -124,7 +124,7 @@ public enum LvDBKeyType: Equatable, Hashable, Sendable {
         return false
     }
 
-    public var keyData: Data {
+    public var data: Data {
         switch self {
         case let .subChunk(x, z, d, t, y):
             var keyData = x.data + z.data
