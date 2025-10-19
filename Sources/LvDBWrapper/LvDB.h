@@ -35,8 +35,15 @@
 
 /**
  * Close the database and release resources
+ * Also destroys all active iterators created by this database
  */
 - (void)close;
+
+/**
+ * Internal method to deregister an iterator when it's manually destroyed
+ * @param iterator Iterator to deregister
+ */
+- (void)deregisterIterator:(LvDBIterator *)iterator;
 
 /**
  * Check if a key exists in the database

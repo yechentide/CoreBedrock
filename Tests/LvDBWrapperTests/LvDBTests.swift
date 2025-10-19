@@ -6,6 +6,8 @@ import Foundation
 @testable import LvDBWrapper
 import Testing
 
+// swiftlint:disable type_body_length
+
 struct LvDBTests {
     @Test(.withEmptyDirectory)
     func throwsWhenTryingToOpenNonDbDirectoryAndCreateIfMissingIsFalse() throws {
@@ -273,4 +275,118 @@ struct LvDBTests {
 //
 //    @Test(.withEmptyDirectory)
 //    func compactsDbWithinSpecifiedRange() async throws {}
+
+    @Test(.withEmptyDirectory)
+    func destroysAllActiveIteratorsOnClose() throws {
+        let directoryPath = EmptyDirectoryTrait.Context.directoryPath
+        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+
+        // Create some test data
+        let keys = ["apple", "banana", "cherry"].map { Data($0.utf8) }
+        for key in keys {
+            try db.put(key, Data())
+        }
+
+        // Create multiple iterators
+        let iter1 = try db.makeIterator()
+        let iter2 = try db.makeIterator()
+        let iter3 = try db.makeIterator()
+
+        // Position iterators
+        iter1.seekToFirst()
+        iter2.seek(keys[1])
+        iter3.seekToLast()
+
+        // Verify iterators are valid
+        #expect(iter1.isDestroyed == false)
+        #expect(iter2.isDestroyed == false)
+        #expect(iter3.isDestroyed == false)
+        #expect(iter1.valid() == true)
+        #expect(iter2.valid() == true)
+        #expect(iter3.valid() == true)
+
+        // Close the database
+        db.close()
+
+        // All iterators should be destroyed
+        #expect(iter1.isDestroyed == true)
+        #expect(iter2.isDestroyed == true)
+        #expect(iter3.isDestroyed == true)
+    }
+
+    @Test(.withEmptyDirectory)
+    func handlesIteratorDestroyedBeforeDbClose() throws {
+        let directoryPath = EmptyDirectoryTrait.Context.directoryPath
+        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+
+        // Create some test data
+        try db.put(Data("key".utf8), Data("value".utf8))
+
+        // Create iterators
+        let iter1 = try db.makeIterator()
+        let iter2 = try db.makeIterator()
+
+        // Manually destroy one iterator before closing the database
+        iter1.destroy()
+        #expect(iter1.isDestroyed == true)
+        #expect(iter2.isDestroyed == false)
+
+        // Close should only destroy the remaining active iterator
+        db.close()
+
+        #expect(iter1.isDestroyed == true)
+        #expect(iter2.isDestroyed == true)
+    }
+
+    @Test(.withEmptyDirectory)
+    func handlesMultipleCloseCallsWithActiveIterators() throws {
+        let directoryPath = EmptyDirectoryTrait.Context.directoryPath
+        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+
+        // Create some test data
+        try db.put(Data("key".utf8), Data("value".utf8))
+
+        // Create iterators
+        let iter1 = try db.makeIterator()
+        let iter2 = try db.makeIterator()
+
+        iter1.seekToFirst()
+        iter2.seekToFirst()
+
+        #expect(iter1.isDestroyed == false)
+        #expect(iter2.isDestroyed == false)
+
+        // First close destroys all iterators
+        db.close()
+
+        #expect(iter1.isDestroyed == true)
+        #expect(iter2.isDestroyed == true)
+
+        // Second close should not cause any issues
+        db.close()
+
+        #expect(iter1.isDestroyed == true)
+        #expect(iter2.isDestroyed == true)
+    }
+
+    @Test(.withEmptyDirectory)
+    func allowsManualIteratorDestroyAfterDbClose() throws {
+        let directoryPath = EmptyDirectoryTrait.Context.directoryPath
+        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+
+        try db.put(Data("key".utf8), Data("value".utf8))
+
+        let iter = try db.makeIterator()
+        iter.seekToFirst()
+
+        // Close destroys the iterator
+        db.close()
+        #expect(iter.isDestroyed == true)
+
+        // Calling destroy again should be safe
+        iter.destroy()
+        #expect(iter.isDestroyed == true)
+    }
 }
+
+// swiftlint:enable type_body_length

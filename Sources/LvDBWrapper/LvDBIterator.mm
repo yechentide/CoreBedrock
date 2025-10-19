@@ -3,6 +3,7 @@
 //
 
 #import "LvDBIterator.h"
+#import "LvDB.h"
 #import "DebugLog.h"
 
 #import <iostream>
@@ -11,12 +12,14 @@
 
 @implementation LvDBIterator {
     std::unique_ptr<leveldb::Iterator> iterator;
+    __weak LvDB *parentDB;
 }
 
-- (id)initFromIterator:(void *)dbIterator {
+- (id)initFromIterator:(void *)dbIterator parentDB:(LvDB *)parent {
     if (self = [super init]) {
         leveldb::Iterator* it = static_cast<leveldb::Iterator*>(dbIterator);
         iterator.reset(it);
+        parentDB = parent;
         DebugLog(@"LvDBIterator initialized.");
     }
     return self;
@@ -32,6 +35,13 @@
         return;
     }
     iterator.reset();
+
+    // Deregister from parent DB if it still exists
+    if (parentDB != nil) {
+        [parentDB deregisterIterator:self];
+        parentDB = nil;
+    }
+
     DebugLog(@"leveldb::Iterator destroyed.");
 }
 
