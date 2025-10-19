@@ -53,4 +53,20 @@ public extension Data {
             $0.load(as: Int32.self)
         })
     }
+
+    var uint64: UInt64? {
+        guard self.count >= 8 else { return nil }
+
+        return UInt64(littleEndian: self[self.startIndex + 0..<self.startIndex + 8].withUnsafeBytes {
+            $0.load(as: UInt64.self)
+        })
+    }
+
+    var int64: Int64? {
+        guard self.count >= 8 else { return nil }
+
+        return Int64(littleEndian: self[self.startIndex + 0..<self.startIndex + 8].withUnsafeBytes {
+            $0.load(as: Int64.self)
+        })
+    }
 }
