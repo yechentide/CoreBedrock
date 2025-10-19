@@ -6,6 +6,8 @@ import Foundation
 @testable import LvDBWrapper
 import Testing
 
+// swiftlint:disable type_body_length
+
 struct LvDBIteratorTests {
     @Test(.withTemporaryDatabase)
     func positionsAtFirstKeyWhenSeekToFirst() throws {
@@ -285,4 +287,72 @@ struct LvDBIteratorTests {
         #expect(iter.key() == keyToRemove)
         #expect(db.contains(keyToRemove) == false)
     }
+
+    @Test(.withEmptyDirectory)
+    func deregistersFromParentDbOnManualDestroy() throws {
+        let directoryPath = EmptyDirectoryTrait.Context.directoryPath
+        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        defer { db.close() }
+
+        try db.put(Data("key".utf8), Data("value".utf8))
+
+        let iter1 = try db.makeIterator()
+        let iter2 = try db.makeIterator()
+
+        // Manually destroy iter1
+        iter1.destroy()
+        #expect(iter1.isDestroyed == true)
+
+        // iter2 should still work normally
+        iter2.seekToFirst()
+        #expect(iter2.valid() == true)
+        #expect(iter2.isDestroyed == false)
+    }
+
+    @Test(.withEmptyDirectory)
+    func allowsMultipleDestroyCallsSafely() throws {
+        let directoryPath = EmptyDirectoryTrait.Context.directoryPath
+        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        defer { db.close() }
+
+        try db.put(Data("key".utf8), Data("value".utf8))
+
+        let iter = try db.makeIterator()
+        iter.seekToFirst()
+
+        // First destroy
+        iter.destroy()
+        #expect(iter.isDestroyed == true)
+
+        // Second destroy should be safe
+        iter.destroy()
+        #expect(iter.isDestroyed == true)
+
+        // Third destroy should also be safe
+        iter.destroy()
+        #expect(iter.isDestroyed == true)
+    }
+
+    @Test(.withEmptyDirectory)
+    func iteratorRemainsDestroyedAfterParentDbClose() throws {
+        let directoryPath = EmptyDirectoryTrait.Context.directoryPath
+        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+
+        try db.put(Data("key".utf8), Data("value".utf8))
+
+        let iter = try db.makeIterator()
+        iter.seekToFirst()
+        #expect(iter.isDestroyed == false)
+
+        // Close DB, which destroys the iterator
+        db.close()
+        #expect(iter.isDestroyed == true)
+
+        // Iterator should remain destroyed
+        #expect(iter.valid() == false)
+        #expect(iter.key() == nil)
+        #expect(iter.value() == nil)
+    }
 }
+
+// swiftlint:enable type_body_length

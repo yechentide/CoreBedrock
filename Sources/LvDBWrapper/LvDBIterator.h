@@ -7,11 +7,13 @@
 
 #import <Foundation/Foundation.h>
 
+@class LvDB;
+
 @interface LvDBIterator : NSObject
 
 @property (nonatomic,readonly) BOOL isDestroyed;
 
-- (id)initFromIterator:(void *)dbIterator;
+- (id)initFromIterator:(void *)dbIterator parentDB:(LvDB *)parentDB;
 - (void)destroy;
 
 - (void)seekToFirst;

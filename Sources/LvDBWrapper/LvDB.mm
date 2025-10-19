@@ -22,10 +22,13 @@
     leveldb::Options options;
     leveldb::ReadOptions readOptions;
     leveldb::WriteOptions writeOptions;
+    NSHashTable<LvDBIterator *> *activeIterators;
 }
 
 - (id)initWithDBPath:(NSString *)path createIfMissing:(BOOL)createIfMissing error:(NSError **)error {
     if (self = [super init]) {
+        activeIterators = [NSHashTable weakObjectsHashTable];
+
         options.create_if_missing = createIfMissing;
         options.write_buffer_size = 4 * 1024 * 1024;                            // Create a 4mb write buffer, to improve compression and touch the disk less
         // options.block_cache = leveldb::NewLRUCache(40 * 1024 * 1024);        // Create a 40 mb cache (we use this on ~1gb devices)
@@ -67,10 +70,23 @@
     if (db == nullptr) {
         return;
     }
+
+    // Destroy all active iterators
+    NSArray<LvDBIterator *> *iterators = [activeIterators allObjects];
+    for (LvDBIterator *iterator in iterators) {
+        [iterator destroy];
+    }
+    [activeIterators removeAllObjects];
+    DebugLog(@"Destroyed %lu active iterators.", (unsigned long)iterators.count);
+
     db.reset();
     delete options.filter_policy;
     delete readOptions.decompress_allocator;
     DebugLog(@"leveldb::DB closed.");
+}
+
+- (void)deregisterIterator:(LvDBIterator *)iterator {
+    [activeIterators removeObject:iterator];
 }
 
 - (BOOL)isClosed {
@@ -109,7 +125,9 @@
     }
     auto dbIterator = db->NewIterator(readOptions);
     DebugLog(@"leveldb::Iterator generated.");
-    return [[LvDBIterator alloc] initFromIterator:dbIterator];
+    LvDBIterator *iterator = [[LvDBIterator alloc] initFromIterator:dbIterator parentDB:self];
+    [activeIterators addObject:iterator];
+    return iterator;
 }
 
 /* ---------- Key-Value Operations ---------- */
