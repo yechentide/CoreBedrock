@@ -49,10 +49,10 @@ struct LvDBKeyTests {
     // Test parsing of string key
     @Test
     func parseStringKey() throws {
-        let data = Data("VILLAGE_test".utf8)
+        let data = Data(LvDBStringKeyType.localPlayer.rawValue.utf8)
         let key = LvDBKey.parse(data: data)
-        if case let .village(villageData) = key {
-            #expect(String(data: villageData, encoding: .utf8) == "test")
+        if case let .string(type) = key {
+            #expect(type == .localPlayer)
         } else {
             Issue.record("Failed to parse village key")
         }
@@ -67,7 +67,7 @@ struct LvDBKeyTests {
         let dataKey = LvDBKey.subChunk(0, 0, .overworld, .data3D, nil)
         #expect(dataKey.isNBTKey == false)
 
-        let villageKey = LvDBKey.village(Data("test".utf8))
+        let villageKey = LvDBKey.village("Overworld", "XXXXXXXX", "INFO")
         #expect(villageKey.isNBTKey == true)
     }
 
@@ -98,8 +98,8 @@ struct LvDBKeyTests {
         #expect(subChunkKey.data == expectedData)
 
         // Test village key
-        let villageKey = LvDBKey.village(Data("test".utf8))
-        let expectedVillageData = Data("VILLAGE_test".utf8)
+        let villageKey = LvDBKey.village("Overworld", "XXXXXXXX", "INFO")
+        let expectedVillageData = Data("VILLAGE_Overworld_XXXXXXXX_INFO".utf8)
         #expect(villageKey.data == expectedVillageData)
     }
 }
