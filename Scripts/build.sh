@@ -51,8 +51,8 @@ function check_environment() {
     if command -v ninja > /dev/null 2>&1; then
         logger 'ok' "Using ninja version $(ninja --version | head -n 1)"
     else
-        logger 'error' 'Command "cmake" not found!'
-        logger 'tip' 'You can install cmake by running "brew install --formula cmake".'
+        logger 'error' 'Command "ninja" not found!'
+        logger 'tip' 'You can install ninja by running "brew install --formula ninja".'
         exit 1
     fi
     if xcode-select -print-path | grep '^/Applications' > /dev/null 2>&1; then
