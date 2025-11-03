@@ -28,13 +28,13 @@ public extension Data {
 
     var uint16: UInt16 {
         UInt16(littleEndian: self[self.startIndex + 0...self.startIndex + 1].withUnsafeBytes {
-            $0.load(as: UInt16.self)
+            $0.loadUnaligned(as: UInt16.self)
         })
     }
 
     var int16: Int16 {
         Int16(littleEndian: self[self.startIndex + 0...self.startIndex + 1].withUnsafeBytes {
-            $0.load(as: Int16.self)
+            $0.loadUnaligned(as: Int16.self)
         })
     }
 
@@ -42,7 +42,7 @@ public extension Data {
         guard self.count >= 4 else { return nil }
 
         return UInt32(littleEndian: self[self.startIndex + 0..<self.startIndex + 4].withUnsafeBytes {
-            $0.load(as: UInt32.self)
+            $0.loadUnaligned(as: UInt32.self)
         })
     }
 
@@ -50,7 +50,7 @@ public extension Data {
         guard self.count >= 4 else { return nil }
 
         return Int32(littleEndian: self[self.startIndex + 0..<self.startIndex + 4].withUnsafeBytes {
-            $0.load(as: Int32.self)
+            $0.loadUnaligned(as: Int32.self)
         })
     }
 
@@ -58,7 +58,7 @@ public extension Data {
         guard self.count >= 8 else { return nil }
 
         return UInt64(littleEndian: self[self.startIndex + 0..<self.startIndex + 8].withUnsafeBytes {
-            $0.load(as: UInt64.self)
+            $0.loadUnaligned(as: UInt64.self)
         })
     }
 
@@ -66,7 +66,7 @@ public extension Data {
         guard self.count >= 8 else { return nil }
 
         return Int64(littleEndian: self[self.startIndex + 0..<self.startIndex + 8].withUnsafeBytes {
-            $0.load(as: Int64.self)
+            $0.loadUnaligned(as: Int64.self)
         })
     }
 }
