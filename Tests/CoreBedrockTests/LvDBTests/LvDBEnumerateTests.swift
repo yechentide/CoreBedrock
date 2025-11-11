@@ -15,11 +15,11 @@ struct EnumerateTests {
             .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
-        let lvdb = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         let data = Data([0x01, 0x02, 0x03]) // 3 bytes
         var called = false
 
-        let result = lvdb.enumerateActorKeys(digpData: data) { _, _ in
+        let result = db.enumerateActorKeys(digpData: data) { _, _ in
             called = true
         }
 
@@ -34,7 +34,7 @@ struct EnumerateTests {
             .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
-        let lvdb = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         // Two actor IDs (16 bytes)
         let data = Data([
             0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
@@ -44,7 +44,7 @@ struct EnumerateTests {
         var indices: [Int] = []
         var ids: [Data] = []
 
-        let result = lvdb.enumerateActorKeys(digpData: data) { index, id in
+        let result = db.enumerateActorKeys(digpData: data) { index, id in
             indices.append(index)
             ids.append(id)
         }
@@ -65,11 +65,11 @@ struct EnumerateTests {
             .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
-        let lvdb = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         let data = Data()
         var called = false
 
-        let result = lvdb.enumerateActorKeys(digpData: data) { _, _ in
+        let result = db.enumerateActorKeys(digpData: data) { _, _ in
             called = true
         }
 

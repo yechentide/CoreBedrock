@@ -14,7 +14,7 @@ struct LvDBIteratorTests {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
 
         #expect(iter.valid() == false)
         iter.seekToFirst()
@@ -26,7 +26,7 @@ struct LvDBIteratorTests {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
 
         #expect(iter.valid() == false)
         iter.seekToLast()
@@ -38,7 +38,7 @@ struct LvDBIteratorTests {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
 
         #expect(iter.valid() == false)
         let key = Data("~local_player".utf8)
@@ -57,7 +57,7 @@ struct LvDBIteratorTests {
             try db.put(Data(key.utf8), Data())
         }
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
 
         // Seek to an existing key
         let bananaKey = Data("banana".utf8)
@@ -87,7 +87,7 @@ struct LvDBIteratorTests {
             try db.put(key, Data())
         }
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
 
         iter.seekToFirst()
         #expect(iter.key() == keys[0])
@@ -110,7 +110,7 @@ struct LvDBIteratorTests {
             try db.put(key, Data())
         }
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
 
         iter.seekToLast()
         #expect(iter.key() == keys[2])
@@ -133,7 +133,7 @@ struct LvDBIteratorTests {
             try db.put(key, Data())
         }
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
 
         #expect(iter.valid() == false)
         iter.seekToFirst()
@@ -151,7 +151,7 @@ struct LvDBIteratorTests {
         let key = Data("apple".utf8)
         try db.put(key, Data())
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
 
         iter.seekToFirst()
         #expect(iter.key() == key)
@@ -167,7 +167,7 @@ struct LvDBIteratorTests {
         let value = Data("fruit".utf8)
         try db.put(key, value)
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
 
         iter.seekToFirst()
         #expect(iter.value() == value)
@@ -184,7 +184,7 @@ struct LvDBIteratorTests {
             try db.put(key, Data())
         }
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
 
         var collected: [Data] = []
         iter.seekToFirst()
@@ -202,7 +202,7 @@ struct LvDBIteratorTests {
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
         #expect(iter.isDestroyed == false)
         iter.destroy()
         #expect(iter.isDestroyed == true)
@@ -214,7 +214,7 @@ struct LvDBIteratorTests {
         let db = try LvDB(dbPath: dbPath)
         defer { db.close() }
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
         iter.destroy()
         #expect(iter.valid() == false)
         #expect(iter.key() == nil)
@@ -236,13 +236,13 @@ struct LvDBIteratorTests {
             try db.put(key, Data())
         }
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
 
         iter.seekToFirst()
         #expect(iter.key() == keys[0])
 
         // Compact the entire database
-        try db.compactRange(withBegin: nil, end: nil)
+        try db.compactRange(nil, nil)
 
         // Iterator should remain valid and point to the same key
         #expect(iter.valid() == true)
@@ -257,7 +257,7 @@ struct LvDBIteratorTests {
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
 
         let newKey = Data("newKey".utf8)
         let newValue = Data("newValue".utf8)
@@ -265,7 +265,7 @@ struct LvDBIteratorTests {
 
         iter.seek(newKey)
         #expect(iter.valid() == false)
-        #expect(db.contains(newKey) == true)
+        #expect(db.has(newKey) == true)
     }
 
     @Test(.withEmptyDirectory)
@@ -278,14 +278,14 @@ struct LvDBIteratorTests {
         let value = Data("value".utf8)
         try db.put(keyToRemove, value)
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
 
         try db.remove(keyToRemove)
 
         iter.seek(keyToRemove)
         #expect(iter.valid() == true)
         #expect(iter.key() == keyToRemove)
-        #expect(db.contains(keyToRemove) == false)
+        #expect(db.has(keyToRemove) == false)
     }
 
     @Test(.withEmptyDirectory)
@@ -296,8 +296,8 @@ struct LvDBIteratorTests {
 
         try db.put(Data("key".utf8), Data("value".utf8))
 
-        let iter1 = try db.makeIterator()
-        let iter2 = try db.makeIterator()
+        let iter1 = try db.newIterator()
+        let iter2 = try db.newIterator()
 
         // Manually destroy iter1
         iter1.destroy()
@@ -317,7 +317,7 @@ struct LvDBIteratorTests {
 
         try db.put(Data("key".utf8), Data("value".utf8))
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
         iter.seekToFirst()
 
         // First destroy
@@ -340,7 +340,7 @@ struct LvDBIteratorTests {
 
         try db.put(Data("key".utf8), Data("value".utf8))
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
         iter.seekToFirst()
         #expect(iter.isDestroyed == false)
 

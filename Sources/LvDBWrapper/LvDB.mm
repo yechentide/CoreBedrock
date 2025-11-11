@@ -93,7 +93,7 @@
     return db == nullptr ? YES : NO;
 }
 
-- (BOOL)contains:(NSData *)key {
+- (BOOL)has:(NSData *)key {
     if (db == nullptr || key == nil) {
         return NO;
     }
@@ -118,7 +118,7 @@
     }
 }
 
-- (LvDBIterator *)makeIterator:(NSError **)error {
+- (LvDBIterator *)newIterator:(NSError **)error {
     if (db == nullptr) {
         [self assignError:error message:@"DB Closed"];
         return nil;
@@ -182,7 +182,7 @@
 
 /* ---------- Batch Operations ---------- */
 
-- (BOOL)writeBatch:(LvDBWriteBatch *)writeBatch error:(NSError **)error {
+- (BOOL)write:(LvDBWriteBatch *)writeBatch error:(NSError **)error {
     if (db == nullptr) {
         [self assignError:error message:@"DB Closed"];
         return NO;
@@ -208,7 +208,7 @@
 
 /* ---------- Database Maintenance ---------- */
 
-- (BOOL)compactRangeWithBegin:(NSData *)begin end:(NSData *)end error:(NSError **)error {
+- (BOOL)compactRange:(NSData *)begin end:(NSData *)end error:(NSError **)error {
     if (db == nullptr) {
         [self assignError:error message:@"DB Closed"];
         return NO;

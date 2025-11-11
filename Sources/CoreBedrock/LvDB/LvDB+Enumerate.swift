@@ -4,7 +4,7 @@
 
 import LvDBWrapper
 
-public extension LvDB {
+public extension LevelKeyValueStore {
     func enumerateActorKeys(
         digpData: Data,
         handler: @escaping (Int, Data) -> Void

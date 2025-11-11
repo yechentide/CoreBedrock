@@ -4,10 +4,10 @@
 
 import LvDBWrapper
 
-public extension LvDB {
+public extension LevelKeyValueStore {
     func getStringKey(type: LvDBStringKeyType) -> Data? {
         let keyData = type.rawValue.data(using: .utf8)!
-        guard contains(keyData) else {
+        guard containsKey(keyData) else {
             return nil
         }
 
@@ -21,7 +21,7 @@ public extension LvDB {
         for strKeyType in LvDBStringKeyType.allCases {
             guard !excludeTypes.contains(strKeyType),
                   let keyData = strKeyType.rawValue.data(using: .utf8),
-                  contains(keyData)
+                  containsKey(keyData)
             else {
                 continue
             }
@@ -36,8 +36,8 @@ public extension LvDB {
         var keys = [Data]()
 
         let digpKey = Data("digp".utf8) + keyPrefix
-        guard contains(digpKey),
-              let digpData = try? get(digpKey),
+        guard containsKey(digpKey),
+              let digpData = try? data(forKey: digpKey),
               !digpData.isEmpty,
               digpData.count % 8 == 0
         else {
@@ -48,7 +48,7 @@ public extension LvDB {
 
         for i in 0..<digpData.count / 8 {
             let actorKey = Data("actorprefix".utf8) + digpData[i * 8...i * 8 + 7]
-            guard contains(actorKey) else {
+            guard containsKey(actorKey) else {
                 continue
             }
 
@@ -63,7 +63,7 @@ public extension LvDB {
 
         for yIndex in Int8(-4)...Int8(20) {
             let key = keyPrefix + LvDBChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
-            if contains(key) {
+            if containsKey(key) {
                 keys.append(key)
             }
         }
@@ -74,7 +74,7 @@ public extension LvDB {
             }
 
             let key = keyPrefix + type.rawValue.data
-            if contains(key) {
+            if containsKey(key) {
                 keys.append(key)
             }
         }
@@ -100,7 +100,7 @@ public extension LvDB {
                 break
             }
 
-            if contains(keyData) {
+            if containsKey(keyData) {
                 keys.append(keyData)
             }
         }

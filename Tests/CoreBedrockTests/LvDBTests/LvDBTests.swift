@@ -28,7 +28,7 @@ struct LvDBTests {
     @Test
     func chunkExists_withVersionKey() throws {
         let dbPath = self.temporaryDBPath()
-        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -39,14 +39,14 @@ struct LvDBTests {
         let dimension: MCDimension = .overworld
         let versionKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .chunkVersion)
         let versionData = Data([0x03])
-        try db.put(versionKey, versionData)
+        try db.putData(versionData, forKey: versionKey)
         #expect(db.chunkExists(chunkX: Int(chunkX), chunkZ: Int(chunkZ), dimension: dimension))
     }
 
     @Test
     func chunkExists_withLegacyVersionKey() throws {
         let dbPath = self.temporaryDBPath()
-        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -57,7 +57,7 @@ struct LvDBTests {
         let dimension: MCDimension = .overworld
         let legacyVersionKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .legacyChunkVersion)
         let versionData = Data([0x03])
-        try db.put(legacyVersionKey, versionData)
+        try db.putData(versionData, forKey: legacyVersionKey)
         let result = db.chunkExists(chunkX: Int(chunkX), chunkZ: Int(chunkZ), dimension: dimension)
         #expect(result == true)
     }
@@ -65,7 +65,7 @@ struct LvDBTests {
     @Test
     func chunkExists_whenDoesNotExist() throws {
         let dbPath = self.temporaryDBPath()
-        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -80,7 +80,7 @@ struct LvDBTests {
     @Test
     func chunkExists_withInvalidData() throws {
         let dbPath = self.temporaryDBPath()
-        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -91,14 +91,14 @@ struct LvDBTests {
         let dimension: MCDimension = .overworld
         let versionKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: dimension, type: .chunkVersion)
         let invalidData = Data([0x01, 0x02])
-        try db.put(versionKey, invalidData)
+        try db.putData(invalidData, forKey: versionKey)
         #expect(!db.chunkExists(chunkX: Int(chunkX), chunkZ: Int(chunkZ), dimension: dimension))
     }
 
     @Test
     func chunkExists_inDifferentDimension() throws {
         let dbPath = self.temporaryDBPath()
-        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -108,7 +108,7 @@ struct LvDBTests {
         let chunkZ: Int32 = 2
         let versionData = Data([0x03])
         let otherDimensionKey = LvDBKeyFactory.makeChunkKey(x: chunkX, z: chunkZ, dimension: .theNether, type: .chunkVersion)
-        try db.put(otherDimensionKey, versionData)
+        try db.putData(versionData, forKey: otherDimensionKey)
         #expect(!db.chunkExists(chunkX: Int(chunkX), chunkZ: Int(chunkZ), dimension: .overworld)) // Should not find it in overworld
         #expect(db.chunkExists(chunkX: Int(chunkX), chunkZ: Int(chunkZ), dimension: .theNether)) // Should find it in nether
     }
@@ -116,7 +116,7 @@ struct LvDBTests {
     @Test
     func scanExistingChunks_overworld() throws {
         let dbPath = self.temporaryDBPath()
-        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -131,10 +131,10 @@ struct LvDBTests {
         // This key should represent a type that scanExistingChunks is NOT looking for.
         let nonChunkVersionKey = LvDBKeyFactory.makeChunkKey(x: 3, z: 3, dimension: .overworld, type: .subChunkPrefix, yIndex: 0)
 
-        try db.put(overworldChunk1Key, versionData)
-        try db.put(overworldChunk2Key, versionData)
-        try db.put(netherChunkKey, versionData)
-        try db.put(nonChunkVersionKey, Data([0x01, 0x02, 0x03]))
+        try db.putData(versionData, forKey: overworldChunk1Key)
+        try db.putData(versionData, forKey: overworldChunk2Key)
+        try db.putData(versionData, forKey: netherChunkKey)
+        try db.putData(Data([0x01, 0x02, 0x03]), forKey: nonChunkVersionKey)
 
         var foundOverworldChunks = [(Int32, Int32)]()
         let scanResult = db.scanExistingChunks(dimension: .overworld) { x, z in
@@ -150,7 +150,7 @@ struct LvDBTests {
     @Test
     func scanExistingChunks_nether() throws {
         let dbPath = self.temporaryDBPath()
-        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -163,10 +163,10 @@ struct LvDBTests {
         // This key should represent a type that scanExistingChunks is NOT looking for.
         let nonChunkVersionKey = LvDBKeyFactory.makeChunkKey(x: 3, z: 3, dimension: .theNether, type: .subChunkPrefix, yIndex: 0)
 
-        try db.put(overworldChunkKey, versionData)
-        try db.put(netherChunk1Key, versionData)
-        try db.put(netherChunk2Key, versionData)
-        try db.put(nonChunkVersionKey, Data([0x01, 0x02, 0x03]))
+        try db.putData(versionData, forKey: overworldChunkKey)
+        try db.putData(versionData, forKey: netherChunk1Key)
+        try db.putData(versionData, forKey: netherChunk2Key)
+        try db.putData(Data([0x01, 0x02, 0x03]), forKey: nonChunkVersionKey)
 
         var foundNetherChunks = [(Int32, Int32)]()
         let scanResult = db.scanExistingChunks(dimension: .theNether) { x, z in
@@ -182,7 +182,7 @@ struct LvDBTests {
     @Test
     func scanExistingChunks_handlerStopsEarly() throws {
         let dbPath = self.temporaryDBPath()
-        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -191,8 +191,8 @@ struct LvDBTests {
         // Add multiple chunks to ensure the handler can stop early
         let overworldChunk1Key = LvDBKeyFactory.makeChunkKey(x: 1, z: 1, dimension: .overworld, type: .chunkVersion)
         let overworldChunk2Key = LvDBKeyFactory.makeChunkKey(x: 1, z: 2, dimension: .overworld, type: .legacyChunkVersion)
-        try db.put(overworldChunk1Key, versionData)
-        try db.put(overworldChunk2Key, versionData)
+        try db.putData(versionData, forKey: overworldChunk1Key)
+        try db.putData(versionData, forKey: overworldChunk2Key)
 
         var processedCount = 0
         let scanResult = db.scanExistingChunks(dimension: .overworld) { _, _ in
@@ -206,7 +206,7 @@ struct LvDBTests {
     @Test
     func scanExistingChunks_emptyDimension() throws {
         let dbPath = self.temporaryDBPath()
-        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -214,7 +214,7 @@ struct LvDBTests {
         // Add a chunk to a different dimension to ensure it's not picked up
         let versionData = Data([0x03])
         let netherChunkKey = LvDBKeyFactory.makeChunkKey(x: 2, z: 1, dimension: .theNether, type: .chunkVersion)
-        try db.put(netherChunkKey, versionData)
+        try db.putData(versionData, forKey: netherChunkKey)
 
         var foundTheEndChunks = [(Int32, Int32)]()
         let scanResult = db.scanExistingChunks(dimension: .theEnd) { x, z in

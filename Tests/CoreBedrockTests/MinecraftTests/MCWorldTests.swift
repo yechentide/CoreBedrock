@@ -48,7 +48,7 @@ struct MCWorldTests {
         do {
             let world = try MCWorld(from: worldDirURL)
             #expect(world.worldName == "§cAll Blocks Test World")
-            world.db.close()
+            world.database.close()
         } catch {
             Issue.record("Failed to open the world.\n")
         }
@@ -61,7 +61,7 @@ struct MCWorldTests {
         do {
             let world = try MCWorld(from: worldDirURL)
             #expect(world.worldName == "§cAll Blocks Test World")
-            world.db.close()
+            world.database.close()
         } catch {
             print(error)
             Issue.record("Failed to open the world.\n")
@@ -75,7 +75,7 @@ struct MCWorldTests {
         do {
             let world = try MCWorld(from: worldDirURL)
             #expect(world.worldName == "§cAll Blocks Test World")
-            world.db.close()
+            world.database.close()
         } catch {
             print(error)
             Issue.record("Failed to open the world.\n")

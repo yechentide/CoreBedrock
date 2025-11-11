@@ -98,9 +98,9 @@ struct LvDBTests {
         let key = Data("key001".utf8)
         let value = Data("value001".utf8)
         try db.put(key, value)
-        #expect(db.contains(key) == true)
+        #expect(db.has(key) == true)
         db.close()
-        #expect(db.contains(key) == false)
+        #expect(db.has(key) == false)
 
         let shouldThrowDBClosedError = { (function: () throws -> Void) in
             let e = #expect(throws: (any Error).self) {
@@ -117,7 +117,7 @@ struct LvDBTests {
         shouldThrowDBClosedError { _ = try db.remove(key) }
         shouldThrowDBClosedError {
             let batch = LvDBWriteBatch()
-            try db.writeBatch(batch)
+            try db.write(batch)
         }
     }
 
@@ -172,7 +172,7 @@ struct LvDBTests {
         let value = Data("value001".utf8)
         try db.put(key, value)
 
-        let result = db.contains(key)
+        let result = db.has(key)
         #expect(result == true)
     }
 
@@ -182,7 +182,7 @@ struct LvDBTests {
         let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
         let key = Data("key001".utf8)
-        let result = db.contains(key)
+        let result = db.has(key)
         #expect(result == false)
     }
 
@@ -195,7 +195,7 @@ struct LvDBTests {
         let value = Data("value001".utf8)
         try db.put(key, value)
         try db.remove(key)
-        #expect(db.contains(key) == false)
+        #expect(db.has(key) == false)
     }
 
     @Test(.withEmptyDirectory)
@@ -205,7 +205,7 @@ struct LvDBTests {
         defer { db.close() }
         let key = Data("key001".utf8)
         try db.remove(key)
-        #expect(db.contains(key) == false)
+        #expect(db.has(key) == false)
     }
 
     @Test(.withEmptyDirectory)
@@ -221,7 +221,7 @@ struct LvDBTests {
         let batch = LvDBWriteBatch()
         batch.put(key1, value: value1)
         batch.put(key2, value: value2)
-        try db.writeBatch(batch)
+        try db.write(batch)
 
         let actualValue1 = try db.get(key1)
         let actualValue2 = try db.get(key2)
@@ -244,10 +244,10 @@ struct LvDBTests {
         let batch = LvDBWriteBatch()
         batch.remove(key1)
         batch.remove(key2)
-        try db.writeBatch(batch)
+        try db.write(batch)
 
-        #expect(db.contains(key1) == false)
-        #expect(db.contains(key2) == false)
+        #expect(db.has(key1) == false)
+        #expect(db.has(key2) == false)
     }
 
     @Test(.withEmptyDirectory)
@@ -264,10 +264,10 @@ struct LvDBTests {
         batch.put(key1, value: value1)
         batch.put(key2, value: value2)
         batch.clear()
-        try db.writeBatch(batch)
+        try db.write(batch)
 
-        #expect(db.contains(key1) == false)
-        #expect(db.contains(key2) == false)
+        #expect(db.has(key1) == false)
+        #expect(db.has(key2) == false)
     }
 
 //    @Test(.withEmptyDirectory)
@@ -288,9 +288,9 @@ struct LvDBTests {
         }
 
         // Create multiple iterators
-        let iter1 = try db.makeIterator()
-        let iter2 = try db.makeIterator()
-        let iter3 = try db.makeIterator()
+        let iter1 = try db.newIterator()
+        let iter2 = try db.newIterator()
+        let iter3 = try db.newIterator()
 
         // Position iterators
         iter1.seekToFirst()
@@ -323,8 +323,8 @@ struct LvDBTests {
         try db.put(Data("key".utf8), Data("value".utf8))
 
         // Create iterators
-        let iter1 = try db.makeIterator()
-        let iter2 = try db.makeIterator()
+        let iter1 = try db.newIterator()
+        let iter2 = try db.newIterator()
 
         // Manually destroy one iterator before closing the database
         iter1.destroy()
@@ -347,8 +347,8 @@ struct LvDBTests {
         try db.put(Data("key".utf8), Data("value".utf8))
 
         // Create iterators
-        let iter1 = try db.makeIterator()
-        let iter2 = try db.makeIterator()
+        let iter1 = try db.newIterator()
+        let iter2 = try db.newIterator()
 
         iter1.seekToFirst()
         iter2.seekToFirst()
@@ -376,7 +376,7 @@ struct LvDBTests {
 
         try db.put(Data("key".utf8), Data("value".utf8))
 
-        let iter = try db.makeIterator()
+        let iter = try db.newIterator()
         iter.seekToFirst()
 
         // Close destroys the iterator

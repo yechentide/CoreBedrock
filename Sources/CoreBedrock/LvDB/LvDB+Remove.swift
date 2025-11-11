@@ -4,7 +4,7 @@
 
 import LvDBWrapper
 
-public extension LvDB {
+public extension LevelKeyValueStore {
     func deleteAllChunks(in dimension: MCDimension) throws {
         try autoreleasepool {
             let iter = try self.makeIterator()
@@ -166,7 +166,7 @@ public extension LvDB {
     private func removeActorAndDigpKeys(keyPrefix: Data, batch: LvDBWriteBatch) {
         let digpKey = Data("digp".utf8) + keyPrefix
 
-        guard let digpData = try? get(digpKey), !digpData.isEmpty, digpData.count % 8 == 0 else {
+        guard let digpData = try? data(forKey: digpKey), !digpData.isEmpty, digpData.count % 8 == 0 else {
             return
         }
 

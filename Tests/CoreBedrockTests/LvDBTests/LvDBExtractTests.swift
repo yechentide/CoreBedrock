@@ -15,13 +15,13 @@ struct ExtractTests {
             .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
-        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer { db.close() }
 
         // Prepare test data
         let keyType = LvDBStringKeyType.localPlayer
         let value = "1.20.0"
-        try db.put(keyType.rawValue.data(using: .utf8)!, value.data(using: .utf8)!)
+        try db.putData(Data(value.utf8), forKey: Data(keyType.rawValue.utf8))
 
         // Execute test
         let result = db.getStringKey(type: keyType)
@@ -36,7 +36,7 @@ struct ExtractTests {
             .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
-        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer { db.close() }
 
         // Prepare test data
@@ -47,7 +47,7 @@ struct ExtractTests {
         ]
 
         for key in testKeys {
-            try db.put(key.rawValue.data(using: .utf8)!, Data("test".utf8))
+            try db.putData(Data("test".utf8), forKey: Data(key.rawValue.utf8))
         }
 
         // Execute test
@@ -66,7 +66,7 @@ struct ExtractTests {
             .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
-        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer { db.close() }
 
         // Prepare test data
@@ -77,10 +77,10 @@ struct ExtractTests {
 
         let digpKey = Data("digp".utf8) + keyPrefix
         let actorData = Data([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08])
-        try db.put(digpKey, actorData)
+        try db.putData(actorData, forKey: digpKey)
 
         let actorKey = Data("actorprefix".utf8) + actorData
-        try db.put(actorKey, Data("test".utf8))
+        try db.putData(Data("test".utf8), forKey: actorKey)
 
         // Execute test
         let keys = db.getPointerAndActorKeys(x: x, z: z, dimension: dimension)
@@ -96,7 +96,7 @@ struct ExtractTests {
             .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
-        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer { db.close() }
 
         // Prepare test data
@@ -108,11 +108,11 @@ struct ExtractTests {
         // Add sub-chunk data
         let yIndex: Int8 = 0
         let subChunkKey = keyPrefix + LvDBChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
-        try db.put(subChunkKey, Data("test".utf8))
+        try db.putData(Data("test".utf8), forKey: subChunkKey)
 
         // Add other chunk data
         let finalizedStateKey = keyPrefix + LvDBChunkKeyType.finalizedState.rawValue.data
-        try db.put(finalizedStateKey, Data("test".utf8))
+        try db.putData(Data("test".utf8), forKey: finalizedStateKey)
 
         // Execute test
         let keys = db.getChunkKeys(x: x, z: z, dimension: dimension)
@@ -128,7 +128,7 @@ struct ExtractTests {
             .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
-        let db = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
         defer { db.close() }
 
         // Prepare test data
@@ -137,9 +137,9 @@ struct ExtractTests {
         let key2 = prefix + Data("2".utf8)
         let otherKey = Data("other".utf8)
 
-        try db.put(key1, Data("value1".utf8))
-        try db.put(key2, Data("value2".utf8))
-        try db.put(otherKey, Data("value3".utf8))
+        try db.putData(Data("value1".utf8), forKey: key1)
+        try db.putData(Data("value2".utf8), forKey: key2)
+        try db.putData(Data("value3".utf8), forKey: otherKey)
 
         // Execute test
         let keys = try db.getPrefixedKeys(with: prefix)
