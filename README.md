@@ -39,23 +39,39 @@ targets: [
 ### LevelDB Operations
 
 ```swift
-import LvDBWrapper
+import CoreBedrock
 
-// Open database
-let dbPath = "/path/to/leveldb"
-let db = try LvDB(dbPath: dbPath)
+// Open a Minecraft world and access its database
+let worldURL = URL(fileURLWithPath: "/path/to/world")
+let world = try MCWorld(from: worldURL, meta: nil)
+let db = world.database  // LevelKeyValueStore protocol
 
 // Basic operations
-try db.put(Data("myKey".utf8), Data("myValue".utf8))
-let value = try db.get(Data("myKey".utf8))
-try db.remove(Data("myKey".utf8))
+try db.putData(Data("myValue".utf8), forKey: Data("myKey".utf8))
+let value = try db.data(forKey: Data("myKey".utf8))
+try db.removeValue(forKey: Data("myKey".utf8))
+
+// Iterate through database entries
+let iterator = try db.makeIterator()
+iterator.seekToFirst()
+while iterator.valid() {
+    let key = iterator.key()
+    let value = iterator.value()
+    // Process key-value pair
+    iterator.next()
+}
 
 // Batch operations
 let batch = LvDBWriteBatch()
 batch.put(Data("key1".utf8), value: Data("value1".utf8))
 batch.remove(Data("key2".utf8))
 try db.writeBatch(batch)
+
+// Close the database when done
+world.closeDB()
 ```
+
+> **Note:** `LvDB`, `LvDBIterator` and `LvDBWriteBatch` are re-exported through CoreBedrock for advanced workflows, allowing direct access to these types without importing LvDBWrapper.
 
 ### NBT Operations
 
@@ -96,21 +112,24 @@ world.closeDB()
 
 ## Architecture
 
-CoreBedrock consists of two main modules:
+CoreBedrock is designed as a unified library with the following components:
 
-### LvDBWrapper
-
-- Low-level LevelDB C++ wrapper
-- Provides Swift-friendly interface to LevelDB operations
-- Includes binary dependencies for compression libraries
-
-### CoreBedrock
+### CoreBedrock (Main Library)
 
 - High-level Minecraft world manipulation
 - NBT parsing and writing
 - World metadata management
 - Chunk and block operations
 - NetEase world support
+- LevelDB database abstraction through the `LevelKeyValueStore` protocol
+
+### LvDBWrapper (Internal Target)
+
+- Low-level LevelDB C++ wrapper bundled within this package
+- Provides Swift-friendly interface to LevelDB operations
+- Includes binary dependencies for compression libraries (libcrc32c, libsnappy, libz, libzstd, libleveldb)
+- Not exposed as a separate product; consumers only need to add CoreBedrock to their dependencies
+- Key types like `LvDBIterator` and `LvDBWriteBatch` are re-exported through CoreBedrock for advanced use cases
 
 ## Support
 
