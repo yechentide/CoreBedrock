@@ -4,7 +4,7 @@
 
 import Foundation
 
-public extension URL {
+extension URL {
     static func from(filePath: String) -> URL {
         if #available(iOS 16.0, macOS 13.0, *) {
             .init(filePath: filePath)
