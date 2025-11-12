@@ -28,16 +28,16 @@ enum NetEasePlayerDataProcessor {
         }
 
         let iter = try database.makeIterator()
-        iter.seek(Data(NetEaseConstants.playerKeyPrefix.utf8))
-        while iter.valid() {
-            defer { iter.next() }
+        iter.move(to: Data(NetEaseConstants.playerKeyPrefix.utf8))
+        while iter.isValid {
+            defer { iter.moveToNext() }
             // player_server_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
             guard
-                let key = iter.key(),
+                let key = iter.currentKey,
                 key.count == NetEaseConstants.expectedPlayerKeyLength,
                 let prefix = String(data: key[0...3], encoding: .utf8),
                 prefix == "play",
-                let serverPlayerData = iter.value()
+                let serverPlayerData = iter.currentValue
             else {
                 break
             }

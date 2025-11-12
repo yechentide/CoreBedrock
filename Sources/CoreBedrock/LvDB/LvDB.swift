@@ -27,15 +27,15 @@ public extension LevelKeyValueStore {
         }
 
         defer {
-            iterator.destroy()
+            iterator.close()
         }
         let expectedKeyLength = dimension == .overworld ? 9 : 13
-        iterator.seekToFirst()
-        while iterator.valid() {
+        iterator.moveToFirst()
+        while iterator.isValid {
             defer {
-                iterator.next()
+                iterator.moveToNext()
             }
-            guard let keyData = iterator.key(), keyData.count == expectedKeyLength else {
+            guard let keyData = iterator.currentKey, keyData.count == expectedKeyLength else {
                 continue
             }
 

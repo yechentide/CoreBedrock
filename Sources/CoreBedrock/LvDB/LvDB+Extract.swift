@@ -86,14 +86,14 @@ public extension LevelKeyValueStore {
         var keys = [Data]()
         let iter = try makeIterator()
         defer {
-            iter.destroy()
+            iter.close()
         }
-        iter.seek(prefix)
-        while iter.valid() {
+        iter.move(to: prefix)
+        while iter.isValid {
             defer {
-                iter.next()
+                iter.moveToNext()
             }
-            guard let keyData = iter.key(),
+            guard let keyData = iter.currentKey,
                   keyData.count >= prefix.count,
                   keyData[0..<prefix.count] == prefix
             else {

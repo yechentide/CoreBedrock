@@ -10,15 +10,15 @@ public extension LevelKeyValueStore {
             let iter = try self.makeIterator()
             let batch = LvDBWriteBatch()
 
-            iter.seekToFirst()
-            while iter.valid() {
+            iter.moveToFirst()
+            while iter.isValid {
                 if Task.isCancelled {
                     throw CancellationError()
                 }
                 defer {
-                    iter.next()
+                    iter.moveToNext()
                 }
-                guard let key = iter.key() else {
+                guard let key = iter.currentKey else {
                     break
                 }
 
@@ -29,7 +29,7 @@ public extension LevelKeyValueStore {
                     }
                     if case let LvDBKey.digp(_, _, d) = lvdbKey, d == dimension {
                         batch.remove(key)
-                        if let digpData = iter.value(), !digpData.isEmpty, digpData.count % 8 == 0 {
+                        if let digpData = iter.currentValue, !digpData.isEmpty, digpData.count % 8 == 0 {
                             for i in 0..<digpData.count / 8 {
                                 let actorprefixKey = Data("actorprefix".utf8) + digpData[i * 8...i * 8 + 7]
                                 batch.remove(actorprefixKey)
@@ -103,15 +103,15 @@ public extension LevelKeyValueStore {
             let iter = try self.makeIterator()
             let batch = LvDBWriteBatch()
 
-            iter.seekToFirst()
-            while iter.valid() {
+            iter.moveToFirst()
+            while iter.isValid {
                 if Task.isCancelled {
                     throw CancellationError()
                 }
                 defer {
-                    iter.next()
+                    iter.moveToNext()
                 }
-                guard let key = iter.key() else {
+                guard let key = iter.currentKey else {
                     break
                 }
 
@@ -124,7 +124,7 @@ public extension LevelKeyValueStore {
                     if case let LvDBKey.digp(cx, cz, d) = lvdbKey,
                        d == dimension, !xRange.contains(cx) || !zRange.contains(cz) {
                         batch.remove(key)
-                        if let digpData = iter.value(), !digpData.isEmpty, digpData.count % 8 == 0 {
+                        if let digpData = iter.currentValue, !digpData.isEmpty, digpData.count % 8 == 0 {
                             for i in 0..<digpData.count / 8 {
                                 let actorprefixKey = Data("actorprefix".utf8) + digpData[i * 8...i * 8 + 7]
                                 batch.remove(actorprefixKey)

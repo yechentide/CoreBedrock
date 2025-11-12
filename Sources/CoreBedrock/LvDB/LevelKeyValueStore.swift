@@ -40,7 +40,7 @@ import LvDBWrapper
 /// - **Testing**: Inject in-memory stores without file I/O
 /// - **SwiftUI Previews**: Use mock data without real database files
 /// - **Remote storage**: Implement cloud-backed world storage
-public protocol LevelKeyValueStore: AnyObject {
+public protocol LevelKeyValueStore {
     /// Returns `true` if the database has been closed.
     var isClosed: Bool { get }
 
@@ -81,9 +81,9 @@ public protocol LevelKeyValueStore: AnyObject {
 
     /// Creates an iterator for traversing the database entries.
     ///
-    /// - Returns: An `LvDBIterator` instance for iterating over the database.
+    /// - Returns: A ``LevelKeyValueStoreIterator`` instance for iterating over the database.
     /// - Throws: An error if iterator creation fails.
-    func makeIterator() throws -> LvDBIterator
+    func makeIterator() throws -> LevelKeyValueStoreIterator
 
     /// Applies a batch of write operations atomically.
     ///
@@ -138,7 +138,7 @@ extension LvDB: LevelKeyValueStore {
     }
 
     /// Creates an iterator for traversing the database.
-    public func makeIterator() throws -> LvDBIterator {
+    public func makeIterator() throws -> LevelKeyValueStoreIterator {
         // Call the Objective-C newIterator: method (bridged to Swift as newIterator())
         try self.newIterator()
     }
