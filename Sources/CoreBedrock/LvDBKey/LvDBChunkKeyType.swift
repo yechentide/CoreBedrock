@@ -29,6 +29,7 @@ public enum LvDBChunkKeyType: UInt8, CaseIterable, Sendable {
     case metaDataHash           = 0x3F
     case blendingData           = 0x40
     case actorDigestVersion     = 0x41
+    case aabbVolumes            = 0x77
 
     // legacy key types
     case data2D                 = 0x2D              // Biomes and elevation
@@ -39,7 +40,6 @@ public enum LvDBChunkKeyType: UInt8, CaseIterable, Sendable {
     case generatedPreCavesAndCliffsBlending = 0x3D  // not used, DON'T REMOVE
     case blendingBiomeHeight    = 0x3E              // not used, DON'T REMOVE
     case legacyChunkVersion     = 0x76
-    case unknown0x77            = 0x77
 }
 
 // swiftformat:enable consecutiveSpaces spaceAroundOperators
