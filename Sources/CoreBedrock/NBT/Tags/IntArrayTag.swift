@@ -5,7 +5,7 @@
 import Foundation
 
 public final class IntArrayTag: NBT {
-    // Override to return the .intArray type
+    /// Override to return the .intArray type
     override public var tagType: TagType {
         .intArray
     }

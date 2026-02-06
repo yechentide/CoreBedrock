@@ -30,7 +30,7 @@ extension URL {
     }
 }
 
-// https://stackoverflow.com/questions/32814535/how-to-get-directory-size-with-swift-on-os-x
+/// https://stackoverflow.com/questions/32814535/how-to-get-directory-size-with-swift-on-os-x
 public extension URL {
     func isDirectoryAndReachable() throws -> Bool {
         guard try resourceValues(forKeys: [.isDirectoryKey]).isDirectory == true else {

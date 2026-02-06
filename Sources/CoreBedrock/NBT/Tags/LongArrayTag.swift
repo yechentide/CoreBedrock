@@ -5,7 +5,7 @@
 import Foundation
 
 public final class LongArrayTag: NBT {
-    // Override to return the .intArray type
+    /// Override to return the .intArray type
     override public var tagType: TagType {
         .longArray
     }

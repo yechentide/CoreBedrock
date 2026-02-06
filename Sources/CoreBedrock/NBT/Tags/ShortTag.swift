@@ -6,7 +6,7 @@ import Foundation
 
 /// Represents a tag containing a signed 16-bit integer.
 public final class ShortTag: NBT {
-    // Override to return the .short type
+    /// Override to return the .short type
     override public var tagType: TagType {
         .short
     }

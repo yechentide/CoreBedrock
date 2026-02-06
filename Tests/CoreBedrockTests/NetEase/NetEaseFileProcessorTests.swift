@@ -9,7 +9,7 @@ struct NetEaseFileProcessorTests {
         let dbDirPath = "\(worldDirPath)/db"
 
         let manifestData = try NetEaseFileProcessor.findManifestFile(in: dbDirPath)
-        let manifestString = String(data: manifestData, encoding: .utf8)!
+        let manifestString = try #require(String(data: manifestData, encoding: .utf8))
 
         #expect(manifestString.hasPrefix(NetEaseConstants.manifestPrefix))
         #expect(manifestString == "MANIFEST-000048")

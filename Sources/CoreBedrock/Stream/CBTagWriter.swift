@@ -19,7 +19,9 @@ public struct CBTagWriter: CustomDebugStringConvertible {
         self.writer = CBBinaryWriter(capacity: capacity, littleEndian: littleEndian)
     }
 
-    public var count: Int { self.writer.count }
+    public var count: Int {
+        self.writer.count
+    }
 
     public var debugDescription: String {
         "CBTagWriterV2(bufferCount: \(self.writer.count))"

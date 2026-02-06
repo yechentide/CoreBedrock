@@ -61,7 +61,7 @@ struct MCPositionConvertTests {
     }
 
     @Test
-    func convertChunkToIndexInRegion() throws {
+    func convertChunkToIndexInRegion() {
         let list: [(pos: Int, expected: Int)] = [
             (-33, 31),
             (-32, 0),

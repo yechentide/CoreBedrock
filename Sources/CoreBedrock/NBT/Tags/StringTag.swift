@@ -6,7 +6,7 @@ import Foundation
 
 /// Represents a tag containing a UTF-8-encoded string.
 public final class StringTag: NBT {
-    // Override to return the .string type
+    /// Override to return the .string type
     override public var tagType: TagType {
         .string
     }

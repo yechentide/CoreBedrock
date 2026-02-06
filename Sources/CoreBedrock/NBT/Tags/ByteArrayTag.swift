@@ -6,7 +6,7 @@ import Foundation
 
 /// Represents a tag containing an array of bytes.
 public final class ByteArrayTag: NBT {
-    // Override to return the .byteArray type
+    /// Override to return the .byteArray type
     override public var tagType: TagType {
         .byteArray
     }

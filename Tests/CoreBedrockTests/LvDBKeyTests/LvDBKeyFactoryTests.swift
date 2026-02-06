@@ -8,7 +8,7 @@ import Testing
 
 struct LvDBKeyFactoryTests {
     @Test
-    func testMakeBaseChunkKey() throws {
+    func testMakeBaseChunkKey() {
         // Test for overworld
         let key1 = LvDBKeyFactory.makeBaseChunkKey(x: 0, z: 0, dimension: .overworld)
         #expect(key1.count == 8) // Int32 x 2 = 8 bytes
@@ -19,7 +19,7 @@ struct LvDBKeyFactoryTests {
     }
 
     @Test
-    func testMakeChunkKey() throws {
+    func testMakeChunkKey() {
         let base = LvDBKeyFactory.makeBaseChunkKey(x: 0, z: 0, dimension: .overworld)
 
         // Test for sub-chunk (with yIndex)
@@ -32,7 +32,7 @@ struct LvDBKeyFactoryTests {
     }
 
     @Test
-    func testMakeDigpKey() throws {
+    func testMakeDigpKey() {
         let base = LvDBKeyFactory.makeBaseChunkKey(x: 0, z: 0, dimension: .overworld)
         let key = LvDBKeyFactory.makeDigpKey(base: base)
 
@@ -46,7 +46,7 @@ struct LvDBKeyFactoryTests {
     }
 
     @Test
-    func testMakeActorKey() throws {
+    func testMakeActorKey() {
         let testId = Data([0x01, 0x02, 0x03, 0x04])
         let key = LvDBKeyFactory.makeActorKey(id: testId)
 
@@ -56,7 +56,7 @@ struct LvDBKeyFactoryTests {
     }
 
     @Test
-    func testMakeMapKey() throws {
+    func testMakeMapKey() {
         let mapId: Int64 = 12345
         let key = LvDBKeyFactory.makeMapKey(id: mapId)
 

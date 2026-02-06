@@ -11,9 +11,9 @@ public final class CompoundTag: NBT {
     // We want CompoundTag to emulate an Ordered Dictionary
     // so keys and values are stored in separate collections.
 
-    // Use a dictionary for the keys to track the indexes in the _tags array
+    /// Use a dictionary for the keys to track the indexes in the _tags array
     private var _keys: [String: Int] = [:]
-    // The backing store for the collection of tags
+    /// The backing store for the collection of tags
     private var _tags: [NBT] = []
 
     /// Creates an empty, unnamed `CompoundTag` tag.
@@ -63,7 +63,7 @@ public final class CompoundTag: NBT {
         }
     }
 
-    // Override to return the .compound type
+    /// Override to return the .compound type
     override public var tagType: TagType {
         .compound
     }
@@ -224,7 +224,7 @@ public final class CompoundTag: NBT {
     ///   - result: When this method returns, contains the tag associated with the specified name
     ///   if the tag is found AND matches the specified type; otherwise, `nil`.
     /// - Returns: `true` if a tag with the specified name was found, regardless of type; otherwise, `false`.
-    public func get<T>(_ tagName: String, result: inout T?) -> Bool where T: NBT {
+    public func get<T: NBT>(_ tagName: String, result: inout T?) -> Bool {
         guard let index = _keys[tagName] else {
             result = nil
             return false
@@ -344,19 +344,19 @@ extension CompoundTag: Sequence {
 }
 
 extension CompoundTag: Collection {
-    // Implement the startIndex and just pass straight to
-    // the startIndex of the _tags array.
+    /// Implement the startIndex and just pass straight to
+    /// the startIndex of the _tags array.
     public var startIndex: Int {
         self._tags.startIndex
     }
 
-    // Implement the endIndex and just pass straight to
-    // the endIndex of the _tags array.
+    /// Implement the endIndex and just pass straight to
+    /// the endIndex of the _tags array.
     public var endIndex: Int {
         self._tags.endIndex
     }
 
-    // Advances to the next index in the collection
+    /// Advances to the next index in the collection
     public func index(after i: Int) -> Int {
         self._tags.index(after: i)
     }

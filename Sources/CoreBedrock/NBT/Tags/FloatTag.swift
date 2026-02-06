@@ -6,7 +6,7 @@ import Foundation
 
 /// Represents a tag containing a single-precision floating point number.
 public final class FloatTag: NBT {
-    // Override to return the .float type
+    /// Override to return the .float type
     override public var tagType: TagType {
         .float
     }

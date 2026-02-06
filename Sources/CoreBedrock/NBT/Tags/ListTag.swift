@@ -8,7 +8,7 @@ import Foundation
 
 /// Represents a collection of unnamed `NBT` objects, all of the same type.
 public final class ListTag: NBT {
-    // The backing store for the collection of tags
+    /// The backing store for the collection of tags
     private var _tags: [NBT] = []
 
     /// Creates an unnamed `ListTag` with empty contents and undefined list type.
@@ -87,16 +87,18 @@ public final class ListTag: NBT {
         }
     }
 
-    // Override to return the .list type
+    /// Override to return the .list type
     override public var tagType: TagType {
         .list
     }
 
     private var _listType: TagType = .unknown
     /// Gets or sets the tag type of this list. All tags in this NBT must be of the same type.
-    public var listType: TagType { self._listType }
+    public var listType: TagType {
+        self._listType
+    }
 
-    // Use a function instead of a setter until Swift allows throwing in properties
+    /// Use a function instead of a setter until Swift allows throwing in properties
     public func setListType(_ newType: TagType) throws {
         if newType == .end {
             // Empty lists may have type "End"

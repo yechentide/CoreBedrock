@@ -7,9 +7,9 @@ import Foundation
 import Testing
 
 struct LvDBKeyTests {
-    // Test parsing of subChunk key
+    /// Test parsing of subChunk key
     @Test
-    func parseSubChunkKey() throws {
+    func parseSubChunkKey() {
         // Test subChunk key without dimension (9 bytes)
         let keyType1 = LvDBChunkKeyType.subChunkPrefix.rawValue
         let data1 = Data([
@@ -45,9 +45,9 @@ struct LvDBKeyTests {
         }
     }
 
-    // Test parsing of string key
+    /// Test parsing of string key
     @Test
-    func parseStringKey() throws {
+    func parseStringKey() {
         let data = Data(LvDBStringKeyType.localPlayer.rawValue.utf8)
         let key = LvDBKey.parse(data: data)
         if case let .string(type) = key {
@@ -57,9 +57,9 @@ struct LvDBKeyTests {
         }
     }
 
-    // Test isNBTKey property
+    /// Test isNBTKey property
     @Test
-    func testIsNBTKey() throws {
+    func testIsNBTKey() {
         let blockEntityKey = LvDBKey.subChunk(0, 0, .overworld, .blockEntity, nil)
         #expect(blockEntityKey.isNBTKey == true)
 
@@ -70,9 +70,9 @@ struct LvDBKeyTests {
         #expect(villageKey.isNBTKey == true)
     }
 
-    // Test isCompoundListKey property
+    /// Test isCompoundListKey property
     @Test
-    func testIsCompoundListKey() throws {
+    func testIsCompoundListKey() {
         let entityKey = LvDBKey.subChunk(0, 0, .overworld, .entity, nil)
         #expect(entityKey.isCompoundListKey == true)
 
@@ -83,9 +83,9 @@ struct LvDBKeyTests {
         #expect(dataKey.isCompoundListKey == false)
     }
 
-    // Test keyData generation
+    /// Test keyData generation
     @Test
-    func keyDataGeneration() throws {
+    func keyDataGeneration() {
         // Test subChunk key
         let subChunkKey = LvDBKey.subChunk(1, 2, .overworld, .subChunkPrefix, nil)
         let keyType = LvDBChunkKeyType.subChunkPrefix.rawValue

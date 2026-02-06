@@ -6,7 +6,7 @@ import Foundation
 
 /// Represents a tag containing a signed 32-bit integer.
 public final class IntTag: NBT {
-    // Override to return the .int type
+    /// Override to return the .int type
     override public var tagType: TagType {
         .int
     }

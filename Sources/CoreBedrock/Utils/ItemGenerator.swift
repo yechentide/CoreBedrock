@@ -73,7 +73,7 @@ public enum ItemGenerator {
         }
 
         if let blockMeta = meta.blockMeta {
-            let blockMetaTag = try CompoundTag([
+            let blockMetaTag = try CompoundTag(name: "Block", [
                 StringTag(name: "name", meta.type),
                 IntTag(name: "version", blockMeta.version),
                 CompoundTag(name: "states", blockMeta.states),

@@ -31,7 +31,7 @@ struct NetEaseNBTTransformTests {
         let result = try NetEaseNBTTransform.patchDecodedPlayerData(neteaseData)
 
         #expect(result != nil, "Invalid NBT with signature should be patched")
-        #expect(result! == bedrockData)
+        #expect(result == bedrockData)
     }
 
     @Test
@@ -64,7 +64,7 @@ struct NetEaseNBTTransformTests {
         let result = try NetEaseNBTTransform.patchEncodedPlayerData(bedrockData)
 
         #expect(result != nil, "Data with byteArray signature should be patched")
-        #expect(result! == neteaseData)
+        #expect(result == neteaseData)
     }
 
     @Test
@@ -131,7 +131,7 @@ struct NetEaseNBTTransformTests {
 
         let result = try NetEaseNBTTransform.patchDecodedPlayerData(signatureAtStart)
         #expect(result != nil, "Should patch signature at start")
-        #expect(result![0] == NetEaseConstants.byteArrayTagByte, "Should change to byteArray tag")
+        #expect(result?[0] == NetEaseConstants.byteArrayTagByte, "Should change to byteArray tag")
 
         // Test with signature at the very end of data
         let prefix = Data([0x10, 0x20, 0x30])
@@ -139,6 +139,6 @@ struct NetEaseNBTTransformTests {
 
         let encodingResult = try NetEaseNBTTransform.patchEncodedPlayerData(signatureAtEnd)
         #expect(encodingResult != nil, "Should patch signature at end")
-        #expect(encodingResult![prefix.count] == NetEaseConstants.stringTagByte, "Should change to string tag")
+        #expect(encodingResult?[prefix.count] == NetEaseConstants.stringTagByte, "Should change to string tag")
     }
 }

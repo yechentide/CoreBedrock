@@ -8,7 +8,7 @@ import Testing
 
 struct DateTests {
     @Test
-    func dateFormatting() {
+    func dateFormatting() throws {
         let calendar = Calendar(identifier: .gregorian)
         var dateComponents = DateComponents()
         dateComponents.year = 2024
@@ -18,7 +18,7 @@ struct DateTests {
         dateComponents.minute = 30
         dateComponents.second = 0
 
-        let date = calendar.date(from: dateComponents)!
+        let date = try #require(calendar.date(from: dateComponents))
 
         // Test compact timestamp format (yyMMdd-HHmmss)
         let compactTimestamp = date.compactTimestamp

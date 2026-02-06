@@ -189,7 +189,7 @@ struct LvDBIteratorTests {
         var collected: [Data] = []
         iter.seekToFirst()
         while iter.valid() {
-            collected.append(iter.key()!)
+            try collected.append(#require(iter.key()))
             iter.next()
         }
 

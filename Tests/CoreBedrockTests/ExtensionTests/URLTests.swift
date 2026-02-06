@@ -11,7 +11,7 @@ struct URLTests {
     let testDirectory = URL(fileURLWithPath: "/path/to/directory")
 
     @Test
-    func safePath() throws {
+    func safePath() {
         let path = self.testURL.compatiblePath(percentEncoded: false)
         #expect(path == "/path/to/test")
 
@@ -20,7 +20,7 @@ struct URLTests {
     }
 
     @Test
-    func appendingSafePath() throws {
+    func appendingSafePath() {
         let fileURL = self.testURL.appendingCompatiblePath("file.txt", isDirectory: false)
         #expect(fileURL.lastPathComponent == "file.txt")
         #expect(fileURL.hasDirectoryPath == false)

@@ -4,7 +4,9 @@
 
 // MARK: Temporarily disabled until rollback is implemented
 
-//public enum ChestEntityGenerator {
+// swiftlint:disable line_length
+
+// public enum ChestEntityGenerator {
 //    private static let capacity = 27
 //
 //    public static func place(database: LevelKeyValueStore, x: Int32, y: Int32, z: Int32, items: [CompoundTag]) throws {
@@ -83,4 +85,6 @@
 //            try database.putData(blockEntityData, forKey: blockEntityKey)
 //        }
 //    }
-//}
+// }
+
+// swiftlint:enable line_length

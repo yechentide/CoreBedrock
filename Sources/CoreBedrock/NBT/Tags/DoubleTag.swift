@@ -6,7 +6,7 @@ import Foundation
 
 /// Represents a tag containing a double-precision floating point number.
 public final class DoubleTag: NBT {
-    // Override to return the .double type
+    /// Override to return the .double type
     override public var tagType: TagType {
         .double
     }

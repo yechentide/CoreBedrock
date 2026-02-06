@@ -10,14 +10,14 @@ import Testing
 // swiftlint:disable line_length
 
 struct LvDBTests {
-    // Helper function to create a temporary path for LevelDB
+    /// Helper function to create a temporary path for LevelDB
     private func temporaryDBPath() -> String {
         let tempDir = FileManager.default.temporaryDirectory
         let dbName = "testDB-\(UUID().uuidString)"
         return tempDir.appendingPathComponent(dbName).path
     }
 
-    // Helper function to clean up the database
+    /// Helper function to clean up the database
     private func cleanupDB(at path: String) {
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: path) {

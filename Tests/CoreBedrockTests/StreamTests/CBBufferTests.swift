@@ -8,14 +8,14 @@ import Testing
 
 struct CBBufferTests {
     @Test
-    func initializationWithCapacity() throws {
+    func initializationWithCapacity() {
         let buffer = CBBuffer(capacity: 10)
         #expect(buffer.count == 10)
         #expect(buffer.currentPosition == 0)
     }
 
     @Test
-    func initializationWithData() throws {
+    func initializationWithData() {
         let data = Data([0x01, 0x02, 0x03])
         let buffer = CBBuffer(data: data)
         #expect(buffer.count == 3)
@@ -24,7 +24,7 @@ struct CBBufferTests {
     }
 
     @Test
-    func initializationWithBytes() throws {
+    func initializationWithBytes() {
         let bytes: [UInt8] = [0x01, 0x02, 0x03]
         let buffer = CBBuffer(bytes: bytes)
         #expect(buffer.count == 3)
@@ -169,7 +169,7 @@ struct CBBufferTests {
     }
 
     @Test
-    func testToArray() throws {
+    func testToArray() {
         let data = Data([0x0A, 0x0B, 0x0C])
         let buffer = CBBuffer(data: data)
         #expect(buffer.toArray() == [0x0A, 0x0B, 0x0C])

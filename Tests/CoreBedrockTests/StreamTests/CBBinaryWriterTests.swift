@@ -8,7 +8,7 @@ import Testing
 
 struct CBBinaryWriterTests {
     @Test
-    func initialization() throws {
+    func initialization() {
         var writer = CBBinaryWriter() // Default littleEndian = true
         #expect(writer.isEmpty)
         #expect(writer.currentPosition == 0)

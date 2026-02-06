@@ -6,7 +6,7 @@ import Foundation
 
 /// Represents a tag containing a signed 64-bit integer.
 public final class LongTag: NBT {
-    // Override to return the .long type
+    /// Override to return the .long type
     override public var tagType: TagType {
         .long
     }

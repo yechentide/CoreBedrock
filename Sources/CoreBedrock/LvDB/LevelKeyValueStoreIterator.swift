@@ -43,13 +43,21 @@ public protocol LevelKeyValueStoreIterator {
 }
 
 extension LvDBIterator: LevelKeyValueStoreIterator {
-    public var isClosed: Bool { isDestroyed }
+    public var isClosed: Bool {
+        isDestroyed
+    }
 
-    public var isValid: Bool { valid() }
+    public var isValid: Bool {
+        valid()
+    }
 
-    public var currentKey: Data? { key() }
+    public var currentKey: Data? {
+        key()
+    }
 
-    public var currentValue: Data? { value() }
+    public var currentValue: Data? {
+        value()
+    }
 
     public func close() {
         destroy()

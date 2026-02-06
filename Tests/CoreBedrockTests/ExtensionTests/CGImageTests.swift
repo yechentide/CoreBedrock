@@ -11,7 +11,7 @@ struct CGImageTests {
     static let testDataURL = Bundle.module.url(forResource: "TestData", withExtension: nil)!
 
     @Test
-    func testLoadPNG() throws {
+    func testLoadPNG() {
         let pngURL = Self.testDataURL.appendingPathComponent("grass.png")
         let image = CGImage.loadPNG(url: pngURL)
         guard let image else {
@@ -24,7 +24,7 @@ struct CGImageTests {
     }
 
     @Test
-    func testLoadJPG() throws {
+    func testLoadJPG() {
         let jpgURL = Self.testDataURL.appendingPathComponent("grass.jpg")
         let image = CGImage.loadJPG(url: jpgURL)
         guard let image else {
@@ -37,7 +37,7 @@ struct CGImageTests {
     }
 
     @Test
-    func loadInvalidFile() throws {
+    func loadInvalidFile() {
         let invalidURL = Self.testDataURL.appendingPathComponent("nonexistent.png")
         let pngImage = CGImage.loadPNG(url: invalidURL)
         guard pngImage == nil else {

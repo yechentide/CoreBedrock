@@ -3,25 +3,28 @@
 //
 
 import CoreGraphics
+import Foundation
 
 public enum MapArtGenerator {
     private static let tileSize = 128
 
-    /// Generates map art from an image and places it in a shulker box chest at the specified location.
+    /// Generates map art from an image, packs the maps into a shulker box,
+    /// and inserts it into the specified player's inventory.
+    ///
     /// - Parameters:
-    ///   - database: The level database to store map data and chest
-    ///   - image: The source image to convert to map art
-    ///   - x: X coordinate for the chest placement
-    ///   - y: Y coordinate for the chest placement
-    ///   - z: Z coordinate for the chest placement
-    ///   - shulkerBoxName: Optional name for the shulker box containing maps
-    /// - Throws: If image processing, map data generation, or placement fails
-    public static func generateAndPlace(
+    ///   - database: The level database used to store generated map data
+    ///   - image: The source image to convert into map art
+    ///   - playerKey: The database key identifying the target player
+    ///   - shulkerBoxName: Optional custom name for the shulker box containing the maps
+    ///
+    /// - Throws:
+    ///   - If map data generation or storage fails
+    ///   - If the player's inventory has no available slot
+    ///   - If the player's NBT data is invalid or cannot be parsed
+    public static func generateAndGiveToPlayer(
         database: LevelKeyValueStore,
         image: CGImage,
-        x: Int32,
-        y: Int32,
-        z: Int32,
+        playerKey: Data,
         shulkerBoxName: String? = nil
     ) throws {
         let (mapItems, mapDataDict) = try buildMapItemsAndData(image: image, database: database)
@@ -32,7 +35,7 @@ public enum MapArtGenerator {
                 try database.putData(entryData, forKey: lvdbKey.data)
             }
             let shulkerBox = try ShulkerNestingPacker.pack(items: mapItems, rootName: shulkerBoxName)
-            try ChestEntityGenerator.place(database: database, x: x, y: y, z: z, items: [shulkerBox])
+            try ItemInjector.giveItemToPlayer(item: shulkerBox, playerKey: playerKey, in: database)
         } catch {
             // Rollback map data on failure
             for lvdbKey in mapDataDict.keys {
@@ -122,6 +125,7 @@ public enum MapArtGenerator {
     /// - Throws: If unable to allocate the requested number of IDs
     private static func allocateMapIDs(in database: LevelKeyValueStore, count: Int) throws -> [Int64] {
         let iter = try database.makeIterator()
+        iter.moveToFirst()
         defer {
             iter.close()
         }
@@ -131,7 +135,7 @@ public enum MapArtGenerator {
         while ids.count < count {
             let keyData = LvDBKey.map(currentID).data
             iter.move(to: keyData)
-            if iter.currentKey != keyData {
+            if !(iter.isValid && iter.currentKey == keyData) {
                 ids.append(currentID)
             }
             currentID += 1

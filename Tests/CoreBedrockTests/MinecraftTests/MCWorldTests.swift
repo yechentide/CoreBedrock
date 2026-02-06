@@ -13,7 +13,7 @@ struct MCWorldTests {
         let originalURL: URL
         let worldDirURL: URL
         if #available(iOS 16.0, macOS 13.0, *) {
-            originalURL = URL(filePath: testDataPath, directoryHint: .isDirectory)
+            originalURL = URL(filePath: self.testDataPath, directoryHint: .isDirectory)
             worldDirURL = FileManager.default.temporaryDirectory
                 .appending(component: newName, directoryHint: .isDirectory)
         } else {
