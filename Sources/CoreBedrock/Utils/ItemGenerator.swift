@@ -23,13 +23,30 @@ public enum ItemGenerator {
             slot: UInt8,
             mapID: Int64,
             type: String = "minecraft:filled_map",
-            name: String? = nil
+            name: String? = nil,
+            mapNameIndex: Int32 = -1,
+            isInit: Bool = false,
+            displayPlayers: Bool = true
         ) -> Self {
-            Self(slot: slot, type: type, name: name, count: 1, damage: 0, wasPickedUp: false, tags: [
-                ByteTag(name: "map_display_players", 1),
-                IntTag(name: "map_name_index", 1),
+            var tags: [NBT] = [
                 LongTag(name: "map_uuid", mapID),
-            ])
+                IntTag(name: "map_name_index", mapNameIndex),
+            ]
+            if isInit {
+                tags.append(ByteTag(name: "map_is_init", 1))
+            }
+            if displayPlayers {
+                tags.append(ByteTag(name: "map_display_players", 1))
+            }
+            return Self(
+                slot: slot,
+                type: type,
+                name: name,
+                count: 1,
+                damage: 0,
+                wasPickedUp: false,
+                tags: tags
+            )
         }
 
         public static func shulkerBox(
