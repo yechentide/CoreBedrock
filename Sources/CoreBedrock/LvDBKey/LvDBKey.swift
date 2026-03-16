@@ -64,7 +64,8 @@ public enum LvDBKey: Equatable, Hashable, Sendable {
         let prefix = "map_"
         guard data.count > prefix.count,
               prefix == String(data: data[..<prefix.count], encoding: .utf8),
-              let id = data[prefix.count...].int64
+              let stringID = String(data: data[prefix.count...], encoding: .utf8),
+              let id = Int64(stringID)
         else {
             return nil
         }
