@@ -27,7 +27,7 @@ public struct PackedBlockLayer: PackedPaletteReadable {
     }
 
     @inline(__always)
-    func unsafeEnumerateColumnDescendingY(
+    public func unsafeEnumerateColumnDescendingY(
         atLocalX localX: Int, localZ: Int, _ perform: (Int, CompoundTag) -> Bool
     ) {
         guard let baseIndex = MCSubChunk.linearIndex(localX, 0, localZ) else {

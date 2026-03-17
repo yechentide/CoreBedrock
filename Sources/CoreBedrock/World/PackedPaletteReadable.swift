@@ -2,7 +2,7 @@
 // Created by yechentide on 2025/09/20
 //
 
-protocol PackedPaletteReadable {
+public protocol PackedPaletteReadable {
     associatedtype PaletteValue
 
     var bitWidth: Int { get }
@@ -10,7 +10,7 @@ protocol PackedPaletteReadable {
     var indicesBytes: [UInt8] { get }
 }
 
-extension PackedPaletteReadable {
+public extension PackedPaletteReadable {
     var indexBitMask: UInt32 {
         ~(UInt32.max << bitWidth)
     }

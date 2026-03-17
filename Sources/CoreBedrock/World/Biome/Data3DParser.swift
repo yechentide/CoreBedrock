@@ -4,10 +4,10 @@
 
 import Foundation
 
-struct Data3DParser {
+public struct Data3DParser {
     private let binaryReader: CBBinaryReader
 
-    init(data: Data) {
+    public init(data: Data) {
         self.binaryReader = CBBinaryReader(data: data)
     }
 
@@ -46,7 +46,7 @@ struct Data3DParser {
         )
     }
 
-    func lightParse(dimension: MCDimension) throws -> PackedBiomeHeightColumn {
+    public func lightParse(dimension: MCDimension) throws -> PackedBiomeHeightColumn {
         let chunkYRange = dimension.chunkYRange
         let minChunkY = chunkYRange.lowerBound
         let maxChunkY = chunkYRange.upperBound

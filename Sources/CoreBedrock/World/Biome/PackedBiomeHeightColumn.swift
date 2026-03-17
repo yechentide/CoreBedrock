@@ -4,12 +4,17 @@
 
 import Foundation
 
-struct PackedBiomeHeightColumn {
-    let heightBytes: [UInt8] // 1 block = 2 bytes
-    let biomeSections: [PackedBiomeSection]
+public struct PackedBiomeHeightColumn {
+    private let heightBytes: [UInt8] // 1 block = 2 bytes
+    private let biomeSections: [PackedBiomeSection]
+
+    public init(heightBytes: [UInt8], biomeSections: [PackedBiomeSection]) {
+        self.heightBytes = heightBytes
+        self.biomeSections = biomeSections
+    }
 
     @inline(__always)
-    func highestBlockY(atLocalX localX: Int, localZ: Int) -> UInt16? {
+    public func highestBlockY(atLocalX localX: Int, localZ: Int) -> UInt16? {
         guard MCSubChunk.localPosRange ~= localX, MCSubChunk.localPosRange ~= localZ else {
             return nil
         }
@@ -20,7 +25,7 @@ struct PackedBiomeHeightColumn {
         return UInt16(self.heightBytes[byteOffset]) | (UInt16(self.heightBytes[byteOffset + 1]) << 8)
     }
 
-    func biomeValue(atLocalX localX: Int, y: Int, localZ: Int) -> Int32? {
+    public func biomeValue(atLocalX localX: Int, y: Int, localZ: Int) -> Int32? {
         let chunkY = Int8(truncatingIfNeeded: y >> 4)
         guard let subChunkBiome = biomeSections.first(where: { $0.chunkY == chunkY }) else {
             return nil
@@ -30,10 +35,10 @@ struct PackedBiomeHeightColumn {
         return subChunkBiome.paletteValue(localX: localX, localY: localY, localZ: localZ)
     }
 
-    struct PackedBiomeSection: PackedPaletteReadable {
-        let chunkY: Int8
-        let bitWidth: Int
-        let palette: [Int32]
-        let indicesBytes: [UInt8]
+    public struct PackedBiomeSection: PackedPaletteReadable {
+        public let chunkY: Int8
+        public let bitWidth: Int
+        public let palette: [Int32]
+        public let indicesBytes: [UInt8]
     }
 }
