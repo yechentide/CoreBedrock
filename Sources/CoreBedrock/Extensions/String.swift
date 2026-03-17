@@ -45,39 +45,4 @@ public extension String {
             return self
         }
     }
-
-    // swiftlint:disable colon
-    // swiftformat:disable consecutiveSpaces spaceAroundOperators
-    internal func toRGBA() -> RGBA? {
-        var hexString = self
-        if hexString.hasPrefix("#") {
-            hexString.removeFirst()
-        }
-
-        let length = hexString.count
-        guard length == 6 || length == 8 else {
-            return nil
-        }
-        guard let value = UInt32(hexString, radix: 16) else {
-            return nil
-        }
-
-        if hexString.count == 6 {
-            return .init(
-                red:   UInt8((value >> 16) & 0xFF),
-                green: UInt8((value >> 8) & 0xFF),
-                blue:  UInt8(value & 0xFF),
-                alpha: 255
-            )
-        } else {
-            return .init(
-                red:   UInt8((value >> 24) & 0xFF),
-                green: UInt8((value >> 16) & 0xFF),
-                blue:  UInt8((value >> 8) & 0xFF),
-                alpha: UInt8(value & 0xFF)
-            )
-        }
-    }
-    // swiftformat:enable consecutiveSpaces spaceAroundOperators
-    // swiftlint:enable colon
 }

@@ -5,15 +5,20 @@
 import Foundation
 
 public enum CBError: Error, Equatable, LocalizedError {
+    // World
     case invalidWorldDirectory(URL)
     case failedOpenWorld(URL)
     case failedParseLevelData(URL?)
+
+    // LevelDB
     case failedExtractKeys(URL)
     case unhandledLevelDBKey(String)
-    case failedSaveImage(URL)
+
+    // Parser
     case invalidDataLength(Int)
     case failedParseSubchunk
-    case invalidSubChunkVersion(Int)
+
+    // Map Art
     case failedCreateImageContext
     case failedToAllocateMapIDs
     case failedToSaveMapDataTag
