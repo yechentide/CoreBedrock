@@ -93,7 +93,7 @@
 }
 
 - (NSData *)key {
-    if (iterator == nullptr) {
+    if (iterator == nullptr || !iterator->Valid()) {
         return nil;
     }
     leveldb::Slice key = iterator->key();
@@ -101,7 +101,7 @@
 }
 
 - (NSData *)value {
-    if (iterator == nullptr) {
+    if (iterator == nullptr || !iterator->Valid()) {
         return nil;
     }
     leveldb::Slice value = iterator->value();

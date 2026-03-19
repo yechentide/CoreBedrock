@@ -58,6 +58,8 @@ struct LvDBIteratorTests {
         }
 
         let iter = try db.newIterator()
+        #expect(iter.key() == nil)
+        #expect(iter.value() == nil)
 
         // Seek to an existing key
         let bananaKey = Data("banana".utf8)
@@ -74,6 +76,8 @@ struct LvDBIteratorTests {
         let zzzKey = Data("zzz".utf8)
         iter.seek(zzzKey)
         #expect(iter.valid() == false)
+        #expect(iter.key() == nil)
+        #expect(iter.value() == nil)
     }
 
     @Test(.withEmptyDirectory)
@@ -97,6 +101,8 @@ struct LvDBIteratorTests {
         #expect(iter.key() == keys[2])
         iter.next()
         #expect(iter.valid() == false)
+        #expect(iter.key() == nil)
+        #expect(iter.value() == nil)
     }
 
     @Test(.withEmptyDirectory)
@@ -120,6 +126,8 @@ struct LvDBIteratorTests {
         #expect(iter.key() == keys[0])
         iter.prev()
         #expect(iter.valid() == false)
+        #expect(iter.key() == nil)
+        #expect(iter.value() == nil)
     }
 
     @Test(.withEmptyDirectory)
@@ -140,6 +148,8 @@ struct LvDBIteratorTests {
         #expect(iter.valid() == true)
         iter.next()
         #expect(iter.valid() == false)
+        #expect(iter.key() == nil)
+        #expect(iter.value() == nil)
     }
 
     @Test(.withEmptyDirectory)
