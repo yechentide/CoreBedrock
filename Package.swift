@@ -1,4 +1,4 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -19,9 +19,7 @@ let package = Package(
             targets: ["CoreBedrock"]
         ),
     ],
-    dependencies: [
-        // .package(url: "https://github.com/mw99/DataCompression", exact: "3.8.0"),
-    ],
+    dependencies: [],
     targets: [
         .binaryTarget(
             name: "libcrc32c",
@@ -63,9 +61,9 @@ let package = Package(
 
         .target(
             name: "CoreBedrock",
-            dependencies: [
-                "LvDBWrapper",
-                // "DataCompression",
+            dependencies: [ "LvDBWrapper" ],
+            swiftSettings: [
+                .defaultIsolation(MainActor.self),
             ]
         ),
         .testTarget(
@@ -73,9 +71,13 @@ let package = Package(
             dependencies: ["CoreBedrock"],
             resources: [
                 .copy("./TestData"),
+            ],
+            swiftSettings: [
+                .defaultIsolation(MainActor.self),
             ]
         ),
     ],
+    swiftLanguageModes: [.v6],
     cLanguageStandard: .c11,
     cxxLanguageStandard: .cxx11
 )

@@ -11,6 +11,7 @@ extension Trait where Self == TemporaryNetEaseWorldTrait {
     }
 }
 
+@MainActor
 struct TemporaryNetEaseWorldTrait: TestTrait, TestScoping {
     enum Context {
         @TaskLocal static var worldDirPath = ""

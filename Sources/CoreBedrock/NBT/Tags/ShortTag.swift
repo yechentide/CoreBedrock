@@ -15,7 +15,7 @@ public final class ShortTag: NBT {
     public var value: Int16
 
     /// Creates an unnamed `ShortTag` tag with the default of value of 0.
-    override public init() {
+    override nonisolated public init() {
         self.value = 0
         super.init()
     }

@@ -12,7 +12,7 @@ public final class ListTag: NBT {
     private var _tags: [NBT] = []
 
     /// Creates an unnamed `ListTag` with empty contents and undefined list type.
-    override public init() {
+    override nonisolated public init() {
         super.init()
     }
 

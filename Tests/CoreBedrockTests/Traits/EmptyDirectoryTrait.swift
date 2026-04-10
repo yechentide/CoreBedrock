@@ -11,6 +11,7 @@ extension Trait where Self == EmptyDirectoryTrait {
     }
 }
 
+@MainActor
 struct EmptyDirectoryTrait: TestTrait, TestScoping {
     enum Context {
         @TaskLocal static var directoryPath = ""

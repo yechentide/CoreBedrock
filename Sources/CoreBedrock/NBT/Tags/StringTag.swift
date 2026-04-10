@@ -15,7 +15,7 @@ public final class StringTag: NBT {
     public var value: String
 
     /// Creates an unnamed `StringTag` tag with the default value (empty string).
-    override public init() {
+    override nonisolated public init() {
         self.value = ""
         super.init()
     }

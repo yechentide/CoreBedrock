@@ -15,7 +15,7 @@ public final class LongTag: NBT {
     public var value: Int64
 
     /// Creates an unnamed `LongTag` tag with the default of value of 0.
-    override public init() {
+    override nonisolated public init() {
         self.value = 0
         super.init()
     }

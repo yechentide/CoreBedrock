@@ -25,7 +25,7 @@ public final class ByteTag: NBT {
     }
 
     /// Creates an unnamed `ByteTag` tag with the default of value of 0.
-    override public init() {
+    override nonisolated public init() {
         self.value = 0
         super.init()
     }
