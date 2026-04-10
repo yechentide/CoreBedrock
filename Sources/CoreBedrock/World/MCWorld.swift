@@ -48,7 +48,7 @@ public class MCWorld {
     ///
     /// This property allows injecting custom database implementations for testing
     /// or alternative storage backends. By default, it uses `LvDB` from `LvDBWrapper`.
-    public let database: LevelKeyValueStore
+    public let database: any LevelKeyValueStore
 
     /// The display name of the world, extracted from metadata.
     public var worldName = "???"
@@ -66,7 +66,7 @@ public class MCWorld {
     /// - Throws: An error if the database cannot be opened or metadata cannot be loaded.
     public convenience init(from dirURL: URL, meta: MCWorldMeta? = nil) throws {
         let dbPath = MCDir.generatePath(for: .db, in: dirURL)
-        let db: LevelKeyValueStore
+        let db: any LevelKeyValueStore
         do {
             db = try LevelKeyValueStoreFactory.makeDefault(dbPath: dbPath, createIfMissing: false)
         } catch let nsError as NSError {
@@ -88,7 +88,7 @@ public class MCWorld {
     ///   - database: The key-value store to use for world data access.
     ///   - meta: Optional pre-loaded metadata. If `nil`, metadata will be loaded from `level.dat`.
     /// - Throws: An error if metadata cannot be loaded.
-    public init(from dirURL: URL, database: LevelKeyValueStore, meta: MCWorldMeta? = nil) throws {
+    public init(from dirURL: URL, database: any LevelKeyValueStore, meta: MCWorldMeta? = nil) throws {
         self.dirURL = dirURL
         self.database = database
 

@@ -5,7 +5,7 @@
 import LvDBWrapper
 
 public enum LevelKeyValueStoreFactory {
-    static func makeDefault(dbPath: String, createIfMissing: Bool) throws -> LevelKeyValueStore {
+    static func makeDefault(dbPath: String, createIfMissing: Bool) throws -> any LevelKeyValueStore {
         try LvDB(dbPath: dbPath, createIfMissing: createIfMissing)
     }
 }

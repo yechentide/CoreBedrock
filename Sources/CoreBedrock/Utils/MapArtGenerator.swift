@@ -22,7 +22,7 @@ public enum MapArtGenerator {
     ///   - If the player's inventory has no available slot
     ///   - If the player's NBT data is invalid or cannot be parsed
     public static func generateAndGiveToPlayer(
-        database: LevelKeyValueStore,
+        database: any LevelKeyValueStore,
         image: CGImage,
         playerKey: Data,
         shulkerBoxName: String? = nil
@@ -53,7 +53,7 @@ public enum MapArtGenerator {
     /// - Throws: If image processing or map generation fails
     private static func buildMapItemsAndData(
         image: CGImage,
-        database: LevelKeyValueStore
+        database: any LevelKeyValueStore
     ) throws -> (items: [CompoundTag], data: [LvDBKey: CompoundTag]) {
         var mapItemTagList = [CompoundTag]()
         var mapDataTagDict = [LvDBKey: CompoundTag]()
@@ -123,7 +123,7 @@ public enum MapArtGenerator {
     ///   - count: Number of map IDs to allocate
     /// - Returns: Array of allocated map IDs
     /// - Throws: If unable to allocate the requested number of IDs
-    private static func allocateMapIDs(in database: LevelKeyValueStore, count: Int) throws -> [Int64] {
+    private static func allocateMapIDs(in database: any LevelKeyValueStore, count: Int) throws -> [Int64] {
         let iter = try database.makeIterator()
         iter.moveToFirst()
         defer {

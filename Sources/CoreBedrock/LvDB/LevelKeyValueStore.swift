@@ -83,7 +83,7 @@ public protocol LevelKeyValueStore {
     ///
     /// - Returns: A ``LevelKeyValueStoreIterator`` instance for iterating over the database.
     /// - Throws: An error if iterator creation fails.
-    func makeIterator() throws -> LevelKeyValueStoreIterator
+    func makeIterator() throws -> any LevelKeyValueStoreIterator
 
     /// Applies a batch of write operations atomically.
     ///
@@ -138,7 +138,7 @@ extension LvDB: LevelKeyValueStore {
     }
 
     /// Creates an iterator for traversing the database.
-    public func makeIterator() throws -> LevelKeyValueStoreIterator {
+    public func makeIterator() throws -> any LevelKeyValueStoreIterator {
         // Call the Objective-C newIterator: method (bridged to Swift as newIterator())
         try self.newIterator()
     }

@@ -64,6 +64,7 @@ let package = Package(
             dependencies: [ "LvDBWrapper" ],
             swiftSettings: [
                 .defaultIsolation(MainActor.self),
+                .enableUpcomingFeature("ExistentialAny"),
             ]
         ),
         .testTarget(

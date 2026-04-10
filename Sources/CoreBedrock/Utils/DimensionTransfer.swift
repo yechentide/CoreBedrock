@@ -25,8 +25,8 @@ public enum DimensionTransfer {
     ///   - mode: Transfer mode controlling how keys are handled
     /// - Throws: If database operations fail
     public static func transfer(
-        from source: LevelKeyValueStore,
-        to target: LevelKeyValueStore,
+        from source: any LevelKeyValueStore,
+        to target: any LevelKeyValueStore,
         dimension: MCDimension,
         mode: TransferMode
     ) throws {
@@ -47,7 +47,7 @@ public enum DimensionTransfer {
     ///   - dimension: Dimension to delete keys for
     /// - Throws: If database operations fail
     private static func deleteTargetDimensionKeys(
-        target: LevelKeyValueStore,
+        target: any LevelKeyValueStore,
         dimension: MCDimension
     ) throws {
         let iter = try target.makeIterator()
@@ -92,8 +92,8 @@ public enum DimensionTransfer {
     ///   - mode: Transfer mode (skipExisting or replacePerKey)
     /// - Throws: If database operations fail
     private static func copyKeys(
-        from source: LevelKeyValueStore,
-        to target: LevelKeyValueStore,
+        from source: any LevelKeyValueStore,
+        to target: any LevelKeyValueStore,
         dimension: MCDimension,
         mode: TransferMode
     ) throws {
