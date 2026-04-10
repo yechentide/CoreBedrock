@@ -2,7 +2,7 @@
 // Created by yechentide on 2025/05/04
 //
 
-public struct MCRegion: Hashable {
+public struct MCRegion: Sendable, Hashable {
     public static let sideLength = 512
     public static var viewSize: Int {
         sideLength * sideLength

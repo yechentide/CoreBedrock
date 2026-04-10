@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum LvDBError: Error, Equatable, LocalizedError {
+public enum LvDBError: Error, LocalizedError, Sendable, Hashable {
     case dbClosed(String)
     case notFound(String)
     case corruption(String)

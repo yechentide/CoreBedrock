@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum ContainerInsertError: Error, Equatable, LocalizedError {
+public enum ContainerInsertError: Error, LocalizedError, Sendable, Hashable {
     case invalidPlayerNBT
     case noAvailableSlot
 }

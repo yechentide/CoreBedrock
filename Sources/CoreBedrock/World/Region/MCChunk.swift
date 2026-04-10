@@ -2,7 +2,7 @@
 // Created by yechentide on 2025/08/11
 //
 
-public class MCChunk {
+public class MCChunk: Sendable {
     public static let sideLength = 16
     public static var viewSize: Int {
         Self.sideLength * Self.sideLength

@@ -7,7 +7,7 @@ import CoreGraphics
 // swiftlint:disable colon
 // swiftformat:disable consecutiveSpaces spaceAroundOperators
 
-public enum MCDimension: Int32, Sendable, CustomStringConvertible {
+public enum MCDimension: Int32, Sendable, Hashable, CustomStringConvertible {
     case overworld = 0
     case theNether = 1
     case theEnd    = 2

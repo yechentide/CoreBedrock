@@ -4,7 +4,7 @@
 
 // swiftformat:disable consecutiveSpaces spaceAroundOperators
 
-public enum MCGameDifficulty: Int32, Sendable, CustomStringConvertible {
+public enum MCGameDifficulty: Int32, Sendable, Hashable, CustomStringConvertible {
     case unknown    = -1
     case peaceful   = 0
     case easy       = 1

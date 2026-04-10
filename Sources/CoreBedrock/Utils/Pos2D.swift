@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/10/04
 //
 
-public struct Pos2D<T: SignedInteger>: Equatable, Hashable {
+public struct Pos2D<T: SignedInteger>: Sendable, Hashable {
     public let x: T
     public let z: T
 

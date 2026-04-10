@@ -6,7 +6,7 @@ import Foundation
 
 // swiftformat:disable consecutiveSpaces spaceAroundOperators redundantRawValues
 
-public enum LvDBStringKeyType: String, CaseIterable, Sendable {
+public enum LvDBStringKeyType: String, CaseIterable, Sendable, Hashable, Codable {
     case autonomousEntities             = "AutonomousEntities"
     case biomeData                      = "BiomeData"
     case dimension0                     = "dimension0"

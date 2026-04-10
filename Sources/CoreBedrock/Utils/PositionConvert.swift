@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/10/04
 //
 
-public enum PositionConvertType {
+public enum PositionConvertType: Sendable, Hashable {
     case blockToChunk
     case blockToRegion
     case chunkToBlock

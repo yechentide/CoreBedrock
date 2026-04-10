@@ -7,7 +7,7 @@ import OSLog
 
 // swiftformat:disable consecutiveSpaces spaceAroundOperators
 
-public enum LvDBKey: Equatable, Hashable, Sendable {
+public enum LvDBKey: Sendable, Hashable {
     case subChunk(Int32, Int32, MCDimension, LvDBChunkKeyType, Int8!)
     case string(LvDBStringKeyType)       // "\(key string)"
     case player(String, String)          // "\(type)\(id)"

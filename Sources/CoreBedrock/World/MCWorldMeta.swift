@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct MCWorldMeta {
+public struct MCWorldMeta: Sendable {
     public let version: Int32
     public var tag: CompoundTag
 
