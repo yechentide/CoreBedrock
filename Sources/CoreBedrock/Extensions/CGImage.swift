@@ -2,8 +2,8 @@
 // Created by yechentide on 2025/04/12
 //
 
-import CoreGraphics
-import Foundation
+public import CoreGraphics
+public import Foundation
 
 public extension CGImage {
     // swiftlint:disable line_length

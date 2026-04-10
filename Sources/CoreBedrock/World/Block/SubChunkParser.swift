@@ -2,7 +2,7 @@
 // Created by yechentide on 2025/09/18
 //
 
-import Foundation
+public import Foundation
 
 // enum PaletteMetaType: UInt8 {
 //     case persistence = 0

@@ -2,8 +2,8 @@
 // Created by yechentide on 2024/07/14
 //
 
-import CoreGraphics
-import Foundation
+public import CoreGraphics
+public import Foundation
 
 public struct MCDir: Sendable {
     public enum MCFileType: String {

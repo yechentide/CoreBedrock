@@ -2,7 +2,7 @@
 // Created by yechentide on 2025/04/20
 //
 
-import Foundation
+public import Foundation
 
 public struct CBBinaryReader: CustomDebugStringConvertible {
     // MARK: - Properties

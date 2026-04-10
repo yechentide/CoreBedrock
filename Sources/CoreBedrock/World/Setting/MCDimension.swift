@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/07/14
 //
 
-import CoreGraphics
+public import CoreGraphics
 
 // swiftlint:disable colon
 // swiftformat:disable consecutiveSpaces spaceAroundOperators

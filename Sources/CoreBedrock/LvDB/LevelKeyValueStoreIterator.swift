@@ -2,8 +2,8 @@
 // Created by yechentide on 2025/11/12
 //
 
-import Foundation
-import LvDBWrapper
+public import Foundation
+public import LvDBWrapper
 
 /// Iterator abstraction that mirrors the functionality exposed by ``LvDBIterator``.
 /// Wrapping the iterator into a protocol allows tests and SwiftUI previews to supply

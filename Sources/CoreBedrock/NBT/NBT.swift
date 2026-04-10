@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/06/02
 //
 
-import Foundation
+public import Foundation
 
 // swiftlint:disable line_length force_cast unused_setter_value
 

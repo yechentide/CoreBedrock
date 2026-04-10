@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/07/21
 //
 
-import Foundation
+public import Foundation
 
 public extension FileManager {
     func createDirectoryIfMissing(at url: URL) throws {

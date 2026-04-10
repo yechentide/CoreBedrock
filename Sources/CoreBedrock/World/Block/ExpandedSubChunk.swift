@@ -2,7 +2,7 @@
 // Created by yechentide on 2025/11/20
 //
 
-import Foundation
+public import Foundation
 
 public struct ExpandedSubChunk {
     public let version: Int

@@ -2,8 +2,8 @@
 // Created by yechentide on 2025/11/12
 //
 
-import Foundation
-import LvDBWrapper
+public import Foundation
+public import LvDBWrapper
 
 /// Protocol abstraction for a key-value store used to persist Minecraft Bedrock world data.
 ///

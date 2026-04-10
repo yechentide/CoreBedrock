@@ -2,7 +2,7 @@
 // Created by yechentide on 2026/02/06
 //
 
-import Foundation
+public import Foundation
 
 public enum ItemInjector {
     public static func giveItemToPlayer(

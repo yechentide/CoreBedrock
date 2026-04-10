@@ -2,7 +2,7 @@
 // Created by yechentide on 2025/04/19
 //
 
-import Foundation
+public import Foundation
 
 public enum LvDBKeyFactory {
     public static func makeBaseChunkKey(x: Int32, z: Int32, dimension: MCDimension) -> Data {

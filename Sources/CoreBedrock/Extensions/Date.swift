@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/06/02
 //
 
-import Foundation
+public import Foundation
 
 extension Date {
     private static let compactFormatter: DateFormatter = {

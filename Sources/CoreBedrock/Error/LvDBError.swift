@@ -2,7 +2,7 @@
 // Created by yechentide on 2025/08/22
 //
 
-import Foundation
+public import Foundation
 
 public enum LvDBError: Error, LocalizedError, Sendable, Hashable {
     case dbClosed(String)

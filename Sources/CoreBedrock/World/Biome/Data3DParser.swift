@@ -2,7 +2,7 @@
 // Created by yechentide on 2025/09/20
 //
 
-import Foundation
+public import Foundation
 
 public struct Data3DParser {
     private let binaryReader: CBBinaryReader

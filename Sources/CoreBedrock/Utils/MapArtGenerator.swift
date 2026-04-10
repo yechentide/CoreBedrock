@@ -2,8 +2,8 @@
 // Created by yechentide on 2025/11/21
 //
 
-import CoreGraphics
-import Foundation
+public import CoreGraphics
+public import Foundation
 
 public enum MapArtGenerator {
     private static let tileSize = 128

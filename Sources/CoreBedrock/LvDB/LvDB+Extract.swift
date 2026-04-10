@@ -2,7 +2,7 @@
 // Created by yechentide on 2025/04/20
 //
 
-import LvDBWrapper
+public import LvDBWrapper
 
 public extension LevelKeyValueStore {
     func getStringKey(type: LvDBStringKeyType) -> Data? {

@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/10/04
 //
 
-import Foundation
+public import Foundation
 import OSLog
 
 // swiftformat:disable consecutiveSpaces spaceAroundOperators

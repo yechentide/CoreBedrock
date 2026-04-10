@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/07/14
 //
 
-import Foundation
+public import Foundation
 
 public enum CBError: Error, LocalizedError, Sendable, Hashable {
     // World

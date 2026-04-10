@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/06/02
 //
 
-import Foundation
+public import Foundation
 
 public extension FixedWidthInteger {
     var data: Data {

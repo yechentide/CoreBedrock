@@ -2,7 +2,7 @@
 // Created by yechentide on 2024/06/02
 //
 
-import Foundation
+public import Foundation
 
 public extension String {
     /// Convert hex string to binary data with little-endian
