@@ -4,6 +4,67 @@
 
 import LvDBWrapper
 
+public typealias DimensionTransferEvent = CBOperationEvent<DimensionTransferProgress, Never, Never, Never>
+
+public struct DimensionTransferProgress: Sendable {
+    public let scannedChunkCount: Int
+    public let processedChunkCount: Int
+    public let scannedKeyCount: UInt64
+    public let processedKeyCount: UInt64
+
+    public init() {
+        self.scannedChunkCount = 0
+        self.processedChunkCount = 0
+        self.scannedKeyCount = 0
+        self.processedKeyCount = 0
+    }
+    public init(
+        scannedChunkCount: Int,
+        processedChunkCount: Int,
+        scannedKeyCount: UInt64,
+        processedKeyCount: UInt64
+    ) {
+        self.scannedChunkCount = scannedChunkCount
+        self.processedChunkCount = processedChunkCount
+        self.scannedKeyCount = scannedKeyCount
+        self.processedKeyCount = processedKeyCount
+    }
+}
+
+fileprivate struct DimensionTransferCoordKey: Hashable {
+    let x: Int32
+    let z: Int32
+}
+fileprivate struct DimensionTransferStatistics {
+    // Per-phase sets deduplicate coords within a single scan pass.
+    // Cumulative counters accumulate across phases (override: delete then copy).
+    private var phaseSeenChunkCoords: Set<DimensionTransferCoordKey> = []
+    private var phaseProcessedChunkCoords: Set<DimensionTransferCoordKey> = []
+    private var cumulativeScannedChunkCount: Int = 0
+    private var cumulativeProcessedChunkCount: Int = 0
+    var scannedKeyCount: UInt64 = 0
+    var processedKeyCount: UInt64 = 0
+
+    var scannedChunkCount: Int { cumulativeScannedChunkCount }
+    var processedChunkCount: Int { cumulativeProcessedChunkCount }
+
+    mutating func markSeen(_ coord: DimensionTransferCoordKey) {
+        if phaseSeenChunkCoords.insert(coord).inserted {
+            cumulativeScannedChunkCount += 1
+        }
+    }
+    mutating func markProcessed(_ coord: DimensionTransferCoordKey) {
+        if phaseProcessedChunkCoords.insert(coord).inserted {
+            cumulativeProcessedChunkCount += 1
+        }
+    }
+    /// Call between phases in override mode so the same coord can be counted again.
+    mutating func resetPhase() {
+        phaseSeenChunkCoords = []
+        phaseProcessedChunkCoords = []
+    }
+}
+
 public enum DimensionTransfer {
     /// Transfer mode for dimension data
     public enum TransferMode: CaseIterable, Sendable {
@@ -17,38 +78,72 @@ public enum DimensionTransfer {
 
     private static let batchThreshold = 512
 
-    /// Transfers dimension data from source to target database.
-    /// - Parameters:
-    ///   - source: Source database to read from
-    ///   - target: Target database to write to
-    ///   - dimension: Dimension to transfer
-    ///   - mode: Transfer mode controlling how keys are handled
-    /// - Throws: If database operations fail
+    /// Transfers dimension data with progress reporting via AsyncThrowingStream.
     public static func transfer(
         from source: any LevelKeyValueStore,
         to target: any LevelKeyValueStore,
         dimension: MCDimension,
         mode: TransferMode
-    ) throws {
-        switch mode {
-        case .override:
-            try self.deleteTargetDimensionKeys(target: target, dimension: dimension)
-            try self.copyKeys(from: source, to: target, dimension: dimension, mode: .replacePerKey)
-        case .skipExisting:
-            try self.copyKeys(from: source, to: target, dimension: dimension, mode: .skipExisting)
-        case .replacePerKey:
-            try self.copyKeys(from: source, to: target, dimension: dimension, mode: .replacePerKey)
+    ) -> AsyncThrowingStream<DimensionTransferEvent, any Error> {
+        return AsyncThrowingStream(DimensionTransferEvent.self) { continuation in
+            let task = Task {
+                do {
+                    continuation.yield(DimensionTransferEvent.progress(.init()))
+                    try self.transferWithProgress(
+                        from: source, to: target, dimension: dimension, mode: mode
+                    ) { event in
+                        continuation.yield(event)
+                    }
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+            continuation.onTermination = { _ in
+                task.cancel()
+            }
         }
     }
 
-    /// Deletes all keys for the specified dimension from the target database.
-    /// - Parameters:
-    ///   - target: Target database to delete keys from
-    ///   - dimension: Dimension to delete keys for
-    /// - Throws: If database operations fail
+    // MARK: - Private progress-reporting workers
+
+    private static func transferWithProgress(
+        from source: any LevelKeyValueStore,
+        to target: any LevelKeyValueStore,
+        dimension: MCDimension,
+        mode: TransferMode,
+        reportEvent: @escaping @Sendable (DimensionTransferEvent) -> Void
+    ) throws {
+        var statistics = DimensionTransferStatistics()
+        switch mode {
+        case .override:
+            try self.deleteTargetDimensionKeys(
+                target: target, dimension: dimension, statistics: &statistics, reportEvent: reportEvent
+            )
+            statistics.resetPhase()
+            try self.copyKeys(
+                from: source, to: target, dimension: dimension, mode: .replacePerKey,
+                statistics: &statistics, reportEvent: reportEvent
+            )
+        case .skipExisting:
+            try self.copyKeys(
+                from: source, to: target, dimension: dimension, mode: .skipExisting,
+                statistics: &statistics, reportEvent: reportEvent
+            )
+        case .replacePerKey:
+            try self.copyKeys(
+                from: source, to: target, dimension: dimension, mode: .replacePerKey,
+                statistics: &statistics, reportEvent: reportEvent
+            )
+        }
+        Self.emit(statistics: statistics, reportEvent: reportEvent)
+    }
+
     private static func deleteTargetDimensionKeys(
         target: any LevelKeyValueStore,
-        dimension: MCDimension
+        dimension: MCDimension,
+        statistics: inout DimensionTransferStatistics,
+        reportEvent: (@Sendable (DimensionTransferEvent) -> Void)?
     ) throws {
         let iter = try target.makeIterator()
         defer { iter.close() }
@@ -58,44 +153,54 @@ public enum DimensionTransfer {
 
         iter.moveToFirst()
         while iter.isValid {
+            try Task.checkCancellation()
+            defer { iter.moveToNext() }
+
             guard let keyData = iter.currentKey else {
-                iter.moveToNext()
                 continue
             }
 
-            let parsedKey = LvDBKey.parse(data: keyData)
-            if case let .subChunk(_, _, dim, _, _) = parsedKey, dim == dimension {
-                batch.remove(keyData)
-                batchCount += 1
+            try autoreleasepool {
+                let parsedKey = LvDBKey.parse(data: keyData)
+                if case let .subChunk(chunkX, chunkZ, dim, _, _) = parsedKey, dim == dimension {
+                    let coord = DimensionTransferCoordKey(x: chunkX, z: chunkZ)
+                    statistics.markSeen(coord)
+                    statistics.scannedKeyCount += 1
+                    batch.remove(keyData)
+                    statistics.markProcessed(coord)
+                    statistics.processedKeyCount += 1
+                    batchCount += 1
 
-                if batchCount >= self.batchThreshold {
-                    try target.writeBatch(batch)
-                    batch.clear()
-                    batchCount = 0
+                    if batchCount >= self.batchThreshold {
+                        try Task.checkCancellation()
+                        try target.writeBatch(batch)
+                        batch.clear()
+                        batchCount = 0
+                    }
+
+                    if let reportEvent, Self.shouldEmitProgress(for: statistics.scannedKeyCount) {
+                        Self.emit(statistics: statistics, reportEvent: reportEvent)
+                    }
                 }
             }
-
-            iter.moveToNext()
         }
 
-        // Flush remaining operations
         if batchCount > 0 {
-            try target.writeBatch(batch)
+            try Task.checkCancellation()
+            try autoreleasepool {
+                try target.writeBatch(batch)
+                batch.clear()
+            }
         }
     }
 
-    /// Copies dimension keys from source to target database.
-    /// - Parameters:
-    ///   - source: Source database to read from
-    ///   - target: Target database to write to
-    ///   - dimension: Dimension to copy keys for
-    ///   - mode: Transfer mode (skipExisting or replacePerKey)
-    /// - Throws: If database operations fail
     private static func copyKeys(
         from source: any LevelKeyValueStore,
         to target: any LevelKeyValueStore,
         dimension: MCDimension,
-        mode: TransferMode
+        mode: TransferMode,
+        statistics: inout DimensionTransferStatistics,
+        reportEvent: (@Sendable (DimensionTransferEvent) -> Void)?
     ) throws {
         let iter = try source.makeIterator()
         defer { iter.close() }
@@ -105,49 +210,71 @@ public enum DimensionTransfer {
 
         iter.moveToFirst()
         while iter.isValid {
+            try Task.checkCancellation()
+            defer { iter.moveToNext() }
+
             guard let keyData = iter.currentKey,
                   let valueData = iter.currentValue else {
-                iter.moveToNext()
                 continue
             }
 
-            let parsedKey = LvDBKey.parse(data: keyData)
+            try autoreleasepool {
+                let parsedKey = LvDBKey.parse(data: keyData)
+                if case let .subChunk(chunkX, chunkZ, dim, _, _) = parsedKey, dim == dimension {
+                    let coord = DimensionTransferCoordKey(x: chunkX, z: chunkZ)
+                    statistics.markSeen(coord)
+                    statistics.scannedKeyCount += 1
 
-            // Filter for dimension keys
-            let shouldProcess: Bool = if case let .subChunk(_, _, dim, _, _) = parsedKey {
-                dim == dimension
-            } else {
-                // Unknown or non-subChunk keys are skipped
-                false
-            }
+                    let shouldWrite: Bool = switch mode {
+                    case .skipExisting: !target.containsKey(keyData)
+                    case .replacePerKey, .override: true
+                    }
 
-            if shouldProcess {
-                // Check if we should skip based on mode
-                let shouldWrite: Bool = switch mode {
-                case .skipExisting:
-                    !target.containsKey(keyData)
-                case .replacePerKey, .override:
-                    true
-                }
+                    if shouldWrite {
+                        batch.put(keyData, value: valueData)
+                        statistics.markProcessed(coord)
+                        statistics.processedKeyCount += 1
+                        batchCount += 1
 
-                if shouldWrite {
-                    batch.put(keyData, value: valueData)
-                    batchCount += 1
+                        if batchCount >= self.batchThreshold {
+                            try Task.checkCancellation()
+                            try target.writeBatch(batch)
+                            batch.clear()
+                            batchCount = 0
+                        }
+                    }
 
-                    if batchCount >= self.batchThreshold {
-                        try target.writeBatch(batch)
-                        batch.clear()
-                        batchCount = 0
+                    if let reportEvent, Self.shouldEmitProgress(for: statistics.scannedKeyCount) {
+                        Self.emit(statistics: statistics, reportEvent: reportEvent)
                     }
                 }
             }
-
-            iter.moveToNext()
         }
 
-        // Flush remaining operations
         if batchCount > 0 {
-            try target.writeBatch(batch)
+            try Task.checkCancellation()
+            try autoreleasepool {
+                try target.writeBatch(batch)
+                batch.clear()
+            }
         }
+    }
+
+    // MARK: - Helpers
+
+    private static func shouldEmitProgress(for count: UInt64) -> Bool {
+        count == 1 || count.isMultiple(of: 512)
+    }
+    private static func emit(
+        statistics: DimensionTransferStatistics,
+        reportEvent: (DimensionTransferEvent) -> Void
+    ) {
+        let progress = DimensionTransferProgress(
+            scannedChunkCount: statistics.scannedChunkCount,
+            processedChunkCount: statistics.processedChunkCount,
+            scannedKeyCount: statistics.scannedKeyCount,
+            processedKeyCount: statistics.processedKeyCount
+        )
+        reportEvent(DimensionTransferEvent.progress(progress))
     }
 }
