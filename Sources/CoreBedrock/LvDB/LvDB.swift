@@ -35,6 +35,7 @@ public extension LevelKeyValueStore {
             guard !Task.isCancelled else {
                 return true
             }
+
             defer {
                 iterator.moveToNext()
             }

@@ -33,7 +33,7 @@ public enum MapArtGenerator {
         playerKey: Data,
         shulkerBoxName: String? = nil
     ) -> AsyncThrowingStream<MapArtGenerationEvent, any Error> {
-        return AsyncThrowingStream(MapArtGenerationEvent.self) { continuation in
+        AsyncThrowingStream(MapArtGenerationEvent.self) { continuation in
             let task = Task {
                 do {
                     try self.run(
@@ -138,7 +138,7 @@ public enum MapArtGenerator {
         bytes.reserveCapacity(pixels.count * 4)
         try autoreleasepool {
             for (index, color) in pixels.enumerated() {
-                if index.isMultiple(of: 1_024) {
+                if index.isMultiple(of: 1024) {
                     try Task.checkCancellation()
                 }
 
@@ -210,6 +210,7 @@ public enum MapArtGenerator {
         return ids
     }
 
+    // swiftlint:disable function_body_length
     private static func split(
         image: CGImage,
         report: @Sendable @escaping (MapArtGenerationProgress) -> Void
@@ -285,4 +286,5 @@ public enum MapArtGenerator {
 
         return tiles
     }
+    // swiftlint:enable function_body_length
 }

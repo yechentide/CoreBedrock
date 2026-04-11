@@ -14,7 +14,7 @@ public final class IntArrayTag: NBT {
     public var value: [Int32]
 
     /// Creates an unnamed `ByteTag` tag, containing an empty array of bytes.
-    override nonisolated public init() {
+    override public nonisolated init() {
         self.value = []
         super.init()
     }

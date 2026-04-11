@@ -7,7 +7,7 @@ import CoreGraphics
 // swiftlint:disable colon
 // swiftformat:disable consecutiveSpaces spaceAroundOperators
 
-enum MCColorCode: Character, Sendable, Hashable {
+enum MCColorCode: Character, Hashable {
     case black          = "0"
     case darkBlue       = "1"
     case darkGreen      = "2"

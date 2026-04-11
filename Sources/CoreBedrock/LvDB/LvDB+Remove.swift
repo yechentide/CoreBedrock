@@ -18,6 +18,7 @@ public struct ChunkDeletionProgress: Sendable {
         self.scannedKeyCount = 0
         self.processedKeyCount = 0
     }
+
     public init(
         scannedChunkCount: Int,
         processedChunkCount: Int,
@@ -31,25 +32,31 @@ public struct ChunkDeletionProgress: Sendable {
     }
 }
 
-fileprivate struct ChunkCoordKey: Hashable {
+private struct ChunkCoordKey: Hashable {
     let x: Int32
     let z: Int32
 }
-fileprivate struct ChunkDeletionStatistics {
+
+private struct ChunkDeletionStatistics {
     var seenChunkCoords: Set<ChunkCoordKey> = []
     var processedChunkCoords: Set<ChunkCoordKey> = []
     var scannedKeyCount: UInt64 = 0
     var processedKeyCount: UInt64 = 0
 
-    var scannedChunkCount: Int { seenChunkCoords.count }
-    var processedChunkCount: Int { processedChunkCoords.count }
+    var scannedChunkCount: Int {
+        self.seenChunkCoords.count
+    }
+
+    var processedChunkCount: Int {
+        self.processedChunkCoords.count
+    }
 }
 
 public extension LevelKeyValueStore {
     // MARK: - deleteAllChunks
 
     func deleteAllChunks(in dimension: MCDimension) -> AsyncThrowingStream<ChunkDeletionEvent, any Error> {
-        return AsyncThrowingStream(ChunkDeletionEvent.self) { continuation in
+        AsyncThrowingStream(ChunkDeletionEvent.self) { continuation in
             let task = Task {
                 do {
                     continuation.yield(ChunkDeletionEvent.progress(.init()))
@@ -67,6 +74,7 @@ public extension LevelKeyValueStore {
         }
     }
 
+    // swiftlint:disable function_body_length
     private func deleteAllChunks(
         in dimension: MCDimension, reportEvent: @escaping @Sendable (ChunkDeletionEvent) -> Void
     ) throws {
@@ -87,6 +95,7 @@ public extension LevelKeyValueStore {
             guard let key = iter.currentKey else {
                 break
             }
+
             statistics.scannedKeyCount += 1
 
             try autoreleasepool { [batch, iter] in
@@ -124,7 +133,7 @@ public extension LevelKeyValueStore {
             }
 
             if self.shouldEmitChunkDeletionProgress(for: statistics.scannedKeyCount) {
-                emit(statistics: statistics, reportEvent: reportEvent)
+                self.emit(statistics: statistics, reportEvent: reportEvent)
             }
         }
         if batch.approximateSize() > 0 {
@@ -132,8 +141,10 @@ public extension LevelKeyValueStore {
             batch.clear()
         }
 
-        emit(statistics: statistics, reportEvent: reportEvent)
+        self.emit(statistics: statistics, reportEvent: reportEvent)
     }
+
+    // swiftlint:enable function_body_length
 
     // MARK: - deleteChunksWithinRange
 
@@ -142,7 +153,7 @@ public extension LevelKeyValueStore {
         fromChunkX startX: Int32, fromChunkZ startZ: Int32,
         toChunkX endX: Int32, toChunkZ endZ: Int32
     ) -> AsyncThrowingStream<ChunkDeletionEvent, any Error> {
-        return AsyncThrowingStream(ChunkDeletionEvent.self) { continuation in
+        AsyncThrowingStream(ChunkDeletionEvent.self) { continuation in
             let task = Task {
                 do {
                     continuation.yield(ChunkDeletionEvent.progress(.init()))
@@ -164,6 +175,7 @@ public extension LevelKeyValueStore {
         }
     }
 
+    // swiftlint:disable function_parameter_count
     private func deleteChunksWithinRange(
         in dimension: MCDimension,
         fromChunkX startX: Int32, fromChunkZ startZ: Int32,
@@ -200,7 +212,7 @@ public extension LevelKeyValueStore {
                 }
 
                 if self.shouldEmitChunkDeletionProgress(for: UInt64(statistics.scannedKeyCount)) {
-                    emit(statistics: statistics, reportEvent: reportEvent)
+                    self.emit(statistics: statistics, reportEvent: reportEvent)
                 }
             }
             try Task.checkCancellation()
@@ -208,8 +220,10 @@ public extension LevelKeyValueStore {
             batch.clear()
         }
 
-        emit(statistics: statistics, reportEvent: reportEvent)
+        self.emit(statistics: statistics, reportEvent: reportEvent)
     }
+
+    // swiftlint:enable function_parameter_count
 
     // MARK: - deleteChunksOutsideRange
 
@@ -218,7 +232,7 @@ public extension LevelKeyValueStore {
         fromChunkX startX: Int32, fromChunkZ startZ: Int32,
         toChunkX endX: Int32, toChunkZ endZ: Int32
     ) -> AsyncThrowingStream<ChunkDeletionEvent, any Error> {
-        return AsyncThrowingStream(ChunkDeletionEvent.self) { continuation in
+        AsyncThrowingStream(ChunkDeletionEvent.self) { continuation in
             let task = Task {
                 do {
                     continuation.yield(ChunkDeletionEvent.progress(.init()))
@@ -240,6 +254,7 @@ public extension LevelKeyValueStore {
         }
     }
 
+    // swiftlint:disable function_body_length function_parameter_count
     private func deleteChunksOutsideRange(
         in dimension: MCDimension,
         fromChunkX startX: Int32, fromChunkZ startZ: Int32,
@@ -258,6 +273,7 @@ public extension LevelKeyValueStore {
             try Task.checkCancellation()
             defer { iter.moveToNext() }
             guard let key = iter.currentKey else { break }
+
             statistics.scannedKeyCount += 1
 
             let lvdbKey = LvDBKey.parse(data: key)
@@ -293,7 +309,7 @@ public extension LevelKeyValueStore {
             }
 
             if self.shouldEmitChunkDeletionProgress(for: statistics.scannedKeyCount) {
-                emit(statistics: statistics, reportEvent: reportEvent)
+                self.emit(statistics: statistics, reportEvent: reportEvent)
             }
         }
         if batch.approximateSize() > 0 {
@@ -301,8 +317,10 @@ public extension LevelKeyValueStore {
             batch.clear()
         }
 
-        emit(statistics: statistics, reportEvent: reportEvent)
+        self.emit(statistics: statistics, reportEvent: reportEvent)
     }
+
+    // swiftlint:enable function_body_length function_parameter_count
 
     // MARK: - Helpers
 
@@ -318,6 +336,7 @@ public extension LevelKeyValueStore {
         }
         for chunkKeyType in LvDBChunkKeyType.allCases {
             guard chunkKeyType != .subChunkPrefix else { continue }
+
             let key = keyPrefix + chunkKeyType.rawValue.data
             if containsKey(key) { scanned += 1 }
             batch.remove(key)
@@ -327,15 +346,17 @@ public extension LevelKeyValueStore {
     }
 
     @discardableResult
-    private func removeActorAndDigpKeys(keyPrefix: Data, batch: LvDBWriteBatch) -> (scanned: UInt64, processed: UInt64) {
+    private func removeActorAndDigpKeys(
+        keyPrefix: Data, batch: LvDBWriteBatch
+    ) -> (scanned: UInt64, processed: UInt64) {
         let digpKey = Data("digp".utf8) + keyPrefix
 
         guard let digpData = try? data(forKey: digpKey), !digpData.isEmpty, digpData.count % 8 == 0 else {
             return (0, 0)
         }
 
-        var scanned: UInt64 = 1  // digp key itself
-        var processed: UInt64 = 1  // digp key itself
+        var scanned: UInt64 = 1 // digp key itself
+        var processed: UInt64 = 1 // digp key itself
         for i in 0..<digpData.count / 8 {
             let actorprefixKey = Data("actorprefix".utf8) + digpData[i * 8...i * 8 + 7]
             batch.remove(actorprefixKey)
@@ -349,6 +370,7 @@ public extension LevelKeyValueStore {
     private func shouldEmitChunkDeletionProgress(for count: UInt64) -> Bool {
         count == 1 || count.isMultiple(of: 512)
     }
+
     private func emit(statistics: ChunkDeletionStatistics, reportEvent: (ChunkDeletionEvent) -> Void) {
         let progress = ChunkDeletionProgress(
             scannedChunkCount: statistics.scannedChunkCount,

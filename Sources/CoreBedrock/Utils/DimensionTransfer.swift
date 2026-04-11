@@ -18,6 +18,7 @@ public struct DimensionTransferProgress: Sendable {
         self.scannedKeyCount = 0
         self.processedKeyCount = 0
     }
+
     public init(
         scannedChunkCount: Int,
         processedChunkCount: Int,
@@ -31,37 +32,45 @@ public struct DimensionTransferProgress: Sendable {
     }
 }
 
-fileprivate struct DimensionTransferCoordKey: Hashable {
+private struct DimensionTransferCoordKey: Hashable {
     let x: Int32
     let z: Int32
 }
-fileprivate struct DimensionTransferStatistics {
+
+private struct DimensionTransferStatistics {
     // Per-phase sets deduplicate coords within a single scan pass.
     // Cumulative counters accumulate across phases (override: delete then copy).
     private var phaseSeenChunkCoords: Set<DimensionTransferCoordKey> = []
     private var phaseProcessedChunkCoords: Set<DimensionTransferCoordKey> = []
-    private var cumulativeScannedChunkCount: Int = 0
-    private var cumulativeProcessedChunkCount: Int = 0
+    private var cumulativeScannedChunkCount = 0
+    private var cumulativeProcessedChunkCount = 0
     var scannedKeyCount: UInt64 = 0
     var processedKeyCount: UInt64 = 0
 
-    var scannedChunkCount: Int { cumulativeScannedChunkCount }
-    var processedChunkCount: Int { cumulativeProcessedChunkCount }
+    var scannedChunkCount: Int {
+        self.cumulativeScannedChunkCount
+    }
+
+    var processedChunkCount: Int {
+        self.cumulativeProcessedChunkCount
+    }
 
     mutating func markSeen(_ coord: DimensionTransferCoordKey) {
-        if phaseSeenChunkCoords.insert(coord).inserted {
-            cumulativeScannedChunkCount += 1
+        if self.phaseSeenChunkCoords.insert(coord).inserted {
+            self.cumulativeScannedChunkCount += 1
         }
     }
+
     mutating func markProcessed(_ coord: DimensionTransferCoordKey) {
-        if phaseProcessedChunkCoords.insert(coord).inserted {
-            cumulativeProcessedChunkCount += 1
+        if self.phaseProcessedChunkCoords.insert(coord).inserted {
+            self.cumulativeProcessedChunkCount += 1
         }
     }
+
     /// Call between phases in override mode so the same coord can be counted again.
     mutating func resetPhase() {
-        phaseSeenChunkCoords = []
-        phaseProcessedChunkCoords = []
+        self.phaseSeenChunkCoords = []
+        self.phaseProcessedChunkCoords = []
     }
 }
 
@@ -85,7 +94,7 @@ public enum DimensionTransfer {
         dimension: MCDimension,
         mode: TransferMode
     ) -> AsyncThrowingStream<DimensionTransferEvent, any Error> {
-        return AsyncThrowingStream(DimensionTransferEvent.self) { continuation in
+        AsyncThrowingStream(DimensionTransferEvent.self) { continuation in
             let task = Task {
                 do {
                     continuation.yield(DimensionTransferEvent.progress(.init()))
@@ -194,6 +203,7 @@ public enum DimensionTransfer {
         }
     }
 
+    // swiftlint:disable function_parameter_count
     private static func copyKeys(
         from source: any LevelKeyValueStore,
         to target: any LevelKeyValueStore,
@@ -260,11 +270,14 @@ public enum DimensionTransfer {
         }
     }
 
+    // swiftlint:enable function_parameter_count
+
     // MARK: - Helpers
 
     private static func shouldEmitProgress(for count: UInt64) -> Bool {
         count == 1 || count.isMultiple(of: 512)
     }
+
     private static func emit(
         statistics: DimensionTransferStatistics,
         reportEvent: (DimensionTransferEvent) -> Void

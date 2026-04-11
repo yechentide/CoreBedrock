@@ -15,7 +15,7 @@ public final class DoubleTag: NBT {
     public var value: Double
 
     /// Creates an unnamed `DoubleTag` tag with the default of value of 0.
-    override nonisolated public init() {
+    override public nonisolated init() {
         self.value = 0
         super.init()
     }

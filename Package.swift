@@ -61,14 +61,14 @@ let package = Package(
 
         .target(
             name: "CoreBedrock",
-            dependencies: [ "LvDBWrapper" ],
+            dependencies: ["LvDBWrapper"],
             swiftSettings: [
                 .defaultIsolation(MainActor.self),
                 .enableUpcomingFeature("ExistentialAny"),
                 .enableUpcomingFeature("InferIsolatedConformances"),
                 .enableUpcomingFeature("InternalImportsByDefault"),
                 .enableUpcomingFeature("MemberImportVisibility"),
-                .enableUpcomingFeature("NonisolatedNonsendingByDefault")
+                .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
             ]
         ),
         .testTarget(
