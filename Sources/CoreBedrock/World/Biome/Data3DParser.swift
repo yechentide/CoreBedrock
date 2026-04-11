@@ -35,6 +35,7 @@ public struct Data3DParser {
 
         var biomePalette: [Int32] = []
         for _ in 0..<paletteCount {
+            try Task.checkCancellation()
             let biomeID = try binaryReader.readInt32()
             biomePalette.append(biomeID)
         }
@@ -60,6 +61,7 @@ public struct Data3DParser {
 
         var biomeSections: [PackedBiomeHeightColumn.PackedBiomeSection] = []
         for chunkY in minChunkY...maxChunkY {
+            try Task.checkCancellation()
             if let biomeSection = try lightParseBiomeSection(chunkY: chunkY) {
                 biomeSections.append(biomeSection)
             }

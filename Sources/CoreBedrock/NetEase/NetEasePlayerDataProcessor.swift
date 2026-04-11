@@ -17,8 +17,11 @@ enum NetEasePlayerDataProcessor {
         do {
             let localPlayerKey = LvDBStringKeyType.localPlayer.rawValue.data(using: .utf8)!
             let localPlayerData = try database.get(localPlayerKey)
-            if let fixedData = try transform(localPlayerData) {
-                try database.put(localPlayerKey, fixedData)
+            try autoreleasepool {
+                try Task.checkCancellation()
+                if let fixedData = try transform(localPlayerData) {
+                    try database.put(localPlayerKey, fixedData)
+                }
             }
         } catch {
             let lvdbError = LvDBError(nsError: error as NSError)
@@ -30,6 +33,7 @@ enum NetEasePlayerDataProcessor {
         let iter = try database.makeIterator()
         iter.move(to: Data(NetEaseConstants.playerKeyPrefix.utf8))
         while iter.isValid {
+            try Task.checkCancellation()
             defer { iter.moveToNext() }
             // player_server_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
             guard
@@ -42,8 +46,11 @@ enum NetEasePlayerDataProcessor {
                 break
             }
 
-            if let fixedData = try transform(serverPlayerData) {
-                try database.put(key, fixedData)
+            try autoreleasepool {
+                if let fixedData = try transform(serverPlayerData) {
+                    try Task.checkCancellation()
+                    try database.put(key, fixedData)
+                }
             }
         }
     }

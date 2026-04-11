@@ -59,18 +59,22 @@ enum NetEaseFileProcessor {
         }
 
         for case let fileURL as URL in enumerator {
+            try Task.checkCancellation()
             let attributes = try fileURL.resourceValues(forKeys: Set(propertyKeys))
             guard attributes.isDirectory == false, let fileName = attributes.name else {
                 continue
             }
 
-            let fileData = try Data(contentsOf: fileURL)
-            let isCurrentFile = fileName == "CURRENT"
-            let headerType = NetEaseHeader.identifyHeader(in: fileData, isCurrentFile: isCurrentFile)
+            try autoreleasepool {
+                let fileData = try Data(contentsOf: fileURL)
+                let isCurrentFile = fileName == "CURRENT"
+                let headerType = NetEaseHeader.identifyHeader(in: fileData, isCurrentFile: isCurrentFile)
 
-            if shouldProcess(fileName, headerType) {
-                let processed = try transform(fileData)
-                try processed.write(to: fileURL)
+                if shouldProcess(fileName, headerType) {
+                    let processed = try transform(fileData)
+                    try Task.checkCancellation()
+                    try processed.write(to: fileURL)
+                }
             }
         }
     }

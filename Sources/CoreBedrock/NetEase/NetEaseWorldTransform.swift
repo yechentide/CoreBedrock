@@ -27,41 +27,47 @@ public enum NetEaseWorldTransform {
     }
 
     public static func decryptWorld(at worldDirPath: String) throws {
-        let currentFileData = try readCurrentFileData(in: worldDirPath)
-        try NetEaseHeader.validate(currentFileData: currentFileData, shouldHasHeader: .neteaseEncrypted)
+        try autoreleasepool {
+            let currentFileData = try readCurrentFileData(in: worldDirPath)
+            try NetEaseHeader.validate(currentFileData: currentFileData, shouldHasHeader: .neteaseEncrypted)
 
-        let dbDirPath = (worldDirPath as NSString).appendingPathComponent("db")
-        let customKey = try NetEaseKeyDerivation.deriveKey(dbDirPath: dbDirPath, currentFileData: currentFileData)
+            let dbDirPath = (worldDirPath as NSString).appendingPathComponent("db")
+            let customKey = try NetEaseKeyDerivation.deriveKey(dbDirPath: dbDirPath, currentFileData: currentFileData)
 
-        try NetEaseFileProcessor.processFiles(
-            in: dbDirPath,
-            shouldProcess: { fileName, headerType in
-                headerType == .neteaseEncrypted && NetEaseFileProcessor.shouldProcessNetEaseFile(fileName)
-            },
-            transform: { fileData in
-                try NetEaseCrypto.decryptFile(data: fileData, key: customKey)
-            }
-        )
+            try Task.checkCancellation()
+            try NetEaseFileProcessor.processFiles(
+                in: dbDirPath,
+                shouldProcess: { fileName, headerType in
+                    headerType == .neteaseEncrypted && NetEaseFileProcessor.shouldProcessNetEaseFile(fileName)
+                },
+                transform: { fileData in
+                    try NetEaseCrypto.decryptFile(data: fileData, key: customKey)
+                }
+            )
+        }
     }
 
     public static func encryptWorld(at worldDirPath: String, with customKey: Data) throws {
-        let currentFileData = try readCurrentFileData(in: worldDirPath)
-        try NetEaseHeader.validate(currentFileData: currentFileData, shouldHasHeader: .bedrockCurrentFile)
+        try autoreleasepool {
+            let currentFileData = try readCurrentFileData(in: worldDirPath)
+            try NetEaseHeader.validate(currentFileData: currentFileData, shouldHasHeader: .bedrockCurrentFile)
 
-        guard customKey.count == 8 else {
-            throw NetEaseError.invalidKeyLength(customKey.count)
-        }
-
-        let dbDirPath = (worldDirPath as NSString).appendingPathComponent("db")
-        try NetEaseFileProcessor.processFiles(
-            in: dbDirPath,
-            shouldProcess: { fileName, headerType in
-                headerType != .neteaseEncrypted && NetEaseFileProcessor.shouldProcessNetEaseFile(fileName)
-            },
-            transform: { fileData in
-                try NetEaseCrypto.encryptFile(data: fileData, key: customKey)
+            guard customKey.count == 8 else {
+                throw NetEaseError.invalidKeyLength(customKey.count)
             }
-        )
+
+            let dbDirPath = (worldDirPath as NSString).appendingPathComponent("db")
+            try Task.checkCancellation()
+            try NetEaseFileProcessor.processFiles(
+                in: dbDirPath,
+                shouldProcess: { fileName, headerType in
+                    headerType != .neteaseEncrypted && NetEaseFileProcessor.shouldProcessNetEaseFile(fileName)
+                },
+                transform: { fileData in
+                    try NetEaseCrypto.encryptFile(data: fileData, key: customKey)
+                }
+            )
+        }
     }
 
     public static func decryptPlayerData(at worldDirPath: String) throws {

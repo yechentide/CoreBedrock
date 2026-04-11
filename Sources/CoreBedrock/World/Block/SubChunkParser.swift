@@ -29,6 +29,7 @@ public struct SubChunkParser {
     }
 
     public func parsePackedLayer() throws -> PackedSubChunk? {
+        try Task.checkCancellation()
         let storageVersion = try binaryReader.readUInt8()
         return switch storageVersion {
         case 9: try self.parseV9Packed()
@@ -38,6 +39,7 @@ public struct SubChunkParser {
     }
 
     private func parseV9Packed() throws -> PackedSubChunk? {
+        try Task.checkCancellation()
         let layerCount = try binaryReader.readUInt8()
         let chunkY = try binaryReader.readInt8()
         guard chunkY == self.chunkY, layerCount > 0 else {
@@ -66,6 +68,7 @@ public struct SubChunkParser {
         var liquidPalette: [CompoundTag] = []
         var liquidIndicesData: [UInt8] = []
         if layerCount > 1 {
+            try Task.checkCancellation()
             (liquidIndicesData, liquidBitWidth, _) = try self.binaryReader.readIndicesData()
             liquidPalette = try self.binaryReader.readBlockPalette()
             guard !liquidPalette.isEmpty, !liquidIndicesData.isEmpty else {
@@ -90,6 +93,7 @@ public struct SubChunkParser {
     }
 
     private func parseV8Packed() throws -> PackedSubChunk? {
+        try Task.checkCancellation()
         let layerCount = try binaryReader.readUInt8()
         guard layerCount > 0 else {
             return nil
@@ -117,6 +121,7 @@ public struct SubChunkParser {
         var liquidPalette: [CompoundTag] = []
         var liquidIndicesData: [UInt8] = []
         if layerCount > 1 {
+            try Task.checkCancellation()
             (liquidIndicesData, liquidBitWidth, _) = try self.binaryReader.readIndicesData()
             liquidPalette = try self.binaryReader.readBlockPalette()
             guard !liquidPalette.isEmpty, !liquidIndicesData.isEmpty else {
@@ -146,11 +151,13 @@ public struct SubChunkParser {
         var blockDataList = [UInt8]()
         // 4096 bytes for block ids
         for _ in 0..<MCSubChunk.totalBlockCount {
+            try Task.checkCancellation()
             let id = try binaryReader.readUInt8()
             blockIDList.append(id)
         }
         // Each byte contains 2 blocks: 4 bits per block
         for _ in 0..<(MCSubChunk.totalBlockCount / 2) {
+            try Task.checkCancellation()
             let twoBlockData = try binaryReader.readUInt8()
             let firstBlockData = twoBlockData & 0x0F
             let secondBlockData = (twoBlockData >> 4) & 0x0F
@@ -162,6 +169,7 @@ public struct SubChunkParser {
         var blockIndicesData = [UInt8]()
         // swiftlint:disable:next identifier_name
         for i in 0..<MCSubChunk.totalBlockCount {
+            try Task.checkCancellation()
             // TODO: create CompoundTag from block ID and block data // swiftlint:disable:this todo
             // let blockID = blockIDList[i]
             // let blockData = blockDataList[i]
