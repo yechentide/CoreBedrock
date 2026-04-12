@@ -6,7 +6,7 @@ import OSLog
 
 enum CBLogger {
     private static let logger = Logger(
-        subsystem: "com.github.yechentide.CoreBedrock",
+        subsystem: "com.github.yechentide.corebedrock",
         category: "library"
     )
 
