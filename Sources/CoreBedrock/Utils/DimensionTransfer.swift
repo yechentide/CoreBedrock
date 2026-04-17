@@ -2,7 +2,7 @@
 // Created by yechentide on 2025/11/21
 //
 
-import LvDBWrapper
+import Foundation
 
 public typealias DimensionTransferEvent = CBOperationEvent<DimensionTransferProgress, Never, Never, Never>
 
@@ -89,36 +89,38 @@ public enum DimensionTransfer {
 
     /// Transfers dimension data with progress reporting via AsyncThrowingStream.
     public static func transfer(
-        from source: any LevelKeyValueStore,
-        to target: any LevelKeyValueStore,
+        from source: any KeyValueStore,
+        to target: any KeyValueStore,
         dimension: MCDimension,
         mode: TransferMode
     ) -> AsyncThrowingStream<DimensionTransferEvent, any Error> {
-        AsyncThrowingStream(DimensionTransferEvent.self) { continuation in
-            let task = Task {
-                do {
-                    continuation.yield(DimensionTransferEvent.progress(.init()))
-                    try self.transferWithProgress(
-                        from: source, to: target, dimension: dimension, mode: mode
-                    ) { event in
-                        continuation.yield(event)
-                    }
-                    continuation.finish()
-                } catch {
-                    continuation.finish(throwing: error)
+        let (stream, continuation) = AsyncThrowingStream<DimensionTransferEvent, any Error>.makeStream()
+        let source = source
+        let target = target
+        let task = Task {
+            do {
+                continuation.yield(DimensionTransferEvent.progress(.init()))
+                try self.transferWithProgress(
+                    from: source, to: target, dimension: dimension, mode: mode
+                ) { event in
+                    continuation.yield(event)
                 }
-            }
-            continuation.onTermination = { _ in
-                task.cancel()
+                continuation.finish()
+            } catch {
+                continuation.finish(throwing: error)
             }
         }
+        continuation.onTermination = { _ in
+            task.cancel()
+        }
+        return stream
     }
 
     // MARK: - Private progress-reporting workers
 
     private static func transferWithProgress(
-        from source: any LevelKeyValueStore,
-        to target: any LevelKeyValueStore,
+        from source: any KeyValueStore,
+        to target: any KeyValueStore,
         dimension: MCDimension,
         mode: TransferMode,
         reportEvent: @escaping @Sendable (DimensionTransferEvent) -> Void
@@ -149,7 +151,7 @@ public enum DimensionTransfer {
     }
 
     private static func deleteTargetDimensionKeys(
-        target: any LevelKeyValueStore,
+        target: any KeyValueStore,
         dimension: MCDimension,
         statistics: inout DimensionTransferStatistics,
         reportEvent: (@Sendable (DimensionTransferEvent) -> Void)?
@@ -157,7 +159,7 @@ public enum DimensionTransfer {
         let iter = try target.makeIterator()
         defer { iter.close() }
 
-        let batch = LvDBWriteBatch()
+        let batch = LevelDBWriteBatch()
         var batchCount = 0
 
         iter.moveToFirst()
@@ -205,8 +207,8 @@ public enum DimensionTransfer {
 
     // swiftlint:disable function_parameter_count
     private static func copyKeys(
-        from source: any LevelKeyValueStore,
-        to target: any LevelKeyValueStore,
+        from source: any KeyValueStore,
+        to target: any KeyValueStore,
         dimension: MCDimension,
         mode: TransferMode,
         statistics: inout DimensionTransferStatistics,
@@ -215,7 +217,7 @@ public enum DimensionTransfer {
         let iter = try source.makeIterator()
         defer { iter.close() }
 
-        let batch = LvDBWriteBatch()
+        let batch = LevelDBWriteBatch()
         var batchCount = 0
 
         iter.moveToFirst()

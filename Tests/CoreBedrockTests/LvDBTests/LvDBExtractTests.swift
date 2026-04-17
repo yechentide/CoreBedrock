@@ -4,7 +4,6 @@
 
 @testable import CoreBedrock
 import Foundation
-import LvDBWrapper
 import Testing
 
 struct ExtractTests {
@@ -15,7 +14,7 @@ struct ExtractTests {
             .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
-        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db = try LevelDB(dbPath: dbPath, createIfMissing: true)
         defer { db.close() }
 
         // Prepare test data
@@ -36,7 +35,7 @@ struct ExtractTests {
             .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
-        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db = try LevelDB(dbPath: dbPath, createIfMissing: true)
         defer { db.close() }
 
         // Prepare test data
@@ -66,7 +65,7 @@ struct ExtractTests {
             .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
-        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db = try LevelDB(dbPath: dbPath, createIfMissing: true)
         defer { db.close() }
 
         // Prepare test data
@@ -96,7 +95,7 @@ struct ExtractTests {
             .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
-        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db = try LevelDB(dbPath: dbPath, createIfMissing: true)
         defer { db.close() }
 
         // Prepare test data
@@ -128,7 +127,7 @@ struct ExtractTests {
             .path
         defer { try? FileManager.default.removeItem(atPath: dbPath) }
 
-        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db = try LevelDB(dbPath: dbPath, createIfMissing: true)
         defer { db.close() }
 
         // Prepare test data

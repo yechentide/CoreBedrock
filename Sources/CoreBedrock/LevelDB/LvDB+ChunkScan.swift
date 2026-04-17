@@ -2,9 +2,9 @@
 // Created by yechentide on 2025/04/30
 //
 
-import LvDBWrapper
+import Foundation
 
-public extension LevelKeyValueStore {
+public extension KeyValueStore {
     func chunkExists(chunkX: Int, chunkZ: Int, dimension: MCDimension) -> Bool {
         let chunkX = Int32(truncatingIfNeeded: chunkX)
         let chunkZ = Int32(truncatingIfNeeded: chunkZ)

@@ -2,7 +2,7 @@
 // Created by yechentide on 2025/04/20
 //
 
-import LvDBWrapper
+import Foundation
 
 public typealias ChunkDeletionEvent = CBOperationEvent<ChunkDeletionProgress, Never, Never, Never>
 
@@ -52,26 +52,27 @@ private struct ChunkDeletionStatistics {
     }
 }
 
-public extension LevelKeyValueStore {
+public extension KeyValueStore {
     // MARK: - deleteAllChunks
 
     func deleteAllChunks(in dimension: MCDimension) -> AsyncThrowingStream<ChunkDeletionEvent, any Error> {
-        AsyncThrowingStream(ChunkDeletionEvent.self) { continuation in
-            let task = Task {
-                do {
-                    continuation.yield(ChunkDeletionEvent.progress(.init()))
-                    try self.deleteAllChunks(in: dimension) { event in
-                        continuation.yield(event)
-                    }
-                    continuation.finish()
-                } catch {
-                    continuation.finish(throwing: error)
+        let (stream, continuation) = AsyncThrowingStream<ChunkDeletionEvent, any Error>.makeStream()
+        let store = self
+        let task = Task {
+            do {
+                continuation.yield(ChunkDeletionEvent.progress(.init()))
+                try store.deleteAllChunks(in: dimension) { event in
+                    continuation.yield(event)
                 }
-            }
-            continuation.onTermination = { _ in
-                task.cancel()
+                continuation.finish()
+            } catch {
+                continuation.finish(throwing: error)
             }
         }
+        continuation.onTermination = { _ in
+            task.cancel()
+        }
+        return stream
     }
 
     // swiftlint:disable function_body_length
@@ -79,7 +80,7 @@ public extension LevelKeyValueStore {
         in dimension: MCDimension, reportEvent: @escaping @Sendable (ChunkDeletionEvent) -> Void
     ) throws {
         var statistics = ChunkDeletionStatistics()
-        let batch = LvDBWriteBatch()
+        let batch = LevelDBWriteBatch()
 
         let iter = try self.makeIterator()
         defer {
@@ -153,26 +154,27 @@ public extension LevelKeyValueStore {
         fromChunkX startX: Int32, fromChunkZ startZ: Int32,
         toChunkX endX: Int32, toChunkZ endZ: Int32
     ) -> AsyncThrowingStream<ChunkDeletionEvent, any Error> {
-        AsyncThrowingStream(ChunkDeletionEvent.self) { continuation in
-            let task = Task {
-                do {
-                    continuation.yield(ChunkDeletionEvent.progress(.init()))
-                    try self.deleteChunksWithinRange(
-                        in: dimension,
-                        fromChunkX: startX, fromChunkZ: startZ,
-                        toChunkX: endX, toChunkZ: endZ
-                    ) { event in
-                        continuation.yield(event)
-                    }
-                    continuation.finish()
-                } catch {
-                    continuation.finish(throwing: error)
+        let (stream, continuation) = AsyncThrowingStream<ChunkDeletionEvent, any Error>.makeStream()
+        let store = self
+        let task = Task {
+            do {
+                continuation.yield(ChunkDeletionEvent.progress(.init()))
+                try store.deleteChunksWithinRange(
+                    in: dimension,
+                    fromChunkX: startX, fromChunkZ: startZ,
+                    toChunkX: endX, toChunkZ: endZ
+                ) { event in
+                    continuation.yield(event)
                 }
-            }
-            continuation.onTermination = { _ in
-                task.cancel()
+                continuation.finish()
+            } catch {
+                continuation.finish(throwing: error)
             }
         }
+        continuation.onTermination = { _ in
+            task.cancel()
+        }
+        return stream
     }
 
     // swiftlint:disable function_parameter_count
@@ -185,7 +187,7 @@ public extension LevelKeyValueStore {
         var statistics = ChunkDeletionStatistics()
         let xRange = min(startX, endX)...max(startX, endX)
         let zRange = min(startZ, endZ)...max(startZ, endZ)
-        let batch = LvDBWriteBatch()
+        let batch = LevelDBWriteBatch()
 
         for x in xRange {
             try Task.checkCancellation()
@@ -232,26 +234,27 @@ public extension LevelKeyValueStore {
         fromChunkX startX: Int32, fromChunkZ startZ: Int32,
         toChunkX endX: Int32, toChunkZ endZ: Int32
     ) -> AsyncThrowingStream<ChunkDeletionEvent, any Error> {
-        AsyncThrowingStream(ChunkDeletionEvent.self) { continuation in
-            let task = Task {
-                do {
-                    continuation.yield(ChunkDeletionEvent.progress(.init()))
-                    try self.deleteChunksOutsideRange(
-                        in: dimension,
-                        fromChunkX: startX, fromChunkZ: startZ,
-                        toChunkX: endX, toChunkZ: endZ
-                    ) { event in
-                        continuation.yield(event)
-                    }
-                    continuation.finish()
-                } catch {
-                    continuation.finish(throwing: error)
+        let (stream, continuation) = AsyncThrowingStream<ChunkDeletionEvent, any Error>.makeStream()
+        let store = self
+        let task = Task {
+            do {
+                continuation.yield(ChunkDeletionEvent.progress(.init()))
+                try store.deleteChunksOutsideRange(
+                    in: dimension,
+                    fromChunkX: startX, fromChunkZ: startZ,
+                    toChunkX: endX, toChunkZ: endZ
+                ) { event in
+                    continuation.yield(event)
                 }
-            }
-            continuation.onTermination = { _ in
-                task.cancel()
+                continuation.finish()
+            } catch {
+                continuation.finish(throwing: error)
             }
         }
+        continuation.onTermination = { _ in
+            task.cancel()
+        }
+        return stream
     }
 
     // swiftlint:disable function_body_length function_parameter_count
@@ -265,7 +268,7 @@ public extension LevelKeyValueStore {
         let xRange = min(startX, endX)...max(startX, endX)
         let zRange = min(startZ, endZ)...max(startZ, endZ)
         let iter = try self.makeIterator()
-        let batch = LvDBWriteBatch()
+        let batch = LevelDBWriteBatch()
         defer { iter.close() }
 
         iter.moveToFirst()
@@ -325,7 +328,9 @@ public extension LevelKeyValueStore {
     // MARK: - Helpers
 
     @discardableResult
-    private func removeChunkKeys(keyPrefix: Data, batch: LvDBWriteBatch) -> (scanned: UInt64, processed: UInt64) {
+    private func removeChunkKeys(
+        keyPrefix: Data, batch: any KeyValueWriteBatch
+    ) -> (scanned: UInt64, processed: UInt64) {
         var scanned: UInt64 = 0
         var processed: UInt64 = 0
         for yIndex in Int8(-4)...Int8(20) {
@@ -347,7 +352,7 @@ public extension LevelKeyValueStore {
 
     @discardableResult
     private func removeActorAndDigpKeys(
-        keyPrefix: Data, batch: LvDBWriteBatch
+        keyPrefix: Data, batch: any KeyValueWriteBatch
     ) -> (scanned: UInt64, processed: UInt64) {
         let digpKey = Data("digp".utf8) + keyPrefix
 

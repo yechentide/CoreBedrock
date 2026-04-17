@@ -2,32 +2,32 @@
 // Created by yechentide on 2024/06/01
 //
 
-#import "LvDBIterator.h"
-#import "LvDB.h"
+#import "LevelDBBridgeIterator.h"
+#import "LevelDBBridge.h"
 #import "DebugLog.h"
 
 #import <iostream>
 #import <memory>
 #import "leveldb/db.h"
 
-@implementation LvDBIterator {
+@implementation LevelDBBridgeIterator {
     std::unique_ptr<leveldb::Iterator> iterator;
-    __weak LvDB *parentDB;
+    __weak LevelDBBridge *parentDB;
 }
 
-- (id)initFromIterator:(void *)dbIterator parentDB:(LvDB *)parent {
+- (id)initFromIterator:(void *)dbIterator parentDB:(LevelDBBridge *)parent {
     if (self = [super init]) {
         leveldb::Iterator* it = static_cast<leveldb::Iterator*>(dbIterator);
         iterator.reset(it);
         parentDB = parent;
-        DebugLog(@"LvDBIterator initialized.");
+        DebugLog(@"LevelDBBridgeIterator initialized.");
     }
     return self;
 }
 
 - (void)dealloc {
     [self destroy];
-    DebugLog(@"LvDBIterator deallocated.");
+    DebugLog(@"LevelDBBridgeIterator deallocated.");
 }
 
 - (void)destroy {

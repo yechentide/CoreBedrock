@@ -3,7 +3,6 @@
 //
 
 public import Foundation
-public import LvDBWrapper
 
 /// Protocol abstraction for a key-value store used to persist Minecraft Bedrock world data.
 ///
@@ -29,10 +28,8 @@ public import LvDBWrapper
 ///
 /// ## Usage
 ///
-/// The default implementation is `LvDB` from `LvDBWrapper`. To inject a custom store:
-///
 /// ```swift
-/// let customStore: LevelKeyValueStore = MyCustomStore()
+/// let customStore: KeyValueStore = MyCustomStore()
 /// let world = try MCWorld(from: worldURL, database: customStore)
 /// ```
 ///
@@ -40,7 +37,7 @@ public import LvDBWrapper
 /// - **Testing**: Inject in-memory stores without file I/O
 /// - **SwiftUI Previews**: Use mock data without real database files
 /// - **Remote storage**: Implement cloud-backed world storage
-public protocol LevelKeyValueStore {
+public protocol KeyValueStore: Sendable {
     /// Returns `true` if the database has been closed.
     var isClosed: Bool { get }
 
@@ -81,15 +78,15 @@ public protocol LevelKeyValueStore {
 
     /// Creates an iterator for traversing the database entries.
     ///
-    /// - Returns: A ``LevelKeyValueStoreIterator`` instance for iterating over the database.
+    /// - Returns: A ``KeyValueStoreIterator`` instance for iterating over the database.
     /// - Throws: An error if iterator creation fails.
-    func makeIterator() throws -> any LevelKeyValueStoreIterator
+    func makeIterator() throws -> any KeyValueStoreIterator
 
     /// Applies a batch of write operations atomically.
     ///
     /// - Parameter batch: The write batch containing operations to apply.
     /// - Throws: An error if the batch write fails.
-    func writeBatch(_ batch: LvDBWriteBatch) throws
+    func writeBatch(_ batch: any KeyValueWriteBatch) throws
 
     /// Compacts the database in the specified key range.
     ///
@@ -100,58 +97,4 @@ public protocol LevelKeyValueStore {
     ///   - end: The end of the range to compact, or `nil` for the end of the database.
     /// - Throws: An error if the compaction fails.
     func compactRange(from begin: Data?, to end: Data?) throws
-}
-
-// MARK: - LvDB Conformance
-
-/// Extends `LvDB` to conform to `LevelKeyValueStore`.
-///
-/// This extension allows `LvDB` from `LvDBWrapper` to be used as a `LevelKeyValueStore`
-/// without requiring any changes to the `LvDBWrapper` package itself.
-///
-/// The Objective-C methods (`has:`, `get:error:`, `put::error:`, `remove:error:`,
-/// `newIterator:`, `write:error:`, and `compactRange:end:error:`) are bridged to Swift
-/// and called by the protocol methods.
-extension LvDB: LevelKeyValueStore {
-    /// Checks whether the specified key exists in the database.
-    public func containsKey(_ key: Data) -> Bool {
-        // Call the Objective-C has: method (bridged to Swift as has(_:))
-        self.has(key)
-    }
-
-    /// Retrieves the value for the specified key.
-    public func data(forKey key: Data) throws -> Data {
-        // Call the Objective-C get:error: method (bridged to Swift as get(_:))
-        try self.get(key)
-    }
-
-    /// Stores a key-value pair in the database.
-    public func putData(_ data: Data, forKey key: Data) throws {
-        // Call the Objective-C put::error: method (bridged to Swift as put(_:_:))
-        try self.put(key, data)
-    }
-
-    /// Removes the key-value pair for the specified key.
-    public func removeValue(forKey key: Data) throws {
-        // Call the Objective-C remove:error: method (bridged to Swift as remove(_:))
-        try self.remove(key)
-    }
-
-    /// Creates an iterator for traversing the database.
-    public func makeIterator() throws -> any LevelKeyValueStoreIterator {
-        // Call the Objective-C newIterator: method (bridged to Swift as newIterator())
-        try self.newIterator()
-    }
-
-    /// Applies a write batch atomically.
-    public func writeBatch(_ batch: LvDBWriteBatch) throws {
-        // Call the Objective-C write:error: method (bridged to Swift as write(_:))
-        try self.write(batch)
-    }
-
-    /// Compacts the database in the specified range.
-    public func compactRange(from begin: Data?, to end: Data?) throws {
-        // Call the Objective-C compactRange:end:error: method (bridged to Swift as compactRange(_:_:))
-        try self.compactRange(begin, end)
-    }
 }

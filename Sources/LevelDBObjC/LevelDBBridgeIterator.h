@@ -2,18 +2,18 @@
 // Created by yechentide on 2024/06/01
 //
 
-#ifndef LvDBIterator_h
-#define LvDBIterator_h
+#ifndef LevelDBBridgeIterator_h
+#define LevelDBBridgeIterator_h
 
 #import <Foundation/Foundation.h>
 
-@class LvDB;
+@class LevelDBBridge;
 
-@interface LvDBIterator : NSObject
+@interface LevelDBBridgeIterator : NSObject
 
 @property (nonatomic,readonly) BOOL isDestroyed;
 
-- (id)initFromIterator:(void *)dbIterator parentDB:(LvDB *)parentDB;
+- (id)initFromIterator:(void *)dbIterator parentDB:(LevelDBBridge *)parentDB;
 - (void)destroy;
 
 - (void)seekToFirst;
@@ -27,4 +27,4 @@
 
 @end
 
-#endif /* LvDBIterator_h */
+#endif /* LevelDBBridgeIterator_h */

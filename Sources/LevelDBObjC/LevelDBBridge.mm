@@ -2,10 +2,10 @@
 // Created by yechentide on 2024/06/01
 //
 
-#import "LvDB.h"
-#import "LvDBIterator.h"
-#import "LvDBWriteBatch.h"
-#import "LvDBWriteBatch+Internal.h"
+#import "LevelDBBridge.h"
+#import "LevelDBBridgeIterator.h"
+#import "LevelDBBridgeWriteBatch.h"
+#import "LevelDBBridgeWriteBatch+Internal.h"
 #import "DebugLog.h"
 
 #import <iostream>
@@ -17,12 +17,12 @@
 #import "leveldb/cache.h"
 #import "leveldb/decompress_allocator.h"
 
-@implementation LvDB {
+@implementation LevelDBBridge {
     std::unique_ptr<leveldb::DB> db;
     leveldb::Options options;
     leveldb::ReadOptions readOptions;
     leveldb::WriteOptions writeOptions;
-    NSHashTable<LvDBIterator *> *activeIterators;
+    NSHashTable<LevelDBBridgeIterator *> *activeIterators;
 }
 
 - (id)initWithDBPath:(NSString *)path createIfMissing:(BOOL)createIfMissing error:(NSError **)error {
@@ -45,10 +45,10 @@
         if (status.ok()) {
             DebugLog(@"leveldb::DB opened: %s", dbPath);
             db.reset(lvdb);
-            DebugLog(@"LvDB initialized: %s", dbPath);
+            DebugLog(@"LevelDBBridge initialized: %s", dbPath);
         } else if (error) {
             NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
-            *error = [NSError errorWithDomain:@"LvDBWrapper"
+            *error = [NSError errorWithDomain:@"LevelDBObjC"
                                          code:-1
                                      userInfo:@{NSLocalizedDescriptionKey: msg}];
             return nil;
@@ -63,7 +63,7 @@
 
 - (void)dealloc {
     [self close];
-    DebugLog(@"LvDB deallocated.");
+    DebugLog(@"LevelDBBridge deallocated.");
 }
 
 - (void)close {
@@ -72,8 +72,8 @@
     }
 
     // Destroy all active iterators
-    NSArray<LvDBIterator *> *iterators = [activeIterators allObjects];
-    for (LvDBIterator *iterator in iterators) {
+    NSArray<LevelDBBridgeIterator *> *iterators = [activeIterators allObjects];
+    for (LevelDBBridgeIterator *iterator in iterators) {
         [iterator destroy];
     }
     [activeIterators removeAllObjects];
@@ -85,7 +85,7 @@
     DebugLog(@"leveldb::DB closed.");
 }
 
-- (void)deregisterIterator:(LvDBIterator *)iterator {
+- (void)deregisterIterator:(LevelDBBridgeIterator *)iterator {
     [activeIterators removeObject:iterator];
 }
 
@@ -112,20 +112,20 @@
 
 - (void)assignError:(NSError **)error message:(NSString *)message {
     if (error) {
-        *error = [NSError errorWithDomain:@"LvDBWrapper"
+        *error = [NSError errorWithDomain:@"LevelDBObjC"
                                      code:-1
                                  userInfo:@{ NSLocalizedDescriptionKey : message }];
     }
 }
 
-- (LvDBIterator *)newIterator:(NSError **)error {
+- (LevelDBBridgeIterator *)newIterator:(NSError **)error {
     if (db == nullptr) {
         [self assignError:error message:@"DB Closed"];
         return nil;
     }
     auto dbIterator = db->NewIterator(readOptions);
     DebugLog(@"leveldb::Iterator generated.");
-    LvDBIterator *iterator = [[LvDBIterator alloc] initFromIterator:dbIterator parentDB:self];
+    LevelDBBridgeIterator *iterator = [[LevelDBBridgeIterator alloc] initFromIterator:dbIterator parentDB:self];
     [activeIterators addObject:iterator];
     return iterator;
 }
@@ -182,7 +182,7 @@
 
 /* ---------- Batch Operations ---------- */
 
-- (BOOL)write:(LvDBWriteBatch *)writeBatch error:(NSError **)error {
+- (BOOL)write:(LevelDBBridgeWriteBatch *)writeBatch error:(NSError **)error {
     if (db == nullptr) {
         [self assignError:error message:@"DB Closed"];
         return NO;

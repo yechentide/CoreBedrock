@@ -17,7 +17,7 @@ public final class CompoundTag: NBT {
     private var _tags: [NBT] = []
 
     /// Creates an empty, unnamed `CompoundTag` tag.
-    override public nonisolated init() {
+    override public init() {
         super.init()
     }
 

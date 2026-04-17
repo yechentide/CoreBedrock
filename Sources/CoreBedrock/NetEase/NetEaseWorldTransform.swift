@@ -3,7 +3,6 @@
 //
 
 public import Foundation
-import LvDBWrapper
 
 public enum NetEaseWorldTransform {
     private static func readCurrentFileData(in worldDirPath: String) throws -> Data {

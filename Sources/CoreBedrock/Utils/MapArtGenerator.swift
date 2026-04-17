@@ -28,36 +28,37 @@ public enum MapArtGenerator {
     ///   - playerKey: The database key identifying the target player
     ///   - shulkerBoxName: Optional custom name for the shulker box containing the maps
     public static func generateAndGiveToPlayer(
-        database: any LevelKeyValueStore,
+        database: any KeyValueStore,
         image: CGImage,
         playerKey: Data,
         shulkerBoxName: String? = nil
     ) -> AsyncThrowingStream<MapArtGenerationEvent, any Error> {
-        AsyncThrowingStream(MapArtGenerationEvent.self) { continuation in
-            let task = Task {
-                do {
-                    try self.run(
-                        database: database,
-                        image: image,
-                        playerKey: playerKey,
-                        shulkerBoxName: shulkerBoxName,
-                        report: { continuation.yield(.progress($0)) }
-                    )
-                    continuation.finish()
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            }
-            continuation.onTermination = { _ in
-                task.cancel()
+        let (stream, continuation) = AsyncThrowingStream<MapArtGenerationEvent, any Error>.makeStream()
+        let database = database
+        let task = Task {
+            do {
+                try self.run(
+                    database: database,
+                    image: image,
+                    playerKey: playerKey,
+                    shulkerBoxName: shulkerBoxName,
+                    report: { continuation.yield(.progress($0)) }
+                )
+                continuation.finish()
+            } catch {
+                continuation.finish(throwing: error)
             }
         }
+        continuation.onTermination = { _ in
+            task.cancel()
+        }
+        return stream
     }
 
     // MARK: - Private workers
 
     private static func run(
-        database: any LevelKeyValueStore,
+        database: any KeyValueStore,
         image: CGImage,
         playerKey: Data,
         shulkerBoxName: String?,
@@ -102,7 +103,7 @@ public enum MapArtGenerator {
 
     private static func buildMapItemsAndData(
         image: CGImage,
-        database: any LevelKeyValueStore,
+        database: any KeyValueStore,
         report: @Sendable @escaping (MapArtGenerationProgress) -> Void
     ) throws -> (items: [CompoundTag], data: [LvDBKey: CompoundTag]) {
         var mapItemTagList = [CompoundTag]()
@@ -175,7 +176,7 @@ public enum MapArtGenerator {
     }
 
     private static func allocateMapIDs(
-        in database: any LevelKeyValueStore,
+        in database: any KeyValueStore,
         count: Int,
         report: @Sendable @escaping (MapArtGenerationProgress) -> Void
     ) throws -> [Int64] {

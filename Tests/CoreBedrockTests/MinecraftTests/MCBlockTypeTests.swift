@@ -4,7 +4,6 @@
 
 @testable import CoreBedrock
 import Foundation
-import LvDBWrapper
 import Testing
 
 // swiftlint:disable line_length
@@ -42,7 +41,7 @@ struct MCBlockTypeTests {
     @Test
     func allCurrentVersionBlockIdsAreDefined() {
 //        let dbPath = Bundle.module.path(forResource: "TestData/all-blocks-test-world/db", ofType: nil)!
-//        guard let db = LvDB(dbPath: dbPath) else {
+//        guard let db = LevelDBBridge(dbPath: dbPath) else {
 //            return
 //        }
 //        defer {
@@ -82,7 +81,7 @@ struct MCBlockTypeTests {
 //        }
     }
 
-//    private func parseSubChunkData(db: LvDB, subChunkKey: LvDBKey, unusedTypesInSwift: inout Set<String>, undefinedTypesInMC: inout Set<String>) throws {
+//    private func parseSubChunkData(db: LevelDBBridge, subChunkKey: LvDBKey, unusedTypesInSwift: inout Set<String>, undefinedTypesInMC: inout Set<String>) throws {
 //        guard let subChunkData = db.get(subChunkKey.data) else {
 //            Issue.record("Can not find subChunk data for \(subChunkKey.data.hexString)")
 //            return

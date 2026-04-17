@@ -20,6 +20,6 @@ void DebugLog(NSString *format, ...) {
     NSString *message = [[NSString alloc] initWithFormat:format arguments:args];
     va_end(args);
 
-    NSLog(@"[LvDBWrapper] [%@] %@", timestamp, message);
+    NSLog(@"[LevelDBObjC] [%@] %@", timestamp, message);
 #endif
 }

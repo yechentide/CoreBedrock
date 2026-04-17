@@ -3,17 +3,17 @@
 //
 
 import Foundation
-@testable import LvDBWrapper
+@testable import LevelDBObjC
 import Testing
 
 // swiftlint:disable type_body_length
 
-struct LvDBTests {
+struct LevelDBBridgeTests {
     @Test(.withEmptyDirectory)
     func throwsWhenTryingToOpenNonDbDirectoryAndCreateIfMissingIsFalse() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
         #expect {
-            _ = try LvDB(dbPath: directoryPath, createIfMissing: false)
+            _ = try LevelDBBridge(dbPath: directoryPath, createIfMissing: false)
         } throws: { error in
             let nsError = error as NSError
             return nsError.localizedDescription.hasPrefix("Invalid argument:")
@@ -24,7 +24,7 @@ struct LvDBTests {
     func throwsWhenParentDirectoryDoesNotExist() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath + "/NonExistentDir/db"
         #expect {
-            _ = try LvDB(dbPath: directoryPath, createIfMissing: true)
+            _ = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         } throws: { error in
             let nsError = error as NSError
             return nsError.localizedDescription.hasPrefix("NotFound:")
@@ -34,7 +34,7 @@ struct LvDBTests {
     @Test(.withTemporaryDatabase)
     func succeedsWithValidPath() throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
-        let db = try LvDB(dbPath: dbPath)
+        let db = try LevelDBBridge(dbPath: dbPath)
         #expect(db.isClosed == false)
         db.close()
     }
@@ -43,7 +43,7 @@ struct LvDBTests {
     func succeedsWhenOpenedMultipleTimes() throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         for _ in 0..<10 {
-            let db = try LvDB(dbPath: dbPath)
+            let db = try LevelDBBridge(dbPath: dbPath)
             #expect(db.isClosed == false)
             db.close()
         }
@@ -52,7 +52,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func opensDbWhenDbPathDoesNotExistAndCreateIfMissingIsTrue() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         #expect(db.isClosed == false)
         db.close()
     }
@@ -60,11 +60,11 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func canOpenDbMultipleTimesWithCreateIfMissing() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         #expect(db.isClosed == false)
         db.close()
         for _ in 0..<10 {
-            let db = try LvDB(dbPath: directoryPath, createIfMissing: false)
+            let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: false)
             #expect(db.isClosed == false)
             db.close()
         }
@@ -74,7 +74,7 @@ struct LvDBTests {
     func reportsClosedAfterClose() throws {
         let dbPath = TemporaryDatabaseTrait.Context.dbPath
         for _ in 0..<10 {
-            let db = try LvDB(dbPath: dbPath)
+            let db = try LevelDBBridge(dbPath: dbPath)
             #expect(db.isClosed == false)
             db.close()
             #expect(db.isClosed == true)
@@ -84,7 +84,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func allowsMultipleCloseCallsWithoutError() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         for _ in 0..<10 {
             db.close()
             #expect(db.isClosed == true)
@@ -94,7 +94,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func throwsWhenOperationsAfterClose() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         let key = Data("key001".utf8)
         let value = Data("value001".utf8)
         try db.put(key, value)
@@ -116,7 +116,7 @@ struct LvDBTests {
         shouldThrowDBClosedError { _ = try db.put(key, value) }
         shouldThrowDBClosedError { _ = try db.remove(key) }
         shouldThrowDBClosedError {
-            let batch = LvDBWriteBatch()
+            let batch = LevelDBBridgeWriteBatch()
             try db.write(batch)
         }
     }
@@ -124,7 +124,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func storesAndRetrievesKeyValue() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
         let key = Data("key001".utf8)
         let value = Data("value001".utf8)
@@ -137,7 +137,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func throwsOrReturnsNilForNonExistentKey() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
         let key = Data("key001".utf8)
         #expect {
@@ -151,7 +151,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func overwritesExistingKey() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
         let key = Data("key001".utf8)
         let oldValue = Data("value001".utf8)
@@ -166,7 +166,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func containsReturnsTrueForStoredKey() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
         let key = Data("key001".utf8)
         let value = Data("value001".utf8)
@@ -179,7 +179,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func containsReturnsFalseForMissingKey() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
         let key = Data("key001".utf8)
         let result = db.has(key)
@@ -189,7 +189,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func removesExistingKey() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
         let key = Data("key001".utf8)
         let value = Data("value001".utf8)
@@ -201,7 +201,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func removingNonExistentKeyIsSafe() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
         let key = Data("key001".utf8)
         try db.remove(key)
@@ -211,14 +211,14 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func appliesBatchWithMultiplePuts() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
         let key1 = Data("key001".utf8)
         let key2 = Data("key002".utf8)
         let value1 = Data("value001".utf8)
         let value2 = Data("value002".utf8)
 
-        let batch = LvDBWriteBatch()
+        let batch = LevelDBBridgeWriteBatch()
         batch.put(key1, value: value1)
         batch.put(key2, value: value2)
         try db.write(batch)
@@ -232,7 +232,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func appliesBatchWithRemovals() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
         let key1 = Data("key001".utf8)
         let key2 = Data("key002".utf8)
@@ -241,7 +241,7 @@ struct LvDBTests {
         try db.put(key1, value1)
         try db.put(key2, value2)
 
-        let batch = LvDBWriteBatch()
+        let batch = LevelDBBridgeWriteBatch()
         batch.remove(key1)
         batch.remove(key2)
         try db.write(batch)
@@ -253,14 +253,14 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func clearingBatchPreventsWrites() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
         defer { db.close() }
         let key1 = Data("key001".utf8)
         let key2 = Data("key002".utf8)
         let value1 = Data("value001".utf8)
         let value2 = Data("value002".utf8)
 
-        let batch = LvDBWriteBatch()
+        let batch = LevelDBBridgeWriteBatch()
         batch.put(key1, value: value1)
         batch.put(key2, value: value2)
         batch.clear()
@@ -279,7 +279,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func destroysAllActiveIteratorsOnClose() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
 
         // Create some test data
         let keys = ["apple", "banana", "cherry"].map { Data($0.utf8) }
@@ -317,7 +317,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func handlesIteratorDestroyedBeforeDbClose() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
 
         // Create some test data
         try db.put(Data("key".utf8), Data("value".utf8))
@@ -341,7 +341,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func handlesMultipleCloseCallsWithActiveIterators() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
 
         // Create some test data
         try db.put(Data("key".utf8), Data("value".utf8))
@@ -372,7 +372,7 @@ struct LvDBTests {
     @Test(.withEmptyDirectory)
     func allowsManualIteratorDestroyAfterDbClose() throws {
         let directoryPath = EmptyDirectoryTrait.Context.directoryPath
-        let db = try LvDB(dbPath: directoryPath, createIfMissing: true)
+        let db = try LevelDBBridge(dbPath: directoryPath, createIfMissing: true)
 
         try db.put(Data("key".utf8), Data("value".utf8))
 

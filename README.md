@@ -19,7 +19,7 @@ Add CoreBedrock to your project using Swift Package Manager:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/your-username/CoreBedrock", branch: "main")
+    .package(url: "https://github.com/yechentide/core-bedrock", branch: "main")
 ]
 ```
 
@@ -41,10 +41,9 @@ targets: [
 ```swift
 import CoreBedrock
 
-// Open a Minecraft world and access its database
-let worldURL = URL(fileURLWithPath: "/path/to/world")
-let world = try MCWorld(from: worldURL, meta: nil)
-let db = world.database  // LevelKeyValueStore protocol
+// Open a LevelDB-backed Bedrock database
+let dbPath = "/path/to/world/db"
+let db = try LevelDB(dbPath: dbPath, createIfMissing: false)
 
 // Basic operations
 try db.putData(Data("myValue".utf8), forKey: Data("myKey".utf8))
@@ -53,25 +52,18 @@ try db.removeValue(forKey: Data("myKey".utf8))
 
 // Iterate through database entries
 let iterator = try db.makeIterator()
-iterator.seekToFirst()
-while iterator.valid() {
-    let key = iterator.key()
-    let value = iterator.value()
+iterator.moveToFirst()
+while iterator.isValid {
+    let key = iterator.currentKey
+    let value = iterator.currentValue
     // Process key-value pair
-    iterator.next()
+    iterator.moveToNext()
 }
-
-// Batch operations
-let batch = LvDBWriteBatch()
-batch.put(Data("key1".utf8), value: Data("value1".utf8))
-batch.remove(Data("key2".utf8))
-try db.writeBatch(batch)
+iterator.close()
 
 // Close the database when done
-world.closeDB()
+db.close()
 ```
-
-> **Note:** `LvDB`, `LvDBIterator` and `LvDBWriteBatch` are re-exported through CoreBedrock for advanced workflows, allowing direct access to these types without importing LvDBWrapper.
 
 ### NBT Operations
 
@@ -104,7 +96,7 @@ let world = try MCWorld(from: worldURL, meta: nil)
 
 // Access world metadata
 print("World name: \(world.worldName)")
-print("Game mode: \(world.meta.gameMode)")
+print("Game mode: \(world.meta.gameMode?.description ?? "unknown")")
 
 // Close the database when done
 world.closeDB()
@@ -121,15 +113,16 @@ CoreBedrock is designed as a unified library with the following components:
 - World metadata management
 - Chunk and block operations
 - NetEase world support
-- LevelDB database abstraction through the `LevelKeyValueStore` protocol
+- LevelDB database abstraction through the `KeyValueStore` protocol
 
-### LvDBWrapper (Internal Target)
+### LevelDBObjC (Internal Target)
 
 - Low-level LevelDB C++ wrapper bundled within this package
 - Provides Swift-friendly interface to LevelDB operations
 - Includes binary dependencies for compression libraries (libcrc32c, libsnappy, libz, libzstd, libleveldb)
 - Not exposed as a separate product; consumers only need to add CoreBedrock to their dependencies
-- Key types like `LvDBIterator` and `LvDBWriteBatch` are re-exported through CoreBedrock for advanced use cases
+- Provides the Objective-C / Objective-C++ bridge layer around LevelDB
+- Exposes bridge types such as `LevelDBBridge`, `LevelDBBridgeIterator`, and `LevelDBBridgeWriteBatch` for internal integration
 
 ## Support
 

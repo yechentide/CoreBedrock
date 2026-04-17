@@ -4,7 +4,6 @@
 
 @testable import CoreBedrock
 import Foundation
-import LvDBWrapper
 import Testing
 
 // swiftlint:disable line_length
@@ -28,7 +27,7 @@ struct LvDBTests {
     @Test
     func chunkExists_withVersionKey() throws {
         let dbPath = self.temporaryDBPath()
-        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db = try LevelDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -46,7 +45,7 @@ struct LvDBTests {
     @Test
     func chunkExists_withLegacyVersionKey() throws {
         let dbPath = self.temporaryDBPath()
-        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db = try LevelDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -65,7 +64,7 @@ struct LvDBTests {
     @Test
     func chunkExists_whenDoesNotExist() throws {
         let dbPath = self.temporaryDBPath()
-        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db = try LevelDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -80,7 +79,7 @@ struct LvDBTests {
     @Test
     func chunkExists_withInvalidData() throws {
         let dbPath = self.temporaryDBPath()
-        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db = try LevelDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -98,7 +97,7 @@ struct LvDBTests {
     @Test
     func chunkExists_inDifferentDimension() throws {
         let dbPath = self.temporaryDBPath()
-        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db = try LevelDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -116,7 +115,7 @@ struct LvDBTests {
     @Test
     func scanExistingChunks_overworld() throws {
         let dbPath = self.temporaryDBPath()
-        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db = try LevelDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -150,7 +149,7 @@ struct LvDBTests {
     @Test
     func scanExistingChunks_nether() throws {
         let dbPath = self.temporaryDBPath()
-        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db = try LevelDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -182,7 +181,7 @@ struct LvDBTests {
     @Test
     func scanExistingChunks_handlerStopsEarly() throws {
         let dbPath = self.temporaryDBPath()
-        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db = try LevelDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)
@@ -206,7 +205,7 @@ struct LvDBTests {
     @Test
     func scanExistingChunks_emptyDimension() throws {
         let dbPath = self.temporaryDBPath()
-        let db: LevelKeyValueStore = try LvDB(dbPath: dbPath, createIfMissing: true)
+        let db = try LevelDB(dbPath: dbPath, createIfMissing: true)
         defer {
             db.close()
             cleanupDB(at: dbPath)

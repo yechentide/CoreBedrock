@@ -2,9 +2,9 @@
 // Created by yechentide on 2025/04/20
 //
 
-public import LvDBWrapper
+public import Foundation
 
-public extension LevelKeyValueStore {
+public extension KeyValueStore {
     func enumerateActorKeys(
         digpData: Data,
         handler: @escaping (Int, Data) -> Void

@@ -3,7 +3,6 @@
 //
 
 import Foundation
-import LvDBWrapper
 
 enum NetEasePlayerDataProcessor {
     static func processPlayerData(
@@ -11,16 +10,16 @@ enum NetEasePlayerDataProcessor {
         transform: (Data) throws -> Data?
     ) throws {
         let dbDirPath = (worldDir as NSString).appendingPathComponent("db")
-        let database = try LvDB(dbPath: dbDirPath)
+        let database = try LevelDB(dbPath: dbDirPath, createIfMissing: false)
         defer { database.close() }
 
         do {
             let localPlayerKey = LvDBStringKeyType.localPlayer.rawValue.data(using: .utf8)!
-            let localPlayerData = try database.get(localPlayerKey)
+            let localPlayerData = try database.data(forKey: localPlayerKey)
             try autoreleasepool {
                 try Task.checkCancellation()
                 if let fixedData = try transform(localPlayerData) {
-                    try database.put(localPlayerKey, fixedData)
+                    try database.putData(fixedData, forKey: localPlayerKey)
                 }
             }
         } catch {
@@ -49,7 +48,7 @@ enum NetEasePlayerDataProcessor {
             try autoreleasepool {
                 if let fixedData = try transform(serverPlayerData) {
                     try Task.checkCancellation()
-                    try database.put(key, fixedData)
+                    try database.putData(fixedData, forKey: key)
                 }
             }
         }

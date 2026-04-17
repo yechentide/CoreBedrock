@@ -5,8 +5,8 @@
 #ifndef ExposedHeader_h
 #define ExposedHeader_h
 
-#include "../LvDB.h"
-#include "../LvDBIterator.h"
-#include "../LvDBWriteBatch.h"
+#include "../LevelDBBridge.h"
+#include "../LevelDBBridgeIterator.h"
+#include "../LevelDBBridgeWriteBatch.h"
 
 #endif /* ExposedHeader_h */

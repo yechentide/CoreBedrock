@@ -2,9 +2,9 @@
 // Created by yechentide on 2025/04/20
 //
 
-public import LvDBWrapper
+public import Foundation
 
-public extension LevelKeyValueStore {
+public extension KeyValueStore {
     func getStringKey(type: LvDBStringKeyType) -> Data? {
         let keyData = type.rawValue.data(using: .utf8)!
         guard containsKey(keyData) else {

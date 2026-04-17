@@ -15,7 +15,7 @@ public final class IntTag: NBT {
     public var value: Int32
 
     /// Creates an unnamed `IntTag` tag with the default of value of 0.
-    override public nonisolated init() {
+    override public init() {
         self.value = 0
         super.init()
     }

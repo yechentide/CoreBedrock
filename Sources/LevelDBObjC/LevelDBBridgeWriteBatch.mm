@@ -2,7 +2,7 @@
 // Created by yechentide on 2025/08/22
 //
 
-#import "LvDBWriteBatch.h"
+#import "LevelDBBridgeWriteBatch.h"
 #import "DebugLog.h"
 
 #import <memory>
@@ -10,7 +10,7 @@
 #import "leveldb/slice.h"
 #import "leveldb/status.h"
 
-@implementation LvDBWriteBatch {
+@implementation LevelDBBridgeWriteBatch {
     std::unique_ptr<leveldb::WriteBatch> writeBatch;
 }
 
@@ -18,13 +18,13 @@
     if (self = [super init]) {
         leveldb::WriteBatch* wb = new leveldb::WriteBatch();
         writeBatch.reset(wb);
-        DebugLog(@"LvDBWriteBatch initialized.");
+        DebugLog(@"LevelDBBridgeWriteBatch initialized.");
     }
     return self;
 }
 
 - (void)dealloc {
-    DebugLog(@"LvDBWriteBatch deallocated.");
+    DebugLog(@"LevelDBBridgeWriteBatch deallocated.");
 }
 
 - (void)put:(NSData *)key value:(NSData *)value {

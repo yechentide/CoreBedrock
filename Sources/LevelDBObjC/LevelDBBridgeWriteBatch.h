@@ -2,12 +2,12 @@
 // Created by yechentide on 2025/08/22
 //
 
-#ifndef LvDBWriteBatch_h
-#define LvDBWriteBatch_h
+#ifndef LevelDBBridgeWriteBatch_h
+#define LevelDBBridgeWriteBatch_h
 
 #import <Foundation/Foundation.h>
 
-@interface LvDBWriteBatch : NSObject
+@interface LevelDBBridgeWriteBatch : NSObject
 
 /**
  * Add a key-value pair to the batch
@@ -35,4 +35,4 @@
 
 @end
 
-#endif /* LvDBWriteBatch_h */
+#endif /* LevelDBBridgeWriteBatch_h */

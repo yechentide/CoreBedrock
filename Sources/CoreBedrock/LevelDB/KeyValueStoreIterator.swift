@@ -3,16 +3,15 @@
 //
 
 public import Foundation
-public import LvDBWrapper
 
-/// Iterator abstraction that mirrors the functionality exposed by ``LvDBIterator``.
+/// Iterator abstraction for traversing key-value store entries.
 /// Wrapping the iterator into a protocol allows tests and SwiftUI previews to supply
 /// lightweight mocks without depending on the Objective-C implementation.
-public protocol LevelKeyValueStoreIterator {
+public protocol KeyValueStoreIterator: Sendable {
     /// Indicates whether the iterator instance has already been closed and its resources released.
     var isClosed: Bool { get }
 
-    /// Indicates whether the iterator currently points to a valid key–value entry.
+    /// Indicates whether the iterator currently points to a valid key-value entry.
     var isValid: Bool { get }
 
     /// Returns the key at the iterator's current position or `nil` if it is invalid.
@@ -40,46 +39,4 @@ public protocol LevelKeyValueStoreIterator {
 
     /// Moves the iterator to the previous entry.
     func moveToPrevious()
-}
-
-extension LvDBIterator: LevelKeyValueStoreIterator {
-    public var isClosed: Bool {
-        isDestroyed
-    }
-
-    public var isValid: Bool {
-        valid()
-    }
-
-    public var currentKey: Data? {
-        key()
-    }
-
-    public var currentValue: Data? {
-        value()
-    }
-
-    public func close() {
-        destroy()
-    }
-
-    public func moveToFirst() {
-        seekToFirst()
-    }
-
-    public func moveToLast() {
-        seekToLast()
-    }
-
-    public func move(to key: Data) {
-        seek(key)
-    }
-
-    public func moveToNext() {
-        next()
-    }
-
-    public func moveToPrevious() {
-        prev()
-    }
 }

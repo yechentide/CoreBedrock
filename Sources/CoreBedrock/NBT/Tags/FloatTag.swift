@@ -15,7 +15,7 @@ public final class FloatTag: NBT {
     public var value: Float
 
     /// Creates an unnamed `FloatTag` tag with the default of value of 0.
-    override nonisolated init() {
+    override init() {
         self.value = 0
         super.init()
     }

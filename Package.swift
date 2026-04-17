@@ -11,10 +11,6 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "LvDBWrapper",
-            targets: ["LvDBWrapper"]
-        ),
-        .library(
             name: "CoreBedrock",
             targets: ["CoreBedrock"]
         ),
@@ -43,7 +39,7 @@ let package = Package(
         ),
 
         .target(
-            name: "LvDBWrapper",
+            name: "LevelDBObjC",
             dependencies: ["libcrc32c", "libsnappy", "libz", "libzstd", "libleveldb"],
             cxxSettings: [
                 .unsafeFlags([
@@ -52,8 +48,8 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "LvDBWrapperTests",
-            dependencies: ["LvDBWrapper"],
+            name: "LevelDBObjCTests",
+            dependencies: ["LevelDBObjC"],
             resources: [
                 .copy("./TestData"),
             ]
@@ -61,9 +57,9 @@ let package = Package(
 
         .target(
             name: "CoreBedrock",
-            dependencies: ["LvDBWrapper"],
+            dependencies: ["LevelDBObjC"],
             swiftSettings: [
-                .defaultIsolation(MainActor.self),
+                .defaultIsolation(nil),
                 .enableUpcomingFeature("ExistentialAny"),
                 .enableUpcomingFeature("InferIsolatedConformances"),
                 .enableUpcomingFeature("InternalImportsByDefault"),
@@ -76,9 +72,6 @@ let package = Package(
             dependencies: ["CoreBedrock"],
             resources: [
                 .copy("./TestData"),
-            ],
-            swiftSettings: [
-                .defaultIsolation(MainActor.self),
             ]
         ),
     ],

@@ -2,15 +2,15 @@
 // Created by yechentide on 2024/06/01
 //
 
-#ifndef LvDB_h
-#define LvDB_h
+#ifndef LevelDBBridge_h
+#define LevelDBBridge_h
 
 #import <Foundation/Foundation.h>
 
-@class LvDBIterator;
-@class LvDBWriteBatch;
+@class LevelDBBridgeIterator;
+@class LevelDBBridgeWriteBatch;
 
-@interface LvDB : NSObject
+@interface LevelDBBridge : NSObject
 
 @property (nonatomic,readonly) BOOL isClosed;
 
@@ -43,7 +43,7 @@
  * Internal method to deregister an iterator when it's manually destroyed
  * @param iterator Iterator to deregister
  */
-- (void)deregisterIterator:(LvDBIterator *)iterator;
+- (void)deregisterIterator:(LevelDBBridgeIterator *)iterator;
 
 /**
  * Check if a key exists in the database
@@ -54,9 +54,9 @@
 
 /**
  * Create an iterator for traversing the database
- * @return LvDBIterator instance for database iteration
+ * @return LevelDBBridgeIterator instance for database iteration
  */
-- (LvDBIterator *)newIterator:(NSError **)error NS_SWIFT_NAME(newIterator());
+- (LevelDBBridgeIterator *)newIterator:(NSError **)error NS_SWIFT_NAME(newIterator());
 
 /**
  * Get value for a specified key
@@ -82,7 +82,7 @@
  * Apply a write batch to the database
  * @param writeBatch Batch of operations to apply
  */
-- (BOOL)write:(LvDBWriteBatch *)writeBatch error:(NSError **)error NS_SWIFT_NAME(write(_:));
+- (BOOL)write:(LevelDBBridgeWriteBatch *)writeBatch error:(NSError **)error NS_SWIFT_NAME(write(_:));
 
 /**
  * Compact the database in the specified range
@@ -93,4 +93,4 @@
 
 @end
 
-#endif /* LvDB_h */
+#endif /* LevelDBBridge_h */

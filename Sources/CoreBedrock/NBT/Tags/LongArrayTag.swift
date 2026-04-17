@@ -14,7 +14,7 @@ public final class LongArrayTag: NBT {
     public var value: [Int64]
 
     /// Creates an unnamed `LongArrayTag` tag, containing an empty array of bytes.
-    override public nonisolated init() {
+    override public init() {
         self.value = []
         super.init()
     }

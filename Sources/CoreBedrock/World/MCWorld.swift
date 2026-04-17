@@ -37,7 +37,7 @@ public import Foundation
 /// ### Injecting a Custom Database
 /// Useful for testing, SwiftUI Previews, or custom storage backends:
 /// ```swift
-/// let mockDB: LevelKeyValueStore = MockDatabase()
+/// let mockDB: KeyValueStore = MockDatabase()
 /// let world = try MCWorld(from: worldURL, database: mockDB)
 /// ```
 public class MCWorld {
@@ -47,8 +47,8 @@ public class MCWorld {
     /// The key-value store used to access world data.
     ///
     /// This property allows injecting custom database implementations for testing
-    /// or alternative storage backends. By default, it uses `LvDB` from `LvDBWrapper`.
-    public let database: any LevelKeyValueStore
+    /// or alternative storage backends. By default, it uses `LevelDBBridge` from `LevelDBObjC`.
+    public let database: any KeyValueStore
 
     /// The display name of the world, extracted from metadata.
     public var worldName = "???"
@@ -58,7 +58,7 @@ public class MCWorld {
 
     /// Creates a new `MCWorld` instance by opening the database at the specified directory.
     ///
-    /// This convenience initializer opens an `LvDB` instance and forwards to the designated initializer.
+    /// This convenience initializer opens a `LevelDBBridge` instance and forwards to the designated initializer.
     ///
     /// - Parameters:
     ///   - dirURL: The directory URL containing the world files.
@@ -66,9 +66,9 @@ public class MCWorld {
     /// - Throws: An error if the database cannot be opened or metadata cannot be loaded.
     public convenience init(from dirURL: URL, meta: MCWorldMeta? = nil) throws {
         let dbPath = MCDir.generatePath(for: .db, in: dirURL)
-        let db: any LevelKeyValueStore
+        let db: any KeyValueStore
         do {
-            db = try LevelKeyValueStoreFactory.makeDefault(dbPath: dbPath, createIfMissing: false)
+            db = try KeyValueStoreFactory.open(dbPath: dbPath, createIfMissing: false)
         } catch let nsError as NSError {
             throw LvDBError(nsError: nsError)
         }
@@ -88,7 +88,7 @@ public class MCWorld {
     ///   - database: The key-value store to use for world data access.
     ///   - meta: Optional pre-loaded metadata. If `nil`, metadata will be loaded from `level.dat`.
     /// - Throws: An error if metadata cannot be loaded.
-    public init(from dirURL: URL, database: any LevelKeyValueStore, meta: MCWorldMeta? = nil) throws {
+    public init(from dirURL: URL, database: any KeyValueStore, meta: MCWorldMeta? = nil) throws {
         self.dirURL = dirURL
         self.database = database
 

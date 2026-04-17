@@ -6,7 +6,7 @@ public import Foundation
 
 public enum ItemInjector {
     public static func giveItemToPlayer(
-        item: CompoundTag, playerKey: Data, in world: any LevelKeyValueStore
+        item: CompoundTag, playerKey: Data, in world: any KeyValueStore
     ) throws {
         let playerTag = try loadPlayerTag(from: world, key: playerKey)
         let inventory = try loadPlayerInventory(from: playerTag)
@@ -22,7 +22,7 @@ public enum ItemInjector {
     }
 
     private static func loadPlayerTag(
-        from world: any LevelKeyValueStore,
+        from world: any KeyValueStore,
         key: Data
     ) throws -> CompoundTag {
         let data = try world.data(forKey: key)

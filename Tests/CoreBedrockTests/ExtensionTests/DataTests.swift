@@ -173,7 +173,7 @@ struct DataTests {
 
     @Test
     func multipleMisalignedReads() {
-        // Simulate real-world scenario: reading from LvDB key with string prefix
+        // Simulate real-world scenario: reading from a LevelDB key with string prefix
         let prefix = "map_"
         let prefixData = Data(prefix.utf8)
         let int64Data = Data([0x39, 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
