@@ -52,11 +52,13 @@ public extension PackedPaletteReadable {
 
     func paletteValue(localX: Int, localY: Int, localZ: Int) -> PaletteValue? {
         guard let paletteIndex = self.paletteIndex(localX: localX, localY: localY, localZ: localZ) else { return nil }
+
         return self.palette[paletteIndex]
     }
 
     func paletteValue(in word: UInt32, atIndex indexInWord: Int) -> PaletteValue? {
         guard let paletteIndex = self.paletteIndex(in: word, atIndex: indexInWord) else { return nil }
+
         return self.palette[paletteIndex]
     }
 
@@ -74,6 +76,7 @@ public extension PackedPaletteReadable {
             }
             let indexInWord = linear % self.valuesPerWord
             guard let paletteIndex = self.paletteIndex(in: word, atIndex: indexInWord) else { return nil }
+
             result[linear] = UInt16(paletteIndex)
         }
 
