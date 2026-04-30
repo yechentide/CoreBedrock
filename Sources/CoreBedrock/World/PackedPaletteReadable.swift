@@ -19,32 +19,44 @@ public extension PackedPaletteReadable {
         CBBinaryReader.wordBitSize / bitWidth
     }
 
-    func paletteValue(localX: Int, localY: Int, localZ: Int) -> PaletteValue? {
-        guard let index = MCSubChunk.linearIndex(localX, localY, localZ) else {
+    func paletteIndex(localX: Int, localY: Int, localZ: Int) -> Int? {
+        guard let linearIndex = MCSubChunk.linearIndex(localX, localY, localZ) else {
             return nil
         }
 
-        let wordIndex: Int = index / self.valuesPerWord
-        let offset = wordIndex * 4
-        guard offset + 4 <= indicesBytes.count else { return nil }
-
-        let word = indicesBytes.withUnsafeBytes {
-            $0.load(fromByteOffset: offset, as: UInt32.self)
-        }
-        let indexInWord = index % self.valuesPerWord
-        let paletteIndex: UInt32 = self.indexBitMask & (word >> (indexInWord * bitWidth))
-
-        guard paletteIndex < palette.count else {
-            return nil
-        }
-
-        return palette[Int(paletteIndex)]
+        return self.paletteIndex(at: linearIndex)
     }
 
-    func paletteValue(in word: UInt32, atIndex indexInWord: Int) -> PaletteValue? {
+    func paletteIndex(at linearIndex: Int) -> Int? {
+        guard 0..<MCSubChunk.totalBlockCount ~= linearIndex else {
+            return nil
+        }
+
+        let wordIndex = linearIndex / self.valuesPerWord
+        let byteOffset = wordIndex * 4
+        guard byteOffset + 4 <= self.indicesBytes.count else { return nil }
+
+        let word = self.indicesBytes.withUnsafeBytes {
+            $0.load(fromByteOffset: byteOffset, as: UInt32.self)
+        }
+        let indexInWord = linearIndex % self.valuesPerWord
+        return self.paletteIndex(in: word, atIndex: indexInWord)
+    }
+
+    func paletteIndex(in word: UInt32, atIndex indexInWord: Int) -> Int? {
         let paletteIndex = Int(self.indexBitMask & (word >> (indexInWord * self.bitWidth)))
         guard paletteIndex < self.palette.count else { return nil }
 
+        return paletteIndex
+    }
+
+    func paletteValue(localX: Int, localY: Int, localZ: Int) -> PaletteValue? {
+        guard let paletteIndex = self.paletteIndex(localX: localX, localY: localY, localZ: localZ) else { return nil }
+        return self.palette[paletteIndex]
+    }
+
+    func paletteValue(in word: UInt32, atIndex indexInWord: Int) -> PaletteValue? {
+        guard let paletteIndex = self.paletteIndex(in: word, atIndex: indexInWord) else { return nil }
         return self.palette[paletteIndex]
     }
 
@@ -61,10 +73,7 @@ public extension PackedPaletteReadable {
                 $0.load(fromByteOffset: byteOffset, as: UInt32.self)
             }
             let indexInWord = linear % self.valuesPerWord
-            let paletteIndex = self.indexBitMask & (word >> (indexInWord * self.bitWidth))
-
-            guard paletteIndex < palette.count else { return nil }
-
+            guard let paletteIndex = self.paletteIndex(in: word, atIndex: indexInWord) else { return nil }
             result[linear] = UInt16(paletteIndex)
         }
 
