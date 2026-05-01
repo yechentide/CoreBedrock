@@ -64,16 +64,11 @@ public struct SubChunkParser {
             )
         }
 
-        var liquidBitWidth = 1
-        var liquidPalette: [CompoundTag] = []
-        var liquidIndicesData: [UInt8] = []
-        if layerCount > 1 {
-            try Task.checkCancellation()
-            (liquidIndicesData, liquidBitWidth, _) = try self.binaryReader.readIndicesData()
-            liquidPalette = try self.binaryReader.readBlockPalette()
-            guard !liquidPalette.isEmpty, !liquidIndicesData.isEmpty else {
-                return nil
-            }
+        try Task.checkCancellation()
+        let (liquidIndicesData, liquidBitWidth, _) = try self.binaryReader.readIndicesData()
+        let liquidPalette = try self.binaryReader.readBlockPalette(isSingleValue: liquidBitWidth == 0)
+        guard !liquidPalette.isEmpty else {
+            return nil
         }
 
         return .init(
@@ -117,16 +112,11 @@ public struct SubChunkParser {
             )
         }
 
-        var liquidBitWidth = 1
-        var liquidPalette: [CompoundTag] = []
-        var liquidIndicesData: [UInt8] = []
-        if layerCount > 1 {
-            try Task.checkCancellation()
-            (liquidIndicesData, liquidBitWidth, _) = try self.binaryReader.readIndicesData()
-            liquidPalette = try self.binaryReader.readBlockPalette()
-            guard !liquidPalette.isEmpty, !liquidIndicesData.isEmpty else {
-                return nil
-            }
+        try Task.checkCancellation()
+        let (liquidIndicesData, liquidBitWidth, _) = try self.binaryReader.readIndicesData()
+        let liquidPalette = try self.binaryReader.readBlockPalette(isSingleValue: liquidBitWidth == 0)
+        guard !liquidPalette.isEmpty else {
+            return nil
         }
 
         return .init(

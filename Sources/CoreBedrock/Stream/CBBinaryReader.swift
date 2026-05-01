@@ -169,12 +169,13 @@ public extension CBBinaryReader {
     // swiftlint:disable:next large_tuple
     func readIndicesData() throws -> (rawData: [UInt8], bitsPerBlock: Int, totalWords: Int) {
         let type = try readUInt8()
-        guard type > 0 else {
-            throw CBStreamError.invalidFormat("Invalid block indices data type: \(type)")
-        }
-
         // let serializedType = type & 0x01
         let bitsPerBlock = Int(type >> 1)
+        // bitsPerBlock == 0 means single-value palette: all blocks are the same type,
+        // so no index words are written. The palette has exactly one entry with no count prefix.
+        if bitsPerBlock == 0 {
+            return ([], 0, 0)
+        }
         guard 1...Self.wordBitSize ~= bitsPerBlock else {
             throw CBStreamError.invalidFormat("Invalid block bit size: \(bitsPerBlock)")
         }
@@ -190,8 +191,9 @@ public extension CBBinaryReader {
         return (rawData, bitsPerBlock, totalWords)
     }
 
-    func readBlockPalette() throws -> [CompoundTag] {
-        let paletteCount = try readUInt32()
+    func readBlockPalette(isSingleValue: Bool = false) throws -> [CompoundTag] {
+        // Single-value palette omits the count field entirely; the entry count is implicitly 1.
+        let paletteCount: UInt32 = isSingleValue ? 1 : try readUInt32()
         guard paletteCount <= MCSubChunk.totalBlockCount else {
             throw CBStreamError.argumentOutOfRange("paletteCount", "Palette count out of range: \(paletteCount)")
         }
