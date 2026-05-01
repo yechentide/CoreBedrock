@@ -32,6 +32,10 @@ public struct Data3DParser {
         let bytesCount = MCSubChunk.totalBlockCount * bitsPerBlock / 8
         let paletteData = try binaryReader.readBytes(bytesCount)
         let paletteCount = try binaryReader.readInt32()
+        // paletteCount == 0 means the section has no biome entries (uninitialized data); skip it.
+        if paletteCount < 1 {
+            return nil
+        }
 
         var biomePalette: [Int32] = []
         for _ in 0..<paletteCount {
