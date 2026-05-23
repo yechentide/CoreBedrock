@@ -37,6 +37,14 @@ let package = Package(
             name: "libleveldb",
             path: "Libraries/libleveldb.xcframework"
         ),
+        .binaryTarget(
+            name: "libpng",
+            path: "Libraries/libpng.xcframework"
+        ),
+        .binaryTarget(
+            name: "libturbojpeg",
+            path: "Libraries/libturbojpeg.xcframework"
+        ),
 
         .target(
             name: "LevelDBObjC",
@@ -46,6 +54,14 @@ let package = Package(
                     "-DDLLX=",
                 ]),
             ]
+        ),
+        .target(
+            name: "LibPNG",
+            dependencies: ["libpng", "libz"]
+        ),
+        .target(
+            name: "LibTurboJPEG",
+            dependencies: ["libturbojpeg"]
         ),
         .testTarget(
             name: "LevelDBObjCTests",
@@ -57,7 +73,7 @@ let package = Package(
 
         .target(
             name: "CoreBedrock",
-            dependencies: ["LevelDBObjC"],
+            dependencies: ["LevelDBObjC", "LibPNG", "LibTurboJPEG"],
             swiftSettings: [
                 .defaultIsolation(nil),
                 .enableUpcomingFeature("ExistentialAny"),
