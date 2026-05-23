@@ -11,17 +11,21 @@ enum NetEaseKeyDerivation {
             throw NetEaseError.invalidCurrentFileData
         }
 
-        // Add newline to manifestName
         let manifestName = try NetEaseFileProcessor.findManifestFile(in: dbDirPath)
-        var manifestWithNewline = manifestName
-        manifestWithNewline.append(0x0A) // '\n'
-        guard manifestWithNewline.count == NetEaseConstants.expectedManifestLength else {
-            throw NetEaseError.invalidManifestFileData
+        var manifestBytes = manifestName
+        if manifestBytes.count < NetEaseConstants.expectedManifestLength {
+            manifestBytes.append(
+                Data(
+                    repeating: 0x0A,
+                    count: NetEaseConstants.expectedManifestLength - manifestBytes.count
+                )
+            )
         }
+        manifestBytes = manifestBytes.prefix(NetEaseConstants.expectedManifestLength)
 
         var keyRaw = Data(count: NetEaseConstants.expectedKeyLength)
         for index in 0..<NetEaseConstants.expectedKeyLength {
-            keyRaw[index] = currentBody[currentBody.startIndex + index] ^ manifestWithNewline[index]
+            keyRaw[index] = currentBody[currentBody.startIndex + index] ^ manifestBytes[index]
         }
 
         let first8 = keyRaw.prefix(8)

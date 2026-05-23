@@ -3,6 +3,21 @@ import Foundation
 import Testing
 
 struct NetEaseKeyDerivationTests {
+    private func writeManifestFile(named fileName: String, in dbDirPath: String) throws {
+        let manifestURL = URL(fileURLWithPath: dbDirPath).appendingPathComponent(fileName)
+        try Data().write(to: manifestURL)
+    }
+
+    private func makeCurrentFileData(manifestBytes: Data, desiredKey: Data) -> Data {
+        let header = NetEaseHeader.bedrockCurrentFile.data
+        let keyPattern = desiredKey + desiredKey
+        var currentBody = Data(count: NetEaseConstants.expectedKeyLength)
+        for index in 0..<NetEaseConstants.expectedKeyLength {
+            currentBody[index] = keyPattern[index] ^ manifestBytes[index]
+        }
+        return header + currentBody
+    }
+
     @Test(.withTemporaryNetEaseWorld)
     func deriveKeySuccess() throws {
         let worldDirPath = TemporaryNetEaseWorldTrait.Context.worldDirPath
@@ -31,6 +46,56 @@ struct NetEaseKeyDerivationTests {
 
         #expect(derivedKey == desiredKey)
         #expect(derivedKey.count == 8)
+    }
+
+    @Test(.withEmptyDirectory)
+    func deriveKeyPadsShortManifestNameWithNewlines() throws {
+        let dbDirPath = EmptyDirectoryTrait.Context.directoryPath
+        let manifestName = "MANIFEST-1234"
+        let manifestBytes = Data("MANIFEST-1234\n\n\n".utf8)
+        let desiredKey = Data([0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80])
+        #expect(Data(manifestName.utf8).count == 13)
+        #expect(manifestBytes.count == NetEaseConstants.expectedManifestLength)
+
+        try self.writeManifestFile(named: manifestName, in: dbDirPath)
+        let currentFileData = self.makeCurrentFileData(manifestBytes: manifestBytes, desiredKey: desiredKey)
+
+        let derivedKey = try NetEaseKeyDerivation.deriveKey(dbDirPath: dbDirPath, currentFileData: currentFileData)
+
+        #expect(derivedKey == desiredKey)
+    }
+
+    @Test(.withEmptyDirectory)
+    func deriveKeyUsesExactLengthManifestNameWithoutNewline() throws {
+        let dbDirPath = EmptyDirectoryTrait.Context.directoryPath
+        let manifestName = "MANIFEST-1234567"
+        let manifestBytes = Data(manifestName.utf8)
+        let desiredKey = Data([0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF])
+        #expect(manifestBytes.count == NetEaseConstants.expectedManifestLength)
+
+        try self.writeManifestFile(named: manifestName, in: dbDirPath)
+        let currentFileData = self.makeCurrentFileData(manifestBytes: manifestBytes, desiredKey: desiredKey)
+
+        let derivedKey = try NetEaseKeyDerivation.deriveKey(dbDirPath: dbDirPath, currentFileData: currentFileData)
+
+        #expect(derivedKey == desiredKey)
+    }
+
+    @Test(.withEmptyDirectory)
+    func deriveKeyTruncatesLongManifestNameToFirst16Bytes() throws {
+        let dbDirPath = EmptyDirectoryTrait.Context.directoryPath
+        let manifestName = "MANIFEST-12345678"
+        let manifestBytes = Data("MANIFEST-1234567".utf8)
+        let desiredKey = Data([0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10])
+        #expect(Data(manifestName.utf8).count == 17)
+        #expect(manifestBytes.count == NetEaseConstants.expectedManifestLength)
+
+        try self.writeManifestFile(named: manifestName, in: dbDirPath)
+        let currentFileData = self.makeCurrentFileData(manifestBytes: manifestBytes, desiredKey: desiredKey)
+
+        let derivedKey = try NetEaseKeyDerivation.deriveKey(dbDirPath: dbDirPath, currentFileData: currentFileData)
+
+        #expect(derivedKey == desiredKey)
     }
 
     @Test(.withTemporaryNetEaseWorld)
