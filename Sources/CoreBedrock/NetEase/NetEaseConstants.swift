@@ -12,6 +12,8 @@ enum NetEaseConstants {
     // Key Derivation Constants
     static let expectedKeyLength = 16
     static let expectedManifestLength = 16
+    static let keyFileName = "netease.key"
+    static let defaultKey = Data([0x38, 0x38, 0x33, 0x32, 0x39, 0x38, 0x35, 0x31])
 
     // Player Data Constants
     static let playerKeyPrefix = "player_"

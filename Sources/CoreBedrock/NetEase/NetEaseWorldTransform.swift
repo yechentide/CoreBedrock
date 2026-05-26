@@ -32,6 +32,7 @@ public enum NetEaseWorldTransform {
 
             let dbDirPath = (worldDirPath as NSString).appendingPathComponent("db")
             let customKey = try NetEaseKeyDerivation.deriveKey(dbDirPath: dbDirPath, currentFileData: currentFileData)
+            try NetEaseKeyDerivation.saveKeyFile(in: worldDirPath, key: customKey)
 
             try Task.checkCancellation()
             try NetEaseFileProcessor.processFiles(
@@ -44,6 +45,12 @@ public enum NetEaseWorldTransform {
                 }
             )
         }
+    }
+
+    public static func encryptWorld(at worldDirPath: String) throws {
+        let customKey = try NetEaseKeyDerivation.loadKeyFileForWorld(at: worldDirPath)
+            ?? NetEaseConstants.defaultKey
+        try self.encryptWorld(at: worldDirPath, with: customKey)
     }
 
     public static func encryptWorld(at worldDirPath: String, with customKey: Data) throws {
