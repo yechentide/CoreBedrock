@@ -251,7 +251,7 @@ public enum LvDBKey: Sendable, Hashable {
             switch strType {
             case .localPlayer, .autonomousEntities, .biomeData,
                  .levelChunkMetaDataDictionary, .mobevents,
-                 .overworld, .schedulerWT, .scoreboard:
+                 .overworld, .nether, .theEnd, .schedulerWT, .scoreboard:
                 true
             default:
                 false
