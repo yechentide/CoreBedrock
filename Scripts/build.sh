@@ -182,6 +182,77 @@ function normalize_xcframework_info_plist() {
     plutil -convert xml1 "$plist"
 }
 
+function first_existing_path() {
+    local path
+    for path in "$@"; do
+        if [[ -f "$path" ]]; then
+            echo "$path"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+function dependency_license_path() {
+    local dependency="$1"
+    local license_name="$2"
+    local platform
+    local paths=()
+
+    for platform in "${platforms[@]}"; do
+        paths+=("$leveldb_repo_path/build-$platform/_deps/$dependency/$license_name")
+    done
+
+    if first_existing_path "${paths[@]}"; then
+        return 0
+    fi
+
+    logger 'error' "License file not found for $dependency ($license_name)"
+    exit 1
+}
+
+function copy_xcframework_license() {
+    local framework_name="$1"
+    local license_path="$2"
+
+    if [[ ! -d "$output_dir/$framework_name" ]]; then
+        logger 'error' "XCFramework not found: $output_dir/$framework_name"
+        exit 1
+    fi
+
+    if [[ ! -f "$license_path" ]]; then
+        logger 'error' "License file not found: $license_path"
+        exit 1
+    fi
+
+    logger 'info' "Copying license to $framework_name ..."
+    cp "$license_path" "$output_dir/$framework_name/LICENSE"
+}
+
+function copy_xcframework_licenses() {
+    copy_xcframework_license 'libcrc32c.xcframework' \
+        "$(dependency_license_path 'crc32c-src' 'LICENSE')"
+    copy_xcframework_license 'libsnappy.xcframework' \
+        "$(dependency_license_path 'snappy-src' 'COPYING')"
+    copy_xcframework_license 'libz.xcframework' \
+        "$(dependency_license_path 'zlib-src' 'LICENSE')"
+    copy_xcframework_license 'libzstd.xcframework' \
+        "$(dependency_license_path 'zstd-src' 'LICENSE')"
+    copy_xcframework_license 'libleveldb.xcframework' \
+        "$leveldb_repo_path/LICENSE"
+
+    if [[ "$build_libjpeg_compat_xcframework" == 'ON' ]]; then
+        copy_xcframework_license 'libjpeg.xcframework' \
+            "$libjpeg_turbo_repo_path/LICENSE.md"
+    fi
+
+    copy_xcframework_license 'libturbojpeg.xcframework' \
+        "$libjpeg_turbo_repo_path/LICENSE.md"
+    copy_xcframework_license 'libpng.xcframework' \
+        "$libpng_repo_path/LICENSE"
+}
+
 function build_static_libs() {
     for platform in "${platforms[@]}"; do
         logger 'info' '########## ########## ########## ########## ########## ##########'
@@ -408,6 +479,9 @@ function build_xcframeworks() {
     for plist in "$output_dir"/*.xcframework/Info.plist; do
         normalize_xcframework_info_plist "$plist"
     done
+
+    logger 'info' 'Copying licenses into XCFrameworks ...'
+    copy_xcframework_licenses
 
     echo ''
     logger 'ok' "XCFrameworks successfully generated at $output_dir"
