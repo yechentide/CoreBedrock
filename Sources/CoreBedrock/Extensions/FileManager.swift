@@ -24,14 +24,14 @@ public extension FileManager {
     func dirExists(at url: URL) -> Bool {
         var isDir: ObjCBool = false
         let path = url.compatiblePath(percentEncoded: false)
-        let fileExists = FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
+        let fileExists = self.fileExists(atPath: path, isDirectory: &isDir)
         return fileExists && isDir.boolValue
     }
 
     func isMCWorldDir(at dirURL: URL) throws -> Bool {
         var isDirForDB: ObjCBool = false
         let dbDirPath = dirURL.appendingCompatiblePath("db", isDirectory: true).compatiblePath(percentEncoded: false)
-        let hasDBDir = FileManager.default.fileExists(
+        let hasDBDir = self.fileExists(
             atPath: dbDirPath, isDirectory: &isDirForDB
         ) && isDirForDB.boolValue
 
@@ -39,7 +39,7 @@ public extension FileManager {
         let levelDatPath = dirURL
             .appendingCompatiblePath("level.dat", isDirectory: false)
             .compatiblePath(percentEncoded: false)
-        let hasLevelDat = FileManager.default.fileExists(
+        let hasLevelDat = self.fileExists(
             atPath: levelDatPath, isDirectory: &isDirForLevelDat
         ) && !isDirForLevelDat.boolValue
 

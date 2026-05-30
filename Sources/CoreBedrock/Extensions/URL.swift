@@ -41,8 +41,9 @@ public extension URL {
     }
 
     func directorySize() throws -> UInt? {
+        let fileManager = FileManager.default
         guard try self.isDirectoryAndReachable(),
-              let urls = FileManager.default.enumerator(at: self, includingPropertiesForKeys: nil)?.allObjects as? [URL]
+              let urls = fileManager.enumerator(at: self, includingPropertiesForKeys: nil)?.allObjects as? [Self]
         else {
             return nil
         }

@@ -236,7 +236,7 @@ extension NBT: CustomStringConvertible {
     /// Gets the contents of this tag and any child tags as a string. Indents the string using
     /// multiples of `defaultIndentString`.
     public var description: String {
-        self.toString(indentString: NBT.defaultIndentString)
+        self.toString(indentString: Self.defaultIndentString)
     }
 }
 
