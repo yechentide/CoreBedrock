@@ -57,6 +57,37 @@ struct LvDBKeyTests {
         }
     }
 
+    @Test
+    func parseVillageKeyWithDimension() {
+        let villageID = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+        let data = Data("VILLAGE_Overworld_\(villageID)_INFO".utf8)
+        let key = LvDBKey.parse(data: data)
+
+        if case let .village(dimension, id, type) = key {
+            #expect(dimension == "Overworld")
+            #expect(id == villageID)
+            #expect(type == "INFO")
+        } else {
+            Issue.record("Failed to parse village key with dimension")
+        }
+    }
+
+    @Test
+    func parseLegacyOverworldVillageKeyWithoutDimension() {
+        let villageID = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+        let legacyData = Data("VILLAGE_\(villageID)_INFO".utf8)
+        let key = LvDBKey.parse(data: legacyData)
+
+        if case let .village(dimension, id, type) = key {
+            #expect(dimension == "Overworld")
+            #expect(id == villageID)
+            #expect(type == "INFO")
+            #expect(key.data == Data("VILLAGE_Overworld_\(villageID)_INFO".utf8))
+        } else {
+            Issue.record("Failed to parse legacy overworld village key without dimension")
+        }
+    }
+
     /// Test isNBTKey property
     @Test
     func testIsNBTKey() {

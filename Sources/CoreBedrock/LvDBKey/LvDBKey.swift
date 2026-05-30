@@ -12,7 +12,7 @@ public enum LvDBKey: Sendable, Hashable {
     case string(LvDBStringKeyType)       // "\(key string)"
     case player(String, String)          // "\(type)\(id)"
     case map(Int64)                      // "map_\(id)"
-    case village(String, String, String) // "VILLAGE_\(Overworld)\(id)\(type)"
+    case village(String, String, String) // "VILLAGE_\(Overworld)_\(id)_\(type)"
     case structure(String)               // "structuretemplate_mystructure:\(name)"
     case actorprefix(Int64)              // "actorprefix\(id)"
     case digp(Int32, Int32, MCDimension) // "digp\(x)\(z)\(dimension)"
@@ -89,11 +89,14 @@ public enum LvDBKey: Sendable, Hashable {
         }
 
         let parts = keyString.split(separator: "_")
-        guard parts.count == 3 else {
-            return nil
+        if parts.count == 2 {
+            return Self.village("Overworld", "\(parts[0])", "\(parts[1])")
+        }
+        if parts.count == 3 {
+            return Self.village("\(parts[0])", "\(parts[1])", "\(parts[2])")
         }
 
-        return Self.village("\(parts[0])", "\(parts[1])", "\(parts[2])")
+        return nil
     }
 
     /// - Precondition:
