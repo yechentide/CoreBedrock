@@ -335,7 +335,9 @@ public extension KeyValueStore {
         var processed: UInt64 = 0
         for yIndex in Int8(-4)...Int8(20) {
             let key = keyPrefix + LvDBChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
-            if containsKey(key) { scanned += 1 }
+            if containsKey(key) {
+                scanned += 1
+            }
             batch.remove(key)
             processed += 1
         }
@@ -343,7 +345,9 @@ public extension KeyValueStore {
             guard chunkKeyType != .subChunkPrefix else { continue }
 
             let key = keyPrefix + chunkKeyType.rawValue.data
-            if containsKey(key) { scanned += 1 }
+            if containsKey(key) {
+                scanned += 1
+            }
             batch.remove(key)
             processed += 1
         }

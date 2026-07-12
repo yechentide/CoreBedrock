@@ -86,7 +86,9 @@ public struct CBTagReader: CustomDebugStringConvertible {
             let compound = CompoundTag(name: name)
             while true {
                 let childType = try reader.readTagType()
-                if childType == .end { break }
+                if childType == .end {
+                    break
+                }
                 let childName = try reader.readNBTString()
                 let child = try parseTag(type: childType, name: childName)
                 try compound.append(child)
