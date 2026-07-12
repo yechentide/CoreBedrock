@@ -67,43 +67,56 @@
 }
 
 - (void)close {
-    if (db == nullptr) {
-        return;
-    }
+    @synchronized (self) {
+        if (db == nullptr) {
+            return;
+        }
 
-    // Destroy all active iterators
-    NSArray<LevelDBBridgeIterator *> *iterators = [activeIterators allObjects];
-    for (LevelDBBridgeIterator *iterator in iterators) {
-        [iterator destroy];
-    }
-    [activeIterators removeAllObjects];
-    DebugLog(@"Destroyed %lu active iterators.", (unsigned long)iterators.count);
+        // Destroy all active iterators before releasing DB-owned read resources.
+        NSArray<LevelDBBridgeIterator *> *iterators = [activeIterators allObjects];
+        for (LevelDBBridgeIterator *iterator in iterators) {
+            [iterator destroy];
+        }
+        [activeIterators removeAllObjects];
+        DebugLog(@"Destroyed %lu active iterators.", (unsigned long)iterators.count);
 
-    db.reset();
-    delete options.filter_policy;
-    delete readOptions.decompress_allocator;
-    DebugLog(@"leveldb::DB closed.");
+        db.reset();
+        delete options.filter_policy;
+        options.filter_policy = nullptr;
+        delete readOptions.decompress_allocator;
+        readOptions.decompress_allocator = nullptr;
+        DebugLog(@"leveldb::DB closed.");
+    }
 }
 
 - (void)deregisterIterator:(LevelDBBridgeIterator *)iterator {
-    [activeIterators removeObject:iterator];
+    @synchronized (self) {
+        [activeIterators removeObject:iterator];
+    }
 }
 
 - (BOOL)isClosed {
-    return db == nullptr ? YES : NO;
+    @synchronized (self) {
+        return db == nullptr ? YES : NO;
+    }
 }
 
 - (BOOL)has:(NSData *)key {
-    if (db == nullptr || key == nil) {
-        return NO;
-    }
+    @synchronized (self) {
+        if (db == nullptr || key == nil) {
+            return NO;
+        }
 
-    leveldb::Slice dbKey((const char *)[key bytes], [key length]);
-    std::unique_ptr<leveldb::Iterator> it(db->NewIterator(readOptions));
-    it->Seek(dbKey);
-    if (it->Valid() && it->key() == dbKey) {
-        return YES;
-    } else {
+        try {
+            leveldb::Slice dbKey((const char *)[key bytes], [key length]);
+            std::unique_ptr<leveldb::Iterator> it(db->NewIterator(readOptions));
+            it->Seek(dbKey);
+            if (it->Valid() && it->key() == dbKey) {
+                return YES;
+            }
+        } catch (...) {
+            return NO;
+        }
         return NO;
     }
 }
@@ -119,116 +132,156 @@
 }
 
 - (LevelDBBridgeIterator *)newIterator:(NSError **)error {
-    if (db == nullptr) {
-        [self assignError:error message:@"DB Closed"];
-        return nil;
+    @synchronized (self) {
+        if (db == nullptr) {
+            [self assignError:error message:@"DB Closed"];
+            return nil;
+        }
+        try {
+            auto dbIterator = db->NewIterator(readOptions);
+            DebugLog(@"leveldb::Iterator generated.");
+            LevelDBBridgeIterator *iterator = [[LevelDBBridgeIterator alloc] initFromIterator:dbIterator parentDB:self];
+            [activeIterators addObject:iterator];
+            return iterator;
+        } catch (...) {
+            [self assignError:error message:@"Failed to create DB iterator"];
+            return nil;
+        }
     }
-    auto dbIterator = db->NewIterator(readOptions);
-    DebugLog(@"leveldb::Iterator generated.");
-    LevelDBBridgeIterator *iterator = [[LevelDBBridgeIterator alloc] initFromIterator:dbIterator parentDB:self];
-    [activeIterators addObject:iterator];
-    return iterator;
 }
 
 /* ---------- Key-Value Operations ---------- */
 
 - (NSData *)get:(NSData *)key error:(NSError **)error {
-    if (db == nullptr) {
-        [self assignError:error message:@"DB Closed"];
+    @synchronized (self) {
+        if (db == nullptr) {
+            [self assignError:error message:@"DB Closed"];
+            return nil;
+        }
+        try {
+            leveldb::Slice dbKey((const char *)[key bytes], [key length]);
+            std::string value;
+            leveldb::Status status = db->Get(readOptions, dbKey, &value);
+            if (status.ok()) {
+                return [NSData dataWithBytes:value.data() length:value.size()];
+            }
+            NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
+            [self assignError:error message:msg];
+        } catch (...) {
+            [self assignError:error message:@"Failed to read DB value"];
+        }
         return nil;
     }
-    leveldb::Slice dbKey((const char *)[key bytes], [key length]);
-    std::string value;
-    leveldb::Status status = db->Get(readOptions, dbKey, &value);
-    if (status.ok()) {
-        return [NSData dataWithBytes:value.data() length:value.size()];
-    }
-    NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
-    [self assignError:error message:msg];
-    return nil;
 }
 
 - (BOOL)put:(NSData *)key :(NSData *)data error:(NSError **)error {
-    if (db == nullptr) {
-        [self assignError:error message:@"DB Closed"];
+    @synchronized (self) {
+        if (db == nullptr) {
+            [self assignError:error message:@"DB Closed"];
+            return NO;
+        }
+        try {
+            leveldb::Slice dbKey((const char *)[key bytes], [key length]);
+            leveldb::Slice newData((const char *)[data bytes], [data length]);
+
+            leveldb::Status status = db->Put(writeOptions, dbKey, newData);
+            if (status.ok()) {
+                return YES;
+            }
+            NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
+            [self assignError:error message:msg];
+        } catch (...) {
+            [self assignError:error message:@"Failed to write DB value"];
+        }
         return NO;
     }
-    leveldb::Slice dbKey((const char *)[key bytes], [key length]);
-    leveldb::Slice newData((const char *)[data bytes], [data length]);
-
-    leveldb::Status status = db->Put(writeOptions, dbKey, newData);
-    if (status.ok()) {
-        return YES;
-    }
-    NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
-    [self assignError:error message:msg];
-    return NO;
 }
 
 - (BOOL)remove:(NSData *)key error:(NSError **)error {
-    if (db == nullptr) {
-        [self assignError:error message:@"DB Closed"];
+    @synchronized (self) {
+        if (db == nullptr) {
+            [self assignError:error message:@"DB Closed"];
+            return NO;
+        }
+        try {
+            leveldb::Slice dbKey((const char *)[key bytes], [key length]);
+            leveldb::Status status = db->Delete(writeOptions, dbKey);
+            if (status.ok()) {
+                return YES;
+            }
+            NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
+            [self assignError:error message:msg];
+        } catch (...) {
+            [self assignError:error message:@"Failed to remove DB value"];
+        }
         return NO;
     }
-    leveldb::Slice dbKey((const char *)[key bytes], [key length]);
-    leveldb::Status status = db->Delete(writeOptions, dbKey);
-    if (status.ok()) {
-        return YES;
-    }
-    NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
-    [self assignError:error message:msg];
-    return NO;
 }
 
 /* ---------- Batch Operations ---------- */
 
 - (BOOL)write:(LevelDBBridgeWriteBatch *)writeBatch error:(NSError **)error {
-    if (db == nullptr) {
-        [self assignError:error message:@"DB Closed"];
+    @synchronized (self) {
+        if (db == nullptr) {
+            [self assignError:error message:@"DB Closed"];
+            return NO;
+        }
+        if (writeBatch == nil) {
+            return YES;
+        }
+
+        leveldb::WriteBatch* leveldbBatch = static_cast<leveldb::WriteBatch *>([writeBatch getWriteBatch]);
+        if (!leveldbBatch) {
+            return YES;
+        }
+
+        try {
+            leveldb::Status status = db->Write(writeOptions, leveldbBatch);
+            if (status.ok()) {
+                return YES;
+            }
+
+            NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
+            [self assignError:error message:msg];
+        } catch (...) {
+            [self assignError:error message:@"Failed to write DB batch"];
+        }
         return NO;
     }
-    if (writeBatch == nil) {
-        return YES;
-    }
-
-    leveldb::WriteBatch* leveldbBatch = static_cast<leveldb::WriteBatch *>([writeBatch getWriteBatch]);
-    if (!leveldbBatch) {
-        return YES;
-    }
-
-    leveldb::Status status = db->Write(writeOptions, leveldbBatch);
-    if (status.ok()) {
-        return YES;
-    }
-
-    NSString *msg = [NSString stringWithUTF8String:status.ToString().c_str()];
-    [self assignError:error message:msg];
-    return NO;
 }
 
 /* ---------- Database Maintenance ---------- */
 
 - (BOOL)compactRange:(NSData *)begin end:(NSData *)end error:(NSError **)error {
-    if (db == nullptr) {
-        [self assignError:error message:@"DB Closed"];
-        return NO;
-    }
-    leveldb::Slice* beginSlice = nullptr;
-    leveldb::Slice* endSlice = nullptr;
-    if (begin) {
-        beginSlice = new leveldb::Slice((const char *)[begin bytes], [begin length]);
-    }
-    if (end) {
-        endSlice = new leveldb::Slice((const char *)[end bytes], [end length]);
-    }
+    @synchronized (self) {
+        if (db == nullptr) {
+            [self assignError:error message:@"DB Closed"];
+            return NO;
+        }
 
-    DebugLog(@"Compacting range in database...");
-    db->CompactRange(beginSlice, endSlice);
-    DebugLog(@"Range compaction completed.");
+        try {
+            leveldb::Slice beginSlice;
+            leveldb::Slice endSlice;
+            leveldb::Slice* beginSlicePtr = nullptr;
+            leveldb::Slice* endSlicePtr = nullptr;
+            if (begin) {
+                beginSlice = leveldb::Slice((const char *)[begin bytes], [begin length]);
+                beginSlicePtr = &beginSlice;
+            }
+            if (end) {
+                endSlice = leveldb::Slice((const char *)[end bytes], [end length]);
+                endSlicePtr = &endSlice;
+            }
 
-    delete beginSlice;
-    delete endSlice;
-    return YES;
+            DebugLog(@"Compacting range in database...");
+            db->CompactRange(beginSlicePtr, endSlicePtr);
+            DebugLog(@"Range compaction completed.");
+            return YES;
+        } catch (...) {
+            [self assignError:error message:@"Failed to compact DB range"];
+            return NO;
+        }
+    }
 }
 
 @end

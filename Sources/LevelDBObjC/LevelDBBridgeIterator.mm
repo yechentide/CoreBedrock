@@ -15,6 +15,11 @@
     __weak LevelDBBridge *parentDB;
 }
 
+- (id)lockedTarget {
+    LevelDBBridge *parent = parentDB;
+    return parent ?: self;
+}
+
 - (id)initFromIterator:(void *)dbIterator parentDB:(LevelDBBridge *)parent {
     if (self = [super init]) {
         leveldb::Iterator* it = static_cast<leveldb::Iterator*>(dbIterator);
@@ -31,81 +36,136 @@
 }
 
 - (void)destroy {
-    if (iterator == nullptr) {
-        return;
-    }
-    iterator.reset();
+    @synchronized ([self lockedTarget]) {
+        if (iterator == nullptr) {
+            return;
+        }
+        iterator.reset();
 
-    // Deregister from parent DB if it still exists
-    if (parentDB != nil) {
-        [parentDB deregisterIterator:self];
-        parentDB = nil;
-    }
+        // Deregister from parent DB if it still exists
+        if (parentDB != nil) {
+            [parentDB deregisterIterator:self];
+            parentDB = nil;
+        }
 
-    DebugLog(@"leveldb::Iterator destroyed.");
+        DebugLog(@"leveldb::Iterator destroyed.");
+    }
 }
 
 - (BOOL)isDestroyed {
-    return iterator == nullptr ? YES : NO;
+    @synchronized ([self lockedTarget]) {
+        return iterator == nullptr ? YES : NO;
+    }
 }
 
 - (void)seekToFirst {
-    if (iterator == nullptr) {
-        return;
+    @synchronized ([self lockedTarget]) {
+        if (iterator == nullptr) {
+            return;
+        }
+        try {
+            iterator->SeekToFirst();
+        } catch (...) {
+            iterator.reset();
+        }
     }
-    iterator->SeekToFirst();
 }
 
 - (void)seekToLast {
-    if (iterator == nullptr) {
-        return;
+    @synchronized ([self lockedTarget]) {
+        if (iterator == nullptr) {
+            return;
+        }
+        try {
+            iterator->SeekToLast();
+        } catch (...) {
+            iterator.reset();
+        }
     }
-    iterator->SeekToLast();
 }
 
 - (void)seek:(NSData *)key {
-    if (iterator == nullptr) {
-        return;
+    @synchronized ([self lockedTarget]) {
+        if (iterator == nullptr) {
+            return;
+        }
+        try {
+            leveldb::Slice dbKey = leveldb::Slice((const char *)[key bytes], [key length]);
+            iterator->Seek(dbKey);
+        } catch (...) {
+            iterator.reset();
+        }
     }
-    leveldb::Slice dbKey = leveldb::Slice((const char *)[key bytes], [key length]);
-    iterator->Seek(dbKey);
 }
 
 - (void)next {
-    if (iterator == nullptr) {
-        return;
+    @synchronized ([self lockedTarget]) {
+        if (iterator == nullptr) {
+            return;
+        }
+        try {
+            iterator->Next();
+        } catch (...) {
+            iterator.reset();
+        }
     }
-    iterator->Next();
 }
 
 - (void)prev {
-    if (iterator == nullptr) {
-        return;
+    @synchronized ([self lockedTarget]) {
+        if (iterator == nullptr) {
+            return;
+        }
+        try {
+            iterator->Prev();
+        } catch (...) {
+            iterator.reset();
+        }
     }
-    iterator->Prev();
 }
 
 - (BOOL)valid {
-    if (iterator == nullptr) {
-        return NO;
+    @synchronized ([self lockedTarget]) {
+        if (iterator == nullptr) {
+            return NO;
+        }
+        try {
+            return iterator->Valid();
+        } catch (...) {
+            iterator.reset();
+            return NO;
+        }
     }
-    return iterator->Valid();
 }
 
 - (NSData *)key {
-    if (iterator == nullptr || !iterator->Valid()) {
-        return nil;
+    @synchronized ([self lockedTarget]) {
+        if (iterator == nullptr || !iterator->Valid()) {
+            return nil;
+        }
+        try {
+            leveldb::Slice key = iterator->key();
+            return [[NSData alloc] initWithBytes:key.data() length:key.size()];
+        } catch (...) {
+            iterator.reset();
+            return nil;
+        }
     }
-    leveldb::Slice key = iterator->key();
-    return [[NSData alloc] initWithBytes:key.data() length:key.size()];
 }
 
 - (NSData *)value {
-    if (iterator == nullptr || !iterator->Valid()) {
-        return nil;
+    @synchronized ([self lockedTarget]) {
+        if (iterator == nullptr || !iterator->Valid()) {
+            return nil;
+        }
+        try {
+            leveldb::Slice value = iterator->value();
+            return [[NSData alloc] initWithBytes:value.data() length:value.size()];
+        } catch (...) {
+            iterator.reset();
+            return nil;
+        }
     }
-    leveldb::Slice value = iterator->value();
-    return [[NSData alloc] initWithBytes:value.data() length:value.size()];
 }
 
 @end
