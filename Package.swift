@@ -56,12 +56,8 @@ let package = Package(
             ]
         ),
         .target(
-            name: "LibPNG",
-            dependencies: ["libpng", "libz"]
-        ),
-        .target(
-            name: "LibTurboJPEG",
-            dependencies: ["libturbojpeg"]
+            name: "ImageCodecC",
+            dependencies: ["libpng", "libz", "libturbojpeg"]
         ),
         .testTarget(
             name: "LevelDBObjCTests",
@@ -73,7 +69,7 @@ let package = Package(
 
         .target(
             name: "CoreBedrock",
-            dependencies: ["LevelDBObjC", "LibPNG", "LibTurboJPEG"],
+            dependencies: ["LevelDBObjC", "ImageCodecC"],
             swiftSettings: [
                 .defaultIsolation(nil),
                 .enableUpcomingFeature("ExistentialAny"),
