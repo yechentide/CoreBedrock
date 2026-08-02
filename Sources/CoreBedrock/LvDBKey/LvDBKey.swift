@@ -25,14 +25,13 @@ public enum LvDBKey: Sendable, Hashable {
     case unknown(Data)
 }
 
-extension LvDBKey {
-
+public extension LvDBKey {
     /// - Precondition:
     ///   Key Format:
     ///   - ~local_player
     ///   - mobevents
     ///   - ......
-    public static func parseStringKey(data: Data) -> Self? {
+    static func parseStringKey(data: Data) -> Self? {
         guard let type = LvDBStringKeyType.parse(data: data) else {
             return nil
         }
@@ -45,7 +44,7 @@ extension LvDBKey {
     ///   - player_AAAAAAAA-1b0c-31c2-995a-XXXXXXXXXXXX
     ///   - player_BBBBBBBB-48be-3f36-a7fd-XXXXXXXXXXXX
     ///   - player_server_CCCCCCCC-6a84-4337-83f4-XXXXXXXXXXXX
-    public static func parsePlayerKey(data: Data) -> Self? {
+    static func parsePlayerKey(data: Data) -> Self? {
         let prefix = "player_"
         guard data.count > prefix.count,
               prefix == String(data: data[..<prefix.count], encoding: .utf8),
@@ -68,7 +67,7 @@ extension LvDBKey {
     ///   Key Format:
     ///   - map_\(id)
     ///   - id = Int64 = 0x2D_33_30_30_36_34_37_37_31_30_36_37
-    public static func parseMapKey(data: Data) -> Self? {
+    static func parseMapKey(data: Data) -> Self? {
         let prefix = "map_"
         guard data.count > prefix.count,
               prefix == String(data: data[..<prefix.count], encoding: .utf8),
@@ -87,7 +86,7 @@ extension LvDBKey {
     ///   - VILLAGE_Overworld_XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX_INFO
     ///   - VILLAGE_Overworld_XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX_PLAYERS
     ///   - VILLAGE_Overworld_XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX_POI
-    public static func parseVillageKey(data: Data) -> Self? {
+    static func parseVillageKey(data: Data) -> Self? {
         let prefix = "VILLAGE_"
         guard data.count > prefix.count,
               prefix == String(data: data[..<prefix.count], encoding: .utf8),
@@ -110,7 +109,7 @@ extension LvDBKey {
     /// - Precondition:
     ///   Key Format:
     ///   - structuretemplate_\(namespace):\(name)
-    public static func parseStructureKey(data: Data) -> Self? {
+    static func parseStructureKey(data: Data) -> Self? {
         let prefix = "structuretemplate_"
         guard data.count > prefix.count,
               prefix == String(data: data[..<prefix.count], encoding: .utf8),
@@ -127,7 +126,7 @@ extension LvDBKey {
     ///   Key Format:
     ///   - actorprefix\(id)
     ///   - id = Int64 = 0x00_00_00_06_00_00_00_01
-    public static func parseActorKey(data: Data) -> Self? {
+    static func parseActorKey(data: Data) -> Self? {
         let prefix = "actorprefix"
         guard data.count > prefix.count,
               prefix == String(data: data[..<prefix.count], encoding: .utf8),
@@ -142,7 +141,7 @@ extension LvDBKey {
     /// - Precondition:
     ///   Key Format:
     ///   - digp\(chunkX)\(chunkZ)\(dimension)?
-    public static func parseDigpKey(data: Data) -> Self? {
+    static func parseDigpKey(data: Data) -> Self? {
         let prefix = "digp"
         guard data.count > prefix.count,
               prefix == String(data: data[..<prefix.count], encoding: .utf8),
@@ -165,7 +164,7 @@ extension LvDBKey {
     /// - Precondition:
     ///   Key Format:
     ///   - RealmsStoriesData_\(id)
-    public static func parseRealmsStoriesDataKey(data: Data) -> Self? {
+    static func parseRealmsStoriesDataKey(data: Data) -> Self? {
         let prefix = "RealmsStoriesData_"
         guard data.count > prefix.count,
               prefix == String(data: data[..<prefix.count], encoding: .utf8)
@@ -177,7 +176,7 @@ extension LvDBKey {
         return Self.realmsStoriesData(idData)
     }
 
-    public static func parsePositionTrackKey(data: Data) -> Self? {
+    static func parsePositionTrackKey(data: Data) -> Self? {
         let lastID = Data("PositionTrackDB-LastId".utf8)
         if data == lastID {
             return .positionTrackLastID
@@ -194,7 +193,7 @@ extension LvDBKey {
         return .positionTrack(id)
     }
 
-    public static func parseTickingAreaKey(data: Data) -> Self? {
+    static func parseTickingAreaKey(data: Data) -> Self? {
         let prefix = "tickingarea_"
         guard data.count > prefix.count,
               prefix == String(data: data[..<prefix.count], encoding: .utf8),
@@ -204,7 +203,7 @@ extension LvDBKey {
         return .tickingArea(id)
     }
 
-    public static func parseChunkLoadedRequestKey(data: Data) -> Self? {
+    static func parseChunkLoadedRequestKey(data: Data) -> Self? {
         let prefix = "chunk_loaded_request_"
         guard data.count > prefix.count,
               prefix == String(data: data[..<prefix.count], encoding: .utf8),
@@ -217,7 +216,7 @@ extension LvDBKey {
     /// - Precondition:
     ///   Key Format:
     ///   - \(chunkX)\(chunkZ)\(dimension)?\(chunkType)\(subChunkPrefix)?
-    public static func parseChunkKey(data: Data) -> Self? {
+    static func parseChunkKey(data: Data) -> Self? {
         guard [9, 10, 13, 14].contains(data.count),
               let chunkX = data[0..<4].int32,
               let chunkZ = data[4..<8].int32
@@ -251,7 +250,7 @@ extension LvDBKey {
         return Self.subChunk(chunkX, chunkZ, dimension, chunkType, chunkY)
     }
 
-    public static func parse(data: Data) -> Self {
+    static func parse(data: Data) -> Self {
         let parsers: [(Data) -> Self?] = [
             Self.parseStringKey,
             Self.parsePlayerKey,
@@ -264,7 +263,7 @@ extension LvDBKey {
             Self.parsePositionTrackKey,
             Self.parseTickingAreaKey,
             Self.parseChunkLoadedRequestKey,
-            Self.parseChunkKey
+            Self.parseChunkKey,
         ]
         if let key = parsers.lazy.compactMap({ $0(data) }).first {
             return key
@@ -273,7 +272,7 @@ extension LvDBKey {
         return Self.unknown(data)
     }
 
-    public var isNBTKey: Bool {
+    var isNBTKey: Bool {
         switch self {
         case let .subChunk(_, _, _, subChunkType, _):
             switch subChunkType {
@@ -302,7 +301,7 @@ extension LvDBKey {
         }
     }
 
-    public var isCompoundListKey: Bool {
+    var isCompoundListKey: Bool {
         if case let .subChunk(_, _, _, subChunkType, _) = self {
             switch subChunkType {
             case .entity, .blockEntity: return true
@@ -312,7 +311,7 @@ extension LvDBKey {
         return false
     }
 
-    public var data: Data {
+    var data: Data {
         switch self {
         case let .subChunk(x, z, d, t, y):
             var keyData = x.data + z.data
