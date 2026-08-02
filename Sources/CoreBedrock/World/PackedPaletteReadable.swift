@@ -12,11 +12,15 @@ public protocol PackedPaletteReadable {
 
 public extension PackedPaletteReadable {
     var indexBitMask: UInt32 {
-        ~(UInt32.max << bitWidth)
+        guard bitWidth > 0 else { return 0 }
+
+        return ~(UInt32.max << bitWidth)
     }
 
     var valuesPerWord: Int {
-        CBBinaryReader.wordBitSize / bitWidth
+        guard bitWidth > 0 else { return MCSubChunk.totalBlockCount }
+
+        return CBBinaryReader.wordBitSize / bitWidth
     }
 
     func paletteIndex(localX: Int, localY: Int, localZ: Int) -> Int? {
@@ -30,6 +34,10 @@ public extension PackedPaletteReadable {
     func paletteIndex(at linearIndex: Int) -> Int? {
         guard 0..<MCSubChunk.totalBlockCount ~= linearIndex else {
             return nil
+        }
+
+        if bitWidth == 0 {
+            return palette.isEmpty ? nil : 0
         }
 
         let wordIndex = linearIndex / self.valuesPerWord
@@ -63,6 +71,9 @@ public extension PackedPaletteReadable {
     }
 
     func unpackPaletteIndices() -> [UInt16]? {
+        if bitWidth == 0 {
+            return palette.isEmpty ? nil : [UInt16](repeating: 0, count: MCSubChunk.totalBlockCount)
+        }
         var result = [UInt16](repeating: 0, count: MCSubChunk.totalBlockCount)
 
         for linear in 0..<MCSubChunk.totalBlockCount {

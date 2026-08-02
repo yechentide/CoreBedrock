@@ -33,8 +33,7 @@ public struct ExpandedSubChunk {
         self.blockLayer = ExpandedBlockLayer(packedLayer: packed.blockLayer)
 
         guard let packedLiquidLayer = packed.liquidLayer,
-              !packedLiquidLayer.palette.isEmpty,
-              !packedLiquidLayer.indicesBytes.isEmpty
+              !packedLiquidLayer.palette.isEmpty
         else {
             self.liquidLayer = nil
             return
@@ -55,7 +54,9 @@ public struct ExpandedSubChunk {
         // Write header
         try writer.write(UInt8(self.version))
         try writer.write(layerCount)
-        try writer.write(self.chunkY)
+        if self.version == 9 {
+            try writer.write(self.chunkY)
+        }
 
         // Write block layer
         try Self.writeLayer(self.blockLayer, to: writer)

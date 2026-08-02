@@ -29,7 +29,15 @@ public struct Data3DParser {
             )
         }
 
-        let bytesCount = MCSubChunk.totalBlockCount * bitsPerBlock / 8
+        guard 1...CBBinaryReader.wordBitSize ~= bitsPerBlock else {
+            throw CBStreamError.invalidFormat("Invalid biome bit size: \(bitsPerBlock)")
+        }
+
+        // Values are packed into independent UInt32 words; unused high bits in
+        // each word are not carried into the next word.
+        let valuesPerWord = CBBinaryReader.wordBitSize / bitsPerBlock
+        let wordCount = (MCSubChunk.totalBlockCount + valuesPerWord - 1) / valuesPerWord
+        let bytesCount = wordCount * MemoryLayout<UInt32>.size
         let paletteData = try binaryReader.readBytes(bytesCount)
         let paletteCount = try binaryReader.readInt32()
         // paletteCount == 0 means the section has no biome entries (uninitialized data); skip it.

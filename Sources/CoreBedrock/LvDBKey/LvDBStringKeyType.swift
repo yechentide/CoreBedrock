@@ -10,6 +10,7 @@ public enum LvDBStringKeyType: String, CaseIterable, Sendable, Hashable, Codable
     case autonomousEntities             = "AutonomousEntities"
     case biomeData                      = "BiomeData"
     case dimension0                     = "dimension0"
+    case dynamicProperties              = "DynamicProperties"
     case levelChunkMetaDataDictionary   = "LevelChunkMetaDataDictionary"
     case mobevents                      = "mobevents"
     case nether                         = "Nether"
@@ -19,6 +20,7 @@ public enum LvDBStringKeyType: String, CaseIterable, Sendable, Hashable, Codable
     case schedulerWT                    = "schedulerWT"
     case scoreboard                     = "scoreboard"
     case localPlayer                    = "~local_player"
+    case worldClocks                    = "WorldClocks"
 
     // legacy key types
     case flatworldlayers                = "game_flatworldlayers"        // Info about the flat world before 1.5, it has been moved to level.dat // swiftlint:disable:this line_length

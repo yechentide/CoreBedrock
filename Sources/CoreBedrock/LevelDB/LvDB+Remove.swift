@@ -99,29 +99,25 @@ public extension KeyValueStore {
 
             statistics.scannedKeyCount += 1
 
-            try autoreleasepool { [batch, iter] in
-                let lvdbKey = LvDBKey.parse(data: key)
-                if case let LvDBKey.subChunk(chunkX, chunkZ, d, _, _) = lvdbKey, d == dimension {
+            autoreleasepool { [batch, iter] in
+                if let chunkKey = LvDBChunkKey(data: key), chunkKey.dimension == dimension {
+                    let chunkX = chunkKey.x
+                    let chunkZ = chunkKey.z
                     let coord = ChunkCoordKey(x: chunkX, z: chunkZ)
                     batch.remove(key)
                     statistics.seenChunkCoords.insert(coord)
                     statistics.processedChunkCoords.insert(coord)
                     statistics.processedKeyCount += 1
                 }
+                let lvdbKey = LvDBKey.parse(data: key)
                 if case let LvDBKey.digp(chunkX, chunkZ, d) = lvdbKey, d == dimension {
                     let coord = ChunkCoordKey(x: chunkX, z: chunkZ)
-                    batch.remove(key)
                     statistics.seenChunkCoords.insert(coord)
                     statistics.processedChunkCoords.insert(coord)
-                    statistics.processedKeyCount += 1
-                    if let digpData = iter.currentValue, !digpData.isEmpty, digpData.count % 8 == 0 {
-                        for i in 0..<digpData.count / 8 {
-                            try Task.checkCancellation()
-                            let actorprefixKey = Data("actorprefix".utf8) + digpData[i * 8...i * 8 + 7]
-                            batch.remove(actorprefixKey)
-                            statistics.processedKeyCount += 1
-                        }
-                    }
+                    let counts = self.removeDigpAndActorKeys(
+                        digpKey: key, digpData: iter.currentValue, batch: batch
+                    )
+                    statistics.processedKeyCount += counts.processed
                 }
             }
 
@@ -195,11 +191,8 @@ public extension KeyValueStore {
                 let coord = ChunkCoordKey(x: x, z: z)
                 statistics.seenChunkCoords.insert(coord)
 
-                let prefix = LvDBKeyFactory.makeBaseChunkKey(x: x, z: z, dimension: dimension)
                 let counts = autoreleasepool { () -> (scanned: UInt64, processed: UInt64) in
-                    let chunkCounts = self.removeChunkKeys(keyPrefix: prefix, batch: batch)
-                    let actorCounts = self.removeActorAndDigpKeys(keyPrefix: prefix, batch: batch)
-                    return (chunkCounts.scanned + actorCounts.scanned, chunkCounts.processed + actorCounts.processed)
+                    self.removeChunk(x: x, z: z, dimension: dimension, batch: batch)
                 }
                 statistics.scannedKeyCount += counts.scanned
                 statistics.processedKeyCount += counts.processed
@@ -257,7 +250,7 @@ public extension KeyValueStore {
         return stream
     }
 
-    // swiftlint:disable function_body_length function_parameter_count
+    // swiftlint:disable function_parameter_count
     private func deleteChunksOutsideRange(
         in dimension: MCDimension,
         fromChunkX startX: Int32, fromChunkZ startZ: Int32,
@@ -279,30 +272,27 @@ public extension KeyValueStore {
 
             statistics.scannedKeyCount += 1
 
-            let lvdbKey = LvDBKey.parse(data: key)
-            if case let LvDBKey.subChunk(cx, cz, d, _, _) = lvdbKey,
-               d == dimension, !xRange.contains(cx) || !zRange.contains(cz) {
+            if let chunkKey = LvDBChunkKey(data: key),
+               chunkKey.dimension == dimension,
+               !xRange.contains(chunkKey.x) || !zRange.contains(chunkKey.z) {
+                let cx = chunkKey.x
+                let cz = chunkKey.z
                 let coord = ChunkCoordKey(x: cx, z: cz)
                 batch.remove(key)
                 statistics.seenChunkCoords.insert(coord)
                 statistics.processedChunkCoords.insert(coord)
                 statistics.processedKeyCount += 1
             }
+            let lvdbKey = LvDBKey.parse(data: key)
             if case let LvDBKey.digp(cx, cz, d) = lvdbKey,
                d == dimension, !xRange.contains(cx) || !zRange.contains(cz) {
                 let coord = ChunkCoordKey(x: cx, z: cz)
-                batch.remove(key)
                 statistics.seenChunkCoords.insert(coord)
                 statistics.processedChunkCoords.insert(coord)
-                statistics.processedKeyCount += 1
-                if let digpData = iter.currentValue, !digpData.isEmpty, digpData.count % 8 == 0 {
-                    for i in 0..<digpData.count / 8 {
-                        try Task.checkCancellation()
-                        let actorprefixKey = Data("actorprefix".utf8) + digpData[i * 8...i * 8 + 7]
-                        batch.remove(actorprefixKey)
-                        statistics.processedKeyCount += 1
-                    }
-                }
+                let counts = self.removeDigpAndActorKeys(
+                    digpKey: key, digpData: iter.currentValue, batch: batch
+                )
+                statistics.processedKeyCount += counts.processed
             }
 
             try Task.checkCancellation()
@@ -323,56 +313,53 @@ public extension KeyValueStore {
         self.emit(statistics: statistics, reportEvent: reportEvent)
     }
 
-    // swiftlint:enable function_body_length function_parameter_count
+    // swiftlint:enable function_parameter_count
 
     // MARK: - Helpers
 
     @discardableResult
-    private func removeChunkKeys(
-        keyPrefix: Data, batch: any KeyValueWriteBatch
+    private func removeChunk(
+        x: Int32, z: Int32, dimension: MCDimension, batch: any KeyValueWriteBatch
     ) -> (scanned: UInt64, processed: UInt64) {
         var scanned: UInt64 = 0
         var processed: UInt64 = 0
-        for yIndex in Int8(-4)...Int8(20) {
-            let key = keyPrefix + LvDBChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
-            if containsKey(key) {
-                scanned += 1
-            }
+        for key in getChunkKeys(x: x, z: z, dimension: dimension) {
+            scanned += 1
             batch.remove(key)
             processed += 1
         }
-        for chunkKeyType in LvDBChunkKeyType.allCases {
-            guard chunkKeyType != .subChunkPrefix else { continue }
-
-            let key = keyPrefix + chunkKeyType.rawValue.data
-            if containsKey(key) {
-                scanned += 1
-            }
-            batch.remove(key)
-            processed += 1
-        }
-        return (scanned, processed)
+        let keyPrefix = LvDBKeyFactory.makeBaseChunkKey(x: x, z: z, dimension: dimension)
+        let digpKey = Data("digp".utf8) + keyPrefix
+        let actorCounts = self.removeDigpAndActorKeys(
+            digpKey: digpKey, digpData: try? data(forKey: digpKey), batch: batch
+        )
+        return (scanned + actorCounts.scanned, processed + actorCounts.processed)
     }
 
     @discardableResult
-    private func removeActorAndDigpKeys(
-        keyPrefix: Data, batch: any KeyValueWriteBatch
+    private func removeDigpAndActorKeys(
+        digpKey: Data, digpData: Data?, batch: any KeyValueWriteBatch
     ) -> (scanned: UInt64, processed: UInt64) {
-        let digpKey = Data("digp".utf8) + keyPrefix
-
-        guard let digpData = try? data(forKey: digpKey), !digpData.isEmpty, digpData.count % 8 == 0 else {
+        guard let digpData else {
             return (0, 0)
         }
 
         var scanned: UInt64 = 1 // digp key itself
         var processed: UInt64 = 1 // digp key itself
+        batch.remove(digpKey)
+
+        // A corrupt or empty actor list must not leave the chunk's pointer
+        // behind. Only derive actor keys when the payload is structurally valid.
+        guard !digpData.isEmpty, digpData.count % 8 == 0 else {
+            return (scanned, processed)
+        }
+
         for i in 0..<digpData.count / 8 {
             let actorprefixKey = Data("actorprefix".utf8) + digpData[i * 8...i * 8 + 7]
             batch.remove(actorprefixKey)
             scanned += 1
             processed += 1
         }
-        batch.remove(digpKey)
         return (scanned: scanned, processed: processed)
     }
 

@@ -13,11 +13,19 @@ public enum LvDBKey: Sendable, Hashable {
     case player(String, String)          // "\(type)\(id)"
     case map(Int64)                      // "map_\(id)"
     case village(String, String, String) // "VILLAGE_\(Overworld)_\(id)_\(type)"
-    case structure(String)               // "structuretemplate_mystructure:\(name)"
-    case actorprefix(Int64)              // "actorprefix\(id)"
+    case legacyVillage(String, String)   // "VILLAGE_\(id)_\(type)"
+    case structure(String)               // "structuretemplate_\(namespace):\(name)"
+    case actorprefix(Data)               // "actorprefix\(8-byte storage key)"
     case digp(Int32, Int32, MCDimension) // "digp\(x)\(z)\(dimension)"
     case realmsStoriesData(Data)         // "RealmsStoriesData_\(id)"
+    case tickingArea(String)             // "tickingarea_\(id)"
+    case chunkLoadedRequest(String)      // "chunk_loaded_request_\(dimension)_\(id)"
+    case positionTrack(String)           // "PosTrackDB-0xXXXXXXXX"
+    case positionTrackLastID             // "PositionTrackDB-LastId"
     case unknown(Data)
+}
+
+extension LvDBKey {
 
     /// - Precondition:
     ///   Key Format:
@@ -90,7 +98,7 @@ public enum LvDBKey: Sendable, Hashable {
 
         let parts = keyString.split(separator: "_")
         if parts.count == 2 {
-            return Self.village("Overworld", "\(parts[0])", "\(parts[1])")
+            return Self.legacyVillage("\(parts[0])", "\(parts[1])")
         }
         if parts.count == 3 {
             return Self.village("\(parts[0])", "\(parts[1])", "\(parts[2])")
@@ -101,13 +109,13 @@ public enum LvDBKey: Sendable, Hashable {
 
     /// - Precondition:
     ///   Key Format:
-    ///   - structuretemplate_mystructure:\(name)
-    ///   - name = String
+    ///   - structuretemplate_\(namespace):\(name)
     public static func parseStructureKey(data: Data) -> Self? {
-        let prefix = "structuretemplate_mystructure:"
+        let prefix = "structuretemplate_"
         guard data.count > prefix.count,
               prefix == String(data: data[..<prefix.count], encoding: .utf8),
-              let name = String(data: data[prefix.count...], encoding: .utf8)
+              let name = String(data: data[prefix.count...], encoding: .utf8),
+              name.contains(":")
         else {
             return nil
         }
@@ -123,12 +131,12 @@ public enum LvDBKey: Sendable, Hashable {
         let prefix = "actorprefix"
         guard data.count > prefix.count,
               prefix == String(data: data[..<prefix.count], encoding: .utf8),
-              let id = data[prefix.count...].int64
+              data.count == prefix.count + 8
         else {
             return nil
         }
 
-        return Self.actorprefix(id)
+        return Self.actorprefix(Data(data[prefix.count...]))
     }
 
     /// - Precondition:
@@ -169,6 +177,43 @@ public enum LvDBKey: Sendable, Hashable {
         return Self.realmsStoriesData(idData)
     }
 
+    public static func parsePositionTrackKey(data: Data) -> Self? {
+        let lastID = Data("PositionTrackDB-LastId".utf8)
+        if data == lastID {
+            return .positionTrackLastID
+        }
+
+        let prefix = "PosTrackDB-"
+        guard data.count > prefix.count,
+              prefix == String(data: data[..<prefix.count], encoding: .utf8),
+              let id = String(data: data[prefix.count...], encoding: .utf8)
+        else {
+            return nil
+        }
+
+        return .positionTrack(id)
+    }
+
+    public static func parseTickingAreaKey(data: Data) -> Self? {
+        let prefix = "tickingarea_"
+        guard data.count > prefix.count,
+              prefix == String(data: data[..<prefix.count], encoding: .utf8),
+              let id = String(data: data[prefix.count...], encoding: .utf8)
+        else { return nil }
+
+        return .tickingArea(id)
+    }
+
+    public static func parseChunkLoadedRequestKey(data: Data) -> Self? {
+        let prefix = "chunk_loaded_request_"
+        guard data.count > prefix.count,
+              prefix == String(data: data[..<prefix.count], encoding: .utf8),
+              let id = String(data: data[prefix.count...], encoding: .utf8)
+        else { return nil }
+
+        return .chunkLoadedRequest(id)
+    }
+
     /// - Precondition:
     ///   Key Format:
     ///   - \(chunkX)\(chunkZ)\(dimension)?\(chunkType)\(subChunkPrefix)?
@@ -207,31 +252,21 @@ public enum LvDBKey: Sendable, Hashable {
     }
 
     public static func parse(data: Data) -> Self {
-        if let key = Self.parseStringKey(data: data) {
-            return key
-        }
-        if let key = Self.parsePlayerKey(data: data) {
-            return key
-        }
-        if let key = Self.parseMapKey(data: data) {
-            return key
-        }
-        if let key = Self.parseVillageKey(data: data) {
-            return key
-        }
-        if let key = Self.parseStructureKey(data: data) {
-            return key
-        }
-        if let key = Self.parseActorKey(data: data) {
-            return key
-        }
-        if let key = Self.parseDigpKey(data: data) {
-            return key
-        }
-        if let key = Self.parseRealmsStoriesDataKey(data: data) {
-            return key
-        }
-        if let key = Self.parseChunkKey(data: data) {
+        let parsers: [(Data) -> Self?] = [
+            Self.parseStringKey,
+            Self.parsePlayerKey,
+            Self.parseMapKey,
+            Self.parseVillageKey,
+            Self.parseStructureKey,
+            Self.parseActorKey,
+            Self.parseDigpKey,
+            Self.parseRealmsStoriesDataKey,
+            Self.parsePositionTrackKey,
+            Self.parseTickingAreaKey,
+            Self.parseChunkLoadedRequestKey,
+            Self.parseChunkKey
+        ]
+        if let key = parsers.lazy.compactMap({ $0(data) }).first {
             return key
         }
         CBLogger.warning("Unknown Leveldb Key: \(data.hexString)")
@@ -242,7 +277,7 @@ public enum LvDBKey: Sendable, Hashable {
         switch self {
         case let .subChunk(_, _, _, subChunkType, _):
             switch subChunkType {
-            case .blockEntity, .pendingTicks, .randomTicks, .biomeState:
+            case .blockEntity, .entity, .pendingTicks, .randomTicks, .biomeState:
                 true
             default:
                 false
@@ -251,12 +286,16 @@ public enum LvDBKey: Sendable, Hashable {
             switch strType {
             case .localPlayer, .autonomousEntities, .biomeData,
                  .levelChunkMetaDataDictionary, .mobevents,
-                 .overworld, .nether, .theEnd, .schedulerWT, .scoreboard:
+                 .overworld, .nether, .theEnd, .schedulerWT, .scoreboard,
+                 .dynamicProperties, .worldClocks:
                 true
             default:
                 false
             }
-        case .player, .map, .village, .structure, .actorprefix:
+        case .player, .map, .village, .legacyVillage, .structure, .actorprefix,
+             .positionTrack, .positionTrackLastID:
+            true
+        case .tickingArea, .chunkLoadedRequest:
             true
         default:
             false
@@ -296,10 +335,12 @@ public enum LvDBKey: Sendable, Hashable {
             return Data("map_\(id)".utf8)
         case let .village(dimension, id, type):
             return Data("VILLAGE_\(dimension)_\(id)_\(type)".utf8)
+        case let .legacyVillage(id, type):
+            return Data("VILLAGE_\(id)_\(type)".utf8)
         case let .structure(name):
-            return Data("structuretemplate_mystructure:\(name)".utf8)
+            return Data("structuretemplate_\(name)".utf8)
         case let .actorprefix(id):
-            return Data("actorprefix".utf8) + id.data
+            return Data("actorprefix".utf8) + id
         case let .digp(x, z, d):
             var keyData = Data("digp".utf8) + x.data + z.data
             if d != .overworld {
@@ -308,6 +349,14 @@ public enum LvDBKey: Sendable, Hashable {
             return keyData
         case let .realmsStoriesData(data):
             return Data("RealmsStoriesData_".utf8) + data
+        case let .tickingArea(id):
+            return Data("tickingarea_\(id)".utf8)
+        case let .chunkLoadedRequest(id):
+            return Data("chunk_loaded_request_\(id)".utf8)
+        case let .positionTrack(id):
+            return Data("PosTrackDB-\(id)".utf8)
+        case .positionTrackLastID:
+            return Data("PositionTrackDB-LastId".utf8)
         case let .unknown(data):
             return data
         }

@@ -58,25 +58,30 @@ public extension KeyValueStore {
     }
 
     func getChunkKeys(x: Int32, z: Int32, dimension: MCDimension) -> [Data] {
-        let keyPrefix = LvDBKeyFactory.makeBaseChunkKey(x: x, z: z, dimension: dimension)
         var keys = [Data]()
+        guard let iterator = try? makeIterator() else { return keys }
 
-        for yIndex in Int8(-4)...Int8(20) {
-            let key = keyPrefix + LvDBChunkKeyType.subChunkPrefix.rawValue.data + yIndex.data
-            if containsKey(key) {
-                keys.append(key)
+        defer { iterator.close() }
+
+        // Seek with the coordinate prefix, then filter structurally. This finds
+        // future chunk tags and valid subchunk Y values outside today's height.
+        let coordinatePrefix = x.data + z.data
+        iterator.move(to: coordinatePrefix)
+        while iterator.isValid {
+            defer { iterator.moveToNext() }
+            guard let key = iterator.currentKey,
+                  key.count >= coordinatePrefix.count,
+                  key[0..<coordinatePrefix.count] == coordinatePrefix
+            else {
+                break
             }
-        }
-
-        for type in LvDBChunkKeyType.allCases {
-            guard type != .subChunkPrefix else {
+            guard let chunkKey = LvDBChunkKey(data: key),
+                  chunkKey.x == x, chunkKey.z == z, chunkKey.dimension == dimension
+            else {
                 continue
             }
 
-            let key = keyPrefix + type.rawValue.data
-            if containsKey(key) {
-                keys.append(key)
-            }
+            keys.append(key)
         }
 
         return keys

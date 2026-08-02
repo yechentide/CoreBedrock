@@ -172,8 +172,9 @@ public enum DimensionTransfer {
             }
 
             try autoreleasepool {
-                let parsedKey = LvDBKey.parse(data: keyData)
-                if case let .subChunk(chunkX, chunkZ, dim, _, _) = parsedKey, dim == dimension {
+                if let chunkKey = LvDBChunkKey(data: keyData), chunkKey.dimension == dimension {
+                    let chunkX = chunkKey.x
+                    let chunkZ = chunkKey.z
                     let coord = DimensionTransferCoordKey(x: chunkX, z: chunkZ)
                     statistics.markSeen(coord)
                     statistics.scannedKeyCount += 1
@@ -231,8 +232,9 @@ public enum DimensionTransfer {
             }
 
             try autoreleasepool {
-                let parsedKey = LvDBKey.parse(data: keyData)
-                if case let .subChunk(chunkX, chunkZ, dim, _, _) = parsedKey, dim == dimension {
+                if let chunkKey = LvDBChunkKey(data: keyData), chunkKey.dimension == dimension {
+                    let chunkX = chunkKey.x
+                    let chunkZ = chunkKey.z
                     let coord = DimensionTransferCoordKey(x: chunkX, z: chunkZ)
                     statistics.markSeen(coord)
                     statistics.scannedKeyCount += 1

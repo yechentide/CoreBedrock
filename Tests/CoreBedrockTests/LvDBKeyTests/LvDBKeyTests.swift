@@ -78,11 +78,10 @@ struct LvDBKeyTests {
         let legacyData = Data("VILLAGE_\(villageID)_INFO".utf8)
         let key = LvDBKey.parse(data: legacyData)
 
-        if case let .village(dimension, id, type) = key {
-            #expect(dimension == "Overworld")
+        if case let .legacyVillage(id, type) = key {
             #expect(id == villageID)
             #expect(type == "INFO")
-            #expect(key.data == Data("VILLAGE_Overworld_\(villageID)_INFO".utf8))
+            #expect(key.data == legacyData)
         } else {
             Issue.record("Failed to parse legacy overworld village key without dimension")
         }
@@ -112,6 +111,25 @@ struct LvDBKeyTests {
 
         let dataKey = LvDBKey.subChunk(0, 0, .overworld, .data3D, nil)
         #expect(dataKey.isCompoundListKey == false)
+    }
+
+    @Test
+    func parseActorAndPositionKeysLosslessly() {
+        let actorID = Data([0xFF, 0x00, 0x01, 0x80, 0x11, 0x22, 0x33, 0x44])
+        let actorKey = Data("actorprefix".utf8) + actorID
+        #expect(LvDBKey.parse(data: actorKey).data == actorKey)
+
+        let trackKey = Data("PosTrackDB-0x00000003".utf8)
+        #expect(LvDBKey.parse(data: trackKey).data == trackKey)
+        let lastID = Data("PositionTrackDB-LastId".utf8)
+        #expect(LvDBKey.parse(data: lastID).data == lastID)
+
+        let tickingArea = Data("tickingarea_1597ce40-382e-42da-96ed-d439af5bc6d4".utf8)
+        #expect(LvDBKey.parse(data: tickingArea).data == tickingArea)
+        let loadedRequest = Data("chunk_loaded_request_Overworld_0000000000".utf8)
+        #expect(LvDBKey.parse(data: loadedRequest).data == loadedRequest)
+        let structure = Data("structuretemplate_oreville_wb:example".utf8)
+        #expect(LvDBKey.parse(data: structure).data == structure)
     }
 
     /// Test keyData generation

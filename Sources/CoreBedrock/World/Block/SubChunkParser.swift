@@ -47,8 +47,8 @@ public struct SubChunkParser {
         }
 
         let (blockIndicesData, blockBitWidth, _) = try binaryReader.readIndicesData()
-        let blockPalette = try binaryReader.readBlockPalette()
-        guard !blockPalette.isEmpty, !blockIndicesData.isEmpty else {
+        let blockPalette = try binaryReader.readBlockPalette(isSingleValue: blockBitWidth == 0)
+        guard !blockPalette.isEmpty, blockBitWidth == 0 || !blockIndicesData.isEmpty else {
             return nil
         }
         guard layerCount > 1 else {
@@ -95,13 +95,13 @@ public struct SubChunkParser {
         }
 
         let (blockIndicesData, blockBitWidth, _) = try binaryReader.readIndicesData()
-        let blockPalette = try binaryReader.readBlockPalette()
-        guard !blockPalette.isEmpty, !blockIndicesData.isEmpty else {
+        let blockPalette = try binaryReader.readBlockPalette(isSingleValue: blockBitWidth == 0)
+        guard !blockPalette.isEmpty, blockBitWidth == 0 || !blockIndicesData.isEmpty else {
             return nil
         }
         guard layerCount > 1 else {
             return .init(
-                version: 9,
+                version: 8,
                 chunkY: self.chunkY,
                 blockLayer: .init(
                     bitWidth: blockBitWidth,
@@ -120,7 +120,7 @@ public struct SubChunkParser {
         }
 
         return .init(
-            version: 9,
+            version: 8,
             chunkY: self.chunkY,
             blockLayer: .init(
                 bitWidth: blockBitWidth,

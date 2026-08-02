@@ -18,7 +18,12 @@ public extension KeyValueStore {
         if let legacyVersionData = try? self.data(forKey: legacyVersionKey), legacyVersionData.count == 1 {
             return true
         }
-        return false
+        // Pre-1.0 LevelDB worlds can have a full terrain record without either
+        // version marker. Do not treat malformed version data as a valid chunk.
+        let legacyTerrainKey = LvDBKeyFactory.makeChunkKey(
+            x: chunkX, z: chunkZ, dimension: dimension, type: .legacyTerrain
+        )
+        return (try? self.data(forKey: legacyTerrainKey))?.isEmpty == false
     }
 
     func scanExistingChunks(dimension: MCDimension, handler: @escaping (Int32, Int32) -> Bool) -> Bool {
@@ -26,10 +31,11 @@ public extension KeyValueStore {
             return false
         }
 
+        var seen = Set<Pos2Di32>()
+
         defer {
             iterator.close()
         }
-        let expectedKeyLength = dimension == .overworld ? 9 : 13
         iterator.moveToFirst()
         while iterator.isValid {
             guard !Task.isCancelled else {
@@ -39,19 +45,20 @@ public extension KeyValueStore {
             defer {
                 iterator.moveToNext()
             }
-            guard let keyData = iterator.currentKey, keyData.count == expectedKeyLength else {
-                continue
-            }
-
-            let key = LvDBKey.parse(data: keyData)
-            guard case let .subChunk(chunkX, chunkZ, actualDimension, type, _) = key,
-                  actualDimension == dimension,
-                  [.chunkVersion, .legacyChunkVersion].contains(type)
+            guard let keyData = iterator.currentKey,
+                  let chunkKey = LvDBChunkKey(data: keyData),
+                  chunkKey.dimension == dimension,
+                  chunkKey.tag == LvDBChunkKeyType.chunkVersion.rawValue ||
+                  chunkKey.tag == LvDBChunkKeyType.legacyChunkVersion.rawValue ||
+                  chunkKey.tag == LvDBChunkKeyType.legacyTerrain.rawValue
             else {
                 continue
             }
+            guard seen.insert(.init(x: chunkKey.x, z: chunkKey.z)).inserted else {
+                continue
+            }
 
-            let result = handler(chunkX, chunkZ)
+            let result = handler(chunkKey.x, chunkKey.z)
             if result == false {
                 return false
             }
