@@ -4,34 +4,6 @@
 
 import Foundation
 
-public typealias ChunkDeletionEvent = CBOperationEvent<ChunkDeletionProgress, Never, Never, Never>
-
-public struct ChunkDeletionProgress: Sendable {
-    public let scannedChunkCount: Int
-    public let processedChunkCount: Int
-    public let scannedKeyCount: UInt64
-    public let processedKeyCount: UInt64
-
-    public init() {
-        self.scannedChunkCount = 0
-        self.processedChunkCount = 0
-        self.scannedKeyCount = 0
-        self.processedKeyCount = 0
-    }
-
-    public init(
-        scannedChunkCount: Int,
-        processedChunkCount: Int,
-        scannedKeyCount: UInt64,
-        processedKeyCount: UInt64
-    ) {
-        self.scannedChunkCount = scannedChunkCount
-        self.processedChunkCount = processedChunkCount
-        self.scannedKeyCount = scannedKeyCount
-        self.processedKeyCount = processedKeyCount
-    }
-}
-
 private struct ChunkCoordKey: Hashable {
     let x: Int32
     let z: Int32
@@ -75,9 +47,47 @@ public extension KeyValueStore {
         return stream
     }
 
+    func deleteChunks(
+        in dimension: MCDimension,
+        matching shouldDelete: @escaping @Sendable (Int32, Int32) -> Bool
+    ) -> AsyncThrowingStream<ChunkDeletionEvent, any Error> {
+        let (stream, continuation) = AsyncThrowingStream<ChunkDeletionEvent, any Error>.makeStream()
+        let store = self
+        let task = Task {
+            do {
+                continuation.yield(ChunkDeletionEvent.progress(.init()))
+                try store.deleteChunks(
+                    in: dimension,
+                    matching: shouldDelete
+                ) { event in
+                    continuation.yield(event)
+                }
+                continuation.finish()
+            } catch {
+                continuation.finish(throwing: error)
+            }
+        }
+        continuation.onTermination = { _ in
+            task.cancel()
+        }
+        return stream
+    }
+
     // swiftlint:disable function_body_length
     private func deleteAllChunks(
         in dimension: MCDimension, reportEvent: @escaping @Sendable (ChunkDeletionEvent) -> Void
+    ) throws {
+        try self.deleteChunks(
+            in: dimension,
+            matching: { _, _ in true },
+            reportEvent: reportEvent
+        )
+    }
+
+    private func deleteChunks(
+        in dimension: MCDimension,
+        matching shouldDelete: @Sendable (Int32, Int32) -> Bool,
+        reportEvent: @escaping @Sendable (ChunkDeletionEvent) -> Void
     ) throws {
         var statistics = ChunkDeletionStatistics()
         let batch = LevelDBWriteBatch()
@@ -100,7 +110,9 @@ public extension KeyValueStore {
             statistics.scannedKeyCount += 1
 
             autoreleasepool { [batch, iter] in
-                if let chunkKey = LvDBChunkKey(data: key), chunkKey.dimension == dimension {
+                if let chunkKey = LvDBChunkKey(data: key),
+                   chunkKey.dimension == dimension,
+                   shouldDelete(chunkKey.x, chunkKey.z) {
                     let chunkX = chunkKey.x
                     let chunkZ = chunkKey.z
                     let coord = ChunkCoordKey(x: chunkX, z: chunkZ)
@@ -110,7 +122,9 @@ public extension KeyValueStore {
                     statistics.processedKeyCount += 1
                 }
                 let lvdbKey = LvDBKey.parse(data: key)
-                if case let LvDBKey.digp(chunkX, chunkZ, d) = lvdbKey, d == dimension {
+                if case let LvDBKey.digp(chunkX, chunkZ, d) = lvdbKey,
+                   d == dimension,
+                   shouldDelete(chunkX, chunkZ) {
                     let coord = ChunkCoordKey(x: chunkX, z: chunkZ)
                     statistics.seenChunkCoords.insert(coord)
                     statistics.processedChunkCoords.insert(coord)

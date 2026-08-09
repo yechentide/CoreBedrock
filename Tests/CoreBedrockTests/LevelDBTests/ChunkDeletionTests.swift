@@ -60,4 +60,32 @@ struct ChunkDeletionTests {
         #expect(!db.containsKey(digp))
         #expect(!db.containsKey(actor))
     }
+
+    @Test
+    func selectiveDeletionPreservesChunksRejectedByPredicate() async throws {
+        let path = FileManager.default.temporaryDirectory
+            .appendingPathComponent("selective-chunk-deletion-\(UUID().uuidString)").path
+        defer { try? FileManager.default.removeItem(atPath: path) }
+        let db = try LevelDB(dbPath: path, createIfMissing: true)
+        defer { db.close() }
+
+        let deleted = (x: Int32(-4), z: Int32(8))
+        let preserved = (x: Int32(9), z: Int32(-2))
+        let deletedKey = LvDBKeyFactory.makeChunkKey(
+            x: deleted.x, z: deleted.z, dimension: .overworld, type: .chunkVersion
+        )
+        let preservedKey = LvDBKeyFactory.makeChunkKey(
+            x: preserved.x, z: preserved.z, dimension: .overworld, type: .chunkVersion
+        )
+        try db.putData(Data([1]), forKey: deletedKey)
+        try db.putData(Data([1]), forKey: preservedKey)
+
+        for try await _ in db.deleteChunks(
+            in: .overworld,
+            matching: { x, z in x != preserved.x || z != preserved.z }
+        ) {}
+
+        #expect(!db.containsKey(deletedKey))
+        #expect(db.containsKey(preservedKey))
+    }
 }
