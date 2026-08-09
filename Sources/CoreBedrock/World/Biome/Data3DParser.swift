@@ -23,9 +23,9 @@ public struct Data3DParser {
             let singleBiomeID = try binaryReader.readInt32()
             return .init(
                 chunkY: chunkY,
-                bitWidth: CBBinaryReader.wordBitSize,
+                bitWidth: 0,
                 palette: [singleBiomeID],
-                indicesBytes: .init(repeating: 0, count: MCSubChunk.totalBlockCount)
+                indicesBytes: []
             )
         }
 
@@ -65,7 +65,7 @@ public struct Data3DParser {
         let maxChunkY = chunkYRange.upperBound
 
         let heightBytesCount = MCChunk.viewSize * 2
-        guard self.binaryReader.remainingByteCount >= heightBytesCount + Int(maxChunkY - minChunkY) else {
+        guard self.binaryReader.remainingByteCount >= heightBytesCount + Int(maxChunkY - minChunkY) + 1 else {
             throw CBError.invalidDataLength(self.binaryReader.remainingByteCount)
         }
 
