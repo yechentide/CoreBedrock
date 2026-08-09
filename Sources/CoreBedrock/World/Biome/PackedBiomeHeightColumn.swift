@@ -33,6 +33,7 @@ public struct PackedBiomeHeightColumn {
         guard MCSubChunk.localPosRange ~= localX, MCSubChunk.localPosRange ~= localZ else {
             return nil
         }
+
         let chunkY = Int8(truncatingIfNeeded: y >> 4)
         guard let subChunkBiome = self.biomeSectionsByChunkY[chunkY] else {
             return nil

@@ -1,5 +1,5 @@
-import Testing
 @testable import CoreBedrock
+import Testing
 
 struct PackedBiomeHeightColumnTests {
     @Test func heightMapUsesZMajorCoordinatesAndLittleEndianValues() {
