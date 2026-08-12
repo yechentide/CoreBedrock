@@ -156,6 +156,15 @@ public struct ExpandedBlockLayer {
     public private(set) var indices: [UInt16]
     private var nameCache: [String: [Int]]
 
+    public init(palette: [CompoundTag], indices: [UInt16]) {
+        precondition(!palette.isEmpty)
+        precondition(indices.count == MCSubChunk.totalBlockCount)
+        precondition(indices.allSatisfy { Int($0) < palette.count })
+        self.palette = palette
+        self.indices = indices
+        self.nameCache = [:]
+    }
+
     public init(packedLayer: PackedBlockLayer) {
         self.palette = packedLayer.palette
         self.nameCache = [:]
