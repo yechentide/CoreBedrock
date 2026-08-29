@@ -4,14 +4,13 @@
 
 public import Foundation
 
-// enum PaletteMetaType: UInt8 {
-//     case persistence = 0
-//     case runtime = 1
-// }
-
 // swiftlint:disable line_length
 /*
- Decode sub chunk data
+ Decode persisted subchunk data.
+
+ Version 9 adds the signed subchunk Y byte to the version 8 envelope. The block
+ storage payload itself keeps the version 8 layout documented below. Its header
+ can describe either palette kind; this LevelDB parser expects persistent NBT.
 
  ref.
  - [Block Protocol in Beta 1.2.13](https://gist.github.com/Tomcc/a96af509e275b1af483b25c543cfbf37)

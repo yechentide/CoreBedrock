@@ -4,7 +4,65 @@
 
 public import Foundation
 
+private func blockPaletteEntriesAreEquivalent(_ lhs: CompoundTag, _ rhs: CompoundTag) -> Bool {
+    nbtTagsAreStructurallyEquivalent(lhs, rhs)
+}
+
+// swiftlint:disable cyclomatic_complexity
+/// NBT's public Equatable conformance intentionally uses object identity. Palette
+/// entries need value semantics so repeated placement of the same block state does
+/// not append a duplicate entry for every block.
+private func nbtTagsAreStructurallyEquivalent(_ lhs: NBT, _ rhs: NBT) -> Bool {
+    guard lhs.tagType == rhs.tagType, lhs.name == rhs.name else { return false }
+
+    switch (lhs, rhs) {
+    case let (lhs as ByteTag, rhs as ByteTag):
+        return lhs.value == rhs.value
+    case let (lhs as ShortTag, rhs as ShortTag):
+        return lhs.value == rhs.value
+    case let (lhs as IntTag, rhs as IntTag):
+        return lhs.value == rhs.value
+    case let (lhs as LongTag, rhs as LongTag):
+        return lhs.value == rhs.value
+    case let (lhs as FloatTag, rhs as FloatTag):
+        return lhs.value.bitPattern == rhs.value.bitPattern
+    case let (lhs as DoubleTag, rhs as DoubleTag):
+        return lhs.value.bitPattern == rhs.value.bitPattern
+    case let (lhs as StringTag, rhs as StringTag):
+        return lhs.value == rhs.value
+    case let (lhs as ByteArrayTag, rhs as ByteArrayTag):
+        return lhs.value == rhs.value
+    case let (lhs as IntArrayTag, rhs as IntArrayTag):
+        return lhs.value == rhs.value
+    case let (lhs as LongArrayTag, rhs as LongArrayTag):
+        return lhs.value == rhs.value
+    case let (lhs as ListTag, rhs as ListTag):
+        guard lhs.listType == rhs.listType, lhs.count == rhs.count else { return false }
+
+        return zip(lhs.tags, rhs.tags).allSatisfy(nbtTagsAreStructurallyEquivalent)
+    case let (lhs as CompoundTag, rhs as CompoundTag):
+        guard lhs.count == rhs.count else { return false }
+
+        return lhs.allSatisfy { child in
+            guard let name = child.name, let other = rhs[name] else { return false }
+
+            return nbtTagsAreStructurallyEquivalent(child, other)
+        }
+    default:
+        return false
+    }
+}
+
+// swiftlint:enable cyclomatic_complexity
+
 public struct ExpandedSubChunk {
+    private struct NormalizedBlockLayer {
+        let palette: [CompoundTag]
+        let indices: [UInt16]
+    }
+
+    private static let persistedPaletteBitWidths = [1, 2, 3, 4, 5, 6, 8, 16]
+
     public let version: Int
     public let chunkY: Int8
 
@@ -70,34 +128,115 @@ public struct ExpandedSubChunk {
     }
 
     private static func writeLayer(_ layer: ExpandedBlockLayer, to writer: CBBinaryWriter) throws {
-        // Compute bitWidth from max palette index
-        let maxIndex = layer.indices.max() ?? 0
-        let bitWidth = max(1, min(CBBinaryReader.wordBitSize, maxIndex.bitWidth))
-
-        guard bitWidth >= 1, bitWidth <= CBBinaryReader.wordBitSize else {
-            throw CBStreamError.invalidFormat("Invalid bitWidth: \(bitWidth)")
-        }
+        // Block storage layout shared by persisted subchunk versions 8 and 9:
+        // https://gist.github.com/Tomcc/a96af509e275b1af483b25c543cfbf37#block-storage-format
+        let normalized = try self.normalize(layer)
+        let bitWidth = try self.persistedPaletteBitWidth(paletteCount: normalized.palette.count)
 
         // Pack indices into bytes
-        let indicesBytes = try Self.packIndices(layer.indices, bitWidth: bitWidth, palette: layer.palette)
+        let indicesBytes = try Self.packIndices(
+            normalized.indices,
+            bitWidth: bitWidth,
+            palette: normalized.palette
+        )
 
-        // Write type byte
-        let typeByte = UInt8((bitWidth << 1) | 0x01)
+        // The least-significant bit distinguishes runtime palettes (1) from
+        // persistent palettes (0). Both V8 and V9 LevelDB subchunks store NBT
+        // block states, so only the packing width is shifted into this header.
+        let typeByte = UInt8(bitWidth << 1)
         try writer.write(typeByte)
 
         // Write packed indices
         try writer.write(indicesBytes)
 
         // Write palette count
-        try writer.write(UInt32(layer.palette.count))
+        try writer.write(UInt32(normalized.palette.count))
 
         // Write each block tag inline (CBTagReader expects inline tags, not separate buffers)
         let tagWriter = CBTagWriter()
-        for block in layer.palette {
+        for block in normalized.palette {
             try tagWriter.write(tag: block)
         }
         let tagData = tagWriter.toData()
         try writer.write([UInt8](tagData))
+    }
+
+    private static func persistedPaletteBitWidth(paletteCount: Int) throws -> Int {
+        guard 1...MCSubChunk.totalBlockCount ~= paletteCount else {
+            throw CBStreamError.argumentOutOfRange(
+                "paletteCount",
+                "Palette count out of range: \(paletteCount)"
+            )
+        }
+
+        // Bedrock has no 7, 9, or other intermediate storage types. Round the
+        // required width up to a type understood by the game.
+        let maximumIndex = UInt16(paletteCount - 1)
+        let requiredBitWidth = max(1, UInt16.bitWidth - maximumIndex.leadingZeroBitCount)
+        guard let bitWidth = self.persistedPaletteBitWidths.first(where: { $0 >= requiredBitWidth }) else {
+            throw CBStreamError.invalidFormat("Invalid palette bit width: \(requiredBitWidth)")
+        }
+
+        return bitWidth
+    }
+
+    private static func normalize(_ layer: ExpandedBlockLayer) throws -> NormalizedBlockLayer {
+        guard layer.indices.count == MCSubChunk.totalBlockCount else {
+            throw CBStreamError.argumentError("Indices count must be \(MCSubChunk.totalBlockCount)")
+        }
+
+        var usedPaletteIndices = Set<Int>()
+        for rawIndex in layer.indices {
+            let paletteIndex = Int(rawIndex)
+            guard layer.palette.indices.contains(paletteIndex) else {
+                throw CBStreamError.argumentOutOfRange(
+                    "paletteIndex",
+                    "Index \(paletteIndex) out of bounds for palette of size \(layer.palette.count)"
+                )
+            }
+
+            usedPaletteIndices.insert(paletteIndex)
+        }
+
+        var normalizedPalette = [CompoundTag]()
+        var normalizedIndicesBySourceIndex = [Int: Int]()
+        var candidateIndicesByName = [String: [Int]]()
+        normalizedPalette.reserveCapacity(usedPaletteIndices.count)
+        normalizedIndicesBySourceIndex.reserveCapacity(usedPaletteIndices.count)
+
+        // Preserve source palette order. Only unused entries and exact structural
+        // duplicates are removed, and every block index is remapped below.
+        for sourceIndex in layer.palette.indices where usedPaletteIndices.contains(sourceIndex) {
+            let block = layer.palette[sourceIndex]
+            let name = (block["name"] as? StringTag)?.value ?? ""
+            let candidateIndices = candidateIndicesByName[name] ?? []
+            if let existingIndex = candidateIndices.first(where: {
+                blockPaletteEntriesAreEquivalent(normalizedPalette[$0], block)
+            }) {
+                normalizedIndicesBySourceIndex[sourceIndex] = existingIndex
+                continue
+            }
+
+            let normalizedIndex = normalizedPalette.count
+            normalizedPalette.append(block)
+            normalizedIndicesBySourceIndex[sourceIndex] = normalizedIndex
+            candidateIndicesByName[name, default: []].append(normalizedIndex)
+        }
+
+        let normalizedIndices: [UInt16] = try layer.indices.map { rawIndex in
+            let sourceIndex = Int(rawIndex)
+            guard let normalizedIndex = normalizedIndicesBySourceIndex[sourceIndex],
+                  let result = UInt16(exactly: normalizedIndex)
+            else {
+                throw CBStreamError.argumentOutOfRange(
+                    "paletteIndex",
+                    "Unable to remap palette index \(sourceIndex)"
+                )
+            }
+
+            return result
+        }
+        return .init(palette: normalizedPalette, indices: normalizedIndices)
     }
 
     private static func packIndices(
@@ -221,7 +360,10 @@ public struct ExpandedBlockLayer {
             let name = nameTag.value
             if let candidateIndices = nameCache[name] {
                 // Only iterate the cached indices for this name
-                for paletteIndex in candidateIndices where self.palette[paletteIndex] == block {
+                for paletteIndex in candidateIndices where blockPaletteEntriesAreEquivalent(
+                    self.palette[paletteIndex],
+                    block
+                ) {
                     return paletteIndex
                 }
             }

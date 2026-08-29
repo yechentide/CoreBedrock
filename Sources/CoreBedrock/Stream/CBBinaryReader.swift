@@ -168,14 +168,23 @@ public extension CBBinaryReader {
 
     // swiftlint:disable:next large_tuple
     func readIndicesData() throws -> (rawData: [UInt8], bitsPerBlock: Int, totalWords: Int) {
-        let type = try readUInt8()
-        // let serializedType = type & 0x01
-        let bitsPerBlock = Int(type >> 1)
+        let storageHeader = try readUInt8()
+        // The least-significant bit is 1 for a runtime palette and 0 for a
+        // persistent palette; the upper seven bits identify the packing width.
+        // Older BlockGraver versions set the runtime bit while still appending a
+        // persistent NBT palette. Deliberately ignore the bit here so those worlds
+        // can be read and rewritten with a canonical persistent header. The NBT
+        // parser still rejects genuine runtime-palette data.
+        let bitsPerBlock = Int(storageHeader >> 1)
         // bitsPerBlock == 0 means single-value palette: all blocks are the same type,
         // so no index words are written. The palette has exactly one entry with no count prefix.
         if bitsPerBlock == 0 {
             return ([], 0, 0)
         }
+        // Bedrock defines 1, 2, 3, 4, 5, 6, 8, and 16-bit packing. Keep accepting
+        // other widths up to one word because older BlockGraver serializers wrote
+        // the exact required width (for example 7 or 9). The writer normalizes
+        // these legacy widths to the next Bedrock-supported value.
         guard 1...Self.wordBitSize ~= bitsPerBlock else {
             throw CBStreamError.invalidFormat("Invalid block bit size: \(bitsPerBlock)")
         }
